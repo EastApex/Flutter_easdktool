@@ -23,7 +23,7 @@ class ConnectListener implements EABleConnectListener {
     /// 绑定手表
     EABindInfo bindInfo = EABindInfo();
     bindInfo.user_id = "10086";
-    Easdktool().bindingWatch(bindInfo);
+    EASDKTool().bindingWatch(bindInfo);
   }
 
   @override
@@ -66,13 +66,13 @@ class _MyAppState extends State<MyApp> {
     connectBluetooth(); // test
 
     /// 【添加监听】
-    Easdktool.addBleConnectListener(ConnectListener());
-    Easdktool.addOperationPhoneCallback(OperationPhoneCallback((info) {
+    EASDKTool.addBleConnectListener(ConnectListener());
+    EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
       operationPhoneListener(info);
     }));
 
     /// 打开 SDKLog
-    Easdktool().showLog(true);
+    EASDKTool().showLog(true);
   }
 
   /// 【绑定手表】
@@ -80,11 +80,11 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress = "45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber = "001001211112000028"; // iOS need
-    Easdktool().connectToPeripheral(connectParam);
+    EASDKTool().connectToPeripheral(connectParam);
   }
 
   void getWatchData(int dataType) {
-    Easdktool().getWatchData(
+    EASDKTool().getWatchData(
         dataType,
         EAGetDataCallback(
             onSuccess: ((info) {
@@ -96,14 +96,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void setWatchData(int dataType, Map map) {
-    Easdktool().setWatchData(dataType, map,
+    EASDKTool().setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
       print(respond.respondCodeType);
     })));
   }
 
   void getBigWatchData() {
-    Easdktool().getBigWatchData(EAGetBitDataCallback(((info) {
+    EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
       /// Determine what kind of big data "dataType" is
       ///【判断dataType是属于那种大数据】
     })));
@@ -782,7 +782,7 @@ class _MyAppState extends State<MyApp> {
                   StopSearchWatch,
                  */
 
-                  Easdktool().operationWatch(
+                  EASDKTool().operationWatch(
                       EAOperationWatchType.StopSearchPhone,
                       OperationWatchCallback((info) {}));
                 },
@@ -817,7 +817,7 @@ class _MyAppState extends State<MyApp> {
 
                   EAOTAList otaList = EAOTAList(0, [ota1, ota2]);
                   //(info) {})
-                  Easdktool().otaUpgrade(otaList,
+                  EASDKTool().otaUpgrade(otaList,
                       EAOTAProgressCallback((progress) {
                     if (progress == -1) {
                       // transmit data fail;
@@ -833,7 +833,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Unbundling equipment【解绑设备】'),
                 onTap: () {
-                  Easdktool().unbindWatch();
+                  EASDKTool().unbindWatch();
                 },
               ),
             ],
