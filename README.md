@@ -1,19 +1,21 @@
 # Flutter_easdktool
 EASDKTOOL
 
-1.在项目的 pubspec.yaml 添加本SDK依赖。
-
+### 1.在项目的 pubspec.yaml 添加本SDK依赖。
+```
   easdktool:
     git:
       url: https://github.com/EastApex/Flutter_easdktool.git
       path: easdktool
-
-2.使用
+```
+### 2.使用
+```
 import 'package:easdktool/easdktool.dart';
-
-3.主要方法
+```
+### 3.主要方法
         
     单例：
+    
         Easdktool()
     
     SDK log显示：
@@ -23,14 +25,14 @@ import 'package:easdktool/easdktool.dart';
     连接手表：
         Easdktool().connectToPeripheral(EAConnectParam connectParam);
             => connectParam
-                    =>  connectAddress ：Android 需要 mac地址才能连接手表
-                    =>  snNumber ：iOS 需要 手表的SN号 来连接手表
+                 =>  connectAddress ：Android 需要 mac地址才能连接手表
+                 =>  snNumber ：iOS 需要 手表的SN号 来连接手表
             详细请查看 class EAConnectParam；
             
     绑定手表：（note:连接成功后需要绑定手表，手表才能进入手表主界面)
         Easdktool().bindingWatch(EABindInfo bindInfo)
             => bindInfo
-                    => user_id:手表的主人
+                 => user_id:手表的主人
              
     解绑手表：（note:解绑后，手表的数据将会被清空，手表会显示二维码界面）
         Easdktool().unbindWatch()
