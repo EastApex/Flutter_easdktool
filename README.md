@@ -1,6 +1,86 @@
 # Flutter_easdktool
 EASDKTOOL
 
+### 1. Add this SDK dependency in the project's pubspec.yaml.
+```
+  easdktool:
+    git:
+      url: https://github.com/EastApex/Flutter_easdktool.git
+      path: easdktool
+```
+### 2. Use
+```
+import 'package:easdktool/easdktool.dart';
+```
+### 3. Main method
+        
+    Singleton:
+        Easdktool()
+    
+    SDK log shows:
+        Easdktool().showLog(bool isShow)
+            => isShow:true show sdklog, false not show
+    
+    Connect the watch:
+        Easdktool().connectToPeripheral(EAConnectParam connectParam);
+            => connectParam
+                    => connectAddress : Android needs a mac address to connect the watch
+                    => snNumber : iOS needs the SN number of the watch to connect to the watch
+            For details, please see class EAConnectParam;
+            
+    Bind the watch: (note: after the connection is successful, you need to bind the watch, the watch can enter the watch main interface)
+        Easdktool().bindingWatch(EABindInfo bindInfo)
+            => bindInfo
+                    => user_id: the owner of the watch
+             
+    Unbinding the watch: (note: after unbinding, the data of the watch will be cleared, and the watch will display the QR code interface)
+        Easdktool().unbindWatch()
+        
+    Actively disconnect the watch: (note: disconnected, the watch is disconnected from the phone, and the data is not synchronized)
+        Easdktool().disConnectWatch()
+        
+    Get watch information
+        Easdktool().getWatchData(int dataType, EAGetDataCallback getDataCallback)
+            => dataType: The type of watch data obtained: For details, please check the [EADataInfoType.dart] file
+            => getDataCallback: callback for watch data.
+            
+    Set watch information
+        Easdktool().setWatchData(int dataType, Map value, EASetDataCallback setDataCallback)
+            => dataType: Set the type of watch data (same as the type to get watch data)
+            => setDataCallback: Set the callback of watch information (success or failure or other reasons).
+            
+    Get all watch big data (daily steps, heart rate, exercise records, etc.)
+        Easdktool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
+            => getBitDataCallback: callback for getting big data. Distinguish different types of data according to dataType
+            
+    Operate the watch
+        Easdktool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
+            => operationType: The type of watch operation, please see EAOperationWatchType in the [EAEnum.dart] file for details;
+            => operationCallback: callback for operating the watch (successful failure or other reasons)
+    
+    Firmware upgrade
+        Easdktool().otaUpgrade(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback)
+            => otaList:
+                => type: The default is 0
+                => otas: array List<EAOTA>
+                    => EAOTA
+                        => binPath: local path to firmware
+                        => firmwareType: firmware type (Apollo, Res, Tp, Hr) For details, please check the EAFirmwareType of the [EAEnum.dart] file;
+                        => version: the version number of the firmware
+            => otaProgressCallback: callback of progress status (-1: data transfer failed, 100: data transfer completed, 0~99: data transfer completion)
+        note:
+            1. Must be newer than the current version to upgrade successfully,
+            2.version must be in a certain format (the following xx represents a value)
+                Apollo Apollo: APxxBxx
+                Font Res: Rxx
+                Screen Tp: Txx
+                Heart rate Hr: Hxx
+            3.【firmwareType】: firmware type, 0Apollo 2Res 3Tp 4Hr
+            4. The font library Res is an iterative upgrade: if the current watch font version is R0.1, and there are new font versions R0.2 and R0.3, then both R0.2 and R0.3 need to be passed to the SDK.
+            5. Other firmware types are update and upgrade: if the current Apollo version of the watch is AP0.1B0.2, and there are new Apollo versions AP0.1B0.2 and AP0.1B0.3, then only the highest one needs to be uploaded. The firmware and version number corresponding to the version number can be given to the SDK.
+
+
+
 ### 1.在项目的 pubspec.yaml 添加本SDK依赖。
 ```
   easdktool:
