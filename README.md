@@ -15,51 +15,51 @@ import 'package:easdktool/easdktool.dart';
 ### 3. Main method
         
     Singleton:
-        Easdktool()
+        EASDKTool()
     
     SDK log shows:
-        Easdktool().showLog(bool isShow)
+        EASDKTool().showLog(bool isShow)
             => isShow:true show sdklog, false not show
     
     Connect the watch:
-        Easdktool().connectToPeripheral(EAConnectParam connectParam);
+        EASDKTool().connectToPeripheral(EAConnectParam connectParam);
             => connectParam
                     => connectAddress : Android needs a mac address to connect the watch
                     => snNumber : iOS needs the SN number of the watch to connect to the watch
             For details, please see class EAConnectParam;
             
     Bind the watch: (note: after the connection is successful, you need to bind the watch, the watch can enter the watch main interface)
-        Easdktool().bindingWatch(EABindInfo bindInfo)
+        EASDKTool().bindingWatch(EABindInfo bindInfo)
             => bindInfo
                     => user_id: the owner of the watch
              
     Unbinding the watch: (note: after unbinding, the data of the watch will be cleared, and the watch will display the QR code interface)
-        Easdktool().unbindWatch()
+        EASDKTool().unbindWatch()
         
     Actively disconnect the watch: (note: disconnected, the watch is disconnected from the phone, and the data is not synchronized)
-        Easdktool().disConnectWatch()
+        EASDKTool().disConnectWatch()
         
     Get watch information
-        Easdktool().getWatchData(int dataType, EAGetDataCallback getDataCallback)
+        EASDKTool().getWatchData(int dataType, EAGetDataCallback getDataCallback)
             => dataType: The type of watch data obtained: For details, please check the [EADataInfoType.dart] file
             => getDataCallback: callback for watch data.
             
     Set watch information
-        Easdktool().setWatchData(int dataType, Map value, EASetDataCallback setDataCallback)
+        EASDKTool().setWatchData(int dataType, Map value, EASetDataCallback setDataCallback)
             => dataType: Set the type of watch data (same as the type to get watch data)
             => setDataCallback: Set the callback of watch information (success or failure or other reasons).
             
     Get all watch big data (daily steps, heart rate, exercise records, etc.)
-        Easdktool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
+        EASDKTool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
             => getBitDataCallback: callback for getting big data. Distinguish different types of data according to dataType
             
     Operate the watch
-        Easdktool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
+        EASDKTool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
             => operationType: The type of watch operation, please see EAOperationWatchType in the [EAEnum.dart] file for details;
             => operationCallback: callback for operating the watch (successful failure or other reasons)
     
     Firmware upgrade
-        Easdktool().otaUpgrade(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback)
+        EASDKTool().otaUpgrade(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback)
             => otaList:
                 => type: The default is 0
                 => otas: array List<EAOTA>
@@ -96,51 +96,51 @@ import 'package:easdktool/easdktool.dart';
         
     单例：
     
-        Easdktool()
+        EASDKTool()
     
     SDK log显示：
-        Easdktool().showLog(bool isShow)
+        EASDKTool().showLog(bool isShow)
             => isShow:true 显示sdklog，false 不显示
     
     连接手表：
-        Easdktool().connectToPeripheral(EAConnectParam connectParam);
+        EASDKTool().connectToPeripheral(EAConnectParam connectParam);
             => connectParam
                  =>  connectAddress ：Android 需要 mac地址才能连接手表
                  =>  snNumber ：iOS 需要 手表的SN号 来连接手表
             详细请查看 class EAConnectParam；
             
     绑定手表：（note:连接成功后需要绑定手表，手表才能进入手表主界面)
-        Easdktool().bindingWatch(EABindInfo bindInfo)
+        EASDKTool().bindingWatch(EABindInfo bindInfo)
             => bindInfo
                  => user_id:手表的主人
              
     解绑手表：（note:解绑后，手表的数据将会被清空，手表会显示二维码界面）
-        Easdktool().unbindWatch()
+        EASDKTool().unbindWatch()
         
     主动断连手表：（note:断连，手表和手机断开连接，不同步数据）
-        Easdktool().disConnectWatch() 
+        EASDKTool().disConnectWatch() 
         
     获取手表信息
-        Easdktool().getWatchData(int dataType, EAGetDataCallback getDataCallback) 
+        EASDKTool().getWatchData(int dataType, EAGetDataCallback getDataCallback) 
             => dataType:获取手表数据的类型：详细请查看 【EADataInfoType.dart】 文件
             => getDataCallback:手表数据的回调。
             
     设置手表信息
-        Easdktool().setWatchData(int dataType, Map value, EASetDataCallback setDataCallback)
+        EASDKTool().setWatchData(int dataType, Map value, EASetDataCallback setDataCallback)
             => dataType:设置手表数据的类型（同获取手表数据的类型）
             => setDataCallback:设置手表信息的回调（成功失败或其他原因）。
             
     获取所有手表大数据（日常步数、心率、运动记录等）
-        Easdktool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
+        EASDKTool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
             => getBitDataCallback:获取大数据的回调。根据 dataType 来区分 不同类型的数据 
             
     操作手表
-        Easdktool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
+        EASDKTool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
             => operationType:操作手表的类型，详细请查看 【EAEnum.dart】文件的 EAOperationWatchType；
             => operationCallback:操作手表的回调（成功失败或其他原因）
     
     固件升级
-        Easdktool().otaUpgrade(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback)
+        EASDKTool().otaUpgrade(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback)
             => otaList:
                 => type: 默认为0即可
                 => otas: 数组 List<EAOTA>
