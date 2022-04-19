@@ -87,10 +87,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)setBleConfig {
     
- 
     _config = [EABleConfig getDefaultConfig];
     _config.debug = YES;
-    _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51"]; // 需要支持的蓝牙设备名称
+    _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex"]; // 需要支持的蓝牙设备名称
     [[EABleManager defaultManager] setBleConfig:_config];
 
     [self addNotification];

@@ -67,7 +67,7 @@ import 'package:easdktool/easdktool.dart';
                         => binPath: local path to firmware
                         => firmwareType: firmware type (Apollo, Res, Tp, Hr) For details, please check the EAFirmwareType of the [EAEnum.dart] file;
                         => version: the version number of the firmware
-            => otaProgressCallback: callback of progress status (-1: data transfer failed, 100: data transfer completed, 0~99: data transfer completion)
+            => otaProgressCallback: callback of progress status (-1: data transfer failed, 100: data transfer completed, 0~99: data transfer completion )
         note:
             1. Must be newer than the current version to upgrade successfully,
             2.version must be in a certain format (the following xx represents a value)
