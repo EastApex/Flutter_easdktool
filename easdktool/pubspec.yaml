@@ -1,7 +1,7 @@
 name: easdktool
 description: A new flutter plugin project.
 version: 0.0.1
-homepage: https://github.com/EastApex/flutter_easdktool.git
+homepage: https://github.com/EastApex/Flutter_easdktool.git
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
