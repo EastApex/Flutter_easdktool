@@ -1,0 +1,47 @@
+group 'com.example.easdktool'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs project(':easdktool').file('libs')
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.google.protobuf'
+
+android {
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        minSdkVersion 23
+    }
+}
+dependencies {
+    implementation 'com.alibaba:fastjson:1.1.54.android'
+    api(name: 'apex_sdk', ext: 'aar')
+    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    //fastjson解析
+    api 'com.alibaba:fastjson:1.2.59'
+}
