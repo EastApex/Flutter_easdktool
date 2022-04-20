@@ -61,7 +61,7 @@ class EASDKTool {
   /// 打开SDK Log
   /// Open SDK Log
   void showLog(bool isShow) {
-    _channel.invokeMethod(kEALog, {"showLog": isShow}.toString());
+    _channel.invokeMethod(kEALog, convert.jsonEncode({"showLog": isShow}));
   }
 
   /// 连接手表
@@ -75,7 +75,7 @@ class EASDKTool {
   /// Binding a watch
   void bindingWatch(EABindInfo bindInfo) {
     Map map = bindInfo.toMap();
-    _channel.invokeMethod(kEAbindingWatch, map.toString());
+    _channel.invokeMethod(kEAbindingWatch, convert.jsonEncode(map));
   }
 
   /// 解绑手表（重置手表）

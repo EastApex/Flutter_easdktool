@@ -27,8 +27,13 @@ class ConnectListener implements EABleConnectListener {
   @override
   void deviceConnected() {
     /// 绑定手表
+    // EABindInfo bindInfo = EABindInfo();
+    // bindInfo.user_id = "10086";
+    // EASDKTool().bindingWatch(bindInfo);
+
+    print('Device connected');
     EABindInfo bindInfo = EABindInfo();
-    bindInfo.user_id = "10086";
+    bindInfo.user_id = "1008690";
     EASDKTool().bindingWatch(bindInfo);
   }
 

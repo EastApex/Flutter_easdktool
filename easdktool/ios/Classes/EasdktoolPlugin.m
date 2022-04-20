@@ -714,6 +714,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         return nil;
     }
+  
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&err];
