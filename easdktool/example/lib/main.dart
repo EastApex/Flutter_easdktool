@@ -1,9 +1,15 @@
 // ignore_for_file: avoid_print
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/Been/EABeen.dart';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -790,7 +796,7 @@ class _MyAppState extends State<MyApp> {
               TitleView('  OTA【升级】'),
               GestureDetector(
                 child: TextView('1.To upgrade the firmware【升级固件】'),
-                onTap: () {
+                onTap: () async {
                   /** 
                  * 
                  * 【type == 1】，升级固件注意事项
@@ -812,21 +818,46 @@ class _MyAppState extends State<MyApp> {
                  * * * firmwareType: firmwareType, 0Apollo 2Res 3Tp 4Hr           
                  */
 
-                  EAOTA ota1 = EAOTA("", EAFirmwareType.Apollo, "AP0.1B0.5");
-                  EAOTA ota2 = EAOTA("", EAFirmwareType.Res, "R0.2");
+                  String uslString =
+                      "http://47.119.196.148/admin/1648451351478001001_AP0.1B4.6.bin";
 
-                  EAOTAList otaList = EAOTAList(0, [ota1, ota2]);
-                  //(info) {})
-                  EASDKTool().otaUpgrade(otaList,
-                      EAOTAProgressCallback((progress) {
-                    if (progress == -1) {
-                      // transmit data fail;
-                    } else if (progress == 100) {
-                      // transmit data succ;
+                  final Directory appDirectory = await getTemporaryDirectory();
+                  String savePath = appDirectory.path + '/file.bin';
+
+                  Dio dio = Dio();
+                  dio.options.connectTimeout = 10000; //设置连接超时时间
+                  dio.options.receiveTimeout = 10000; //设置数据接收超时时间
+                  Response response;
+
+                  try {
+                    response = await dio.download(uslString, savePath);
+                    if (response.statusCode == 200) {
+                      //下载文件成功
+                      final file = File(savePath);
+                      Uint8List content = await file.readAsBytes();
+                      print('length ${content.length}');
+
+                      EAOTA ota1 =
+                          EAOTA(savePath, EAFirmwareType.Apollo, "AP0.1B4.6");
+
+                      EAOTAList otaList = EAOTAList(0, [ota1]);
+                      //(info) {})
+                      EASDKTool().otaUpgrade(otaList,
+                          EAOTAProgressCallback((progress) {
+                        if (progress == -1) {
+                          // transmit data fail;
+                        } else if (progress == 100) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+                        }
+                      }));
                     } else {
-                      // transmit data progress
+                      throw Exception('接口出错');
                     }
-                  }));
+                  } catch (e) {
+                    throw Exception('下载文件失败');
+                  }
                 },
               ),
               TitleView('  unbindWatch【解绑】'),

@@ -195,7 +195,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] setBleConfig:_config];
         }
         
-    }else if ([call.method isEqualToString:kEAConnectWatch]) {  // FIXME: - 连接
+    }
+    else if ([call.method isEqualToString:kEAConnectWatch]) {  // FIXME: - 连接
         
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
         if ([self checkArgumentName:@"snNumber" inArguments:arguments]) {
@@ -209,11 +210,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] reConnectToPeripheral:snNumber];
         }
         
-    }else if ([call.method isEqualToString:kEADisConnectWatch]) { // FIXME: - 断开
+    }
+    else if ([call.method isEqualToString:kEADisConnectWatch]) { // FIXME: - 断开
         
         [[EABleManager defaultManager] disconnectPeripheral];
         
-    }else if ([call.method isEqualToString:kEAUnbindWatch]) { // FIXME: - 解绑
+    }
+    else if ([call.method isEqualToString:kEAUnbindWatch]) { // FIXME: - 解绑
         
         [[EABleManager defaultManager] unbindPeripheral];
         
@@ -239,11 +242,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             }
             [self bingdingWatch:bingingOps];
         }
-        
-    }
-    else if ([call.method isEqualToString:kEASyncPhoneInfoToWacth]) { // FIXME: - 同步手机信息
-        
-        
         
     }
     else if ([call.method isEqualToString:kEAGetWatchInfo]) { // FIXME: - 获取手表信息

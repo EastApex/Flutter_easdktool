@@ -5,7 +5,7 @@ class EAOTA {
   String binPath = ""; // Local bin path【本地bin路径】
   EAFirmwareType firmwareType =
       EAFirmwareType.Apollo; // The firmware type【固件类型】
-  String version = ""; // The firmware type【固件类型】
+  String version = ""; // 【版本号】
 
   EAOTA(this.binPath, this.firmwareType, this.version);
   Map toJson() {
