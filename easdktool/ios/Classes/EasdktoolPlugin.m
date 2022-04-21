@@ -37,7 +37,6 @@
 #define kBluetoothState             @"BluetoothState"
 #define kSetWatchResponse           @"SetWatchResponse"
 #define kGetWatchResponse           @"GetWatchResponse"
-#define kGetWatchResponse           @"GetWatchResponse"
 #define kGetBigWatchData            @"GetBigWatchData"
 #define kOperationPhone             @"OperationPhone"
 #define kProgress                   @"Progress"

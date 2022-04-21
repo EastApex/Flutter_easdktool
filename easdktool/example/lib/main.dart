@@ -1,15 +1,22 @@
 // ignore_for_file: avoid_print
 
-import 'dart:typed_data';
+// import 'dart:typed_data';
+
+import 'dart:async';
+import 'dart:ffi';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/Been/EABeen.dart';
 
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
-import 'dart:io';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:dio/dio.dart';
+// import 'dart:io';
+
+// import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 
 void main() {
   runApp(const MyApp());
@@ -70,6 +77,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // BleManager bleManager = BleManager();
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +93,15 @@ class _MyAppState extends State<MyApp> {
 
     /// 打开 SDKLog
     EASDKTool().showLog(true);
+
+    // bleManager.startPeripheralScan(
+    //   uuids: [],
+    // ).listen((scanResult) {
+    //   //Scan one peripheral and stop scanning
+    //   print(
+    //       "Scanned Peripheral ${scanResult.peripheral.name}, RSSI ${scanResult.rssi}");
+    //   bleManager.stopPeripheralScan();
+    // });
   }
 
   /// 【绑定手表】
@@ -117,6 +135,7 @@ class _MyAppState extends State<MyApp> {
     EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
       /// Determine what kind of big data "dataType" is
       ///【判断dataType是属于那种大数据】
+      print(info);
     })));
   }
 
@@ -823,46 +842,21 @@ class _MyAppState extends State<MyApp> {
                  * * * firmwareType: firmwareType, 0Apollo 2Res 3Tp 4Hr           
                  */
 
-                  String uslString =
-                      "http://47.119.196.148/admin/1648451351478001001_AP0.1B4.6.bin";
+                  EAOTA ota1 = EAOTA("", EAFirmwareType.Apollo, "AP0.1B4.6");
 
-                  final Directory appDirectory = await getTemporaryDirectory();
-                  String savePath = appDirectory.path + '/file.bin';
+                  EAOTAList otaList = EAOTAList(0, [ota1]);
+                  //(info) {})
+                  EASDKTool().otaUpgrade(otaList,
+                      EAOTAProgressCallback((progress) {
+                    if (progress == -1) {
+                      // transmit data fail;
 
-                  Dio dio = Dio();
-                  dio.options.connectTimeout = 10000; //设置连接超时时间
-                  dio.options.receiveTimeout = 10000; //设置数据接收超时时间
-                  Response response;
-
-                  try {
-                    response = await dio.download(uslString, savePath);
-                    if (response.statusCode == 200) {
-                      //下载文件成功
-                      final file = File(savePath);
-                      Uint8List content = await file.readAsBytes();
-                      print('length ${content.length}');
-
-                      EAOTA ota1 =
-                          EAOTA(savePath, EAFirmwareType.Apollo, "AP0.1B4.6");
-
-                      EAOTAList otaList = EAOTAList(0, [ota1]);
-                      //(info) {})
-                      EASDKTool().otaUpgrade(otaList,
-                          EAOTAProgressCallback((progress) {
-                        if (progress == -1) {
-                          // transmit data fail;
-                        } else if (progress == 100) {
-                          // transmit data succ;
-                        } else {
-                          // transmit data progress
-                        }
-                      }));
+                    } else if (progress == 100) {
+                      // transmit data succ;
                     } else {
-                      throw Exception('接口出错');
+                      // transmit data progress
                     }
-                  } catch (e) {
-                    throw Exception('下载文件失败');
-                  }
+                  }));
                 },
               ),
               TitleView('  unbindWatch【解绑】'),
@@ -878,4 +872,14 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class EADevice {
+  String name = "";
+  String snNumber = "";
+  String macAddress = "";
+  int rssi = 0;
+
+  EADevice.n();
+  EADevice(this.name, this.snNumber, this.macAddress, this.rssi);
 }

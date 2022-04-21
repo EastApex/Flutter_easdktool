@@ -195,7 +195,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kBluetoothState        = "BluetoothState";
     final String kSetWatchResponse      = "SetWatchResponse";
     final String kGetWatchResponse      = "GetWatchResponse";
-    final String kSendBigWatchData      = "SendBigWatchData";   // 发送手表大数据
+    final String kGetBigWatchData       = "GetBigWatchData";
     final String kOperationPhone        = "OperationPhone"; //操作手机
     final String kProgress              = "Progress";
 
@@ -2147,7 +2147,7 @@ final int kEADataInfoTypeOTARespond = 9000;
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    channel.invokeMethod(kSendBigWatchData, jsonObject.toJSONString());
+                    channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
                 }
             });
         }

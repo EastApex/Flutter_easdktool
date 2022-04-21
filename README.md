@@ -52,7 +52,9 @@ import 'package:easdktool/easdktool.dart';
     Get all watch big data (daily steps, heart rate, exercise records, etc.)
         EASDKTool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
             => getBitDataCallback: callback for getting big data. Distinguish different types of data according to dataType
-            
+        note:
+            There are some fields that iOS and Android return differently, so be careful
+        
     Operate the watch
         EASDKTool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
             => operationType: The type of watch operation, please see EAOperationWatchType in the [EAEnum.dart] file for details;
@@ -133,7 +135,8 @@ import 'package:easdktool/easdktool.dart';
     获取所有手表大数据（日常步数、心率、运动记录等）
         EASDKTool().getBigWatchData(EAGetBitDataCallback getBitDataCallback)
             => getBitDataCallback:获取大数据的回调。根据 dataType 来区分 不同类型的数据 
-            
+        note：有一些类的字段 iOS和安卓返回的不一样，需要注意下
+        
     操作手表
         EASDKTool().operationWatch(EAOperationWatchType operationType,OperationWatchCallback operationCallback)
             => operationType:操作手表的类型，详细请查看 【EAEnum.dart】文件的 EAOperationWatchType；
@@ -161,3 +164,48 @@ import 'package:easdktool/easdktool.dart';
             5. 其他固件类型为更新升级：如当前手表的阿波罗version为AP0.1B0.2时，此时有新的阿波罗版本AP0.1B0.2、AP0.1B0.3，那么只需要传最高的版本号对应的固件和版本号 给SDK即可。
     
     
+
+OTA Eg:
+```
+                  String uslString = "http://47.119.196.148/admin/1648451351478001001_AP0.1B4.6.bin";
+
+                  final Directory appDirectory = await getTemporaryDirectory();
+                  String savePath = appDirectory.path + '/file.bin';
+
+                  Dio dio = Dio();
+                  dio.options.connectTimeout = 10000; //设置连接超时时间
+                  dio.options.receiveTimeout = 10000; //设置数据接收超时时间
+                  Response response;
+
+                  try {
+                    response = await dio.download(uslString, savePath);
+                    if (response.statusCode == 200) {
+                      //下载文件成功
+                      final file = File(savePath);
+                      Uint8List content = await file.readAsBytes();
+                      print('length ${content.length}');
+
+                      EAOTA ota1 =
+                          EAOTA(savePath, EAFirmwareType.Apollo, "AP0.1B4.6");
+
+                      EAOTAList otaList = EAOTAList(0, [ota1]);
+                      //(info) {})
+                      EASDKTool().otaUpgrade(otaList,
+                          EAOTAProgressCallback((progress) {
+                        if (progress == -1) {
+                          // transmit data fail;
+
+                        } else if (progress == 100) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+
+                        }
+                      }));
+                    } else {
+                      throw Exception('接口出错');
+                    }
+                  } catch (e) {
+                    throw Exception('下载文件失败');
+                  }
+```

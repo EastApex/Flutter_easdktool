@@ -30,9 +30,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  path_provider: ^2.0.5
-  dio: ^4.0.0
+  # path_provider: ^2.0.5
+  # dio: ^4.0.0
   
+
+  # permission_handler: "^9.2.0" # 权限
+
+  # flutter_ble_lib: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
