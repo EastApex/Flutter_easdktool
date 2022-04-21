@@ -10,8 +10,26 @@ part of easdktool.been;
 class EAConnectParam {
   String connectAddress = "";
   String snNumber = "";
+  String name = "";
+  int rssi = 0;
+  EAConnectParam();
   Map<String, dynamic> toJson() => {
         'connectAddress': connectAddress,
         'snNumber': snNumber,
       };
+
+  EAConnectParam.fromMap(Map<String, dynamic> map) {
+    if (map["connectAddress"] != null) {
+      connectAddress = map["connectAddress"];
+    }
+    if (map["snNumber"] != null) {
+      snNumber = map["snNumber"];
+    }
+    if (map["name"] != null) {
+      name = map["name"];
+    }
+    if (map["rssi"] != null) {
+      rssi = map["rssi"];
+    }
+  }
 }

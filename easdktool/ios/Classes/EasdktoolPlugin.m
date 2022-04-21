@@ -5,7 +5,7 @@
 
 
 #define kTimerSec 10
-@interface EasdktoolPlugin()
+@interface EasdktoolPlugin()<EABleManagerDelegate>
 @property(nonatomic,assign) NSInteger timerSec;// 定时器时间
 
 /* 创建一个内置定时器（系统）*/
@@ -30,6 +30,9 @@
 #define kEAOTA                      @"EAOTA"                // ota
 #define kEALog                      @"EALog"                // log
 #define kEASyncPhoneInfoToWacth     @"EASyncPhoneInfoToWacth"// 设置手表信息
+#define kEAScanWacth                @"EAScanWacth"          // 搜索手表
+#define kEAStopScanWacth            @"EAStopScanWacth"          //停止搜索手表
+
 
 /// MARK: - invoke method Name
 #define kArgumentsError             @"ArgumentsError"
@@ -40,6 +43,8 @@
 #define kGetBigWatchData            @"GetBigWatchData"
 #define kOperationPhone             @"OperationPhone"
 #define kProgress                   @"Progress"
+#define kScanWacthResponse          @"ScanWacthResponse"
+
 
 /// MARK: - 枚举
 //绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对
@@ -107,6 +112,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getDeviceOpsPhoneMessage:) name:kNTF_EAGetDeviceOpsPhoneMessage object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showProgress:) name:kNTF_EAOTAAGPSDataing object:nil];
+    
+    
     
 }
 
@@ -193,6 +200,18 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             _config.debug = [arguments[@"showLog"] boolValue];
             [[EABleManager defaultManager] setBleConfig:_config];
         }
+        
+    }
+    else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
+        
+        [EABleManager defaultManager].delegate = self;
+        [[EABleManager defaultManager] scanPeripherals];
+        
+    }
+    else if ([call.method isEqualToString:kEAStopScanWacth]) { // FIXME: - 停止
+        
+        [EABleManager defaultManager].delegate = nil;
+        [[EABleManager defaultManager] stopScanPeripherals];
         
     }
     else if ([call.method isEqualToString:kEAConnectWatch]) {  // FIXME: - 连接
@@ -704,6 +723,20 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         [selfWeak.channel invokeMethod:kProgress arguments:@(-1)];
     });
+}
+
+#pragma mark - EABleManagerDelegate
+
+/// 扫描发现的设备 （实时）
+/// @param peripheralModel 设备
+- (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel {
+    
+    NSDictionary *item = @{
+        @"snNumber":peripheralModel.SN,
+        @"name":peripheralModel.peripheral.name,
+        @"rssi":@(peripheralModel.RSSI.integerValue)
+    };
+    [self.channel invokeMethod:kScanWacthResponse arguments:[item yy_modelToJSONString]];
 }
 
 

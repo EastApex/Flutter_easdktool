@@ -77,13 +77,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // BleManager bleManager = BleManager();
-
   @override
   void initState() {
     super.initState();
 
-    connectBluetooth(); // test
+    // connectBluetooth(); // test
 
     /// 【添加监听】
     EASDKTool.addBleConnectListener(ConnectListener());
@@ -92,16 +90,14 @@ class _MyAppState extends State<MyApp> {
     }));
 
     /// 打开 SDKLog
-    EASDKTool().showLog(true);
+    // EASDKTool().showLog(true);
 
-    // bleManager.startPeripheralScan(
-    //   uuids: [],
-    // ).listen((scanResult) {
-    //   //Scan one peripheral and stop scanning
-    //   print(
-    //       "Scanned Peripheral ${scanResult.peripheral.name}, RSSI ${scanResult.rssi}");
-    //   bleManager.stopPeripheralScan();
-    // });
+    /// search watch
+    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+      print(connectParam.name);
+    }));
+
+    // EASDKTool().stopWatch();
   }
 
   /// 【绑定手表】

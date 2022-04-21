@@ -4,6 +4,7 @@ typedef OnSuccess = void Function(Map<String, dynamic> info);
 typedef OnFail = void Function(Map<String, dynamic> info);
 typedef OnRespond = void Function(EARespond respond);
 typedef Progress = void Function(int progress);
+typedef ScanRespond = void Function(EAConnectParam connectParam);
 
 /// Get the watch data callback【获取手表数据回调】
 class EAGetDataCallback {
@@ -40,6 +41,11 @@ class OperationWatchCallback {
 class EAOTAProgressCallback {
   Progress callback;
   EAOTAProgressCallback(this.callback);
+}
+
+class EAScanWatchCallback {
+  ScanRespond scanRespond;
+  EAScanWatchCallback(this.scanRespond);
 }
 
 // Watch connection status and Bluetooth monitoring【手表连接状态和蓝牙监听】

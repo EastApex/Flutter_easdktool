@@ -19,6 +19,8 @@ const String kEAGetBigWatchData = "EAGetBigWatchData"; // 获取手表大数据
 const String kEAOperationWatch = "EAOperationWatch"; // 操作手表
 const String kEAOTA = "EAOTA"; // ota
 const String kEALog = "EALog"; // log
+const String kEAScanWacth = "EAScanWacth"; // 搜索手表
+const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -29,6 +31,7 @@ const String kGetWatchResponse = "GetWatchResponse";
 const String kGetBigWatchData = "GetBigWatchData";
 const String kOperationPhone = "OperationPhone";
 const String kProgress = "Progress";
+const String kScanWacthResponse = "ScanWacthResponse";
 
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
@@ -48,6 +51,8 @@ class EASDKTool {
   static EABleConnectListener? mEaBleConnectListener;
   static OperationWatchCallback? mOperationCallback;
   static EAOTAProgressCallback? mOTAProgressCallback;
+  static EAScanWatchCallback? mScanWatchCallback;
+
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
     mOperationPhoneCallback = operationPhoneCallback;
@@ -56,6 +61,19 @@ class EASDKTool {
   static void addBleConnectListener(EABleConnectListener eaBleConnectListener) {
     mEaBleConnectListener = eaBleConnectListener;
     _channel.setMethodCallHandler(platformCallHandler);
+  }
+
+  /// 开始搜索手表
+  /// scan wacth,
+  void scanWatch(EAScanWatchCallback scanWatchCallback) {
+    mScanWatchCallback = scanWatchCallback;
+    _channel.invokeMethod(kEAScanWacth);
+  }
+
+  /// 停止搜索
+  /// stop watch
+  void stopWatch() {
+    _channel.invokeMethod(kEAStopScanWacth);
   }
 
   /// 打开SDK Log
@@ -149,7 +167,8 @@ class EASDKTool {
      *  5.GetWatchResponse  => Get the watch data response【获取手表数据回应】
      *  6.GetBigWatchData   => Get watch big data response【获取手表大数据回应】
      *  7.OperationPhone    => Operating mobile phone【操作手机】
-     *  8.Progress         => The progress situation【进度情况】
+     *  8.Progress          => The progress situation【进度情况】
+     *  9.ScanWacthResponse => 【返回手表】
      */
 
     String methodName = methodCall.method;
@@ -194,6 +213,13 @@ class EASDKTool {
         int progress = convert.jsonDecode(methodCall.arguments);
         if (mOTAProgressCallback != null) {
           mOTAProgressCallback!.callback(progress);
+        }
+        break;
+      case kScanWacthResponse:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        EAConnectParam connectParam = EAConnectParam.fromMap(info);
+        if (mScanWatchCallback != null) {
+          mScanWatchCallback!.scanRespond(connectParam);
         }
         break;
     }

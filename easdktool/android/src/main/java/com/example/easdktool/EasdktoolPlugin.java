@@ -48,6 +48,7 @@ import com.apex.bluetooth.enumeration.QueryWatchInfoType;
 import com.apex.bluetooth.enumeration.TimeZone;
 import com.apex.bluetooth.enumeration.UnitFormat;
 import com.apex.bluetooth.listener.EABleConnectListener;
+import com.apex.bluetooth.listener.EABleScanListener;
 import com.apex.bluetooth.model.EABleAncsSw;
 import com.apex.bluetooth.model.EABleAutoCheckSleep;
 import com.apex.bluetooth.model.EABleBatInfo;
@@ -58,6 +59,7 @@ import com.apex.bluetooth.model.EABleDailyData;
 import com.apex.bluetooth.model.EABleDailyGoal;
 import com.apex.bluetooth.model.EABleDev;
 import com.apex.bluetooth.model.EABleDevUnit;
+import com.apex.bluetooth.model.EABleDevice;
 import com.apex.bluetooth.model.EABleDeviceLanguage;
 import com.apex.bluetooth.model.EABleDistanceFormat;
 import com.apex.bluetooth.model.EABleGpsData;
@@ -187,7 +189,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kEAOperationWatch      = "EAOperationWatch";     // 操作手表
     final String kEAOTA                 = "EAOTA";                // ota
     final String kEALog                 = "EALog";                // log
-
+    final String kEAScanWacth           = "EAScanWacth"; // 搜索手表
+    final String kEAStopScanWacth       = "EAStopScanWacth"; //停止搜索手表
 
     /// MARK: - invoke method Name
     final String kConnectState          = "ConnectState";
@@ -198,7 +201,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kGetBigWatchData       = "GetBigWatchData";
     final String kOperationPhone        = "OperationPhone"; //操作手机
     final String kProgress              = "Progress";
-
+    final String kScanWacthResponse     = "ScanWacthResponse";
     /// 数据类型
     /* 手表 */
 final int kEADataInfoTypeWatch = 3;
@@ -742,6 +745,51 @@ final int kEADataInfoTypeOTARespond = 9000;
 
 
         }
+        else if (call.method.equals(kEAScanWacth)) {
+
+            EABleScanListener bleScanListener = new EABleScanListener() {
+                @Override
+                public void scanDevice(EABleDevice eaBleDevice) {
+
+                    if (mHandler != null) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("name",eaBleDevice.deviceName);
+                                jsonObject.put("macAddress",eaBleDevice.deviceAddress);
+                                jsonObject.put("rssi",eaBleDevice.rssi);
+                                jsonObject.put("snNumber",eaBleDevice.deviceSign);
+                                channel.invokeMethod(kScanWacthResponse,  jsonObject.toJSONString());
+                            }
+                        });
+                    }
+
+                }
+
+                @Override
+                public void scanError(int i) {
+
+                    if (mHandler != null) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                channel.invokeMethod(kArgumentsError,  "scan error");
+                            }
+                        });
+                    }
+
+                }
+            };
+            EABleManager.getInstance().didDiscoverPeripheral(bleScanListener, mContext);
+
+        }
+        else if (call.method.equals(kEAStopScanWacth)) {
+
+
+            EABleManager.getInstance().stopScanPeripherals(mContext);
+        }
         else if (call.method.equals(kEAConnectWatch)) {
 
             String arguments = (String) call.arguments;
@@ -900,8 +948,18 @@ final int kEADataInfoTypeOTARespond = 9000;
             String arguments = (String) call.arguments;
             if (checkArgumentName("type",arguments) && checkArgumentName("otas",arguments)) {
 
-                OtaData otaData = JSONObject.parseObject(arguments,OtaData.class);
-                otaAction(otaData.otas);
+//                OtaData otaData = JSONObject.parseObject(arguments,OtaData.class);
+//                otaAction(otaData.otas);
+
+                final OtaData otaData = JSONObject.parseObject(arguments, OtaData.class);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        otaAction(otaData.otas);
+                    }
+                }.start();
+
             }
         }
         else{
@@ -2164,73 +2222,94 @@ final int kEADataInfoTypeOTARespond = 9000;
         }
     }
 
-    private void otaAction(List otas){
+    private void otaAction(List otas) {
 
-        if (mHandler != null) {
-            mHandler.post(new Runnable() {
+        // if (mHandler != null) {
+        //     mHandler.post(new Runnable() {
+        //         @Override
+        //         public void run() {
+
+        List<EABleOta> otaList = new ArrayList<>();
+        for (int i = 0; i < otas.size(); i++) {
+
+            TempOtaData tempOtaData = (TempOtaData) otas.get(i);
+            EABleOta eaBleOta = new EABleOta();
+            File file = new File(tempOtaData.binPath);
+            if (!file.exists() || file.isDirectory()) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        channel.invokeMethod(kArgumentsError, "not find file in binPath");
+                    }
+                });
+                return;
+            }
+            try {
+                eaBleOta.fileByte = file2Byte(file);
+                eaBleOta.version = tempOtaData.version;
+                if (tempOtaData.firmwareType == 0) {
+                    eaBleOta.otaType = EABleOta.OtaType.apollo;
+                } else if (tempOtaData.firmwareType == 1) {
+                    eaBleOta.otaType = EABleOta.OtaType.res;
+                } else if (tempOtaData.firmwareType == 2) {
+                    eaBleOta.otaType = EABleOta.OtaType.hr;
+                } else if (tempOtaData.firmwareType == 3) {
+                    eaBleOta.otaType = EABleOta.OtaType.tp;
+                }
+                otaList.add(eaBleOta);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        channel.invokeMethod(kArgumentsError, "binpath file error");
+                    }
+                });
+                return;
+            }
+        }
+        if (otaList != null && !otaList.isEmpty()) {
+            EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
                 @Override
-                public void run() {
-
-                    List<EABleOta> otaList = new ArrayList<>();
-                    for (int i = 0; i < otas.size(); i++) {
-
-                        TempOtaData tempOtaData = (TempOtaData)otas.get(i);
-                        EABleOta eaBleOta = new EABleOta();
-                        File file = new File(tempOtaData.binPath);
-                        if (!file.exists() || file.isDirectory()) {
-                                mHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        channel.invokeMethod(kArgumentsError, "not find file in binPath");
-                                    }
-                                });
-                            return;
+                public void success() {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod(kProgress, 100);
                         }
-                        try {
-                            eaBleOta.fileByte = file2Byte(file);
-                            eaBleOta.version = tempOtaData.version;
-                            if (tempOtaData.firmwareType == 0) {
-                                eaBleOta.otaType = EABleOta.OtaType.apollo;
-                            } else if (tempOtaData.firmwareType == 1) {
-                                eaBleOta.otaType = EABleOta.OtaType.res;
-                            } else if (tempOtaData.firmwareType == 2) {
-                                eaBleOta.otaType = EABleOta.OtaType.hr;
-                            } else if (tempOtaData.firmwareType == 3) {
-                                eaBleOta.otaType = EABleOta.OtaType.tp;
-                            }
-                            otaList.add(eaBleOta);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                                mHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        channel.invokeMethod(kArgumentsError, "binpath file error");
-                                    }
-                                });
-                            return;
-                        }
-                    }
-                    if (otaList != null && !otaList.isEmpty()) {
-                        EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
-                            @Override
-                            public void success() {
-                                channel.invokeMethod(kProgress, 100);
-                            }
-                            @Override
-                            public void progress(int i) {
-                                channel.invokeMethod(kProgress, i);
-                            }
-                            @Override
-                            public void mutualFail(int i) {
-                                channel.invokeMethod(kProgress, -1);
-                            }
-                        });
-                    }
+                    });
+
                 }
 
+                @Override
+                public void progress(int i) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod(kProgress, i);
+                        }
+                    });
+
+                }
+
+                @Override
+                public void mutualFail(int i) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod(kProgress, -1);
+                        }
+                    });
+
+                }
             });
         }
+        //  }
+
+        // });
+        //}
+
     }
 
     private byte[] file2Byte(@NonNull File f) throws FileNotFoundException {
