@@ -1,6 +1,12 @@
 # Flutter_easdktool
 EASDKTOOL
 
+
+
+
+## Normal scanning can be started only when Bluetooth is enabled and the location permission is allowed. The scanning is time-consuming. The developer can set the scanning time through the timer. The recommended scanning duration is 8-10 seconds. Do not scan frequently. You can scan only five times within 30 seconds. Otherwise, the android system will prompt you that the device cannot be scanned "is scanning too frequently"
+
+
 ### 1. Add this SDK dependency in the project's pubspec.yaml.
 ```
   easdktool:
@@ -81,7 +87,7 @@ import 'package:easdktool/easdktool.dart';
             4. The font library Res is an iterative upgrade: if the current watch font version is R0.1, and there are new font versions R0.2 and R0.3, then both R0.2 and R0.3 need to be passed to the SDK.
             5. Other firmware types are update and upgrade: if the current Apollo version of the watch is AP0.1B0.2, and there are new Apollo versions AP0.1B0.2 and AP0.1B0.3, then only the highest one needs to be uploaded. The firmware and version number corresponding to the version number can be given to the SDK.
 
-
+## Note：在蓝牙开启且允许定位权限下，才能开始正常扫描。扫描是耗时的，开发者可以 通过定时器设定扫描时间，建议扫描时长 8-10 秒。不要频繁扫描，30S 内最多只 能扫描 5 次，否则扫描不到设备，安卓系统会提示 is scanning too frequently。
 
 ### 1.在项目的 pubspec.yaml 添加本SDK依赖。
 ```
