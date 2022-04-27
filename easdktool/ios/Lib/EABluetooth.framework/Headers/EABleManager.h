@@ -133,6 +133,8 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// 解绑设备（移除关联）
 - (void)unbindPeripheral;
 
+/// 解绑设备并重置（移除关联）
+- (void)unbindAndResetPeripheral;
 
 /// 断链设备(不移除关联)
 - (void)disconnectPeripheral;

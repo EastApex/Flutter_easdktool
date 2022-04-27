@@ -92,7 +92,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 - (void)setBleConfig {
     
     _config = [EABleConfig getDefaultConfig];
-    _config.debug = YES;
+    _config.debug = NO;
     _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex"]; // 需要支持的蓝牙设备名称
     [[EABleManager defaultManager] setBleConfig:_config];
 
@@ -200,9 +200,15 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             _config.debug = [arguments[@"showLog"] boolValue];
             [[EABleManager defaultManager] setBleConfig:_config];
         }
-        
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
+        
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        if ([self checkArgumentName:@"scanAll" inArguments:arguments]) {
+            
+            _config.canScanAllDevices = [arguments[@"scanAll"] boolValue];
+            [[EABleManager defaultManager] setBleConfig:_config];
+        }
         
         [EABleManager defaultManager].delegate = self;
         [[EABleManager defaultManager] scanPeripherals];
@@ -731,11 +737,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 /// @param peripheralModel 设备
 - (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel {
     
-    NSDictionary *item = @{
-        @"snNumber":peripheralModel.SN,
-        @"name":peripheralModel.peripheral.name,
-        @"rssi":@(peripheralModel.RSSI.integerValue)
-    };
+    NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
+    [item setValue:peripheralModel.SN forKey:@"snNumber"];
+    [item setValue:peripheralModel.peripheral.name forKey:@"name"];
+    [item setValue:@(peripheralModel.RSSI.integerValue) forKey:@"rssi"];
+    [item setValue:peripheralModel.advertisementData forKey:@"advertisementData"];
+    [item setValue:peripheralModel.peripheral.identifier.UUIDString forKey:@"uuid"];
+    
     [self.channel invokeMethod:kScanWacthResponse arguments:[item yy_modelToJSONString]];
 }
 

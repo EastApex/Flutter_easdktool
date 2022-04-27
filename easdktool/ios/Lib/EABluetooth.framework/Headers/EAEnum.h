@@ -188,7 +188,7 @@ typedef NS_ENUM(NSUInteger, EACharacteristicType) {
 typedef NS_ENUM(NSUInteger,EAConnectStateType) {
     
     /** 断开连接 */
-    EAConnectStateTypeUnunited = 0,
+    EAConnectStateTypeUnconnected = 0,
     
     /** 已连接 */
     EAConnectStateTypeConnected = 1,
@@ -810,6 +810,57 @@ typedef NS_ENUM(NSUInteger,EASportType) {
 
     /** 划船机 */
     EASportTypeRowing = 14,
+    
+    /** 室内游泳 */
+    EASportTypeIndoorSwimming = 15,
+
+    /** 智慧运动: 日常运动 */
+    EASportTypeDailyEx = 128,
+
+    /** 智慧运动: 户外步行 */
+    EASportTypeOurdoorWalkingEx = 129,
+
+    /** 智慧运动: 户外跑步 */
+    EASportTypeOurdoorRunningEx = 130,
+
+    /** 智慧运动: 户外徒步 */
+    EASportTypeOurdoorOnFootEx = 131,
+
+    /** 智慧运动: 户外登山 */
+    EASportTypeOurdoorOnMountaineeringEx = 132,
+
+    /** 智慧运动: 户外越野跑 */
+    EASportTypeOurdoorTrailRunningEx = 133,
+
+    /** 智慧运动: 户外单车 */
+    EASportTypeOurdoorCyclingEx = 134,
+
+    /** 智慧运动: 户外游泳 */
+    EASportTypeOutdoorSwimmingEx = 135,
+
+    /** 智慧运动: 室内步行 */
+    EASportTypeIndoorWalkingEx = 136,
+
+    /** 智慧运动: 室内跑步 */
+    EASportTypeIndoorRunningEx = 137,
+
+    /** 智慧运动: 室内锻炼 */
+    EASportTypeIndoorExerciseEx = 138,
+
+    /** 智慧运动: 室内单车 */
+    EASportTypeIndoorCyclingEx = 139,
+
+    /** 智慧运动: 椭圆机 */
+    EASportTypeEllipticalEx = 140,
+
+    /** 智慧运动: 瑜伽 */
+    EASportTypeYogaEx = 141,
+
+    /** 智慧运动: 划船机 */
+    EASportTypeRowingEx = 142,
+
+    /** 智慧运动: 室内游泳 */
+    EASportTypeIndoorSwimmingEx = 143,
     
 };
 

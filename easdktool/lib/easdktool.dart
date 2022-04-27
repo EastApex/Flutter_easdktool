@@ -65,9 +65,10 @@ class EASDKTool {
 
   /// 开始搜索手表
   /// scan wacth,
-  void scanWatch(EAScanWatchCallback scanWatchCallback) {
+  void scanWatch(bool scanAll, EAScanWatchCallback scanWatchCallback) {
     mScanWatchCallback = scanWatchCallback;
-    _channel.invokeMethod(kEAScanWacth);
+    _channel.invokeMethod(
+        kEAScanWacth, convert.jsonEncode({"scanAll": scanAll}));
   }
 
   /// 停止搜索

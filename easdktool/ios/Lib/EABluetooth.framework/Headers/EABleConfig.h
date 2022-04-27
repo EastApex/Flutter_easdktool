@@ -31,7 +31,8 @@ NSLog(@"[EALog]:%s:%d" format, __func__, __LINE__, ##__VA_ARGS__);\
 /// 搜索设备的 HeadName
 @property (nonatomic, copy) NSArray *deviceHeadNames;
 
-
+/// 扫描所有设备 ，默认关闭
+@property (nonatomic, assign) BOOL canScanAllDevices;
 
 + (EABleConfig *)getDefaultConfig;
 

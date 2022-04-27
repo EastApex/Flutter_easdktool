@@ -26,18 +26,17 @@ String connectState = "Unknown";
 
 class ConnectListener implements EABleConnectListener {
   @override
-  void connectError() {}
+  void connectError() {
+    print("connectError");
+  }
 
   @override
-  void connectTimeOut() {}
+  void connectTimeOut() {
+    print("connectTimeOut");
+  }
 
   @override
   void deviceConnected() {
-    /// 绑定手表
-    // EABindInfo bindInfo = EABindInfo();
-    // bindInfo.user_id = "10086";
-    // EASDKTool().bindingWatch(bindInfo);
-
     print('Device connected');
     EABindInfo bindInfo = EABindInfo();
     bindInfo.user_id = "1008690";
@@ -45,28 +44,44 @@ class ConnectListener implements EABleConnectListener {
   }
 
   @override
-  void deviceDisconnect() {}
+  void deviceDisconnect() {
+    print("deviceDisconnect");
+  }
 
   @override
-  void deviceNotFind() {}
+  void deviceNotFind() {
+    print("deviceNotFind");
+  }
 
   @override
-  void notOpenLocation() {}
+  void notOpenLocation() {
+    print("notOpenLocation");
+  }
 
   @override
-  void paramError() {}
+  void paramError() {
+    print("paramError");
+  }
 
   @override
-  void unopenedBluetooth() {}
+  void unopenedBluetooth() {
+    print("unopenedBluetooth");
+  }
 
   @override
-  void unsupportedBLE() {}
+  void unsupportedBLE() {
+    print("unsupportedBLE");
+  }
 
   @override
-  void iOSRelievePair() {}
+  void iOSRelievePair() {
+    print("iOSRelievePair");
+  }
 
   @override
-  void iOSUnAuthorized() {}
+  void iOSUnAuthorized() {
+    print("iOSUnAuthorized");
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -90,10 +105,11 @@ class _MyAppState extends State<MyApp> {
     }));
 
     /// 打开 SDKLog
-    // EASDKTool().showLog(true);
+    EASDKTool().showLog(true);
 
     /// search watch
-    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+    /// scanAll : ture => scan all ble devices ; false => only scan APEX devices
+    EASDKTool().scanWatch(false, EAScanWatchCallback((connectParam) {
       print(connectParam.name);
     }));
 
