@@ -782,7 +782,7 @@ final int kEADataInfoTypeOTARespond = 9000;
 
                 }
             };
-            EABleManager.getInstance().didDiscoverPeripheral(bleScanListener, mContext);
+            EABleManager.getInstance().didDiscoverPeripheral(bleScanListener, mContext,false);
 
         }
         else if (call.method.equals(kEAStopScanWacth)) {

@@ -108,8 +108,7 @@ class _MyAppState extends State<MyApp> {
     EASDKTool().showLog(true);
 
     /// search watch
-    /// scanAll : ture => scan all ble devices ; false => only scan APEX devices
-    EASDKTool().scanWatch(false, EAScanWatchCallback((connectParam) {
+    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
       print(connectParam.name);
     }));
 

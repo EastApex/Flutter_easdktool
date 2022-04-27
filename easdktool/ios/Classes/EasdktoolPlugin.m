@@ -93,6 +93,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     _config = [EABleConfig getDefaultConfig];
     _config.debug = NO;
+    _config.canScanAllDevices = YES;
     _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex"]; // 需要支持的蓝牙设备名称
     [[EABleManager defaultManager] setBleConfig:_config];
 
@@ -203,12 +204,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
         
-        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        if ([self checkArgumentName:@"scanAll" inArguments:arguments]) {
-            
-            _config.canScanAllDevices = [arguments[@"scanAll"] boolValue];
-            [[EABleManager defaultManager] setBleConfig:_config];
-        }
+//        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+//        if ([self checkArgumentName:@"scanAll" inArguments:arguments]) {
+//
+//            _config.canScanAllDevices = [arguments[@"scanAll"] boolValue];
+//            [[EABleManager defaultManager] setBleConfig:_config];
+//        }
         
         [EABleManager defaultManager].delegate = self;
         [[EABleManager defaultManager] scanPeripherals];
