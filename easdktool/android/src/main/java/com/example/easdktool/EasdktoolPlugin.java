@@ -757,7 +757,7 @@ final int kEADataInfoTypeOTARespond = 9000;
                             public void run() {
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("name",eaBleDevice.deviceName);
-                                jsonObject.put("macAddress",eaBleDevice.deviceAddress);
+                                jsonObject.put("connectAddress",eaBleDevice.deviceAddress);
                                 jsonObject.put("rssi",eaBleDevice.rssi);
                                 jsonObject.put("snNumber",eaBleDevice.deviceSign);
                                 channel.invokeMethod(kScanWacthResponse,  jsonObject.toJSONString());
