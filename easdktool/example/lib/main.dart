@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    // connectBluetooth(); // test
+    connectBluetooth(); // test
 
     /// 【添加监听】
     EASDKTool.addBleConnectListener(ConnectListener());
@@ -108,9 +108,9 @@ class _MyAppState extends State<MyApp> {
     EASDKTool().showLog(true);
 
     /// search watch
-    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-      print(connectParam.name);
-    }));
+    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+    //   print(connectParam.name);
+    // }));
 
     // EASDKTool().stopWatch();
   }

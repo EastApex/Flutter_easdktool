@@ -27,6 +27,7 @@ import com.apex.bluetooth.callback.HeartLimitCallback;
 import com.apex.bluetooth.callback.InfoPushCallback;
 import com.apex.bluetooth.callback.LanguageCallback;
 import com.apex.bluetooth.callback.MotionDataReportCallback;
+import com.apex.bluetooth.callback.MotionDataResponseCallback;
 import com.apex.bluetooth.callback.OtaCallback;
 import com.apex.bluetooth.callback.PersonInfoCallback;
 import com.apex.bluetooth.callback.RaiseHandBrightScreenCallback;
@@ -62,6 +63,7 @@ import com.apex.bluetooth.model.EABleDevUnit;
 import com.apex.bluetooth.model.EABleDevice;
 import com.apex.bluetooth.model.EABleDeviceLanguage;
 import com.apex.bluetooth.model.EABleDistanceFormat;
+import com.apex.bluetooth.model.EABleGeneralSportRespond;
 import com.apex.bluetooth.model.EABleGpsData;
 import com.apex.bluetooth.model.EABleHeartData;
 import com.apex.bluetooth.model.EABleHr;
@@ -93,6 +95,7 @@ import com.apex.bluetooth.utils.LogUtils;
 import com.example.easdktool.been.BindInfo;
 import com.example.easdktool.been.ConnectParam;
 import com.example.easdktool.been.DailyGoal;
+import com.example.easdktool.been.GeneralSportRespond;
 import com.example.easdktool.been.InfoPush;
 import com.example.easdktool.been.InfoPushItem;
 import com.example.easdktool.been.LogParam;
@@ -866,8 +869,6 @@ final int kEADataInfoTypeOTARespond = 9000;
                     }
                 });
             }
-
-
         }
         else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
@@ -890,7 +891,7 @@ final int kEADataInfoTypeOTARespond = 9000;
         }
         else if (call.method.equals(kEAGetBigWatchData)) { /// 获取大数据
 
-            EABleManager.getInstance().requestSyncMotionData(MotionReportType.sport_data_req, new GeneralCallback() {
+            EABleManager.getInstance().requestSyncMotionData(MotionReportType.hr_data_req, new GeneralCallback() {
                 @Override
                 public void result(boolean b) {
                     setWatchDataResponse(0,kEADataInfoTypeGetBigData);
@@ -2205,7 +2206,11 @@ final int kEADataInfoTypeOTARespond = 9000;
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    int flag = jsonObject.getInteger("flag");
+                    int dataType = jsonObject.getInteger("dataType");
+                    bigDataRespond(dataType,flag);
                     channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
+
                 }
             });
         }
@@ -2326,6 +2331,45 @@ final int kEADataInfoTypeOTARespond = 9000;
 
         }
         return null;
+    }
+
+    private void bigDataRespond(int request_id,int e_common_flag){
+
+        EABleGeneralSportRespond eaBleGeneralSportRespond = new EABleGeneralSportRespond();
+        eaBleGeneralSportRespond.setRequest_id(request_id);
+        if (e_common_flag == 0) {
+            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin);
+        } else if (e_common_flag == 1) {
+            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.proceed);
+        } else if (e_common_flag == 2) {
+            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.end);
+        } else if (e_common_flag == 3) {
+            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin_end);
+        }
+        EABleManager.getInstance().motionDataResponse(eaBleGeneralSportRespond, new MotionDataResponseCallback() {
+            @Override
+            public void mutualSuccess() {
+                if (mHandler != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            }
+            @Override
+            public void mutualFail(int i) {
+                if (mHandler != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 }
 

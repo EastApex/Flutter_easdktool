@@ -170,7 +170,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 [_channel invokeMethod:kGetBigWatchData arguments:[info yy_modelToJSONString]];
             }
         }
-
     }
 }
 
