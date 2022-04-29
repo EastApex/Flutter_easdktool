@@ -87,6 +87,176 @@ import 'package:easdktool/easdktool.dart';
             4. The font library Res is an iterative upgrade: if the current watch font version is R0.1, and there are new font versions R0.2 and R0.3, then both R0.2 and R0.3 need to be passed to the SDK.
             5. Other firmware types are update and upgrade: if the current Apollo version of the watch is AP0.1B0.2, and there are new Apollo versions AP0.1B0.2 and AP0.1B0.3, then only the highest one needs to be uploaded. The firmware and version number corresponding to the version number can be given to the SDK.
 
+## Big data response parameter parsing
+
+### Big data types
+```
+    3001:step
+    3002:sleep
+    3003:head rate
+    3004:GPS
+    3005:multi-motion data
+    3006:blood oxygen
+    3007:stress
+    3008:step frequency
+    3009:step pace
+    3010:resting heart rate
+```
+
+### Daily steps
+```
+/** timestamp */
+int timeStamp;
+
+/** Movement data: number of steps */
+int steps;
+
+/** Exercise data: Calories (in calories) */
+int calorie;
+
+/** Movement data: distance (unit: cm) */
+int distance;
+
+/** Exercise data: exercise duration (unit: second) */
+int duration;
+
+/** Exercise data: average heart rate */
+int averageHeartRate;
+```
+### Sleep
+```
+/** timestamp */
+int timeStamp;
+
+/** Sleep type 0: active state 1: entering sleep 2: waking up in the middle of sleep 3: RAPID eye movement 4: light sleep 5: deep sleep 6: exiting sleep 7: Unknown 8: Sleep summary */
+int eSleepNode;
+```
+### Heart rate || Resting heart rate
+```
+/** timestamp */
+int timeStamp;
+
+/** Heart rate */
+int hrValue;
+
+```
+### GPS data
+```
+/** timestamp */
+int timeStamp;
+
+/** Latitude */
+float latitude;
+
+/** longitude */ 
+float longitude;
+```
+### Multi-motion data
+```
+/** Sport type 1: outdoor walking 2: outdoor running 3: outdoor hiking 4: outdoor mountaineering 5: outdoor trail running 6: outdoor cycling 7: outdoor swimming 8: indoor walking 9: indoor running 10: indoor exercise 11: indoor cycling 12: elliptical machine 13: Yoga 14: rowing machine 15: indoor swimming */
+int eType;
+
+/** Start timestamp */
+int beginTimeStamp;
+
+/** Stop timestamp */
+int endTimeStamp;
+
+Steps / * * * /
+int steps;
+
+/** Calories (in calories) */
+int calorie;
+
+/** Distance (unit: cm) */
+int distance;
+
+/** Exercise duration (unit: second) */
+int duration;
+
+/** Training effect Normal heart rate duration (unit: second) */
+int trainingEffectNormal;
+
+/** Training effect Warm-up heart rate duration (unit: second) */
+int trainingEffectWarmUp;
+
+/** Training effect Fat consumption duration (unit: second) */
+int trainingEffectFatconsumption;
+
+/** Training effect Aerobic heart rate duration (unit: second) */
+int trainingEffectAerobic;
+
+/** Training effect Anaerobic heart rate duration (unit: second) */
+int trainingEffectAnaerobic;
+
+/** Duration of training effect limit heart rate (unit: second) */
+int trainingEffectLimit;
+
+/** Average heart rate */
+int averageHeartRate;
+
+/** Average body temperature (unit: Celsius) */
+float averageTemperature;
+
+/** Average speed (unit: KM/H *100 times) */
+float averageSpeed;
+
+/** Average pace (unit: S/KM) */
+float averagePace;
+
+/** Average step frequency (SPM steps per minute) */
+float averageStepFreq;
+
+/** Average step size (unit: cm) */
+float averageStride;
+
+/** Average altitude (in cm) */
+float averageAltitude;
+
+/** Maximum heart rate */
+int averageHeartRateMax;
+
+/** Minimum heart rate */
+int averageHeartRateMin;
+```
+### blood oxygen data
+```
+/** timestamp */
+int timeStamp;
+
+/** Blood oxygen */
+int bloodOxygenValue;
+```
+### Stree data
+```
+/** timestamp */
+int timeStamp;
+
+/ * * * / pressure
+int stessValue;
+
+/** Pressure type 0: unknown 1: relaxed 2: normal 3: medium 4: high */
+int eType;
+
+```
+### Step frequency
+```
+/** timestamp */
+int timeStamp;
+
+/** step frequency */
+int stepFreqValue;
+```
+### Step pace 
+```
+/** timestamp */
+int timeStamp;
+
+/** speed value */
+int stepPaceValue;
+```
+
+
 ## Note：在蓝牙开启且允许定位权限下，才能开始正常扫描。扫描是耗时的，开发者可以 通过定时器设定扫描时间，建议扫描时长 8-10 秒。不要频繁扫描，30S 内最多只 能扫描 5 次，否则扫描不到设备，安卓系统会提示 is scanning too frequently。
 
 ### 1.在项目的 pubspec.yaml 添加本SDK依赖。
@@ -215,3 +385,173 @@ OTA Eg:
                     throw Exception('下载文件失败');
                   }
 ```
+
+## 大数据回应参数解析
+
+### 大数据类型
+```
+    3001:大数据步数
+    3002:大数据睡眠
+    3003:大数据心率
+    3004:大数据GPS
+    3005:大数据多运动
+    3006:大数据血氧
+    3007:大数据压力
+    3008:大数据步频
+    3009:大数据配速
+    3010:大数据静息心率
+```
+
+### 日常步数
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 运动数据：步数 */
+int steps;
+
+/** 运动数据：卡路里（单位:小卡) */
+int calorie;
+
+/** 运动数据：距离 （单位:厘米） */
+int distance;
+
+/** 运动数据：运动时长(单位:秒) */
+int duration;
+
+/** 运动数据：平均心率 */
+int averageHeartRate;
+```
+### 睡眠
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 睡眠类型  0:活动状态 1:进入睡眠 2:睡眠中途醒来 3:快速眼动 4:浅睡 5:深睡 6:退出睡眠 7:未知 8:睡眠摘要*/
+ int eSleepNode;
+```
+### 心率 || 静息心率
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 心率值 */
+int hrValue;
+
+```
+### GPS数据
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 纬度 */
+ float latitude;
+
+/** 经度 */
+ float longitude;
+```
+### 多运动数据
+```
+/** 运动类型 1:户外步行 2:户外跑步 3:户外徒步 4:户外登山 5:户外越野跑 6:户外单车 7:户外游泳 8:室内步行 9:室内跑步 10:室内锻炼 11:室内单车 12:椭圆机 13:瑜伽 14:划船机 15:室内游泳*/
+int eType;
+
+/** 起始时间戳 */
+int beginTimeStamp;
+
+/** 停止时间戳 */
+int endTimeStamp;
+
+/** 步数 */
+int steps;
+
+/** 卡路里（单位:小卡) */
+int calorie;
+
+/** 距离 （单位:厘米） */
+int distance;
+
+/** 运动时长(单位:秒) */
+int duration;
+
+/** 训练效果 正常心率 时长(单位:秒) */
+int trainingEffectNormal;
+
+/** 训练效果 热身心率 时长(单位:秒) */
+int trainingEffectWarmUp;
+
+/** 训练效果 消耗脂肪 时长(单位:秒) */
+int trainingEffectFatconsumption;
+
+/** 训练效果 有氧心率 时长(单位:秒) */
+int trainingEffectAerobic;
+
+/** 训练效果 无氧心率 时长(单位:秒) */
+int trainingEffectAnaerobic;
+
+/** 训练效果 极限心率 时长(单位:秒) */
+int trainingEffectLimit;
+
+/** 平均心率 */
+int averageHeartRate;
+
+/** 平均体温（单位：摄氏度） */
+ float averageTemperature;
+
+/** 平均速度（单位: KM/H *100倍） */
+ float averageSpeed;
+
+/** 平均配速（单位: S/KM） */
+ float averagePace;
+
+/** 平均步频（单位: SPM 步每分钟） */
+ float averageStepFreq;
+
+/** 平均步距（单位:厘米） */
+ float averageStride;
+
+/** 平均海拔（单位:厘米） */
+ float averageAltitude;
+
+/** 最大心率 */
+int averageHeartRateMax;
+
+/** 最小心率 */
+int averageHeartRateMin;
+```
+### 血氧数据
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 血氧值 */
+int bloodOxygenValue;
+```
+### 压力数据
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 压力 */
+int stessValue;
+
+/** 压力类型 0:未知 1:放松 2:正常 3:中等 4:高*/
+int eType;
+
+```
+### 步频数据
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 步频值 */
+int stepFreqValue;
+```
+### 配速数据
+```
+/** 时间戳 */
+int timeStamp;
+
+/** 配速值 */
+int stepPaceValue;
+```
+
