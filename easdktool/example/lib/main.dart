@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     /// 打开 SDKLog
-    EASDKTool().showLog(true);
+    EASDKTool().showLog(1);
 
     connectBluetooth(); // test
 

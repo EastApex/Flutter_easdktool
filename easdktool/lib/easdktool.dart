@@ -79,7 +79,7 @@ class EASDKTool {
 
   /// 打开SDK Log
   /// Open SDK Log
-  void showLog(bool isShow) {
+  void showLog(int isShow) {
     _channel.invokeMethod(kEALog, convert.jsonEncode({"showLog": isShow}));
   }
 
