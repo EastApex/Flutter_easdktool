@@ -18,9 +18,10 @@ const String kEASyncPhoneInfoToWacth = "EASyncPhoneInfoToWacth"; // 同步手机
 const String kEAGetBigWatchData = "EAGetBigWatchData"; // 获取手表大数据
 const String kEAOperationWatch = "EAOperationWatch"; // 操作手表
 const String kEAOTA = "EAOTA"; // ota
-const String kEALog = "EALog"; // log
+const String kEALog = "EAShowLog"; // log
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
+const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -87,6 +88,14 @@ class EASDKTool {
   void connectToPeripheral(EAConnectParam connectParam) {
     String param = convert.jsonEncode(connectParam);
     _channel.invokeMethod(kEAConnectWatch, param);
+  }
+
+  /// 获取手表连接状态信息
+  /// get the watch connect state info.
+  Future<EAConnectStateInfo> getWacthStateInfo() async {
+    String json = await _channel.invokeMethod(kEAGetWacthStateInfo);
+    Map<String, dynamic> info = convert.jsonDecode(json);
+    return EAConnectStateInfo.fromMap(info);
   }
 
   /// 绑定手表

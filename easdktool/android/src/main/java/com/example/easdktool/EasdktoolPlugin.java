@@ -43,6 +43,7 @@ import com.apex.bluetooth.callback.WeightUnitCallback;
 import com.apex.bluetooth.core.EABleManager;
 import com.apex.bluetooth.enumeration.CommonAction;
 import com.apex.bluetooth.enumeration.CommonFlag;
+import com.apex.bluetooth.enumeration.EABleConnectState;
 import com.apex.bluetooth.enumeration.MotionReportType;
 import com.apex.bluetooth.enumeration.PersonHand;
 import com.apex.bluetooth.enumeration.QueryWatchInfoType;
@@ -191,9 +192,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kEAGetBigWatchData     = "EAGetBigWatchData";    // 获取手表大数据
     final String kEAOperationWatch      = "EAOperationWatch";     // 操作手表
     final String kEAOTA                 = "EAOTA";                // ota
-    final String kEALog                 = "EALog";                // log
+    final String kEALog                 = "EAShowLog";                // log
     final String kEAScanWacth           = "EAScanWacth"; // 搜索手表
     final String kEAStopScanWacth       = "EAStopScanWacth"; //停止搜索手表
+    final String kEAGetWacthStateInfo   = "EAGetWacthStateInfo"; //获取手表连接状态信息
 
     /// MARK: - invoke method Name
     final String kConnectState          = "ConnectState";
@@ -745,8 +747,19 @@ final int kEADataInfoTypeOTARespond = 9000;
 
                 LogUtils.setShowLog(logParam.showLog);
             }
+        }
+        else if (call.method.equals(kEAGetWacthStateInfo)) {
 
-
+            EABleConnectState connectState =  EABleManager.getInstance().getDeviceConnectState();
+            int i = 0;
+            if (connectState == EABleConnectState.STATE_CONNECTED) {
+                i = 1;
+            } else if (connectState == EABleConnectState.STATE_CONNECTING) {
+                i = 2;
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("connectState",i);
+            result.success(jsonObject.toJSONString());
         }
         else if (call.method.equals(kEAScanWacth)) {
 

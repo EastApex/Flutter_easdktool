@@ -96,6 +96,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+    /// 打开 SDKLog
+    EASDKTool().showLog(true);
+
     connectBluetooth(); // test
 
     /// 【添加监听】
@@ -103,9 +106,6 @@ class _MyAppState extends State<MyApp> {
     EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
       operationPhoneListener(info);
     }));
-
-    /// 打开 SDKLog
-    EASDKTool().showLog(true);
 
     /// search watch
     // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
@@ -133,6 +133,11 @@ class _MyAppState extends State<MyApp> {
               returnClassValue(dataType, value);
             }),
             onFail: ((info) {})));
+  }
+
+  void getWacthStateInfo() async {
+    EAConnectStateInfo connectStateInfo = await EASDKTool().getWacthStateInfo();
+    print(connectStateInfo.connectState.index);
   }
 
   void setWatchData(int dataType, Map map) {
@@ -465,6 +470,13 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('22.Interest rates screen time【息屏时间】'),
                 onTap: () {
                   getWatchData(kEADataInfoTypeBlacklightTimeout);
+                },
+              ),
+              GestureDetector(
+                child: TextView(
+                    '23.Obtain the connection status of the watch【获取手表连接状态】'),
+                onTap: () {
+                  getWacthStateInfo();
                 },
               ),
               TitleView('  Setting【设置信息】'),

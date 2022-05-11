@@ -29,3 +29,4 @@ part 'EAMenstrual.dart';
 part 'EAWatchFace.dart';
 part 'EAOTA.dart';
 part 'EABindInfo.dart';
+part 'EAConnectStateInfo.dart';

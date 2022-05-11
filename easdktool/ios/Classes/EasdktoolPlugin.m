@@ -28,11 +28,11 @@
 #define kEAGetBigWatchData          @"EAGetBigWatchData"    // 获取手表大数据
 #define kEAOperationWatch           @"EAOperationWatch"     // 操作手表
 #define kEAOTA                      @"EAOTA"                // ota
-#define kEALog                      @"EALog"                // log
+#define kEALog                      @"EAShowLog"            // log
 #define kEASyncPhoneInfoToWacth     @"EASyncPhoneInfoToWacth"// 设置手表信息
 #define kEAScanWacth                @"EAScanWacth"          // 搜索手表
 #define kEAStopScanWacth            @"EAStopScanWacth"          //停止搜索手表
-
+#define kEAGetWacthStateInfo        @"EAGetWacthStateInfo"  //获取手表连接状态信息
 
 /// MARK: - invoke method Name
 #define kArgumentsError             @"ArgumentsError"
@@ -200,6 +200,14 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             _config.debug = [arguments[@"showLog"] boolValue];
             [[EABleManager defaultManager] setBleConfig:_config];
         }
+    }
+    if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
+        
+        EAConnectStateType connectStateType = [EABleManager defaultManager].connectState;
+        NSDictionary *info = @{
+            @"connectState":@(connectStateType),
+        };
+        result([info yy_modelToJSONString]);
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
         
