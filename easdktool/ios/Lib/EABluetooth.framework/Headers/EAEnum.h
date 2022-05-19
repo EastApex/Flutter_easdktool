@@ -418,6 +418,12 @@ typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     /** 停止寻找手机(上位机需求) */
     EADeviceOpsTypeStopSearchPhone = 7,
     
+    /** 工厂模式专用：进入工厂测试模式 */
+    EADeviceOpsTypeEnterFactoryTestMode = 8,
+
+    /** 工厂模式专用：退出工厂测试模式 */
+    EADeviceOpsTypeExitFactoryTestMode = 9,
+    
     /** 寻找手表 */
     EADeviceOpsTypeStartSearchWatch = 10,
     
