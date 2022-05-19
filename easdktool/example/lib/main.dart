@@ -328,6 +328,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false, // 加入这行代码,即可关闭'DEBUG'字样
       home: Scaffold(
         appBar: AppBar(
           title: Text("Flutter Demo For EASDK"),

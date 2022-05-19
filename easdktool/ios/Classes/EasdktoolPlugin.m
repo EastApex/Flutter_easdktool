@@ -191,7 +191,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    
+    NSLog(@"~~~~~~ call method:%@",call.method);
     if ([call.method isEqualToString:kEALog]) { // FIXME: - log
         
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
@@ -250,8 +250,16 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }
     else if ([call.method isEqualToString:kEAUnbindWatch]) { // FIXME: - 解绑
         
-        [[EABleManager defaultManager] unbindPeripheral];
-        
+        EADeviceOps *deviceOps = [[EADeviceOps alloc] init];
+        deviceOps.deviceOpsType = EADeviceOpsTypeRestoreFactory;
+        deviceOps.deviceOpsStatus = EADeviceOpsStatusExecute;
+        [[EABleSendManager defaultManager] changeInfo:deviceOps respond:^(EARespondModel * _Nonnull respondModel) {
+            
+            if (respondModel.eErrorCode == EARespondCodeTypeSuccess) {
+                
+                [[EABleManager defaultManager] unbindPeripheral];
+            }
+        }];
     }
     else if ([call.method isEqualToString:kEAbindingWatch]) { // FIXME: - 绑定手表
         
@@ -506,8 +514,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 
                 return;
             }
+            NSInteger index = [[arguments valueForKey:@"type"] integerValue];
+            if (index >= 8) {
+                
+                index += 2;
+            }
             EADeviceOps *model = [[EADeviceOps alloc] init];
-            model.deviceOpsType = [[arguments valueForKey:@"type"] integerValue];
+            model.deviceOpsType = index;
             model.deviceOpsStatus = EADeviceOpsStatusExecute;
             [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
                 
@@ -517,7 +530,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }
     else if ([call.method isEqualToString:kEAOTA]) { // FIXME: - OTA
          
-        
         // 判断断连
         if (![EABleManager defaultManager].isConnected) {
             
@@ -548,7 +560,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         result(FlutterMethodNotImplemented);
     }
-    
 }
 
 
@@ -560,7 +571,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:succ?0:1];
     }];
 }
-
 
 - (void)getWatchInfo:(EADataInfoType )dataInfoType {
     

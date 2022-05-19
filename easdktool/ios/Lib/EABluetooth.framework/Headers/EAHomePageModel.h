@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, strong) NSMutableArray<EAPageModel*> *sPageArray;
 
+/** 当前项目支持的page，最多支持7个（大小详见对应OPTIONS文件） */
+@property(nonatomic, strong) NSMutableArray<EAPageModel*> *supportPageArray;
 
 /// MARK: - 获取一级菜单
 /// @param data 数据流

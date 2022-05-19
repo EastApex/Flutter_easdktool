@@ -80,6 +80,12 @@ NS_ASSUME_NONNULL_BEGIN
 /** 最小心率 */
 @property(nonatomic, assign) NSInteger averageHeartRateMin;
 
+/** 次数【跳绳】 */
+@property(nonatomic, assign) NSInteger count;
+
+/** 有效时长【UTE设备特有】 */
+@property (nonatomic,assign) NSInteger validTime;
+
 @end
 
 @interface EAUploadSportsData : EABaseBigDataModel

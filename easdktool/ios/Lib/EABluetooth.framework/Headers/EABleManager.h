@@ -40,11 +40,14 @@ typedef NS_ENUM(NSUInteger, EAConnectStatus) {
 };
 
 /** 连接失败 */
-#define kNTF_EAConnectStatusFailed          @"EAConnectStatusFailed"
-/** 连接成功 */
-#define kNTF_EAConnectStatusSucceed         @"EAConnectStatusSucceed"
+#define kNTF_EAConnectStatusFailed              @"EAConnectStatusFailed"
+/** 连接成功（已获取服务） */
+#define kNTF_EAConnectStatusSucceed             @"EAConnectStatusSucceed"
 /** 断开链接 */
-#define kNTF_EAConnectStatusDisconnect      @"EAConnectStatusDisconnect"
+#define kNTF_EAConnectStatusDisconnect          @"EAConnectStatusDisconnect"
+/** 尝试连接成功（未获取服务） */
+#define kNTF_EAConnectStatusSucceedUnGetServer  @"EAConnectStatusSucceedUnGetServer"
+
 /** 蓝牙开启 */
 #define kNTF_EABlePoweredOn                 @"EABlePoweredOn"
 /** 蓝牙关闭 */

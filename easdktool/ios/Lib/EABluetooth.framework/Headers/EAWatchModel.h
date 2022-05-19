@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 手表agps的最后更新时间戳，0为没更新过 */
 @property(nonatomic, assign) NSInteger agpsUpdateTimestamp;
 
+/** 蓝牙MAC地址 */
+@property(nonatomic, strong) NSString *bleMacAddr;
 
 /// 获取手表相关信息
 /// @param data 数据流

@@ -100,16 +100,11 @@ const int kEADataInfoTypeOTARespond = 9000;
 
 class EAGetData {
   int type = 0;
-  Map<String, dynamic> toJson() => {
-        'type': type,
-      };
+  Map<String, dynamic> toJson() => {'type': type};
 }
 
 class EASetData {
   int type = 0;
   String jsonString = "";
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'jsonString': jsonString,
-      };
+  Map<String, dynamic> toJson() => {'type': type, 'jsonString': jsonString};
 }

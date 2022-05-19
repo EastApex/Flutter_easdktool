@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 调色版RGB565 (B) */
 @property(nonatomic, assign) NSInteger b;
 
-/** 贪睡时间（单位：分钟） */
+/** 贪睡时间（单位：分钟）写死30分钟 */
 @property(nonatomic, assign) NSInteger duration;
 
 /** 提醒方式 */
@@ -51,6 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 自定义内容：最多支持32字节的utf8，字符串（大小详见对应OPTIONS文件） */
 @property(nonatomic, copy,) NSString *content;
+
+/** 标志  （read respond有效，write request写0） */
+@property(nonatomic, assign) EAHabitTrackerFlag eFlag;
+
 
 @end
 

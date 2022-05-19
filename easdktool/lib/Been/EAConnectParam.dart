@@ -15,10 +15,8 @@ class EAConnectParam {
   int rssi = 0;
   String uuid = "";
   EAConnectParam();
-  Map<String, dynamic> toJson() => {
-        'connectAddress': connectAddress,
-        'snNumber': snNumber,
-      };
+  Map<String, dynamic> toJson() =>
+      {'connectAddress': connectAddress, 'snNumber': snNumber};
 
   EAConnectParam.fromMap(Map<String, dynamic> map) {
     if (map["connectAddress"] != null) {

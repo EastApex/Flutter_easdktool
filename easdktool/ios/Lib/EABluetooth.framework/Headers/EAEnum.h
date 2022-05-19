@@ -156,6 +156,9 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /** 大数据静息心率 */
     EADataInfoTypeRestingHeartRateData = 3010,
     
+    /** 习惯数据 */
+    EADataInfoTypeHabitTrackerData = 3012,
+    
     /** OTA命令 */
     EADataInfoTypeOTARequest = 9001,
     
@@ -247,16 +250,16 @@ typedef NS_ENUM(NSUInteger, EASkinColorType) {
     
     /** 白 */
     EASkinColorTypeWhite = 0,
-
+    
     /** 白偏黄 */
     EASkinColorTypeWhiteYellow = 1,
-
+    
     /** 黄 */
     EASkinColorTypeYellow = 2,
-
+    
     /** 黄偏黑 */
     EASkinColorTypeYellowBlack = 3,
-
+    
     /** 黑 */
     EASkinColorTypeBalck = 4,
 };
@@ -417,7 +420,7 @@ typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     
     /** 寻找手表 */
     EADeviceOpsTypeStartSearchWatch = 10,
-
+    
     /** 停止寻找手表 */
     EADeviceOpsTypeStopSearchWatch = 11,
     
@@ -453,34 +456,34 @@ typedef NS_ENUM(NSUInteger,EAWeatherType) {
     
     /** 晴 （100 102 150） */
     EAWeatherTypeClear = 0,
-
+    
     /** 多云（101 103 153 502~515） */
     EAWeatherTypeCloudy = 1,
-
+    
     /** 阴（104 154 500 501 999） */
     EAWeatherTypeGloomy = 2,
-
+    
     /** 阵雨（300 305 309 350） */
     EAWeatherTypeDrizzle = 3,
-
+    
     /** 强阵雨（301 306 314 399 351） */
     EAWeatherTypeModerateRain = 4,
-
+    
     /** 雷阵雨（302 303 304） */
     EAWeatherTypeThunderstorm = 5,
-
+    
     /** 大雨（307 308 310 311 312 315 316 317 318） */
     EAWeatherTypeHeavyRain = 6,
-
+    
     /** 冻雨（313 404 405 406 456） */
     EAWeatherTypeSleet = 7,
-
+    
     /** 小雪（400 407 457） */
     EAWeatherTypeLightSnow = 8,
-
+    
     /** 中雪（401 408 499） */
     EAWeatherTypeModerateSnow = 9,
-
+    
     /** 大雪（402 403 409 410） */
     EAWeatherTypeHeavySnow = 10,
 };
@@ -490,10 +493,10 @@ typedef NS_ENUM(NSUInteger,EAWeatherAirType) {
     
     /** 优 */
     EAWeatherAirTypeExcellent = 0,
-
+    
     /** 良 */
     EAWeatherAirTypeGood = 1,
-
+    
     /** 差 */
     EAWeatherAirTypeBad = 2,
 };
@@ -503,16 +506,16 @@ typedef NS_ENUM(NSUInteger,EAWeatherRaysType) {
     
     /** 弱 */
     EAWeatherRaysTypeWeak = 0,
-
+    
     /** 中等 */
     EAWeatherRaysTypeMedium = 1,
-
+    
     /** 强 */
     EAWeatherRaysTypeStrong = 2,
-
+    
     /** 很强 */
     EAWeatherRaysTypeVeryStrong = 3,
-
+    
     /** 超级强 */
     EAWeatherRaysTypeSuperStrong = 4,
 };
@@ -522,31 +525,31 @@ typedef NS_ENUM(NSUInteger,EAWeatherMoonType) {
     
     /** 新月 */
     EAWeatherMoonTypeNewMoon = 0,
-
+    
     /** 峨眉月 */
     EAWeatherMoonTypeWaxingCrescentMoon = 1,
-
+    
     /** 上弦月 */
     EAWeatherMoonTypeQuarterMoon = 2,
-
+    
     /** 盈半月 */
     EAWeatherMoonTypeHalfMoon1 = 3,
-
+    
     /** 盈凸月 */
     EAWeatherMoonTypeWaxingGibbousMoon = 4,
-
+    
     /** 满月 */
     EAWeatherMoonTypeFullMoon = 5,
-
+    
     /** 亏凸月 */
     EAWeatherMoonTypeWaningGibbousMoon = 6,
-
+    
     /** 亏半月 */
     EAWeatherMoonTypeHalfMoon2 = 7,
-
+    
     /** 下弦月 */
     EAWeatherMoonTypeLastQuarterMoon = 8,
-
+    
     /** 残月 */
     EAWeatherMoonTypeWaningCrescentMoon = 9,
 };
@@ -693,7 +696,7 @@ typedef NS_ENUM(NSUInteger,EAPhoneOps) {
     
     /** mic录音准备 lin */
     EAPhoneOpsMicRecordReady = 9,
-
+    
     /** mic录音结束 lin */
     EAPhoneOpsMicRecordStop = 10,
     
@@ -737,28 +740,28 @@ typedef NS_ENUM(NSUInteger,EASleepNode) {
     
     /** 活动状态 */
     EASleepNodeActivity = 0,
-
+    
     /** 进入睡眠 (!!!) */
     EASleepNodeEnter = 1,
-
+    
     /** 睡眠中途醒来 */
     EASleepNodeWake = 2,
-
+    
     /** 快速眼动 */
     EASleepNodeRem = 3,
-
+    
     /** 浅睡 */
     EASleepNodeLight = 4,
-
+    
     /** 深睡 */
     EASleepNodeDeep = 5,
-
+    
     /** 退出睡眠(!!!) */
     EASleepNodeQuit = 6,
-
+    
     /** 未知 */
     EASleepNodeUnknown = 7,
-
+    
     /** 睡眠摘要 */
     EASleepNodeSummary = 8,
 };
@@ -804,61 +807,241 @@ typedef NS_ENUM(NSUInteger,EASportType) {
     
     /** 椭圆机 */
     EASportTypeElliptical = 12,
-
+    
     /** 瑜伽 */
     EASportTypeYoga = 13,
-
+    
     /** 划船机 */
     EASportTypeRowing = 14,
     
     /** 室内游泳 */
     EASportTypeIndoorSwimming = 15,
-
+    
+    /** 跳绳 */
+    EASportTypeRopeSkipping = 68,
+    
+    /** 网球 */
+    EASportTypeTennis = 69,
+    
+    /** 乒乓球 */
+    EASportTypePingPong = 70,
+    
+    /** 羽毛球 */
+    EASportTypeBadminton = 71,
+    
+    /** 篮球 */
+    EASportTypeBasketball = 72,
+    
+    /** 足球 */
+    EASportTypeFootball = 73,
+    
+    /** 棒球 */
+    EASportTypeBaseball = 74,
+    
+    /** 板球 */
+    EASportTypeCricket = 75,
+    
+    /** 排球 */
+    EASportTypeVolleyball = 76,
+    
+    /** 曲棍球 */
+    EASportTypeHockey = 77,
+    
+    /** 橄榄球 */
+    EASportTypeRugby = 78,
+    
+    /** 跳舞 */
+    EASportTypeDance = 79,
+    
+    /** 自定义运动 */
+    EASportTypeCustomSport = 80,
+    
+    /** 动感单车 */
+    EASportTypeSpinning = 81,
+    
+    /** 仰卧起坐 */
+    EASportTypeSitUp = 82,
+    
+    /** 体操 */
+    EASportTypeGymnastics = 83,
+    
+    /** 开合跳 */
+    EASportTypeJumpingJack = 84,
+    
+    /** 自由训练 */
+    EASportTypeFreeTraining = 85,
+    
+    /** 力量训练 */
+    EASportTypeStrengthTraining = 86,
+    
+    /** 踏步 */
+    EASportTypeMarkTime = 87,
+    
+    /** 骑马 */
+    EASportTypeHorseRiding = 88,
+    
+    /** 太极 */
+    EASportTypeTaiJi = 89,
+    
+    /** 毽球 */
+    EASportTypeShuttlecock = 90,
+    
+    /** 滑雪 */
+    EASportTypeSkiing = 91,
+    
+    /** 冰球 */
+    EASportTypeIceHockey = 92,
+    
+    /** 跆拳道 */
+    EASportTypeTaekwondo = 93,
+    
+    /** 漫步机 */
+    EASportTypeWalkingMachine = 94,
+    
+    /** 田径 */
+    EASportTypeAthletics = 95,
+    
+    /** 腰腹训练 */
+    EASportTypeLumbarAbdomenTraining = 96,
+    
+    /** 空手道 */
+    EASportTypeKarate = 97,
+    
+    /** 普拉提 */
+    EASportTypePilates = 98,
+    
+    /** 拉丁舞 */
+    EASportTypeLatinDance = 99,
+    
+    /** 街舞 */
+    EASportTypeStreetDance = 100,
+    
+    /** 芭蕾 */
+    EASportTypeBallet = 101,
+    
+    /** 武术 */
+    EASportTypeWushu = 102,
+    
+    /** 爬楼 */
+    EASportTypeClimbStairs = 103,
+    
+    /** 手球 */
+    EASportTypeHandball = 104,
+    
+    /** 保龄球 */
+    EASportTypeBowling = 105,
+    
+    /** 壁球 */
+    EASportTypeSquash = 106,
+    
+    /** 冰壶 */
+    EASportTypeCurling = 107,
+    
+    /** 钓鱼 */
+    EASportTypeFish = 108,
+    
+    /** 飞盘 */
+    EASportTypeFrisbee = 109,
+    
+    /** 高尔夫 */
+    EASportTypeGolf = 110,
+    
+    /** 民族舞 */
+    EASportTypeFolkDance = 111,
+    
+    /** 滑冰 */
+    EASportTypeSkating = 112,
+    
+    /** 健身操 */
+    EASportTypeBodybuildingExercise = 113,
+    
+    /** 长曲棍球 */
+    EASportTypeLacrosse = 114,
+    
+    /** 垒球 */
+    EASportTypeSoftball = 115,
+    
+    /** 呼啦圈 */
+    EASportTypeHulaHoop = 116,
+    
+    /** 飞镖 */
+    EASportTypeDarts = 117,
+    
+    /** 匹克球 */
+    EASportTypePeakBall = 118,
+    
+    /** 蹦床 */
+    EASportTypeTrampoline = 119,
+    
+    /** 滑板 */
+    EASportTypeSkateboarding = 120,
+    
+    /** 酷跑 */
+    EASportTypeParkour = 121,
+    
+    /** 引体向上 */
+    EASportTypeChinning = 122,
+    
+    /** 俯卧撑 */
+    EASportTypePushUp = 123,
+    
+    /** 平板支撑 */
+    EASportTypePlank = 124,
+    
+    /** 攀岩 */
+    EASportTypeSportClimbing = 125,
+    
+    /** 跳高 */
+    EASportTypeHighJump = 126,
+    
+    /** 跳远 */
+    EASportTypeLongJump = 127,
+    
     /** 智慧运动: 日常运动 */
     EASportTypeDailyEx = 128,
-
+    
     /** 智慧运动: 户外步行 */
     EASportTypeOurdoorWalkingEx = 129,
-
+    
     /** 智慧运动: 户外跑步 */
     EASportTypeOurdoorRunningEx = 130,
-
+    
     /** 智慧运动: 户外徒步 */
     EASportTypeOurdoorOnFootEx = 131,
-
+    
     /** 智慧运动: 户外登山 */
     EASportTypeOurdoorOnMountaineeringEx = 132,
-
+    
     /** 智慧运动: 户外越野跑 */
     EASportTypeOurdoorTrailRunningEx = 133,
-
+    
     /** 智慧运动: 户外单车 */
     EASportTypeOurdoorCyclingEx = 134,
-
+    
     /** 智慧运动: 户外游泳 */
     EASportTypeOutdoorSwimmingEx = 135,
-
+    
     /** 智慧运动: 室内步行 */
     EASportTypeIndoorWalkingEx = 136,
-
+    
     /** 智慧运动: 室内跑步 */
     EASportTypeIndoorRunningEx = 137,
-
+    
     /** 智慧运动: 室内锻炼 */
     EASportTypeIndoorExerciseEx = 138,
-
+    
     /** 智慧运动: 室内单车 */
     EASportTypeIndoorCyclingEx = 139,
-
+    
     /** 智慧运动: 椭圆机 */
     EASportTypeEllipticalEx = 140,
-
+    
     /** 智慧运动: 瑜伽 */
     EASportTypeYogaEx = 141,
-
+    
     /** 智慧运动: 划船机 */
     EASportTypeRowingEx = 142,
-
+    
     /** 智慧运动: 室内游泳 */
     EASportTypeIndoorSwimmingEx = 143,
     
@@ -869,19 +1052,19 @@ typedef NS_ENUM(NSUInteger,EAOtaRespondStatus) {
     
     /** 接受ota请求 */
     EAOtaRespondStatusAccept = 0,
-
+    
     /** 拒绝ota请求 : 其他原因 */
     EAOtaRespondStatusReject = 1,
-
+    
     /** 拒绝ota请求 : 设备已经更新此版本 */
     EAOtaRespondStatusRejectVersionError = 2,
-
+    
     /** 请继续发送数据包 */
     EAOtaRespondStatusProceed = 3,
-
+    
     /** 传输完成，crc校验错误 */
     EAOtaRespondStatusCrcError = 4,
-
+    
     /** 传输完成 */
     EAOtaRespondStatusComplete = 5,
 };
@@ -1082,19 +1265,19 @@ typedef NS_ENUM(NSUInteger, EAMenstruationType) {
     
     /** 未设置时间 */
     EAMenstruationTypeUnSetting,
-   
+    
 };
 
 /// MARK: - 抬手亮屏
 typedef NS_ENUM(NSUInteger, EAGesturesBrightType) {
- 
-  /** 关闭 */
+    
+    /** 关闭 */
     EAGesturesBrightTypeClose = 0,
-
-  /** 全天开启 */
+    
+    /** 全天开启 */
     EAGesturesBrightTypeAllDay = 1,
-
-  /** 选择时间段开启 */
+    
+    /** 选择时间段开启 */
     EAGesturesBrightTypeSelectTime = 2,
 };
 
@@ -1104,13 +1287,13 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerOps) {
     
     /** 操作：新增 */
     EAHabitTrackerOpsAdd = 0,
-
+    
     /** 操作：编辑 */
     EAHabitTrackerOpsEdit = 1,
-
+    
     /** 操作：删除此条 */
     EAHabitTrackerOpsDel = 2,
-
+    
     /** 操作：删除全部 */
     EAHabitTrackerOpsDelAll = 3,
 };
@@ -1145,15 +1328,32 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerRespondType) {
     
     /** 执行成功 */
     EAHabitTrackerRespondTypeSuccess = 0,
-
+    
     /** 执行失败 */
     EAHabitTrackerRespondTypeFail = 1,
-
+    
     /** 超过支持的最大数量 */
     EAHabitTrackerRespondTypeMemFull = 2,
-
+    
     /** 时间重复 */
     EAHabitTrackerRespondTypeTimeConflict = 3,
+};
+
+
+#pragma mark - 习惯追踪flag
+typedef NS_ENUM(NSUInteger,EAHabitTrackerFlag) {
+    
+    /** 初始态 */
+    EAHabitTrackerFlagInitial = 0,
+    
+    /** 进行中 */
+    EAHabitTrackerFlagInProgress = 1,
+    
+    /** 已完成 */
+    EAHabitTrackerFlagCompleted = 2,
+    
+    /** 已取消 */
+    EAHabitTrackerFlagCancel = 3,
 };
 
 #endif /* EAEnumh */

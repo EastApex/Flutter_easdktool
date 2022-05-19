@@ -56,7 +56,7 @@ class EAAutoCheckSleep {
       "beginHour": beginHour,
       "beginMinute": beginMinute,
       "endHour": endHour,
-      "endMinute": endMinute,
+      "endMinute": endMinute
     };
   }
 }
@@ -87,6 +87,7 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
 
   /// 间隔时长：单位分钟，0为关闭监测功能
   int interval = 60;
+
   EAAutoCheckSedentariness();
   EAAutoCheckSedentariness.fromMap(Map<String, dynamic> map)
       : super.fromMap(map) {

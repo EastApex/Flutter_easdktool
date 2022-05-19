@@ -59,7 +59,7 @@
 #import <EABluetooth/EABloodPressureModel.h>
 #import <EABluetooth/EAAutoMonitorModel.h>
 #import <EABluetooth/EAHabitTrackerModel.h>
-
+#import <EABluetooth/EAHabitTrackerDataModel.h>
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>

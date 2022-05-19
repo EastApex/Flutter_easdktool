@@ -10,6 +10,7 @@ class EABleWatchInfo {
   EABindingType bindingType = EABindingType.unbound; // 绑定状态
   String userId = ""; // 已绑定的用户id
   int agpsUpdateTimestamp = 0; // agps更新时间
+  String bleMacAddr = ""; //
 
   EABleWatchInfo.fromMap(Map<String, dynamic> map) {
     if (map["agpsUpdateTimestamp"] != null) {
@@ -35,6 +36,9 @@ class EABleWatchInfo {
 
     if (map["type"] != null) {
       watchType = map["type"];
+    }
+    if (map["bleMacAddr"] != null) {
+      watchType = map["bleMacAddr"];
     }
   }
 }

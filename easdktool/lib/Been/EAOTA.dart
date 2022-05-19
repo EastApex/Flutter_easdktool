@@ -24,11 +24,6 @@ class EAOTAList {
   EAOTAList(this.type, this.otas);
 
   Map toJson() {
-    // List array = [];
-    // for (EAOTA ota in otas) {
-    //   Map map = ota.toJson();
-    //   array.add(map);
-    // }
     return {"type": type, "otas": otas};
   }
 }
