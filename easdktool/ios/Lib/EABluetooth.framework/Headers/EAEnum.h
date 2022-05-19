@@ -157,7 +157,9 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     EADataInfoTypeRestingHeartRateData = 3010,
     
     /** 习惯数据 */
-    EADataInfoTypeHabitTrackerData = 3012,
+    EADataInfoTypeHabitTrackerData = 3011,
+    
+
     
     /** OTA命令 */
     EADataInfoTypeOTARequest = 9001,

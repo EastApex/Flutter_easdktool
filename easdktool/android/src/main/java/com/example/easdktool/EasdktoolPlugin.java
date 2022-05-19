@@ -304,6 +304,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeStepPaceData = 3009;
     /* 大数据静息心率 */
     final int kEADataInfoTypeRestingHeartRateData = 3010;
+    /* 习惯数据 */
+    final int EADataInfoTypeHabitTrackerData = 3011;
     /* OTA命令 */
     final int kEADataInfoTypeOTARequest = 9001;
     /* OTA命令回应 */

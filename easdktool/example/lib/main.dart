@@ -119,7 +119,8 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress = "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "001001211112000028"; // iOS need
+    connectParam.snNumber =
+        "002006000009999030"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -499,9 +500,9 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Set the watch time【设置手表时间】'), // 同步手机时间到手表
                 onTap: () {
                   EASyncTime syncTime = EASyncTime();
-                  syncTime.day = 16;
-                  syncTime.month = 4;
-                  syncTime.year = 2020;
+                  syncTime.day = 18;
+                  syncTime.month = 5;
+                  syncTime.year = 2022;
                   syncTime.hour = 12;
                   syncTime.minute = 0;
                   syncTime.second = 0;

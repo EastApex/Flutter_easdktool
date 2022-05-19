@@ -156,7 +156,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     if(phoneOpsModel.eOps == EAPhoneOpsBig8803DataUpdateFinish) {
         
-        for (int i = 1; i < 11; i ++) {
+        for (int i = 1; i < 12; i ++) {
             
             NSInteger dataType = 3000 + i;
             NSArray *list = [[EABleSendManager defaultManager] getBigDataWithBigDataType:(dataType)];
@@ -336,7 +336,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeSyncTime: {
                     
-                    EASyncTime *syncTime = [EASyncTime getCurrentTime];
+                    // EASyncTime *syncTime = [EASyncTime getCurrentTime];
+                    EASyncTime *syncTime = [EASyncTime yy_modelWithJSON:value];
                     [[EABleSendManager defaultManager] changeInfo:syncTime respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];

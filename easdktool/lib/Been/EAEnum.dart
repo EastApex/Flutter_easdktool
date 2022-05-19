@@ -396,6 +396,21 @@ enum EAHabitTrackerOps {
   DelAll,
 }
 
+/// MARK: - 习惯追踪flag
+enum EAHabitTrackerFlag {
+  /// 初始态
+  EAHabitTrackerFlagInitial,
+
+  /// 进行中
+  EAHabitTrackerFlagInProgress,
+
+  /// 已完成
+  EAHabitTrackerFlagCompleted,
+
+  /// 已取消
+  EAHabitTrackerFlagCancel,
+}
+
 /// Operating Phone Type 【Operating Phone Type】
 enum EAOpePhoneType {
   /// 寻找手机

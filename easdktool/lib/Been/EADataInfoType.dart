@@ -93,6 +93,8 @@ const int kEADataInfoTypeStepFreqData = 3008;
 const int kEADataInfoTypeStepPaceData = 3009;
 /* 大数据静息心率 */
 const int kEADataInfoTypeRestingHeartRateData = 3010;
+/* 习惯数据 */
+const int EADataInfoTypeHabitTrackerData = 3011;
 /* OTA命令 */
 const int kEADataInfoTypeOTARequest = 9001;
 /* OTA命令回应 */

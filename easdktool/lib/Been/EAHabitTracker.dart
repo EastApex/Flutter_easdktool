@@ -37,8 +37,11 @@ class EAHabitTracker {
   /// 提醒方式
   EARemindActionType eAction = EARemindActionType.NoAction;
 
-  /// 自定义内容：最多支持32字节的utf8，字符串（大小详见对应OPTIONS文件）
+  /// 自定义内容：最多支64字节的utf8，字符串（大小详见对应OPTIONS文件）
   String content = "";
+
+  /// 习惯状态标志 (建议App不做修改，默认传 EAHabitTrackerFlagInitial)
+  EAHabitTrackerFlag eFlag = EAHabitTrackerFlag.EAHabitTrackerFlagInitial;
 
   EAHabitTracker();
   EAHabitTracker.fromMap(Map<String, dynamic> map) {
@@ -77,6 +80,9 @@ class EAHabitTracker {
     }
     if (map["eAction"] != null) {
       eAction = EARemindActionType.values[map["eAction"]];
+    }
+    if (map["eFlag"] != null) {
+      eFlag = EAHabitTrackerFlag.values[map["eFlag"]];
     }
   }
 }
