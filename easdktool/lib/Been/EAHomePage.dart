@@ -45,6 +45,7 @@ class EAPage {
 /// 一级菜单
 class EAHomePages {
   List<EAPage> list = <EAPage>[];
+  List<EAPage> supportPageArray = <EAPage>[];
 
   EAHomePages();
   EAHomePages.fromMap(Map<String, dynamic> map) {
@@ -55,6 +56,13 @@ class EAHomePages {
         list.add(page);
       }
     }
+    if (map["supportPageArray"] != null) {
+      List supportPageArray = map["supportPageArray"];
+      for (Map<String, dynamic> item in supportPageArray) {
+        EAPage page = EAPage.fromMap(item);
+        supportPageArray.add(page);
+      }
+    }
   }
 
   Map toMap() {
@@ -62,8 +70,6 @@ class EAHomePages {
     for (EAPage page in list) {
       pages.add(page.toMap());
     }
-    return {
-      "sPageArray": pages,
-    };
+    return {"sPageArray": pages, "supportPageArray": supportPageArray};
   }
 }

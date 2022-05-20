@@ -26,6 +26,7 @@ import com.apex.bluetooth.callback.HeartCheckCallback;
 import com.apex.bluetooth.callback.HeartLimitCallback;
 import com.apex.bluetooth.callback.InfoPushCallback;
 import com.apex.bluetooth.callback.LanguageCallback;
+import com.apex.bluetooth.callback.MenuCallback;
 import com.apex.bluetooth.callback.MotionDataReportCallback;
 import com.apex.bluetooth.callback.MotionDataResponseCallback;
 import com.apex.bluetooth.callback.OtaCallback;
@@ -67,6 +68,7 @@ import com.apex.bluetooth.model.EABleDistanceFormat;
 import com.apex.bluetooth.model.EABleGeneralSportRespond;
 import com.apex.bluetooth.model.EABleGesturesBrightScreen;
 import com.apex.bluetooth.model.EABleGpsData;
+import com.apex.bluetooth.model.EABleHabitRecord;
 import com.apex.bluetooth.model.EABleHeartData;
 import com.apex.bluetooth.model.EABleHr;
 import com.apex.bluetooth.model.EABleInfoPush;
@@ -513,6 +515,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
+
     class MotionDataListener implements MotionDataReportCallback {
         @Override
         public void dailyExerciseData(final List<EABleDailyData> list, final CommonFlag commonFlag) {
@@ -641,6 +644,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
 
         @Override
+        public void getHabitData(List<EABleHabitRecord> list, CommonFlag commonFlag) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", list);
+            jsonObject.put("flag", commonFlag.getValue());
+            jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
+            sendBigWatchData(jsonObject);
+        }
+
+        @Override
         public void mutualFail(int i) {
 
             JSONObject jsonObject = new JSONObject();
@@ -648,6 +660,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             jsonObject.put("flag", CommonFlag.end.getValue());
             sendBigWatchData(jsonObject);
         }
+
     }
 
     class ConnectListener implements EABleConnectListener {
@@ -1567,13 +1580,50 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             });
                         }
                     }
-
                     @Override
                     public void mutualFail(int i) {
                     }
                 });
             }
             break;
+            case 31: {
+                EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.home_page, new MenuCallback() {
+                    @Override
+                    public void menuInfo(EABleMenuPage eaBleMenuPage) {
+                        if (eaBleMenuPage != null) {
+                            List<EABleMenuPage.MenuType> types = eaBleMenuPage.getAllSupportList();
+                            if (types == null || types.isEmpty()) {
+                                types = new ArrayList<>();
+                                types.add(EABleMenuPage.MenuType.page_pressure);
+                                types.add(EABleMenuPage.MenuType.page_heart_rate);
+                                types.add(EABleMenuPage.MenuType.page_menstrual_cycle);
+                                types.add(EABleMenuPage.MenuType.page_breath);
+                                types.add(EABleMenuPage.MenuType.page_music);
+                                types.add(EABleMenuPage.MenuType.page_sleep);
+                                types.add(EABleMenuPage.MenuType.page_weather);
+                                eaBleMenuPage.setAllSupportList(types);
+                            }
+                            if (mHandler != null) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("list", eaBleMenuPage.getTypeList());
+                                        jsonObject.put("supportPageArray", eaBleMenuPage.getAllSupportList());
+                                        sendWatchDataWithMap(jsonObject.getInnerMap(), type);
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+
+                    }
+                });
+            }
             case 33: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.dial, new WatchFaceCallback() {
                     @Override
@@ -2421,7 +2471,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     int dataType = jsonObject.getInteger("dataType");
                     bigDataRespond(dataType, flag);
                     channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
-
                 }
             });
         }
