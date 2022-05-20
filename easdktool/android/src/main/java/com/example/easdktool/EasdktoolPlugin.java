@@ -22,6 +22,8 @@ import com.apex.bluetooth.callback.DonDisturbCallback;
 import com.apex.bluetooth.callback.EditAttentionCallback;
 import com.apex.bluetooth.callback.GeneralCallback;
 import com.apex.bluetooth.callback.GoalCallback;
+import com.apex.bluetooth.callback.HabitCallback;
+import com.apex.bluetooth.callback.HabitResultCallback;
 import com.apex.bluetooth.callback.HeartCheckCallback;
 import com.apex.bluetooth.callback.HeartLimitCallback;
 import com.apex.bluetooth.callback.InfoPushCallback;
@@ -45,6 +47,8 @@ import com.apex.bluetooth.core.EABleManager;
 import com.apex.bluetooth.enumeration.CommonAction;
 import com.apex.bluetooth.enumeration.CommonFlag;
 import com.apex.bluetooth.enumeration.EABleConnectState;
+import com.apex.bluetooth.enumeration.HabitIcon;
+import com.apex.bluetooth.enumeration.HabitState;
 import com.apex.bluetooth.enumeration.MotionReportType;
 import com.apex.bluetooth.enumeration.PersonHand;
 import com.apex.bluetooth.enumeration.QueryWatchInfoType;
@@ -68,7 +72,9 @@ import com.apex.bluetooth.model.EABleDistanceFormat;
 import com.apex.bluetooth.model.EABleGeneralSportRespond;
 import com.apex.bluetooth.model.EABleGesturesBrightScreen;
 import com.apex.bluetooth.model.EABleGpsData;
+import com.apex.bluetooth.model.EABleHabit;
 import com.apex.bluetooth.model.EABleHabitRecord;
+import com.apex.bluetooth.model.EABleHabitRespond;
 import com.apex.bluetooth.model.EABleHeartData;
 import com.apex.bluetooth.model.EABleHr;
 import com.apex.bluetooth.model.EABleInfoPush;
@@ -1037,6 +1043,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     map.put("userId", eaBleWatchInfo.getUserId());
                                     map.put("id_p", eaBleWatchInfo.getWatchId());
                                     map.put("type", eaBleWatchInfo.getWatchType());
+                                    map.put("bleMacAddr",eaBleWatchInfo.getBle_mac_addr());
                                     sendWatchDataWithMap(map, type);
                                 }
                             });
@@ -1677,6 +1684,58 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             }
             break;
+
+            case 38:{
+                EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.habit, new HabitCallback() {
+                    @Override
+                    public void habitInfo(EABleHabit eaBleHabit) {
+                        if (eaBleHabit!=null){
+                            if (mHandler != null) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("id", eaBleHabit.id);
+                                        jsonObject.put("eOps", eaBleHabit.getE_ops().getValue());
+                                        List<JSONObject> items = new ArrayList<>();
+                                        if (eaBleHabit.getItemList() != null && !eaBleHabit.getItemList().isEmpty()) {
+                                            for (int i = 0; i < eaBleHabit.getItemList().size(); i++) {
+
+                                                EABleHabit.HabitItem habitItem = eaBleHabit.getItemList().get(i);
+                                                JSONObject item = new JSONObject();
+                                                item.put("eIconId", habitItem.getE_icon_id().getValue());
+                                                item.put("id_p", habitItem.getId());
+                                                item.put("beginHour", habitItem.getBegin_hour());
+                                                item.put("beginMinute", habitItem.getBegin_minute());
+                                                item.put("endHour", habitItem.getEnd_hour());
+                                                item.put("endMinute", habitItem.getEnd_minute());
+                                                item.put("r", habitItem.getRedColor());
+                                                item.put("g", habitItem.getGreenColor());
+                                                item.put("b", habitItem.getBlueColor());
+                                                item.put("duration", habitItem.getDuration());
+                                                item.put("eAction", habitItem.getE_action().getValue());
+                                                item.put("content", habitItem.getContent());
+                                                item.put("eFlag", habitItem.getHabitState().getValue());
+                                                items.add(item);
+                                            }
+                                        }
+                                        jsonObject.put("sIndexArray", items);
+                                        Map map = jsonObject.getInnerMap();
+                                        sendWatchDataWithMap(map, type);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    @Override
+                    public void mutualFail(int i) {
+
+                    }
+                });
+            }
+            break;
+
             default:
                 channel.invokeMethod(kArgumentsError, "type error");
                 break;
@@ -2222,6 +2281,125 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             break;
             case (kEADataInfoTypeHabitTracker): {
 
+                Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+                EABleHabit eaBleHabit = new EABleHabit();
+                eaBleHabit.setId((Integer) map.get("id_p"));
+
+                int eOps = (int) map.get("eOps");
+                if (eOps == 0) {
+                    eaBleHabit.setE_ops(EABleHabit.HabitualOperation.add);
+                } else if (eOps == 1) {
+                    eaBleHabit.setE_ops(EABleHabit.HabitualOperation.edit);
+                } else if (eOps == 2) {
+                    eaBleHabit.setE_ops(EABleHabit.HabitualOperation.del);
+                } else {
+                    eaBleHabit.setE_ops(EABleHabit.HabitualOperation.del_all);
+                }
+                List<JSONObject> wArray = (List<JSONObject>) map.get("sIndexArray");
+                if (wArray != null && !wArray.isEmpty()) {
+                    List<EABleHabit.HabitItem> itemList = new ArrayList<>();
+                    eaBleHabit.setItemList(itemList);
+                    for (int i = 0; i < wArray.size(); i++) {
+                        JSONObject wMap = wArray.get(i);
+                        EABleHabit.HabitItem habitItem = new EABleHabit.HabitItem();
+                        habitItem.setContent((String) wMap.get("content"));
+                        habitItem.setBegin_hour((Integer) wMap.get("beginHour"));
+                        habitItem.setBegin_minute((Integer) wMap.get("beginMinute"));
+                        habitItem.setEnd_hour((Integer) wMap.get("endHour"));
+                        habitItem.setEnd_minute((Integer) wMap.get("endMinute"));
+                        habitItem.setBlueColor((Integer) wMap.get("b"));
+                        habitItem.setGreenColor((Integer) wMap.get("g"));
+                        habitItem.setRedColor((Integer) wMap.get("r"));
+                        habitItem.setDuration((Integer) wMap.get("duration"));
+                        habitItem.setId((Integer) wMap.get("id_p"));
+                        int remindActionType = (int) wMap.get("eAction");
+                        if (remindActionType == 0) {
+                            habitItem.setE_action(CommonAction.no_action);
+                        } else if (remindActionType == 1) {
+                            habitItem.setE_action(CommonAction.one_long_vibration);
+                        } else if (remindActionType == 2) {
+                            habitItem.setE_action(CommonAction.one_short_vibration);
+                        } else if (remindActionType == 3) {
+                            habitItem.setE_action(CommonAction.two_long_vibration);
+                        } else if (remindActionType == 4) {
+                            habitItem.setE_action(CommonAction.two_short_vibration);
+                        } else if (remindActionType == 5) {
+                            habitItem.setE_action(CommonAction.long_vibration);
+                        } else if (remindActionType == 6) {
+                            habitItem.setE_action(CommonAction.long_short_vibration);
+                        } else if (remindActionType == 7) {
+                            habitItem.setE_action(CommonAction.one_ring);
+                        } else if (remindActionType == 8) {
+                            habitItem.setE_action(CommonAction.two_ring);
+                        } else if (remindActionType == 9) {
+                            habitItem.setE_action(CommonAction.ring);
+                        } else if (remindActionType == 10) {
+                            habitItem.setE_action(CommonAction.one_vibration_ring);
+                        } else if (remindActionType == 11) {
+                            habitItem.setE_action(CommonAction.vibration_ring);
+                        }
+                        int reminderEventType = (int) wMap.get("eIconId");
+                        if (reminderEventType == 0) {
+                            habitItem.setE_icon_id(HabitIcon.study_01);
+                        } else if (reminderEventType == 1) {
+                            habitItem.setE_icon_id(HabitIcon.sleep_02);
+                        } else if (reminderEventType == 2) {
+                            habitItem.setE_icon_id(HabitIcon.study_03);
+                        } else if (reminderEventType == 3) {
+                            habitItem.setE_icon_id(HabitIcon.chores_04);
+                        } else if (reminderEventType == 4) {
+                            habitItem.setE_icon_id(HabitIcon.havefun_05);
+                        } else if (reminderEventType == 5) {
+                            habitItem.setE_icon_id(HabitIcon.drink_06);
+                        } else if (reminderEventType == 6) {
+                            habitItem.setE_icon_id(HabitIcon.sun_07);
+                        } else if (reminderEventType == 7) {
+                            habitItem.setE_icon_id(HabitIcon.teeth_08);
+                        } else if (reminderEventType == 8) {
+                            habitItem.setE_icon_id(HabitIcon.calendar_09);
+                        } else if (reminderEventType == 9) {
+                            habitItem.setE_icon_id(HabitIcon.piano_10);
+                        } else if (reminderEventType == 10) {
+                            habitItem.setE_icon_id(HabitIcon.fruit_11);
+                        } else if (reminderEventType == 11) {
+                            habitItem.setE_icon_id(HabitIcon.medicine_12);
+                        } else if (reminderEventType == 12) {
+                            habitItem.setE_icon_id(HabitIcon.draw_13);
+                        } else if (reminderEventType == 13) {
+                            habitItem.setE_icon_id(HabitIcon.target_14);
+                        } else if (reminderEventType == 14) {
+                            habitItem.setE_icon_id(HabitIcon.dog_15);
+                        } else if (reminderEventType == 15) {
+                            habitItem.setE_icon_id(HabitIcon.exercise_16);
+                        } else if (reminderEventType == 16) {
+                            habitItem.setE_icon_id(HabitIcon.bed_17);
+                        } else {
+                            habitItem.setE_icon_id(HabitIcon.tidyup_18);
+                        }
+                        int flag = (int) wMap.get("eFlag");
+                        if (flag == 0) {
+                            habitItem.setHabitState(HabitState.initial);
+                        } else if (flag == 1) {
+                            habitItem.setHabitState(HabitState.in_progress);
+                        } else if (flag == 2) {
+                            habitItem.setHabitState(HabitState.completed);
+                        } else {
+                            habitItem.setHabitState(HabitState.cancel);
+                        }
+                        itemList.add(habitItem);
+                    }
+                }
+                EABleManager.getInstance().setHabit(eaBleHabit, new HabitResultCallback() {
+                    @Override
+                    public void editResult(EABleHabitRespond eaBleHabitRespond) {
+                        setWatchDataResponse(eaBleHabitRespond.result.getValue(), (Integer) setWatchParam.get("type"));
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                    }
+                });
             }
             break;
             case (kEADataInfoTypeGesturesSetting): {

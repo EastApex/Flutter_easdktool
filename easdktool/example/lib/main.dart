@@ -118,9 +118,10 @@ class _MyAppState extends State<MyApp> {
   /// 【绑定手表】
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
-    connectParam.connectAddress = "45:41:70:97:FC:84"; // andriond need
+    connectParam.connectAddress =
+        "45:41:46:03:F2:B5"; //"45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "001001211112000028"; // iOS need "002006000009999030";
+        "002006000009999029"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -299,8 +300,8 @@ class _MyAppState extends State<MyApp> {
         break;
       case kEADataInfoTypeHabitTracker:
         {
-          EAHomePages homePages = EAHomePages.fromMap(value);
-          print(homePages.list);
+          EAHabitTrackers habitTrackers = EAHabitTrackers.formMap(value);
+          print(habitTrackers.list);
         }
         break;
       default:
@@ -479,6 +480,13 @@ class _MyAppState extends State<MyApp> {
                     '23.Obtain the connection status of the watch【获取手表连接状态】'),
                 onTap: () {
                   getWacthStateInfo();
+                },
+              ),
+              GestureDetector(
+                child:
+                    TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
+                onTap: () {
+                  getWatchData(kEADataInfoTypeHabitTracker);
                 },
               ),
               TitleView('  Setting【设置信息】'),
@@ -793,6 +801,29 @@ class _MyAppState extends State<MyApp> {
                   ]);
                   setWatchData(
                       kEADataInfoTypeAppMessage, appPushSwitch.toMap());
+                },
+              ),
+              GestureDetector(
+                child: TextView('17.Set the Habit Tracker【设置习惯】'),
+                onTap: () {
+                  EAHabitTracker habitTracker = EAHabitTracker();
+                  habitTracker.r = 0;
+                  habitTracker.g = 255;
+                  habitTracker.b = 255;
+                  habitTracker.content = "dog";
+                  habitTracker.duration = 30;
+                  habitTracker.beginHour = 22;
+                  habitTracker.beginMinute = 0;
+                  habitTracker.endHour = 7;
+                  habitTracker.endMinute = 00;
+                  habitTracker.eAction = EARemindActionType.LongShortVibration;
+                  habitTracker.eIconId = EAHabitTrackerIconType.Dog15;
+
+                  EAHabitTrackers habitTrackers = EAHabitTrackers();
+                  habitTrackers.list = [habitTracker];
+                  habitTrackers.eOps = EAHabitTrackerOps.Add;
+                  setWatchData(
+                      kEADataInfoTypeHabitTracker, habitTrackers.toMap());
                 },
               ),
               TitleView(' Getting big data【获取大数据】'),

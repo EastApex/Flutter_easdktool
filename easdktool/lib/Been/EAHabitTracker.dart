@@ -85,6 +85,24 @@ class EAHabitTracker {
       eFlag = EAHabitTrackerFlag.values[map["eFlag"]];
     }
   }
+
+  Map toMap() {
+    return {
+      "eIconId": eIconId.index,
+      "id_p": id_p,
+      "beginHour": beginHour,
+      "beginMinute": beginMinute,
+      "endHour": endHour,
+      "endMinute": endMinute,
+      "r": r,
+      "g": g,
+      "b": b,
+      "duration": duration,
+      "eAction": eAction.index,
+      "content": content,
+      "eFlag": eFlag.index,
+    };
+  }
 }
 
 /// 习惯列表
@@ -97,6 +115,15 @@ class EAHabitTrackers {
   /// 最多20个
   List<EAHabitTracker> list = [];
 
+  Map toMap() {
+    List lists = [];
+    for (EAHabitTracker habitTracker in list) {
+      lists.add(habitTracker.toMap());
+    }
+    return {"sIndexArray": lists, "id_p": id_p, "eOps": eOps.index};
+  }
+
+  EAHabitTrackers();
   EAHabitTrackers.formMap(Map<String, dynamic> map) {
     if (map["sIndexArray"] != null) {
       List sPageArray = map["sIndexArray"];

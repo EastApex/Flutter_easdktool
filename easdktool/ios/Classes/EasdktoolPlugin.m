@@ -407,7 +407,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAReminderOps *model = [EAReminderOps yy_modelWithJSON:value];
                     [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        if ([respondModel isKindOfClass:[EAReminderRespondModel class]]) {
+                            
+                            EAReminderRespondModel *model = (EAReminderRespondModel*)respondModel;
+                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
+
+                        }
                     }];
                 }break;
                 case EADataInfoTypeHeartRateWaringSetting: {
@@ -472,6 +477,21 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                    
+                }break;
+                case EADataInfoTypeHabitTracker: {
+                    
+                    EAHabitTrackers *model = [EAHabitTrackers yy_modelWithJSON:value];
+                    [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                        if ([respondModel isKindOfClass:[EAHabitTrackerRespondModel class]]) {
+                            
+                            EAHabitTrackerRespondModel *model = (EAHabitTrackerRespondModel*)respondModel;
+                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
+
+                        }
+                        
                     }];
                     
                 }break;
