@@ -39,6 +39,7 @@ import com.apex.bluetooth.callback.RestScreenCallback;
 import com.apex.bluetooth.callback.ScreenBrightnessCallback;
 import com.apex.bluetooth.callback.SedentaryCheckCallback;
 import com.apex.bluetooth.callback.SleepCheckCallback;
+import com.apex.bluetooth.callback.TodayTotalDataCallback;
 import com.apex.bluetooth.callback.UnitCallback;
 import com.apex.bluetooth.callback.WatchFaceCallback;
 import com.apex.bluetooth.callback.WatchInfoCallback;
@@ -101,6 +102,7 @@ import com.apex.bluetooth.model.EABleWatchFace;
 import com.apex.bluetooth.model.EABleWatchInfo;
 import com.apex.bluetooth.model.EABleWeather;
 import com.apex.bluetooth.model.EABleWeightFormat;
+import com.apex.bluetooth.model.TodayTotalData;
 import com.apex.bluetooth.utils.LogUtils;
 import com.example.easdktool.been.BindInfo;
 import com.example.easdktool.been.ConnectParam;
@@ -288,6 +290,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeHabitTracker = 38;
     /*习惯追踪回应 */
     final int kEADataInfoTypeHabitTrackerRespond = 39;
+
+
     /* 操作手机命令 */
     final int kEADataInfoTypePhoneOps = 2001;
     /* MTU */
@@ -897,10 +901,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 @Override
                                 public void run() {
 
-                                    Map map = new HashMap();
-                                    map.put("respondCodeType", b);
-                                    map.put("dataType", kEADataInfoTypeBingWatch);
-                                    channel.invokeMethod(kSetWatchResponse, map);
+                                    setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
                                 }
                             });
                         }
@@ -1015,7 +1016,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             }
                         }.start();
                     }
-
                 }
 
             }
@@ -1639,7 +1639,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sendWatchData(eaBleWatchFace, type);
+
+                                    Map<String, Integer> map = new HashMap();
+                                    sendWatchDataWithObjectMap(eaBleWatchFace, map, type);
+
                                 }
                             });
                         }
@@ -1735,7 +1738,29 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
+            case 40:{
 
+                EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.todayData, new TodayTotalDataCallback() {
+                    @Override
+                    public void todayData(TodayTotalData todayTotalData) {
+                        if (mHandler != null) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Map<String, Integer> map = new HashMap();
+                                    sendWatchDataWithObjectMap(todayTotalData, map, type);
+                                }
+                            });
+                        }
+                    }
+                    @Override
+                    public void mutualFail(int i) {
+
+                    }
+                });
+            }
+            break;
             default:
                 channel.invokeMethod(kArgumentsError, "type error");
                 break;
@@ -2606,6 +2631,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("dataType", type);
         jsonObject.put("value", map);
+        System.out.println("打印" + jsonObject.toJSONString());
         channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
     }
 

@@ -119,6 +119,8 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /**习惯追踪回应 */
     EADataInfoTypeHabitTrackerRespond = 39,
     
+    /**当前运动显示值 */
+    EADataInfoTypeSportShowData = 40,
     
     /** 操作手机命令 */
     EADataInfoTypePhoneOps = 2001,

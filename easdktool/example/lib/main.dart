@@ -2,11 +2,6 @@
 
 // import 'dart:typed_data';
 
-import 'dart:async';
-import 'dart:ffi';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:easdktool/EACallback.dart';
@@ -119,9 +114,9 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
-        "45:41:46:03:F2:B5"; //"45:41:70:97:FC:84"; // andriond need
+        "45:41:70:98:6E:97"; //"45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "002006000009999029"; //"001001211112000028"; // iOS need
+        "001002210515000000"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -302,6 +297,12 @@ class _MyAppState extends State<MyApp> {
         {
           EAHabitTrackers habitTrackers = EAHabitTrackers.formMap(value);
           print(habitTrackers.list);
+        }
+        break;
+      case kEADataInfoTypeSportShowData:
+        {
+          EASportShowData sportShowData = EASportShowData.fromMap(value);
+          print(sportShowData.calorie);
         }
         break;
       default:
@@ -487,6 +488,12 @@ class _MyAppState extends State<MyApp> {
                     TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
                 onTap: () {
                   getWatchData(kEADataInfoTypeHabitTracker);
+                },
+              ),
+              GestureDetector(
+                child: TextView('25.Obtain sport show data【获取运动显示值】'),
+                onTap: () {
+                  getWatchData(kEADataInfoTypeSportShowData);
                 },
               ),
               TitleView('  Setting【设置信息】'),

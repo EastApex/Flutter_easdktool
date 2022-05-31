@@ -69,6 +69,8 @@ const int kEADataInfoTypeAutoMonitor = 37;
 const int kEADataInfoTypeHabitTracker = 38;
 /*习惯追踪回应 */
 const int kEADataInfoTypeHabitTrackerRespond = 39;
+/*运动显示值 */
+const int kEADataInfoTypeSportShowData = 40;
 /* 操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
 /* MTU */

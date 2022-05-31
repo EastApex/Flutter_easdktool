@@ -46,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 是否单独设定振动模式 0:不单独设置 1:单独设置 */
 @property(nonatomic, assign) BOOL setVibrateIntensity;
 
-/** 表盘id, (0代表在线自定义表盘，1~n，内置表盘编号) */
+/** 表盘id, (0代表在线自定义表盘，1~n，内置表盘编号) 【不支持修改】*/
 @property(nonatomic, assign) NSInteger wfId;
 
-/** 在线自定义表盘id */
-@property(nonatomic, strong) NSString *userWfId;
+/** 在线自定义表盘id 【不支持修改】*/
+@property(nonatomic, copy,readonly) NSString *userWfId;
 
 /// MARK: - 获取设备基本信息
 + (EACombinationModel *)getModelByData:(NSData *)data;

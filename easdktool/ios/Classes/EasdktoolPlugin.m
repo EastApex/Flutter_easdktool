@@ -491,9 +491,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
 
                         }
-                        
                     }];
-                    
                 }break;
             
                 default:
@@ -517,7 +515,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
      
         EAGetBigDataRequestModel *model = [[EAGetBigDataRequestModel alloc] init];
         model.sportDataReq = 1;
-        [[EABleSendManager defaultManager] getBigDataRequestModel:model];
+        [[EABleSendManager defaultManager] getBigDataRequestModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+            
+        }];
         
     }
     else if ([call.method isEqualToString:kEAOperationWatch]) { // FIXME: - 操作手表
