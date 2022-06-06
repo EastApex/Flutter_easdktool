@@ -599,6 +599,15 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     [[EABleSendManager defaultManager] getInfoByInfoType:(dataInfoType) result:^(EABaseModel * _Nonnull baseModel) {
         
         NSDictionary *value = [baseModel yy_modelToJSONObject];
+        
+        if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
+            
+            NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
+            newValue[@"type"] = @"iTouch Flex";
+            
+            value = [newValue copy];
+        }
+        
         NSDictionary *info = @{
             @"dataType":@(dataInfoType),
             @"value":value,

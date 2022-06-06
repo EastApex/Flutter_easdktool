@@ -114,9 +114,9 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
-        "45:41:70:98:6E:97"; //"45:41:70:97:FC:84"; // andriond need
+        "45:41:46:03:F2:A2"; //"45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "001002210515000000"; //"001001211112000028"; // iOS need
+        "002006000009999010"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -162,7 +162,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeWatch:
         {
           EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
-          print(eaBleWatchInfo.agpsUpdateTimestamp);
+          print(eaBleWatchInfo.watchType);
         }
         break;
       case kEADataInfoTypeUser:

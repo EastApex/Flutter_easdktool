@@ -38,7 +38,7 @@ class EABleWatchInfo {
       watchType = map["type"];
     }
     if (map["bleMacAddr"] != null) {
-      watchType = map["bleMacAddr"];
+      bleMacAddr = map["bleMacAddr"];
     }
   }
 }

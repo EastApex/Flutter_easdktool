@@ -1042,8 +1042,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     map.put("firmwareVersion", eaBleWatchInfo.getFirmwareVersion());
                                     map.put("userId", eaBleWatchInfo.getUserId());
                                     map.put("id_p", eaBleWatchInfo.getWatchId());
-                                    map.put("type", eaBleWatchInfo.getWatchType());
                                     map.put("bleMacAddr",eaBleWatchInfo.getBle_mac_addr());
+
+                                    String watchType = eaBleWatchInfo.getWatchType();
+                                    if (watchType.equals("G01")){
+                                        map.put("type", "iTouch Flex");
+                                    }else  {
+                                        map.put("type", eaBleWatchInfo.getWatchType());
+                                    }
                                     sendWatchDataWithMap(map, type);
                                 }
                             });
