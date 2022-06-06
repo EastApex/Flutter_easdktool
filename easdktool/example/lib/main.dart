@@ -929,6 +929,12 @@ class _MyAppState extends State<MyApp> {
                   EASDKTool().unbindWatch();
                 },
               ),
+              GestureDetector(
+                child: TextView('2.disconnect equipment【断开设备】'),
+                onTap: () {
+                  EASDKTool().disConnectWatch();
+                },
+              ),
             ],
           ),
         ),

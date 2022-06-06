@@ -869,7 +869,19 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectListener(), 128, new DeviceOperationListener(), new MotionDataListener());
         } else if (call.method.equals(kEADisConnectWatch)) { // 手动断开设备
 
-            EABleManager.getInstance().disconnectPeripheral();
+            EABleConnectState connectState = EABleManager.getInstance().getDeviceConnectState();
+            if (connectState == EABleConnectState.STATE_CONNECTED) {
+                EABleManager.getInstance().disconnectPeripheral();
+
+                if (mHandler != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod(kConnectState, ConnectState.disConnect.getValue());
+                        }
+                    });
+                }
+            }
         } else if (call.method.equals(kEAUnbindWatch)) { // 解绑设备
             EABleDev eaBleDev = new EABleDev();
             eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
