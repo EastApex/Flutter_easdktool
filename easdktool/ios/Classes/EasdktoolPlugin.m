@@ -215,6 +215,18 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         NSDictionary *info = @{
             @"connectState":@(connectStateType),
         };
+        
+        NSArray *list = [[EABleManager defaultManager] getPairedWacthes];
+        EAPeripheralModel *model = [EABleManager defaultManager].getPeripheralModel;
+        if (model) {
+            
+            if ([list containsObject: model.SN]) {
+               
+                info = @{
+                    @"connectState":@(3),
+                };
+            }
+        }
         result([info yy_modelToJSONString]);
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索

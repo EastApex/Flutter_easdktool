@@ -498,4 +498,7 @@ enum EAConnectStateType {
 
   /// 连接中
   EAConnectStateTypeConnecting,
+
+  /// 已连接并且配对
+  EAConnectStateTypeConnectedAndPairing,
 }
