@@ -43,7 +43,7 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 /// 获取大数据【队列操作】
 - (void)operationgGetBigData:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;
 /// 手表OTA【队列操作】
-- (void)upgrade:(EAOTA *)ota;
+- (BOOL)upgrade:(EAOTA *)ota;
 /// 获取大数据（bigDataType 只支持大数据类型 3000~3999）
 - (NSArray *)getBigDataWithBigDataType:(EADataInfoType)bigDataType;
 /// 获取音频数据【通知收到 ‘录音完成’ 才能调用此方法获取录音数据】

@@ -158,7 +158,8 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// 获取链接的设备信息
 - (EAPeripheralModel *)getPeripheralModel;
 
-
+/// 获取配对列表的手表
+- (NSArray *)getPairedWacthes;
 
 @end
 

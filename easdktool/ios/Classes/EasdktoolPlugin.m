@@ -33,6 +33,9 @@
 #define kEAScanWacth                @"EAScanWacth"          // 搜索手表
 #define kEAStopScanWacth            @"EAStopScanWacth"          //停止搜索手表
 #define kEAGetWacthStateInfo        @"EAGetWacthStateInfo"  //获取手表连接状态信息
+#define kEAGetiOSPairedWacth        @"EAGetiOSPairedWacth"  //获取ios已配对的手表
+
+
 
 /// MARK: - invoke method Name
 #define kArgumentsError             @"ArgumentsError"
@@ -201,7 +204,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] setBleConfig:_config];
         }
     }
-    if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
+    else if ([call.method isEqualToString:kEAGetiOSPairedWacth]) { // FIXME: - 获取ios已配对的手表
+        
+        NSArray *list = [[EABleManager defaultManager] getPairedWacthes];
+        result(list);
+    }
+    else if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
         
         EAConnectStateType connectStateType = [EABleManager defaultManager].connectState;
         NSDictionary *info = @{

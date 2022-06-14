@@ -137,6 +137,11 @@ class _MyAppState extends State<MyApp> {
     print(connectStateInfo.connectState.index);
   }
 
+  void getPairedWatches() async {
+    List list = await EASDKTool().getPairedWatchesFormIOS();
+    print(list);
+  }
+
   void setWatchData(int dataType, Map map) {
     EASDKTool().setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
@@ -495,6 +500,14 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   getWatchData(kEADataInfoTypeSportShowData);
                 },
+              ),
+              GestureDetector(
+                child: TextView('26.get paired watches【获取ios已配对的手表】'),
+                onTap: () {
+                  getPairedWatches();
+                },
+
+                /// 获取ios已配对的手表
               ),
               TitleView('  Setting【设置信息】'),
               GestureDetector(

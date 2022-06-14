@@ -22,6 +22,7 @@ const String kEALog = "EAShowLog"; // log
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
+const String kEAGetiOSPairedWacth = "EAGetiOSPairedWacth"; //获取ios已配对的手表
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -96,6 +97,13 @@ class EASDKTool {
     String json = await _channel.invokeMethod(kEAGetWacthStateInfo);
     Map<String, dynamic> info = convert.jsonDecode(json);
     return EAConnectStateInfo.fromMap(info);
+  }
+
+  /// 获取ios已配对的手表 【only iOS function】
+  /// get paired watches.【only iOS function】
+  Future<List> getPairedWatchesFormIOS() async {
+    List list = await _channel.invokeMethod(kEAGetiOSPairedWacth);
+    return list;
   }
 
   /// 绑定手表
