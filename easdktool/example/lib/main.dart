@@ -35,6 +35,7 @@ class ConnectListener implements EABleConnectListener {
     print('Device connected');
     EABindInfo bindInfo = EABindInfo();
     bindInfo.user_id = "1008690";
+    bindInfo.bindMod = 1;
     EASDKTool().bindingWatch(bindInfo);
   }
 

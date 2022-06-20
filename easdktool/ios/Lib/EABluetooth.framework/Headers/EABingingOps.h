@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 用户id */
 @property(nonatomic, strong) NSString *userId;
 
+/** 绑定模式 0: 正常模式  1: 计步数据固定间隔存储 */
+@property(nonatomic, assign) NSInteger bindMod;
+
 + (EABingingOps *)getModelByData:(NSData *)data ;
 
 @end

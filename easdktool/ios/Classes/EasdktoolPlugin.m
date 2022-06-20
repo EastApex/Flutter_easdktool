@@ -295,6 +295,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             
             EABingingOps *bingingOps = [[EABingingOps alloc] init];
             bingingOps.ops = EABindingOpsTypeEnd;
+            bingingOps.bindMod = [arguments[@"bindMod"] integerValue];
             NSString *userId = [NSString stringWithFormat:@"%@",arguments[@"user_id"]];
             if (userId.length > 0) {
                 

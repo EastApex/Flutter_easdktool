@@ -905,6 +905,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleBindInfo eaBleBindInfo = new EABleBindInfo();
                 eaBleBindInfo.setUser_id(bindInfo.user_id);
                 eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
+                eaBleBindInfo.setBind_mod(bindInfo.bindMod);
                 EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
