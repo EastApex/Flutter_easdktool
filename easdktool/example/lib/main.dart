@@ -507,7 +507,17 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('26.get paired watche state【获取手表配对状态】'),
                 onTap: () {
-                  getWatchData(EADataInfoTypeBlePairState);
+                  // getWatchData(EADataInfoTypeBlePairState);
+
+                  EASDKTool().getWatchData(
+                      EADataInfoTypeBlePairState,
+                      EAGetDataCallback(
+                          onSuccess: ((info) {
+                            Map<String, dynamic> value = info["value"];
+                            EAWatchPairStateModel sportShowData =
+                                EAWatchPairStateModel.fromMap(value);
+                          }),
+                          onFail: ((info) {})));
                 },
 
                 /// 获取ios已配对的手表
