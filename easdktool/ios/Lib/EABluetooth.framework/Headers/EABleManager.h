@@ -148,7 +148,6 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// @param characteristicType 通道类型
 - (void)writeValue:(NSData *)Data forCharacteristic:(EACharacteristicType )characteristicType;
 
-
 /// 是否开启蓝牙
 - (BOOL)isBleOn;
 
@@ -158,8 +157,6 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// 获取链接的设备信息
 - (EAPeripheralModel *)getPeripheralModel;
 
-/// 获取配对列表的手表
-- (NSArray *)getPairedWacthes;
 
 @end
 

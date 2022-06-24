@@ -122,6 +122,9 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /**当前运动显示值 */
     EADataInfoTypeSportShowData = 40,
     
+    /**获取蓝牙配对状态 */
+    EADataInfoTypeBlePairState = 41,
+    
     /** 操作手机命令 */
     EADataInfoTypePhoneOps = 2001,
     
@@ -433,6 +436,9 @@ typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     
     /** 停止寻找手表 */
     EADeviceOpsTypeStopSearchWatch = 11,
+    
+    /** 停止相机 */
+    EADeviceOpsTypeStopCamera = 12,
     
 };
 

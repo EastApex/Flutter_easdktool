@@ -223,6 +223,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kOperationPhone = "OperationPhone"; //操作手机
     final String kProgress = "Progress";
     final String kScanWacthResponse = "ScanWacthResponse";
+    final String kOperationWacthResponse = "OperationWacthResponse";
+
     /// 数据类型
     /* 手表 */
     final int kEADataInfoTypeWatch = 3;
@@ -995,6 +997,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void result(boolean b) {
 
+                        if (mHandler != null) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("operationType", action);
+                                    jsonObject.put("respondCodeType", b);
+                                    channel.invokeMethod(kOperationWacthResponse, jsonObject.toJSONString());
+                                }
+                            });
+                        }
                     }
 
                     @Override

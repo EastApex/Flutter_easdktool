@@ -35,7 +35,7 @@ class ConnectListener implements EABleConnectListener {
     print('Device connected');
     EABindInfo bindInfo = EABindInfo();
     bindInfo.user_id = "1008690";
-    bindInfo.bindMod = 1;
+    bindInfo.bindMod = 1; // Turn on the daily step interval for 30 minutes
     EASDKTool().bindingWatch(bindInfo);
   }
 
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
     connectParam.connectAddress =
         "45:41:46:03:F2:A2"; //"45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "002006000009999010"; //"001001211112000028"; // iOS need
+        "001012220623000021"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -136,11 +136,6 @@ class _MyAppState extends State<MyApp> {
   void getWacthStateInfo() async {
     EAConnectStateInfo connectStateInfo = await EASDKTool().getWacthStateInfo();
     print(connectStateInfo.connectState.index);
-  }
-
-  void getPairedWatches() async {
-    List list = await EASDKTool().getPairedWatchesFormIOS();
-    print(list);
   }
 
   void setWatchData(int dataType, Map map) {
@@ -309,6 +304,13 @@ class _MyAppState extends State<MyApp> {
         {
           EASportShowData sportShowData = EASportShowData.fromMap(value);
           print(sportShowData.calorie);
+        }
+        break;
+      case EADataInfoTypeBlePairState:
+        {
+          EAWatchPairStateModel sportShowData =
+              EAWatchPairStateModel.fromMap(value);
+          print(sportShowData.secState);
         }
         break;
       default:
@@ -503,9 +505,9 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView('26.get paired watches【获取ios已配对的手表】'),
+                child: TextView('26.get paired watche state【获取手表配对状态】'),
                 onTap: () {
-                  getPairedWatches();
+                  getWatchData(EADataInfoTypeBlePairState);
                 },
 
                 /// 获取ios已配对的手表
@@ -891,6 +893,22 @@ class _MyAppState extends State<MyApp> {
 
                   EASDKTool().operationWatch(
                       EAOperationWatchType.StopSearchPhone,
+                      OperationWatchCallback((info) {}));
+                },
+              ),
+              GestureDetector(
+                child: TextView('2. Looking for your watch【寻找手表】'),
+                onTap: () {
+                  EASDKTool().operationWatch(
+                      EAOperationWatchType.StartSearchWatch,
+                      OperationWatchCallback((info) {}));
+                },
+              ),
+              GestureDetector(
+                child: TextView('3.Stop looking for your watch【停止寻找手表】'),
+                onTap: () {
+                  EASDKTool().operationWatch(
+                      EAOperationWatchType.StopSearchWatch,
                       OperationWatchCallback((info) {}));
                 },
               ),

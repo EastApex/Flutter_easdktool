@@ -22,7 +22,6 @@ const String kEALog = "EAShowLog"; // log
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
-const String kEAGetiOSPairedWacth = "EAGetiOSPairedWacth"; //获取ios已配对的手表
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -34,6 +33,7 @@ const String kGetBigWatchData = "GetBigWatchData";
 const String kOperationPhone = "OperationPhone";
 const String kProgress = "Progress";
 const String kScanWacthResponse = "ScanWacthResponse";
+const String kOperationWacthResponse = "OperationWacthResponse";
 
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
@@ -97,13 +97,6 @@ class EASDKTool {
     String json = await _channel.invokeMethod(kEAGetWacthStateInfo);
     Map<String, dynamic> info = convert.jsonDecode(json);
     return EAConnectStateInfo.fromMap(info);
-  }
-
-  /// 获取ios已配对的手表 【only iOS function】
-  /// get paired watches.【only iOS function】
-  Future<List> getPairedWatchesFormIOS() async {
-    List list = await _channel.invokeMethod(kEAGetiOSPairedWacth);
-    return list;
   }
 
   /// 绑定手表
@@ -237,6 +230,12 @@ class EASDKTool {
         EAConnectParam connectParam = EAConnectParam.fromMap(info);
         if (mScanWatchCallback != null) {
           mScanWatchCallback!.scanRespond(connectParam);
+        }
+        break;
+      case kOperationWacthResponse:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        if (mOperationCallback != null) {
+          mOperationCallback!.callback(info);
         }
         break;
     }

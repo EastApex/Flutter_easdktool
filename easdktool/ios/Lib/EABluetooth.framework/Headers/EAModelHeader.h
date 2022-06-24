@@ -61,6 +61,7 @@
 #import <EABluetooth/EAHabitTrackerModel.h>
 #import <EABluetooth/EAHabitTrackerDataModel.h>
 #import <EABluetooth/EASportShowDataModel.h>
+#import <EABluetooth/EABlePairStateModel.h>
 
 // ops
 #import <EABluetooth/EABingingOps.h>

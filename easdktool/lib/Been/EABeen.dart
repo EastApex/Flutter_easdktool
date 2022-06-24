@@ -31,3 +31,4 @@ part 'EAOTA.dart';
 part 'EABindInfo.dart';
 part 'EAConnectStateInfo.dart';
 part 'EASportShowData.dart';
+part 'EAWatchPairStateModel.dart';

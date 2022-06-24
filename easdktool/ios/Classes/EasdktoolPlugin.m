@@ -33,7 +33,6 @@
 #define kEAScanWacth                @"EAScanWacth"          // 搜索手表
 #define kEAStopScanWacth            @"EAStopScanWacth"          //停止搜索手表
 #define kEAGetWacthStateInfo        @"EAGetWacthStateInfo"  //获取手表连接状态信息
-#define kEAGetiOSPairedWacth        @"EAGetiOSPairedWacth"  //获取ios已配对的手表
 
 
 
@@ -47,6 +46,7 @@
 #define kOperationPhone             @"OperationPhone"
 #define kProgress                   @"Progress"
 #define kScanWacthResponse          @"ScanWacthResponse"
+#define kOperationWacthResponse     @"OperationWacthResponse"
 
 
 /// MARK: - 枚举
@@ -97,7 +97,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     _config = [EABleConfig getDefaultConfig];
     _config.debug = NO;
     _config.canScanAllDevices = YES;
-    _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex"]; // 需要支持的蓝牙设备名称
+//    _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex",@"APEX G03A"]; // 需要支持的蓝牙设备名称
     [[EABleManager defaultManager] setBleConfig:_config];
 
     [self addNotification];
@@ -204,11 +204,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] setBleConfig:_config];
         }
     }
-    else if ([call.method isEqualToString:kEAGetiOSPairedWacth]) { // FIXME: - 获取ios已配对的手表
-        
-        NSArray *list = [[EABleManager defaultManager] getPairedWacthes];
-        result(list);
-    }
+
     else if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
         
         EAConnectStateType connectStateType = [EABleManager defaultManager].connectState;
@@ -216,17 +212,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             @"connectState":@(connectStateType),
         };
         
-        NSArray *list = [[EABleManager defaultManager] getPairedWacthes];
-        EAPeripheralModel *model = [EABleManager defaultManager].getPeripheralModel;
-        if (model) {
-            
-            if ([list containsObject: model.SN]) {
-               
-                info = @{
-                    @"connectState":@(3),
-                };
-            }
-        }
         result([info yy_modelToJSONString]);
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
@@ -565,7 +550,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             model.deviceOpsType = index;
             model.deviceOpsStatus = EADeviceOpsStatusExecute;
             [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
-                
+               
+                NSDictionary *info = @{
+                    @"respondCodeType":@(respondModel.eErrorCode),
+                    @"operationType":@([[arguments valueForKey:@"type"] integerValue]),
+                };
+                [self.channel invokeMethod:kOperationWacthResponse arguments:[info yy_modelToJSONString]];
             }];
         
         }

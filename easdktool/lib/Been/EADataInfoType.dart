@@ -71,6 +71,8 @@ const int kEADataInfoTypeHabitTracker = 38;
 const int kEADataInfoTypeHabitTrackerRespond = 39;
 /*运动显示值 */
 const int kEADataInfoTypeSportShowData = 40;
+/*获取蓝牙配对状态 */
+const int EADataInfoTypeBlePairState = 41;
 /* 操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
 /* MTU */
