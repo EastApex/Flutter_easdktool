@@ -440,6 +440,8 @@ typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     /** 停止相机 */
     EADeviceOpsTypeStopCamera = 12,
     
+    /** 使能设备操作IOS手机弹出配对框 */
+    EADeviceOpsTypeShowiPhonePairingAlert = 13,
 };
 
 
@@ -1335,6 +1337,8 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerIconType) {
     EAHabitTrackerIconTypeExercise16 = 15,
     EAHabitTrackerIconTypeBed17 = 16,
     EAHabitTrackerIconTypeTidyup18 = 17,
+    EAHabitTrackerIconTypeEatFood = 18,
+    EAHabitTrackerIconTypePackYourBag = 19,
 };
 
 

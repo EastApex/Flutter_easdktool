@@ -481,6 +481,12 @@ enum EAOperationWatchType {
 
   /// 停止寻找手表
   StopSearchWatch,
+
+  /// 停止相机
+  StopCamera,
+
+  /// 使能设备操作IOS手机弹出配对框
+  ShowiPhonePairingAlert,
 }
 
 ///【OTA 固件类型】

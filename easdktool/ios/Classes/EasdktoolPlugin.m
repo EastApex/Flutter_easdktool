@@ -600,6 +600,15 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     WeakSelf
     [BluetoothFunc bingdingWatch:bingingOps completion:^(BOOL succ) {
         
+        if (succ) {
+            
+            EADeviceOps *ops = AyeAllocInit(EADeviceOps);
+            ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;
+            ops.deviceOpsStatus = EADeviceOpsStatusExecute;
+            [[EABleSendManager defaultManager] operationChangeModel:ops respond:^(EARespondModel * _Nonnull respondModel) {
+                
+            }];
+        }
         [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:succ?0:1];
     }];
 }

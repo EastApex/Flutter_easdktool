@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 蓝牙MAC地址 */
 @property(nonatomic, strong) NSString *bleMacAddr;
 
+/** 是否需要等待设备确认绑定 */
+@property(nonatomic,assign) NSInteger isWaitForBinding;
+
 /// 获取手表相关信息
 /// @param data 数据流
 + (EAWatchModel *)getModelByData:(NSData *)data;

@@ -922,6 +922,14 @@ class _MyAppState extends State<MyApp> {
                       OperationWatchCallback((info) {}));
                 },
               ),
+              GestureDetector(
+                child: TextView('4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
+                onTap: () {
+                  EASDKTool().operationWatch(
+                      EAOperationWatchType.ShowiPhonePairingAlert,
+                      OperationWatchCallback((info) {}));
+                },
+              ),
               TitleView('  OTA【升级】'),
               GestureDetector(
                 child: TextView('1.To upgrade the firmware【升级固件】'),

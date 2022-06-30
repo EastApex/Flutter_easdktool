@@ -9,6 +9,59 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class EAAppMessageSwitchData;
+
+@interface EAShowAppMessageModel : NSObject
+
+@property(nonatomic,assign) BOOL unknow;
+@property(nonatomic,assign) BOOL wechat;
+@property(nonatomic,assign) BOOL qq;
+@property(nonatomic,assign) BOOL facebook;
+@property(nonatomic,assign) BOOL twitter;
+@property(nonatomic,assign) BOOL messenger;
+@property(nonatomic,assign) BOOL hangouts;
+@property(nonatomic,assign) BOOL gmail;
+@property(nonatomic,assign) BOOL viber;
+@property(nonatomic,assign) BOOL snapchat;
+@property(nonatomic,assign) BOOL whatsApp;
+@property(nonatomic,assign) BOOL instagram;
+@property(nonatomic,assign) BOOL linkedin;
+@property(nonatomic,assign) BOOL line;
+@property(nonatomic,assign) BOOL skype;
+@property(nonatomic,assign) BOOL booking;
+@property(nonatomic,assign) BOOL airbnb;
+@property(nonatomic,assign) BOOL flipboard;
+@property(nonatomic,assign) BOOL spotify;
+@property(nonatomic,assign) BOOL pandora;
+@property(nonatomic,assign) BOOL telegram;
+@property(nonatomic,assign) BOOL dropbox;
+@property(nonatomic,assign) BOOL waze;
+@property(nonatomic,assign) BOOL lift;
+@property(nonatomic,assign) BOOL slack;
+@property(nonatomic,assign) BOOL shazam;
+@property(nonatomic,assign) BOOL deliveroo;
+@property(nonatomic,assign) BOOL kakaotalk;
+@property(nonatomic,assign) BOOL pinterest;
+@property(nonatomic,assign) BOOL tumblr;
+@property(nonatomic,assign) BOOL vk;
+@property(nonatomic,assign) BOOL youtube;
+@property(nonatomic,assign) BOOL amazon;
+@property(nonatomic,assign) BOOL discord;
+@property(nonatomic,assign) BOOL github;
+@property(nonatomic,assign) BOOL googleMaps;
+@property(nonatomic,assign) BOOL newsBreak;
+@property(nonatomic,assign) BOOL rReddit;
+@property(nonatomic,assign) BOOL teams;
+@property(nonatomic,assign) BOOL tiktok;
+@property(nonatomic,assign) BOOL twitch;
+@property(nonatomic,assign) BOOL uberEats;
+
+
+// 获取App推送蓝牙传输对象数据
+- (EAAppMessageSwitchData *)getEAAppMessageSwitchData;
+
+@end
+
 
 
 
@@ -46,10 +99,18 @@ NS_ASSUME_NONNULL_BEGIN
  tumblr =29;
  vk =30;
  youtube=31;
+ Amazon = 33,
+ Discord = 34,
+ Github = 35,
+ GoogleMaps = 36,
+ NewsBreak = 37,
+ Reddit = 38,
+ Teams = 39,
+ Tiktok = 40,
+ Twitch = 41,
+ UberEats = 42,
  */
 @property(nonatomic, assign) BOOL sw;
-
-
 
 @end
 
