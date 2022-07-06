@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
     connectParam.connectAddress =
         "45:41:46:03:F2:A2"; //"45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "001012220623000021"; //"001001211112000028"; // iOS need
+        "002006000009999015"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 

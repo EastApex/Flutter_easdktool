@@ -602,7 +602,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if (succ) {
             
-            EADeviceOps *ops = AyeAllocInit(EADeviceOps);
+            EADeviceOps *ops = [[EADeviceOps alloc] init];
             ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;
             ops.deviceOpsStatus = EADeviceOpsStatusExecute;
             [[EABleSendManager defaultManager] operationChangeModel:ops respond:^(EARespondModel * _Nonnull respondModel) {
