@@ -544,10 +544,10 @@ class _MyAppState extends State<MyApp> {
                   syncTime.day = 18;
                   syncTime.month = 5;
                   syncTime.year = 2022;
-                  syncTime.hour = 12;
+                  syncTime.hour = 14;
                   syncTime.minute = 0;
                   syncTime.second = 0;
-                  syncTime.timeHourType = EATimeHourType.hour12;
+                  // syncTime.timeHourType = EATimeHourType.hour24; 【It can only be set on the watch】
                   syncTime.timeZone = EATimeZone.zero;
                   syncTime.timeZoneHour = 0;
                   syncTime.timeZoneMinute = 0;

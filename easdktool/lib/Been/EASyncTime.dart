@@ -16,7 +16,7 @@ class EASyncTime {
 // 秒
   int second = 0;
 // 小时制
-  EATimeHourType timeHourType = EATimeHourType.hour12;
+  // EATimeHourType timeHourType = EATimeHourType.hour12;
 // 当前时区：0时区、东时区、西时区
   EATimeZone timeZone = EATimeZone.zero;
 // 当前时区:时
@@ -34,7 +34,7 @@ class EASyncTime {
       "second": second,
       "timeZoneHour": timeZoneHour,
       "timeZoneMinute": timeZoneMinute,
-      "timeHourType": timeHourType.index,
+      // "timeHourType": timeHourType.index,
       "timeZone": timeZone.index,
     };
   }
