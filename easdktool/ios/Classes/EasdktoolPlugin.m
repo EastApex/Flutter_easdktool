@@ -344,7 +344,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                     // EASyncTime *syncTime = [EASyncTime getCurrentTime];
                     EASyncTime *syncTime = [EASyncTime yy_modelWithJSON:value];
-//                    syncTime.timeHourType = [value[@"timeHourType"] intValue];
+                    syncTime.timeHourType = [value[@"timeHourType"] intValue];
                     [[EABleSendManager defaultManager] changeInfo:syncTime respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];

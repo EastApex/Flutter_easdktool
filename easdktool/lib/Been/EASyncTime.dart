@@ -16,7 +16,7 @@ class EASyncTime {
 // 秒
   int second = 0;
 // 小时制
-  // EATimeHourType timeHourType = EATimeHourType.hour12;
+  EATimeHourType timeHourType = EATimeHourType.hour12;
 // 当前时区：0时区、东时区、西时区
   EATimeZone timeZone = EATimeZone.zero;
 // 当前时区:时
@@ -24,6 +24,7 @@ class EASyncTime {
 // 当前时区:分
   int timeZoneMinute = 0;
 
+  EASyncTime();
   Map<String, dynamic> toMap() {
     return {
       "year": year,
@@ -34,8 +35,41 @@ class EASyncTime {
       "second": second,
       "timeZoneHour": timeZoneHour,
       "timeZoneMinute": timeZoneMinute,
-      // "timeHourType": timeHourType.index,
+      "timeHourType": timeHourType.index,
       "timeZone": timeZone.index,
     };
+  }
+
+  EASyncTime.fromMap(Map<String, dynamic> map) {
+    if (map["year"] != null) {
+      year = map["year"];
+    }
+    if (map["month"] != null) {
+      month = map["month"];
+    }
+    if (map["day"] != null) {
+      day = map["day"];
+    }
+    if (map["hour"] != null) {
+      hour = map["hour"];
+    }
+    if (map["minute"] != null) {
+      minute = map["minute"];
+    }
+    if (map["second"] != null) {
+      second = map["second"];
+    }
+    if (map["timeZoneHour"] != null) {
+      timeZoneHour = map["timeZoneHour"];
+    }
+    if (map["timeZoneMinute"] != null) {
+      timeZoneMinute = map["timeZoneMinute"];
+    }
+    if (map["timeZone"] != null) {
+      timeZone = EATimeZone.values[map["timeZone"]];
+    }
+    if (map["timeHourType"] != null) {
+      timeHourType = EATimeHourType.values[map["timeHourType"]];
+    }
   }
 }

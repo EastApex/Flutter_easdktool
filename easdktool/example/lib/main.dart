@@ -115,7 +115,7 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
-        "45:41:46:03:F2:A2"; //"45:41:70:97:FC:84"; // andriond need
+        "45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
         "002006000009999015"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
@@ -311,6 +311,12 @@ class _MyAppState extends State<MyApp> {
           EAWatchPairStateModel sportShowData =
               EAWatchPairStateModel.fromMap(value);
           print(sportShowData.secState);
+        }
+        break;
+      case kEADataInfoTypeSyncTime:
+        {
+          EASyncTime syncTime = EASyncTime.fromMap(value);
+          print(syncTime.day);
         }
         break;
       default:
@@ -522,6 +528,12 @@ class _MyAppState extends State<MyApp> {
 
                 /// 获取ios已配对的手表
               ),
+              GestureDetector(
+                child: TextView('27.Obtain watch time【获取手表时间】'),
+                onTap: () {
+                  getWatchData(kEADataInfoTypeSyncTime);
+                },
+              ),
               TitleView('  Setting【设置信息】'),
               GestureDetector(
                 child: TextView('1.Set up information【设置用户信息】'),
@@ -547,7 +559,7 @@ class _MyAppState extends State<MyApp> {
                   syncTime.hour = 14;
                   syncTime.minute = 0;
                   syncTime.second = 0;
-                  // syncTime.timeHourType = EATimeHourType.hour24; 【It can only be set on the watch】
+                  syncTime.timeHourType = EATimeHourType.hour24;
                   syncTime.timeZone = EATimeZone.zero;
                   syncTime.timeZoneHour = 0;
                   syncTime.timeZoneMinute = 0;
@@ -641,7 +653,7 @@ class _MyAppState extends State<MyApp> {
 
                   EAWeathers weathers = EAWeathers();
                   weathers.currentTemperature = 20;
-                  weathers.place = "Guanzhou";
+                  weathers.place = "Charlotte";
                   weathers.days = [dayWeather, dayWeather2];
                   setWatchData(kEADataInfoTypeWeather, weathers.toMap());
                 },

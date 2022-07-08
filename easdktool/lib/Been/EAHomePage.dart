@@ -57,8 +57,23 @@ class EAHomePages {
       }
     }
     if (map["supportPageArray"] != null) {
-      List supportPageArray = map["supportPageArray"];
-      for (Map<String, dynamic> item in supportPageArray) {
+      List list = map["supportPageArray"];
+      for (Map<String, dynamic> item in list) {
+        EAPage page = EAPage.fromMap(item);
+        supportPageArray.add(page);
+      }
+    }
+
+    if (map["aList"] != null) {
+      List aList = map["aList"];
+      for (Map<String, dynamic> item in aList) {
+        EAPage page = EAPage.fromMap(item);
+        list.add(page);
+      }
+    }
+    if (map["sList"] != null) {
+      List list = map["sList"];
+      for (Map<String, dynamic> item in list) {
         EAPage page = EAPage.fromMap(item);
         supportPageArray.add(page);
       }

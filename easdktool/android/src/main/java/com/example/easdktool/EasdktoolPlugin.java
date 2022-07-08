@@ -39,6 +39,7 @@ import com.apex.bluetooth.callback.RestScreenCallback;
 import com.apex.bluetooth.callback.ScreenBrightnessCallback;
 import com.apex.bluetooth.callback.SedentaryCheckCallback;
 import com.apex.bluetooth.callback.SleepCheckCallback;
+import com.apex.bluetooth.callback.TimeCallback;
 import com.apex.bluetooth.callback.TodayTotalDataCallback;
 import com.apex.bluetooth.callback.UnitCallback;
 import com.apex.bluetooth.callback.WatchFaceCallback;
@@ -1114,6 +1115,32 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
+            case 5:{
+                EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sync_time, new TimeCallback() {
+                    @Override
+                    public void syncTime(EABleSyncTime eaBleSyncTime) {
+                        if (mHandler != null) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Map<String, Integer> map = new HashMap();
+                                    map.put("timeHourType", eaBleSyncTime.e_hour_system.getValue());
+                                    map.put("timeZone", eaBleSyncTime.e_time_zone.getValue());
+                                    map.put("timeZoneHour", eaBleSyncTime.getTime_zone_hour());
+                                    map.put("timeZoneMinute", eaBleSyncTime.getTime_zone_minute());
+                                    sendWatchDataWithObjectMap(eaBleSyncTime, map, type);
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+
+                    }
+                });
+            }break;
             case 8: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.black_screen_time, new RestScreenCallback() {
                     @Override
@@ -1647,9 +1674,25 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     @Override
                                     public void run() {
 
+                                        List<Map> aList = new ArrayList<>();
+                                        List<Map> sList = new ArrayList<>();
+
+                                        for (int i = 0; i < eaBleMenuPage.getTypeList().size(); i++) {
+
+                                            JSONObject jsonObject = new JSONObject();
+                                            jsonObject.put("eType", eaBleMenuPage.getTypeList().get(i).getValue());
+                                            aList.add(jsonObject);
+                                        }
+                                        for (int i = 0; i < eaBleMenuPage.getAllSupportList().size(); i++) {
+
+                                            JSONObject jsonObject = new JSONObject();
+                                            jsonObject.put("eType", eaBleMenuPage.getAllSupportList().get(i).getValue());
+                                            sList.add(jsonObject);
+                                        }
+
                                         JSONObject jsonObject = new JSONObject();
-                                        jsonObject.put("list", eaBleMenuPage.getTypeList());
-                                        jsonObject.put("supportPageArray", eaBleMenuPage.getAllSupportList());
+                                        jsonObject.put("aList", aList);
+                                        jsonObject.put("sList", sList);
                                         sendWatchDataWithMap(jsonObject.getInnerMap(), type);
                                     }
                                 });
@@ -2671,9 +2714,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("dataType", type);
         jsonObject.put("value", mapValue);
-        channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
+        String jsonString = jsonObject.toJSONString();
+        channel.invokeMethod(kGetWatchResponse, jsonString);
     }
-
     ///addKeyValuesToJsonObjectWithJsonObjectKey
     private void addKeyValues(String key1, Object value1, String key2, Object value2, JSONObject jsonObject, String jsonObjectKey) {
         JSONObject jsonObject1 = new JSONObject();
