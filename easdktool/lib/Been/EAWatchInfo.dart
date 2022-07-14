@@ -11,6 +11,8 @@ class EABleWatchInfo {
   String userId = ""; // 已绑定的用户id
   int agpsUpdateTimestamp = 0; // agps更新时间
   String bleMacAddr = ""; //
+  int isWaitForBinding =
+      0; // Whether to wait for the device to confirm binding【是否需要等待设备确认绑定】
 
   EABleWatchInfo.fromMap(Map<String, dynamic> map) {
     if (map["agpsUpdateTimestamp"] != null) {
@@ -39,6 +41,9 @@ class EABleWatchInfo {
     }
     if (map["bleMacAddr"] != null) {
       bleMacAddr = map["bleMacAddr"];
+    }
+    if (map["isWaitForBinding"] != null) {
+      isWaitForBinding = map["isWaitForBinding"];
     }
   }
 }

@@ -904,10 +904,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             String arguments = (String) call.arguments;
             if (checkArgumentName("user_id", arguments)) {
 
+
                 BindInfo bindInfo = JSONObject.parseObject(arguments, BindInfo.class);
                 EABleBindInfo eaBleBindInfo = new EABleBindInfo();
                 eaBleBindInfo.setUser_id(bindInfo.user_id);
-                eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
+                eaBleBindInfo.setE_ops(bindInfo.ops==1?EABleBindInfo.BindingOps.end:EABleBindInfo.BindingOps.normal_begin);
                 eaBleBindInfo.setBind_mod(bindInfo.bindMod);
                 EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                     @Override
@@ -917,7 +918,47 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 @Override
                                 public void run() {
 
-                                    setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
+                                    if (bindInfo.ops==0 && b) {
+
+                                        EABleBindInfo eaBleBindInfo = new EABleBindInfo();
+                                        eaBleBindInfo.setUser_id(bindInfo.user_id);
+                                        eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
+                                        eaBleBindInfo.setBind_mod(bindInfo.bindMod);
+                                        EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
+                                            @Override
+                                            public void result(boolean b) {
+                                                if (mHandler != null) {
+                                                    mHandler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                            @Override
+                                            public void mutualFail(int i) {
+                                                if (mHandler != null) {
+                                                    mHandler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            channel.invokeMethod(kArgumentsError, "user_id error");
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+
+
+                                    }else {
+
+                                        if (!b){
+                                            EABleManager.getInstance().disconnectPeripheral();
+                                        }
+                                        setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
+                                    }
+
                                 }
                             });
                         }
@@ -929,7 +970,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    channel.invokeMethod(kArgumentsError, "user_id error");
                                 }
                             });
                         }
@@ -1070,7 +1110,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     map.put("userId", eaBleWatchInfo.getUserId());
                                     map.put("id_p", eaBleWatchInfo.getWatchId());
                                     map.put("bleMacAddr",eaBleWatchInfo.getBle_mac_addr());
-
+                                    map.put("isWaitForBinding",eaBleWatchInfo.getIs_wait_for_binding());
                                     String watchType = eaBleWatchInfo.getWatchType();
                                     if (watchType.equals("G01")){
                                         map.put("type", "iTouch Flex");

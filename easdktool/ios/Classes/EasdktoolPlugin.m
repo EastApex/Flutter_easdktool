@@ -278,15 +278,49 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 return;
             }
             
-            EABingingOps *bingingOps = [[EABingingOps alloc] init];
-            bingingOps.ops = EABindingOpsTypeEnd;
+            EABindingOpsType ops = [arguments[@"bindingCommandType"] integerValue] == 1 ? EABindingOpsTypeEnd:EABindingOpsTypeNormalBegin;
+            __block EABingingOps *bingingOps = [[EABingingOps alloc] init];
+            bingingOps.ops = ops;
             bingingOps.bindMod = [arguments[@"bindMod"] integerValue];
             NSString *userId = [NSString stringWithFormat:@"%@",arguments[@"user_id"]];
             if (userId.length > 0) {
                 
                 bingingOps.userId = userId;
             }
-            [self bingdingWatch:bingingOps];
+            WeakSelf;
+            [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
+                
+                
+                if (ops == EABindingOpsTypeNormalBegin && respondModel.eErrorCode == EARespondCodeTypeSuccess) {
+                    
+                    bingingOps.ops = EABindingOpsTypeEnd;
+                    [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                        [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
+                        
+                        EADeviceOps *ops = [[EADeviceOps alloc] init];
+                        ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;
+                        ops.deviceOpsStatus = EADeviceOpsStatusExecute;
+                        [[EABleSendManager defaultManager] changeInfo:ops respond:^(EARespondModel * _Nonnull respondModel) {
+                            
+                            [selfWeak setWatchRespondWithDataType:EADataInfoTypeDeviceOps respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
+                        }];
+                    }];
+                    
+                }else {
+                    
+                    [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
+                    if (respondModel.eErrorCode == EARespondCodeTypeFail) {
+                        
+                        //
+                        [[EABleManager defaultManager] unbindPeripheral];
+                       
+                    }
+                    
+                }
+            }];
+            
+            
         }
         
     }
@@ -756,8 +790,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }
 
 }
-
-
 
 
 #pragma mark - Timer func

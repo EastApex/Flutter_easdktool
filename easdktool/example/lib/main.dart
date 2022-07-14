@@ -2,6 +2,8 @@
 
 // import 'dart:typed_data';
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:easdktool/EACallback.dart';
@@ -33,10 +35,35 @@ class ConnectListener implements EABleConnectListener {
   @override
   void deviceConnected() {
     print('Device connected');
-    EABindInfo bindInfo = EABindInfo();
-    bindInfo.user_id = "1008690";
-    bindInfo.bindMod = 1; // Turn on the daily step interval for 30 minutes
-    EASDKTool().bindingWatch(bindInfo);
+    // 1st. get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
+    EASDKTool().getWatchData(
+        kEADataInfoTypeWatch,
+        EAGetDataCallback(
+            onSuccess: ((info) async {
+              Map<String, dynamic> value = info["value"];
+              EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
+
+              /** 2nd.
+               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
+               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
+                  The watch displays a waiting for confirmation binding screen,
+                  Wait to click OK or cancel
+               */
+
+              EABindInfo bindInfo = EABindInfo();
+              bindInfo.user_id = "1008690";
+              // Turn on the daily step interval for 30 minutes
+              bindInfo.bindMod = 1;
+              if (eaBleWatchInfo.isWaitForBinding == 0) {
+                //Bind command type: End【绑定命令类型：结束】
+                bindInfo.bindingCommandType = 1;
+              } else {
+                //Bind command type: Begin【绑定命令类型：开始】
+                bindInfo.bindingCommandType = 0;
+              }
+              EASDKTool().bindingWatch(bindInfo);
+            }),
+            onFail: ((info) {})));
   }
 
   @override
@@ -115,9 +142,9 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
-        "45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+        "45:41:CD:11:11:01"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber =
-        "002006000009999015"; //"001001211112000028"; // iOS need
+        "001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -652,8 +679,8 @@ class _MyAppState extends State<MyApp> {
                   dayWeather2.eAir = EAWeatherAirType.bad;
 
                   EAWeathers weathers = EAWeathers();
-                  weathers.currentTemperature = 20;
-                  weathers.place = "Charlotte";
+                  weathers.currentTemperature = -12;
+                  weathers.place = "hxhhiox";
                   weathers.days = [dayWeather, dayWeather2];
                   setWatchData(kEADataInfoTypeWeather, weathers.toMap());
                 },
