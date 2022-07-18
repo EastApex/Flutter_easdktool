@@ -69,6 +69,8 @@ typedef NS_ENUM(NSUInteger, EAConnectStatus) {
 
  */
 
+#define kKeychainService        @"com.eastapex.bluetooth"
+#define kKeychainDataAccount    @"data_apexwear"
 
 
 @protocol EABleManagerDelegate <NSObject>
