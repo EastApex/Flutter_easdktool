@@ -905,67 +905,52 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             if (checkArgumentName("user_id", arguments)) {
 
 
-                BindInfo bindInfo = JSONObject.parseObject(arguments, BindInfo.class);
+                final BindInfo bindInfo = JSONObject.parseObject(arguments, BindInfo.class);
                 EABleBindInfo eaBleBindInfo = new EABleBindInfo();
                 eaBleBindInfo.setUser_id(bindInfo.user_id);
-                eaBleBindInfo.setE_ops(bindInfo.ops==1?EABleBindInfo.BindingOps.end:EABleBindInfo.BindingOps.normal_begin);
+                eaBleBindInfo.setE_ops(bindInfo.ops == 1 ? EABleBindInfo.BindingOps.end : EABleBindInfo.BindingOps.normal_begin);
                 eaBleBindInfo.setBind_mod(bindInfo.bindMod);
                 EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (bindInfo.ops==0 && b) {
-
-                                        EABleBindInfo eaBleBindInfo = new EABleBindInfo();
-                                        eaBleBindInfo.setUser_id(bindInfo.user_id);
-                                        eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
-                                        eaBleBindInfo.setBind_mod(bindInfo.bindMod);
-                                        EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
-                                            @Override
-                                            public void result(boolean b) {
-                                                if (mHandler != null) {
-                                                    mHandler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
-                                                        }
-                                                    });
-                                                }
-                                            }
-
-                                            @Override
-                                            public void mutualFail(int i) {
-                                                if (mHandler != null) {
-                                                    mHandler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            channel.invokeMethod(kArgumentsError, "user_id error");
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-
-
-                                    }else {
-
-                                        if (!b){
-                                            EABleManager.getInstance().disconnectPeripheral();
-                                        }
+                        if (b) {
+                            if (bindInfo.ops == 0) {
+                                EABleBindInfo eaBleBindInfo1 = new EABleBindInfo();
+                                eaBleBindInfo1.setUser_id(bindInfo.user_id);
+                                eaBleBindInfo1.setE_ops(EABleBindInfo.BindingOps.end);
+                                eaBleBindInfo1.setBind_mod(bindInfo.bindMod);
+                                EABleManager.getInstance().setOpsBinding(eaBleBindInfo1, new GeneralCallback() {
+                                    @Override
+                                    public void result(boolean b) {
                                         setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
                                     }
 
-                                }
-                            });
+
+                                    @Override
+                                    public void mutualFail(int i) {
+                                        if (mHandler != null) {
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    channel.invokeMethod(kArgumentsError, "user_id error");
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
+                            if (EABleManager.getInstance().getEaBleConnectListener() != null) {
+                                EABleManager.getInstance().getEaBleConnectListener().deviceDisconnect();
+                            }
+                            EABleManager.getInstance().disconnectPeripheral();
                         }
                     }
 
                     @Override
                     public void mutualFail(int i) {
+                        Log.e(TAG, "收到错误");
                         if (mHandler != null) {
                             mHandler.post(new Runnable() {
                                 @Override
@@ -975,7 +960,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         }
                     }
                 });
-            }
+            }        
         } else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
             String arguments = (String) call.arguments;
