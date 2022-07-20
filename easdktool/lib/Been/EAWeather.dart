@@ -91,7 +91,7 @@ class EAWeathers {
     }
 
     return {
-      "weatherUnit": weatherUnit.index,
+      "eFormat": weatherUnit.index,
       "currentTemperature": currentTemperature,
       "place": place,
       "sDayArray": list

@@ -2163,7 +2163,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 int cTemperature = (int) map.get("currentTemperature");
                 eaBleWeather.setCurrent_temperature(cTemperature);
                 eaBleWeather.setPlace((String) map.get("place"));
-                int temperatureUnit = (int) map.get("weatherUnit");
+                int temperatureUnit = (int) map.get("eFormat");
                 eaBleWeather.setTemperatureUnit(temperatureUnit == 0 ? EABleWeather.TemperatureUnit.centigrade : EABleWeather.TemperatureUnit.fahrenheit);
                 List<JSONObject> wArray = (List<JSONObject>) map.get("sDayArray");
                 if (wArray != null && !wArray.isEmpty()) {

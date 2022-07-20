@@ -143,8 +143,8 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:01"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber =
-        "001007220516000001"; //"001001211112000028"; // iOS need
+    connectParam.snNumber = "001007220719000021";
+    //"002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -580,15 +580,15 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Set the watch time【设置手表时间】'), // 同步手机时间到手表
                 onTap: () {
                   EASyncTime syncTime = EASyncTime();
-                  syncTime.day = 18;
-                  syncTime.month = 5;
+                  syncTime.day = 20;
+                  syncTime.month = 7;
                   syncTime.year = 2022;
-                  syncTime.hour = 14;
-                  syncTime.minute = 0;
+                  syncTime.hour = 10;
+                  syncTime.minute = 6;
                   syncTime.second = 0;
                   syncTime.timeHourType = EATimeHourType.hour24;
-                  syncTime.timeZone = EATimeZone.zero;
-                  syncTime.timeZoneHour = 0;
+                  syncTime.timeZone = EATimeZone.east;
+                  syncTime.timeZoneHour = 8;
                   syncTime.timeZoneMinute = 0;
                   setWatchData(kEADataInfoTypeSyncTime, syncTime.toMap());
                 },
@@ -614,9 +614,9 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EANotDisturb notDisturb = EANotDisturb();
                   notDisturb.sw = 1;
-                  notDisturb.beginHour = 22;
+                  notDisturb.beginHour = 1;
                   notDisturb.beginMinute = 0;
-                  notDisturb.endHour = 8;
+                  notDisturb.endHour = 12;
                   notDisturb.endMinute = 0;
                   setWatchData(kEADataInfoTypeNotDisturb, notDisturb.toMap());
                 },
@@ -682,6 +682,7 @@ class _MyAppState extends State<MyApp> {
                   weathers.currentTemperature = -12;
                   weathers.place = "hxhhiox";
                   weathers.days = [dayWeather, dayWeather2];
+                  weathers.weatherUnit = EAWeatherUnit.Fahrenheit;
                   setWatchData(kEADataInfoTypeWeather, weathers.toMap());
                 },
               ),
