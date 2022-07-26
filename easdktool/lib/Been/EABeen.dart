@@ -2,6 +2,8 @@
 
 library easdktool.been;
 
+import 'dart:ffi';
+
 part 'EAEnum.dart';
 part 'EAPersonInfo.dart';
 part 'EAWatchInfo.dart';
@@ -32,3 +34,14 @@ part 'EABindInfo.dart';
 part 'EAConnectStateInfo.dart';
 part 'EASportShowData.dart';
 part 'EAWatchPairStateModel.dart';
+part 'EABigDataBloodOxygen.dart';
+part 'EABigDataGPS.dart';
+part 'EABigDataHabitTracker.dart';
+part 'EABigDataHeartRate.dart';
+part 'EABigDataRestingHeartRate.dart';
+part 'EABigDataSleep.dart';
+part 'EABigDataSport.dart';
+part 'EABigDataStep.dart';
+part 'EABigDataStress.dart';
+part 'EABigDataStrideFrequency.dart';
+part 'EABigDataStridePace.dart';

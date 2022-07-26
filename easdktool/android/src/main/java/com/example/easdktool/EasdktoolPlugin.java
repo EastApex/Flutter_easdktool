@@ -534,7 +534,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         public void dailyExerciseData(final List<EABleDailyData> list, final CommonFlag commonFlag) {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepData);
             sendBigWatchData(jsonObject);
@@ -543,7 +543,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void sleepData(final List<EABleSleepData> list, final CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeSleepData);
             sendBigWatchData(jsonObject);
@@ -553,7 +553,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         public void heartData(final List<EABleHeartData> list, final CommonFlag commonFlag) {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeHeartRateData);
             sendBigWatchData(jsonObject);
@@ -563,7 +563,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         public void gpsData(final List<EABleGpsData> list, final CommonFlag commonFlag) {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeGPSData);
             sendBigWatchData(jsonObject);
@@ -601,7 +601,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 tempMotion.average_heart_rate_min = list.get(i).getAverage_heart_rate_min();
                 motionList.add(tempMotion);
             }
-            json.put("data", motionList);
+            json.put("value", motionList);
             json.put("flag", commonFlag.getValue());
             json.put("dataType", kEADataInfoTypeSportsData);
             sendBigWatchData(json);
@@ -612,7 +612,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void bloodOxygenData(final List<EABleBloodOxygen> list, final CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeBloodOxygenData);
             sendBigWatchData(jsonObject);
@@ -622,7 +622,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         public void pressureData(List<EABlePressureData> list, CommonFlag commonFlag) {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStressData);
             sendBigWatchData(jsonObject);
@@ -631,7 +631,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void stepFrequencyData(List<EABleStepFrequencyData> list, CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepFreqData);
             sendBigWatchData(jsonObject);
@@ -641,7 +641,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void speedData(List<EABlePaceData> list, CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepPaceData);
             sendBigWatchData(jsonObject);
@@ -650,7 +650,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void restingHeartRateData(List<EABleRestingRateData> list, CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeRestingHeartRateData);
             sendBigWatchData(jsonObject);
@@ -659,7 +659,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void getHabitData(List<EABleHabitRecord> list, CommonFlag commonFlag) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
+            jsonObject.put("value", list);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
             sendBigWatchData(jsonObject);
@@ -669,7 +669,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         public void mutualFail(int i) {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", null);
+            jsonObject.put("value", null);
             jsonObject.put("flag", CommonFlag.end.getValue());
             sendBigWatchData(jsonObject);
         }

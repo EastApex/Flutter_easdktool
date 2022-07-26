@@ -35,7 +35,7 @@ class ConnectListener implements EABleConnectListener {
   @override
   void deviceConnected() {
     print('Device connected');
-    // 1st. get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
+
     EASDKTool().getWatchData(
         kEADataInfoTypeWatch,
         EAGetDataCallback(
@@ -43,25 +43,30 @@ class ConnectListener implements EABleConnectListener {
               Map<String, dynamic> value = info["value"];
               EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
 
-              /** 2nd.
+              if (eaBleWatchInfo.userId.isEmpty) {
+                /**
+                 1st. 
+               * get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
+                 2nd.
                * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
                * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
                   The watch displays a waiting for confirmation binding screen,
                   Wait to click OK or cancel
                */
 
-              EABindInfo bindInfo = EABindInfo();
-              bindInfo.user_id = "1008690";
-              // Turn on the daily step interval for 30 minutes
-              bindInfo.bindMod = 1;
-              if (eaBleWatchInfo.isWaitForBinding == 0) {
-                //Bind command type: End【绑定命令类型：结束】
-                bindInfo.bindingCommandType = 1;
-              } else {
-                //Bind command type: Begin【绑定命令类型：开始】
-                bindInfo.bindingCommandType = 0;
+                EABindInfo bindInfo = EABindInfo();
+                bindInfo.user_id = "1008690";
+                // Turn on the daily step interval for 30 minutes
+                bindInfo.bindMod = 1;
+                if (eaBleWatchInfo.isWaitForBinding == 0) {
+                  //Bind command type: End【绑定命令类型：结束】
+                  bindInfo.bindingCommandType = 1;
+                } else {
+                  //Bind command type: Begin【绑定命令类型：开始】
+                  bindInfo.bindingCommandType = 0;
+                }
+                EASDKTool().bindingWatch(bindInfo);
               }
-              EASDKTool().bindingWatch(bindInfo);
             }),
             onFail: ((info) {})));
   }
@@ -143,7 +148,7 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:01"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "001007220719000021";
+    connectParam.snNumber = "001007220516000001";
     //"002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -176,7 +181,89 @@ class _MyAppState extends State<MyApp> {
     EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
       /// Determine what kind of big data "dataType" is
       ///【判断dataType是属于那种大数据】
-      print(info);
+
+      int dataType = info['dataType'];
+      List<dynamic> list = info['value'];
+      print(dataType);
+
+      if (list.isEmpty) {
+        return;
+      }
+      switch (dataType) {
+        case kEADataInfoTypeStepData: //Daily steps【日常步数】
+
+          for (Map<String, dynamic> item in list) {
+            EABigDataStep model = EABigDataStep.fromMap(item);
+            print(model.steps);
+          }
+          break;
+        case kEADataInfoTypeSleepData: // sleep
+          for (Map<String, dynamic> item in list) {
+            EABigDataSleep model = EABigDataSleep.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeHeartRateData: // heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+            print(model.timeStamp);
+          }
+
+          break;
+        case kEADataInfoTypeGPSData: // gps
+          for (Map<String, dynamic> item in list) {
+            EABigDataGPS model = EABigDataGPS.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeSportsData: // sports
+          for (Map<String, dynamic> item in list) {
+            EABigDataSport model = EABigDataSport.fromMap(item);
+            print(model.sportType);
+          }
+          break;
+        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+          for (Map<String, dynamic> item in list) {
+            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStressData: // Stress
+          for (Map<String, dynamic> item in list) {
+            EABigDataStress model = EABigDataStress.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepFreqData: // stride frequency
+          for (Map<String, dynamic> item in list) {
+            EABigDataStrideFrequency model =
+                EABigDataStrideFrequency.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepPaceData: // stride Pace
+          for (Map<String, dynamic> item in list) {
+            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataRestingHeartRate model =
+                EABigDataRestingHeartRate.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case EADataInfoTypeHabitTrackerData: // habit tracker
+          for (Map<String, dynamic> item in list) {
+            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+
+        default:
+          break;
+      }
     })));
   }
 

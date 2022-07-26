@@ -1,0 +1,25 @@
+// ignore_for_file: file_names, constant_identifier_names, non_constant_identifier_names
+
+part of easdktool.been;
+
+class EABigDataStridePace {
+  // 时间戳
+  int timeStamp = 0;
+
+// 配速值
+  int stepPaceValue = 0;
+  EABigDataStridePace.fromMap(Map<String, dynamic> map) {
+    if (map["timeStamp"] != null) {
+      timeStamp = map["timeStamp"];
+    }
+    if (map["time_stamp"] != null) {
+      timeStamp = map["time_stamp"];
+    }
+    if (map["stepPaceValue"] != null) {
+      stepPaceValue = map["stepPaceValue"];
+    }
+    if (map["step_pace_value"] != null) {
+      stepPaceValue = map["step_pace_value"];
+    }
+  }
+}
