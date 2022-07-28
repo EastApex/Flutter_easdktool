@@ -1763,12 +1763,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 @Override
                                 public void run() {
                                     JSONObject jsonObject = new JSONObject();
-                                    List<Integer> integerList = new ArrayList<>();
+                                    List integerList = new ArrayList<>();
                                     if (eaBleInfoPush.getS_app_sw() != null && !eaBleInfoPush.getS_app_sw().isEmpty()) {
                                         for (int i = 0; i < eaBleInfoPush.getS_app_sw().size(); i++) {
-                                            integerList.add(eaBleInfoPush.getS_app_sw().get(i).getSw());
+
+                                            JSONObject jsonObject1 = new JSONObject();
+                                            jsonObject1.put("sw", (eaBleInfoPush.getS_app_sw().get(i).getSw() == 1 ? true:false));
+                                            integerList.add(jsonObject1);
                                         }
-                                        jsonObject.put("data", integerList);
+                                        jsonObject.put("sAppSwArray", integerList);
                                     }
                                     Map map = jsonObject.getInnerMap();
                                     sendWatchDataWithMap(map, type);

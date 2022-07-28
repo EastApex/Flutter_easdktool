@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
     connectParam.connectAddress =
         "45:41:CD:11:11:01"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     connectParam.snNumber = "001007220516000001";
-    //"002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+    //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
 
@@ -433,6 +433,12 @@ class _MyAppState extends State<MyApp> {
           print(syncTime.day);
         }
         break;
+      case kEADataInfoTypeAppMessage:
+        {
+          EAAppPushSwitch appPushSwitch = EAAppPushSwitch.fromMap(value);
+          print(appPushSwitch.list);
+        }
+        break;
       default:
     }
   }
@@ -639,13 +645,17 @@ class _MyAppState extends State<MyApp> {
                           }),
                           onFail: ((info) {})));
                 },
-
-                /// 获取ios已配对的手表
               ),
               GestureDetector(
                 child: TextView('27.Obtain watch time【获取手表时间】'),
                 onTap: () {
                   getWatchData(kEADataInfoTypeSyncTime);
+                },
+              ),
+              GestureDetector(
+                child: TextView('28.Obtain App notifications 【获取App消息推送】'),
+                onTap: () {
+                  getWatchData(kEADataInfoTypeAppMessage);
                 },
               ),
               TitleView('  Setting【设置信息】'),
@@ -1082,10 +1092,43 @@ class _MyAppState extends State<MyApp> {
                  * * * firmwareType: firmwareType, 0Apollo 2Res 3Tp 4Hr           
                  */
 
-                  EAOTA ota1 = EAOTA("", EAFirmwareType.Apollo, "AP0.1B4.6");
+                  /**
+                   * 假设 当前手表 firmwareVersion => AP0.1B0.9R0.3T0.1G0.1
+                   * AP0.1B0.9 => 固件版本号是0.1 build 0.9
+                   * R0.3=>字库版本号是0.3
+                   * T0.1=>屏幕版本号0.1
+                   * H0.1=>心率版本号0.1
+                   * 
+                   * 有新的 固件版本号 是 AP0.1B1.0 和 AP0.1B1.1
+                   * 有新的 字库版本号是 R0.4 和 R0.5
+                   * 
+                   * 固件版本升级 升级 最大版本号就可以了，即升级 AP0.1B1.1，不需要升级 AP0.1B1.0
+                   * 字库版本升级 需要升级所有比当前字库版本大的版本，即 R0.4 和 R0.5都要升级
+                   * 屏幕和心率同固件一样逻辑，升级最大版本的就行
+                   */
 
-                  EAOTAList otaList = EAOTAList(0, [ota1]);
-                  //(info) {})
+                  /**
+                   * Assume that the firmwareVersion of the current watch is => AP0.1b0.9R0.3T0.1G0.1
+                   * ap0.1b0.9 => The firmware version number is 0.1 build 0.9
+                   * R0.3=> The font version is 0.3
+                   * T0.1=> Screen version 0.1
+                   * H0.1=> heart rate version 0.1
+                   *
+                   * There are new firmware version numbers AP0.1b1.0 and AP0.1b1.1
+                   * There are new font version numbers R0.4 and R0.5
+                   *
+                   * Firmware version upgrade You only need to upgrade the maximum version, that is, AP0.1b1.1. You do not need to upgrade AP0.1b1.0
+                   * All versions larger than the current font version need to be upgraded, that is, R0.4 and R0.5 need to be upgraded
+                   * The screen and heart rate are just as logical as firmware. Upgrade to the largest version
+                   */
+
+                  EAOTA ota1 = EAOTA(
+                      "固件AP0.1B1.1本地文件路径", EAFirmwareType.Apollo, "AP0.1B1.1");
+                  EAOTA ota2 = EAOTA("字库0.4本地文件路径", EAFirmwareType.Res, "R0.4");
+                  EAOTA ota3 = EAOTA("字库0.5本地文件路径", EAFirmwareType.Res, "R0.5");
+
+                  EAOTAList otaList = EAOTAList(0, [ota1, ota2, ota3]);
+
                   EASDKTool().otaUpgrade(otaList,
                       EAOTAProgressCallback((progress) {
                     if (progress == -1) {

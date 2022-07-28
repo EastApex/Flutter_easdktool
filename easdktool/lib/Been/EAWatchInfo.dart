@@ -4,6 +4,14 @@ part of easdktool.been;
 
 /// 手表信息
 class EABleWatchInfo {
+/*
+ * firmwareVersion => AP0.1B0.9R0.3T0.1G0.1
+ * AP0.1B0.9 => 固件版本号是0.1 build 0.9
+ * R0.3=>字库版本号是0.3
+ * T0.1=>屏幕版本号0.1
+ * H0.1=>心率版本号0.1
+ */
+
   String snNumber = ""; // sn号
   String watchType = ""; // 手表型号
   String firmwareVersion = ""; //  版本号

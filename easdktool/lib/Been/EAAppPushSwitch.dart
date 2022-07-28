@@ -6,6 +6,12 @@ class EAApp {
   bool sw = true;
 
   EAApp(this.sw);
+  EAApp.fromMap(Map<String, dynamic> map) {
+    if (map["sw"] != null) {
+      sw = map["sw"];
+    }
+  }
+
   Map toMap() {
     return {"sw": sw};
   }
@@ -49,6 +55,14 @@ class EAAppPushSwitch {
   /// list的元素全部为以上32种，
   List<EAApp> list = [];
 
+  EAAppPushSwitch();
+  EAAppPushSwitch.fromMap(Map<String, dynamic> map) {
+    List array = map["sAppSwArray"];
+    for (Map<String, dynamic> map in array) {
+      EAApp app = EAApp.fromMap(map);
+      list.add(app);
+    }
+  }
   Map toMap() {
     List array = [];
     for (EAApp app in list) {
