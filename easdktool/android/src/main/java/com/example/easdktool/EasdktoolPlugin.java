@@ -120,6 +120,7 @@ import com.example.easdktool.been.PersonInfo;
 import com.example.easdktool.been.ReminderItem;
 import com.example.easdktool.been.Sedentariness;
 import com.example.easdktool.been.SetWatchParam;
+import com.example.easdktool.been.ShowAppMessage;
 import com.example.easdktool.been.SyncTime;
 import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
@@ -1764,16 +1765,67 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 public void run() {
                                     JSONObject jsonObject = new JSONObject();
                                     List integerList = new ArrayList<>();
+                                    ShowAppMessage showAppMessage = new ShowAppMessage();
                                     if (eaBleInfoPush.getS_app_sw() != null && !eaBleInfoPush.getS_app_sw().isEmpty()) {
-                                        for (int i = 0; i < eaBleInfoPush.getS_app_sw().size(); i++) {
 
-                                            JSONObject jsonObject1 = new JSONObject();
-                                            jsonObject1.put("sw", (eaBleInfoPush.getS_app_sw().get(i).getSw() == 1 ? true:false));
-                                            integerList.add(jsonObject1);
+                                        showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true:false);
+                                        showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true:false);
+                                        showAppMessage.wechat = (eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true:false);
+                                        showAppMessage.qq = (eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true:false);
+                                        showAppMessage.facebook = (eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true:false);
+                                        showAppMessage.twitter = (eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true:false);
+                                        showAppMessage.messenger = (eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true:false);
+                                        showAppMessage.hangouts = (eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true:false);
+                                        showAppMessage.gmail = (eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true:false);
+                                        showAppMessage.viber = (eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true:false);
+                                        showAppMessage.snapchat = (eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true:false);
+                                        showAppMessage.whatsApp = (eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true:false);
+                                        showAppMessage.instagram = (eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true:false);
+                                        showAppMessage.linkedin = (eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true:false);
+                                        showAppMessage.line = (eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true:false);
+                                        showAppMessage.skype = (eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true:false);
+                                        showAppMessage.booking = (eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true:false);
+                                        showAppMessage.airbnb = (eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true:false);
+                                        showAppMessage.flipboard = (eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true:false);
+                                        showAppMessage.spotify = (eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true:false);
+                                        showAppMessage.pandora = (eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true:false);
+                                        showAppMessage.telegram = (eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true:false);
+                                        showAppMessage.dropbox = (eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true:false);
+                                        showAppMessage.waze = (eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true:false);
+                                        showAppMessage.lift = (eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true:false);
+                                        showAppMessage.slack = (eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true:false);
+                                        showAppMessage.shazam = (eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true:false);
+                                        showAppMessage.deliveroo = (eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true:false);
+                                        showAppMessage.kakaotalk = (eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true:false);
+                                        showAppMessage.pinterest = (eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true:false);
+                                        showAppMessage.tumblr = (eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true:false);
+                                        showAppMessage.vk = (eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true:false);
+                                        if (integerList.size()>=32) {
+                                            showAppMessage.youtube = (eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+                                            showAppMessage.amazon = (eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
+                                            showAppMessage.discord = (eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
+                                            showAppMessage.github = (eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
+                                            showAppMessage.googleMaps = (eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
+                                            showAppMessage.newsBreak = (eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
+                                            showAppMessage.rReddit = (eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
+                                            showAppMessage.teams = (eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
+                                            showAppMessage.tiktok = (eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
+                                            showAppMessage.twitch = (eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                                            showAppMessage.uberEats = (eaBleInfoPush.getS_app_sw().get(42).getSw() == 1 ? true : false);
                                         }
-                                        jsonObject.put("sAppSwArray", integerList);
+
+
+//                                        for (int i = 0; i < eaBleInfoPush.getS_app_sw().size(); i++) {
+//
+//                                            JSONObject jsonObject1 = new JSONObject();
+//                                            jsonObject1.put("sw", (eaBleInfoPush.getS_app_sw().get(i).getSw() == 1 ? true:false));
+//                                            integerList.add(jsonObject1);
+//                                        }
+//                                        jsonObject.put("sAppSwArray", integerList);
                                     }
-                                    Map map = jsonObject.getInnerMap();
+//                                    Map map = jsonObject.getInnerMap();
+                                    String jsonString = JSON.toJSONString(showAppMessage);
+                                    Map map = JSON.parseObject(jsonString);
                                     sendWatchDataWithMap(map, type);
                                 }
                             });
@@ -2650,19 +2702,22 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             break;
             case (kEADataInfoTypeAppMessage): {
 
-                Map<String, JSONObject> map = JSONObject.parseObject(jsonString, Map.class);
-                List<JSONObject> wArray = (List<JSONObject>) map.get("sIndexArray");
+
+                final ShowAppMessage showAppMessage = JSONObject.parseObject(jsonString, ShowAppMessage.class);
                 EABleInfoPush eaBleInfoPush = new EABleInfoPush();
-                if (wArray != null && !wArray.isEmpty()) {
-                    List<EABleInfoPush.EABlePushSwitch> switchList = new ArrayList<>();
-                    eaBleInfoPush.setS_app_sw(switchList);
-                    for (int i = 0; i < wArray.size(); i++) {
-                        JSONObject wMap = wArray.get(i);
-                        EABleInfoPush.EABlePushSwitch pushSwitch = new EABleInfoPush.EABlePushSwitch();
-                        pushSwitch.setSw(wMap.getBoolean("sw") ? 1 : 0);
-                        switchList.add(pushSwitch);
-                    }
-                }
+                eaBleInfoPush.setS_app_sw(showAppMessage.getSwitchList());
+//                Map<String, JSONObject> map = JSONObject.parseObject(jsonString, Map.class);
+//                List<JSONObject> wArray = (List<JSONObject>) map.get("sIndexArray");
+//                if (wArray != null && !wArray.isEmpty()) {
+//                    List<EABleInfoPush.EABlePushSwitch> switchList = new ArrayList<>();
+//                    eaBleInfoPush.setS_app_sw(switchList);
+//                    for (int i = 0; i < wArray.size(); i++) {
+//                        JSONObject wMap = wArray.get(i);
+//                        EABleInfoPush.EABlePushSwitch pushSwitch = new EABleInfoPush.EABlePushSwitch();
+//                        pushSwitch.setSw(wMap.getBoolean("sw") ? 1 : 0);
+//                        switchList.add(pushSwitch);
+//                    }
+//                }
                 EABleManager.getInstance().setAppPushSwitch(eaBleInfoPush, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {

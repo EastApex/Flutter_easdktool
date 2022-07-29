@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class EAAppMessageSwitchData;
 
-@interface EAShowAppMessageModel : NSObject
+@interface EAShowAppMessageModel : EABaseModel
 
 @property(nonatomic,assign) BOOL unknow;
 @property(nonatomic,assign) BOOL wechat;
@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 获取App推送蓝牙传输对象数据
 - (EAAppMessageSwitchData *)getEAAppMessageSwitchData;
+
++ (EAShowAppMessageModel *)allocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)appMessageSwitchData;
 
 @end
 
@@ -125,6 +127,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// MARK: - 获取提醒事件操作设置数据流
 - (NSData *)getModelData ;
+
+
+
 
 @end
 

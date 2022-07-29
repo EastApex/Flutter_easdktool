@@ -435,8 +435,10 @@ class _MyAppState extends State<MyApp> {
         break;
       case kEADataInfoTypeAppMessage:
         {
-          EAAppPushSwitch appPushSwitch = EAAppPushSwitch.fromMap(value);
-          print(appPushSwitch.list);
+          print(value);
+
+          EAShowAppMessage showAppMessage = EAShowAppMessage.fromMap(value);
+          print(showAppMessage);
         }
         break;
       default:
@@ -866,111 +868,11 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('16.Message push switch【消息推送开关】'),
                 onTap: () {
-                  /**
-                * 【sAppSwArray】Is an array sorted by the following types【为按以下类型排序的的数组】
-                * unknow=0; //
-                * wechat =1;
-                * qq=2;
-                * facebook=3;
-                * twitter = 4;
-                * messenger =5;
-                * hangouts =6;
-                * gmail = 7;
-                * viber=8;
-                * snapchat=9;
-                * whatsApp=10;
-                * instagram =11;
-                * linkedin =12;
-                * line =13;
-                * skype =14;
-                * booking =15;
-                * airbnb =16;
-                * flipboard =17;
-                *spotify =18;
-                * pandora =19;
-                * telegram =20;
-                * dropbox =21;
-                * waze =22;
-                * lift =23;
-                * slack =24;
-                * shazam =25;
-                * deliveroo =26;
-                * kakaotalk =27;
-                * pinterest =28;
-                * tumblr =29;
-                * vk =30;
-                * youtube=31;
-                */
-                  EAApp _00unknow = EAApp(false); //类型：其他社交类型
-                  EAApp _01wechat = EAApp(false);
-                  EAApp _02qq = EAApp(false);
-                  EAApp _03facebook = EAApp(false);
-                  EAApp _04twitter = EAApp(false);
-                  EAApp _05messenger = EAApp(false);
-                  EAApp _06hangouts = EAApp(false);
-                  EAApp _07gmail = EAApp(false);
-                  EAApp _08viber = EAApp(false);
-                  EAApp _09snapchat = EAApp(false);
-                  EAApp _10whatsApp = EAApp(false);
-                  EAApp _11instagram = EAApp(false);
-                  EAApp _12linkedin = EAApp(false);
-                  EAApp _13line = EAApp(false);
-                  EAApp _14skype = EAApp(false);
-                  EAApp _15booking = EAApp(false);
-                  EAApp _16airbnb = EAApp(false);
-                  EAApp _17flipboard = EAApp(false);
-                  EAApp _18spotify = EAApp(false);
-                  EAApp _19pandora = EAApp(false);
-                  EAApp _20telegram = EAApp(false);
-                  EAApp _21dropbox = EAApp(false);
-                  EAApp _22waze = EAApp(false);
-                  EAApp _23lift = EAApp(false);
-                  EAApp _24slack = EAApp(false);
-                  EAApp _25shazam = EAApp(false);
-                  EAApp _26deliveroo = EAApp(false);
-                  EAApp _27kakaotalk = EAApp(false);
-                  EAApp _28pinterest = EAApp(false);
-                  EAApp _29tumblr = EAApp(false);
-                  EAApp _30vk = EAApp(false);
-                  EAApp _31youtube = EAApp(false);
-
-                  EAAppPushSwitch appPushSwitch = EAAppPushSwitch();
-                  appPushSwitch.list.addAll([
-                    _00unknow,
-                    _01wechat,
-                    _02qq,
-                    _03facebook,
-                    _04twitter,
-                    _05messenger,
-                    _06hangouts,
-                    _07gmail,
-                    _08viber,
-                    _09snapchat,
-                    _10whatsApp,
-                    _11instagram,
-                    _12linkedin,
-                    _13line,
-                    _14skype,
-                    _15booking,
-                    _16airbnb,
-                    _17flipboard,
-                    _18spotify,
-                    _19pandora,
-                    _20telegram,
-                    _21dropbox,
-                    _22waze,
-                    _23lift,
-                    _24slack,
-                    _25shazam,
-                    _26deliveroo,
-                    _27kakaotalk,
-                    _28pinterest,
-                    _29tumblr,
-                    _30vk,
-                    _31youtube
-                  ]);
+                  // func 2
+                  EAShowAppMessage showAppMessage = EAShowAppMessage();
+                  showAppMessage.wechat = false;
                   setWatchData(
-                      kEADataInfoTypeAppMessage, appPushSwitch.toMap());
+                      kEADataInfoTypeAppMessage, showAppMessage.toMap());
                 },
               ),
               GestureDetector(

@@ -514,7 +514,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeAppMessage: {
                     
-                    EAAppMessageSwitchData *model = [EAAppMessageSwitchData yy_modelWithJSON:value];
+                    EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel yy_modelWithJSON:value];
+                    EAAppMessageSwitchData *model = [showAppMessageModel getEAAppMessageSwitchData];
                     [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -655,6 +656,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         NSDictionary *value = [baseModel yy_modelToJSONObject];
         
+        if (dataInfoType == EADataInfoTypeAppMessage) {
+            
+            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel allocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
+            value = [showAppMessageModel yy_modelToJSONObject];
+        }
         if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
             
             NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
