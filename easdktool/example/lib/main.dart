@@ -868,11 +868,26 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('16.Message push switch【消息推送开关】'),
                 onTap: () {
-                  // func 2
-                  EAShowAppMessage showAppMessage = EAShowAppMessage();
-                  showAppMessage.wechat = false;
-                  setWatchData(
-                      kEADataInfoTypeAppMessage, showAppMessage.toMap());
+                  /*
+                  1. Use kEADataInfoTypeAppMessage to obtain EAShowAppMessage first
+                  2. Set EAShowAppMessage
+                  
+                  1.先使用 kEADataInfoTypeAppMessage 获取 EAShowAppMessage
+                  2.再设置 EAShowAppMessage
+                  */
+
+                  EASDKTool().getWatchData(
+                      kEADataInfoTypeAppMessage,
+                      EAGetDataCallback(
+                          onSuccess: ((info) {
+                            Map<String, dynamic> value = info["value"];
+                            EAShowAppMessage showAppMessage =
+                                EAShowAppMessage.fromMap(value);
+                            showAppMessage.wechat = false;
+                            setWatchData(kEADataInfoTypeAppMessage,
+                                showAppMessage.toMap());
+                          }),
+                          onFail: ((info) {})));
                 },
               ),
               GestureDetector(
