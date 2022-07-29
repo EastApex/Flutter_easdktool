@@ -505,3 +505,84 @@ enum EAConnectStateType {
   /// 连接中
   EAConnectStateTypeConnecting,
 }
+enum EAPushMessageActionType {
+  ///新增(来电属于新增)
+  add,
+
+  ///编辑此条
+  edit,
+
+  ///删除此条(来电挂断属于删除此条)
+  del,
+
+  ///删除此类型全部
+  del_type,
+
+  ///删除全部社交
+  del_all,
+}
+enum EAPushMessageType {
+
+  ///来电
+  incomingcall,
+
+  ///未接来电
+  missedcall,
+
+  ///社交
+  social,
+
+  ///日程
+  schedule,
+
+  ///邮件
+  email,
+
+  ///短信
+  sms,
+
+  ///未知社交类型
+  unknow,
+  wechat,
+  qq,
+  facebook,
+  twitter,
+  messenger,
+  hangouts,
+  gmail,
+  viber,
+  snapchat,
+  whatsApp,
+  instagram,
+  linkedin,
+  line,
+  skype,
+  booking,
+  airbnb,
+  flipboard,
+  spotify,
+  pandora,
+  telegram,
+  dropbox,
+  waze,
+  lift,
+  slack,
+  shazam,
+  deliveroo,
+  kakaotalk,
+  pinterest,
+  tumblr,
+  vk,
+  youtube,
+  outlook,
+  amazon,
+  discord,
+  github,
+  google_maps,
+  news_break,
+  reddit,
+  teams,
+  tiktok,
+  twitch,
+  uber_eats,
+}

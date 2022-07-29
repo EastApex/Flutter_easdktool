@@ -147,8 +147,8 @@ class _MyAppState extends State<MyApp> {
   void connectBluetooth() {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
-        "45:41:CD:11:11:01"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "001007220516000001";
+        "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+    connectParam.snNumber = "";
     //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -911,6 +911,19 @@ class _MyAppState extends State<MyApp> {
                   habitTrackers.eOps = EAHabitTrackerOps.Add;
                   setWatchData(
                       kEADataInfoTypeHabitTracker, habitTrackers.toMap());
+                },
+              ),
+              GestureDetector(
+                child: TextView('18.Push message【推送信息到手表】'),
+                onTap: () {
+                  // func 2
+                  EAPushMessage eapushMessage = EAPushMessage();
+                  eapushMessage.messageType = EAPushMessageType.facebook;
+                  eapushMessage.messageActionType = EAPushMessageActionType.add;
+                  eapushMessage.title = "test";
+                  eapushMessage.content = "Test push information";
+                  eapushMessage.date = "20220729T083015";
+                  setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap());
                 },
               ),
               TitleView(' Getting big data【获取大数据】'),

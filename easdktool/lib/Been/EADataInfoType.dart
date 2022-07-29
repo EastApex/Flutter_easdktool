@@ -33,6 +33,8 @@ const int kEADataInfoTypeAutoCheckSleep = 16;
 const int kEADataInfoTypeAutoCheckHeartRate = 17;
 /* 久坐监测 */
 const int kEADataInfoTypeAutoCheckSedentariness = 18;
+/*推送信息*/
+const int kEADataInfoTypePushInfo = 19;
 /* 通用天气 */
 const int kEADataInfoTypeWeather = 20;
 /* 社交提醒开关 */

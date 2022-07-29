@@ -96,6 +96,7 @@ import com.apex.bluetooth.model.EABleReminder;
 import com.apex.bluetooth.model.EABleRestingRateData;
 import com.apex.bluetooth.model.EABleSedentariness;
 import com.apex.bluetooth.model.EABleSleepData;
+import com.apex.bluetooth.model.EABleSocialContact;
 import com.apex.bluetooth.model.EABleSocialResponse;
 import com.apex.bluetooth.model.EABleStepFrequencyData;
 import com.apex.bluetooth.model.EABleSyncTime;
@@ -258,6 +259,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeAutoCheckHeartRate = 17;
     /* 久坐监测 */
     final int kEADataInfoTypeAutoCheckSedentariness = 18;
+    final int kEADataInfoTypePushInfo2Watch = 19;
+
     /* 通用天气 */
     final int kEADataInfoTypeWeather = 20;
     /* 社交提醒开关 */
@@ -1915,12 +1918,128 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
+
             default:
                 channel.invokeMethod(kArgumentsError, "type error");
                 break;
         }
     }
-
+    private EABleSocialContact.SocialContactType getPushInfoType(int type) {
+        if (type == 0) {
+            return EABleSocialContact.SocialContactType.incomingcall;
+        } else if (type == 1) {
+            return EABleSocialContact.SocialContactType.missedcall;
+        } else if (type == 2) {
+            return EABleSocialContact.SocialContactType.social;
+        } else if (type == 3) {
+            return EABleSocialContact.SocialContactType.schedule;
+        } else if (type == 4) {
+            return EABleSocialContact.SocialContactType.email;
+        } else if (type == 5) {
+            return EABleSocialContact.SocialContactType.sms;
+        } else if (type == 6) {
+            return EABleSocialContact.SocialContactType.unknow;
+        } else if (type == 7) {
+            return EABleSocialContact.SocialContactType.wechat;
+        } else if (type == 8) {
+            return EABleSocialContact.SocialContactType.qq;
+        } else if (type == 9) {
+            return EABleSocialContact.SocialContactType.facebook;
+        } else if (type == 10) {
+            return EABleSocialContact.SocialContactType.twitter;
+        } else if (type == 11) {
+            return EABleSocialContact.SocialContactType.messenger;
+        } else if (type == 12) {
+            return EABleSocialContact.SocialContactType.hangouts;
+        } else if (type == 13) {
+            return EABleSocialContact.SocialContactType.gmail;
+        } else if (type == 14) {
+            return EABleSocialContact.SocialContactType.viber;
+        } else if (type == 15) {
+            return EABleSocialContact.SocialContactType.snapchat;
+        } else if (type == 16) {
+            return EABleSocialContact.SocialContactType.whatsApp;
+        } else if (type == 17) {
+            return EABleSocialContact.SocialContactType.instagram;
+        } else if (type == 18) {
+            return EABleSocialContact.SocialContactType.linkedin;
+        } else if (type == 19) {
+            return EABleSocialContact.SocialContactType.line;
+        } else if (type == 20) {
+            return EABleSocialContact.SocialContactType.skype;
+        } else if (type == 21) {
+            return EABleSocialContact.SocialContactType.booking;
+        } else if (type == 22) {
+            return EABleSocialContact.SocialContactType.airbnb;
+        } else if (type == 23) {
+            return EABleSocialContact.SocialContactType.flipboard;
+        } else if (type == 24) {
+            return EABleSocialContact.SocialContactType.spotify;
+        } else if (type == 25) {
+            return EABleSocialContact.SocialContactType.pandora;
+        } else if (type == 26) {
+            return EABleSocialContact.SocialContactType.telegram;
+        } else if (type == 27) {
+            return EABleSocialContact.SocialContactType.dropbox;
+        } else if (type == 28) {
+            return EABleSocialContact.SocialContactType.waze;
+        } else if (type == 29) {
+            return EABleSocialContact.SocialContactType.lift;
+        } else if (type == 30) {
+            return EABleSocialContact.SocialContactType.slack;
+        } else if (type == 31) {
+            return EABleSocialContact.SocialContactType.shazam;
+        } else if (type == 32) {
+            return EABleSocialContact.SocialContactType.deliveroo;
+        } else if (type == 33) {
+            return EABleSocialContact.SocialContactType.kakaotalk;
+        } else if (type == 34) {
+            return EABleSocialContact.SocialContactType.pinterest;
+        } else if (type == 35) {
+            return EABleSocialContact.SocialContactType.tumblr;
+        } else if (type == 36) {
+            return EABleSocialContact.SocialContactType.vk;
+        } else if (type == 37) {
+            return EABleSocialContact.SocialContactType.youtube;
+        } else if (type == 38) {
+            return EABleSocialContact.SocialContactType.outlook;
+        } else if (type == 39) {
+            return EABleSocialContact.SocialContactType.amazon;
+        } else if (type == 40) {
+            return EABleSocialContact.SocialContactType.discord;
+        } else if (type == 41) {
+            return EABleSocialContact.SocialContactType.github;
+        } else if (type == 42) {
+            return EABleSocialContact.SocialContactType.google_maps;
+        } else if (type == 43) {
+            return EABleSocialContact.SocialContactType.news_break;
+        } else if (type == 44) {
+            return EABleSocialContact.SocialContactType.reddit;
+        } else if (type == 45) {
+            return EABleSocialContact.SocialContactType.teams;
+        } else if (type == 46) {
+            return EABleSocialContact.SocialContactType.tiktok;
+        } else if (type == 47) {
+            return EABleSocialContact.SocialContactType.twitch;
+        } else if (type == 48) {
+            return EABleSocialContact.SocialContactType.uber_eats;
+        } else {
+            return EABleSocialContact.SocialContactType.unknow;
+        }
+    }
+    private EABleSocialContact.SocialContactOps getPushInfoAction(int action) {
+        if (action == 0) {
+            return EABleSocialContact.SocialContactOps.add;
+        } else if (action == 1) {
+            return EABleSocialContact.SocialContactOps.edit;
+        } else if (action == 2) {
+            return EABleSocialContact.SocialContactOps.del;
+        } else if (action == 3) {
+            return EABleSocialContact.SocialContactOps.del_type;
+        } else {
+            return EABleSocialContact.SocialContactOps.del_all;
+        }
+    }
     private void setWatchData(Map<String, Object> setWatchParam) {
         int type = (int) setWatchParam.get("type");
         String jsonString = (String) setWatchParam.get("jsonString");
@@ -2732,6 +2851,29 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
             break;
 //            case (kEADataInfoTypeLanguage):{}break;
+            case (kEADataInfoTypePushInfo2Watch): {
+                Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+                EABleSocialContact eaBleSocialContact = new EABleSocialContact();
+                eaBleSocialContact.setTitle((String) map.get("title"));
+                eaBleSocialContact.setContent((String) map.get("content"));
+                eaBleSocialContact.setDate((String) map.get("date"));
+                eaBleSocialContact.setId((Integer) map.get("messageId"));
+                int actionType = (int) map.get("messageActionType");
+                int messageType = (int) map.get("messageType");
+                eaBleSocialContact.setE_ops(getPushInfoAction(actionType));
+                eaBleSocialContact.seteType(getPushInfoType(messageType));
+                EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
+                    @Override
+                    public void result(boolean b) {
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                    }
+                });
+            }
 
             default: {
                 if (mHandler != null) {
