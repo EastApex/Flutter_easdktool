@@ -916,13 +916,30 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Push message【推送信息到手表】'),
                 onTap: () {
-                  // func 2
                   EAPushMessage eapushMessage = EAPushMessage();
                   eapushMessage.messageType = EAPushMessageType.facebook;
                   eapushMessage.messageActionType = EAPushMessageActionType.add;
                   eapushMessage.title = "test";
-                  eapushMessage.content = "Test push information";
-                  eapushMessage.date = "20220729T083015";
+                  DateTime dateTime = DateTime.now();
+                  eapushMessage.date = "2022" +
+                      (dateTime.month < 10
+                          ? "0" + dateTime.month.toString()
+                          : dateTime.month.toString()) +
+                      (dateTime.day < 10
+                          ? "0" + dateTime.day.toString()
+                          : dateTime.day.toString()) +
+                      "T" +
+                      (dateTime.hour < 10
+                          ? "0" + dateTime.hour.toString()
+                          : dateTime.hour.toString()) +
+                      (dateTime.minute < 10
+                          ? "0" + dateTime.minute.toString()
+                          : dateTime.minute.toString()) +
+                      (dateTime.second < 10
+                          ? "0" + dateTime.second.toString()
+                          : dateTime.second.toString());
+                  eapushMessage.content =
+                      "Test push information" + dateTime.second.toString();
                   setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap());
                 },
               ),
