@@ -220,7 +220,7 @@ class EASDKTool {
         }
         break;
       case kProgress:
-        int progress = convert.jsonDecode(methodCall.arguments);
+        int progress = methodCall.arguments;
         if (mOTAProgressCallback != null) {
           mOTAProgressCallback!.callback(progress);
         }

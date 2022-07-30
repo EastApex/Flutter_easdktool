@@ -6,6 +6,8 @@ PODS:
     - SAMKeychain
     - YYModel
   - Flutter (1.0.0)
+  - path_provider_ios (0.0.1):
+    - Flutter
   - Protobuf (3.14.0)
   - Realm (10.25.1):
     - Realm/Headers (= 10.25.1)
@@ -16,6 +18,7 @@ PODS:
 DEPENDENCIES:
   - easdktool (from `.symlinks/plugins/easdktool/ios`)
   - Flutter (from `Flutter`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -29,10 +32,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/easdktool/ios"
   Flutter:
     :path: Flutter
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
 
 SPEC CHECKSUMS:
   easdktool: 248bc691cabbad26ca80efcd2273764226fae378
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   Realm: 1a6e9b4f6983711655d8c0bcb6d2d29c3afbb1f3
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c

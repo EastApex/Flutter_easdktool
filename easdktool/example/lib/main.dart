@@ -2,14 +2,15 @@
 
 // import 'dart:typed_data';
 
-import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/Been/EABeen.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
-// import 'package:path_provider/path_provider.dart';
 // import 'package:dio/dio.dart';
 // import 'dart:io';
 
@@ -148,7 +149,7 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "";
+    connectParam.snNumber = "001004000000999038";
     //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -1076,17 +1077,40 @@ class _MyAppState extends State<MyApp> {
 
                   EAOTAList otaList = EAOTAList(0, [ota1, ota2, ota3]);
 
-                  EASDKTool().otaUpgrade(otaList,
-                      EAOTAProgressCallback((progress) {
-                    if (progress == -1) {
-                      // transmit data fail;
+                  EASDKTool().otaUpgrade(
+                    otaList,
+                    EAOTAProgressCallback((progress) {
+                      if (progress == -1) {
+                        // transmit data fail;
 
-                    } else if (progress == 100) {
-                      // transmit data succ;
-                    } else {
-                      // transmit data progress
-                    }
-                  }));
+                      } else if (progress == 100) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    }));
+
+                  // var bytes = await rootBundle.load("assets/bin/AP0.2B2.3.bin");
+                  // String path = (await getApplicationSupportDirectory()).path;
+                  // final buffer = bytes.buffer;
+                  // await new File('$path/appolo.bin').writeAsBytes(buffer
+                  //     .asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+
+                  // EAOTA appoloOTA = EAOTA(
+                  //     '$path/appolo.bin', EAFirmwareType.Apollo, "AP0.2B2.3");
+                  // EAOTAList eaList = EAOTAList(0, [appoloOTA]);
+                  // EASDKTool().otaUpgrade(eaList,
+                  //     EAOTAProgressCallback((progress) {
+                  //   print("OTA进度:" + progress.toString());
+                  //   if (progress == -1) {
+                  //     // transmit data fail;
+
+                  //   } else if (progress == 100) {
+                  //     // transmit data succ;
+                  //   } else {
+                  //     // transmit data progress
+                  //   }
+                  // }));
                 },
               ),
               TitleView('  unbindWatch【解绑】'),
