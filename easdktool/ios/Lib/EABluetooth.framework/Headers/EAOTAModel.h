@@ -12,15 +12,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-
-
-@interface EAOTAModel : EABaseModel
+@interface EAFileModel : EABaseModel
 
 /** ota类型 */
 @property(nonatomic,assign) EAOtaRequestType otaType;
 
 /** bin包所在路径 */
 @property(nonatomic,strong) NSString *binPath;
+
+/** 版本号  */
+@property(nonatomic,copy) NSString *version;
+
+
++ (EAFileModel *)allocInitWithPath:(NSString *)binPath otaType:(EAOtaRequestType )otaType version:(NSString *)version;
+
+@end
+
+
+
+
+@interface EAOTAModel : EAFileModel
+
+
 
 /** 当前ota Bin 包大小 单位 bytes） */
 @property(nonatomic,assign) NSInteger currentSize;
@@ -34,8 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 序号  */
 @property(nonatomic,assign) NSInteger number;
 
-/** 版本号  */
-@property(nonatomic,copy) NSString *version;
 
 
 - (NSData *)getOtaData;

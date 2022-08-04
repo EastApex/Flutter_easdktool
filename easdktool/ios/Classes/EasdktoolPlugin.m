@@ -95,9 +95,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 - (void)setBleConfig {
     
     _config = [EABleConfig getDefaultConfig];
-    _config.debug = NO;
+    _config.debug = YES;
     _config.canScanAllDevices = YES;
-//    _config.deviceHeadNames = @[@"APEX A02",@"APEX M02",@"APEX M02L",@"APEX M51",@"iTouch Flex",@"APEX G03A"]; // 需要支持的蓝牙设备名称
     [[EABleManager defaultManager] setBleConfig:_config];
 
     [self addNotification];
@@ -180,6 +179,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)showProgress:(NSNotification *)no {
     
+    NSLog(@"~~~~~~ showProgress:%@",no.object);
     if ([no.object floatValue] < 0) {
         
         [_channel invokeMethod:kProgress arguments:@(-1)];
@@ -316,13 +316,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                         [[EABleManager defaultManager] unbindPeripheral];
                        
                     }
-                    
                 }
             }];
-            
-            
         }
-        
     }
     else if ([call.method isEqualToString:kEAGetWatchInfo]) { // FIXME: - 获取手表信息
         
@@ -396,6 +392,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 case EADataInfoTypeUnifiedUnit: {
                     
                     EAUnifiedUnitModel *unit = [EAUnifiedUnitModel yy_modelWithJSON:value];
+                    unit.unit = [[value objectForKey:@"unit"] integerValue];
                     [[EABleSendManager defaultManager] changeInfo:unit respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -693,16 +690,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     // OTA
     NSMutableArray *models = [NSMutableArray new];
-    NSMutableData *otaDatas = [[NSMutableData alloc]init];
-    NSInteger i = 1;
-    NSMutableDictionary *resDic = [NSMutableDictionary new];
     
-    // 查找apollo 放置在最后
-    EAOTAModel *apolloModel;
     for (NSDictionary *item in otas) {
         
         NSString *binPath = item[@"binPath"];
-        NSInteger otaType = [item[@"firmwareType"] integerValue];
+        NSInteger otaType = [item[@"firmwareType"] integerValue];  // Apollo, Res, Tp, Hr
         NSString *version = item[@"version"];
 
         NSFileManager *manager = [NSFileManager defaultManager];
@@ -710,86 +702,31 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if (data.length == 0) {
             
-            continue;
+            [_channel invokeMethod:kProgress arguments:@(-1)];
+            NSLog(@"The data is null in binPath!");
+            return;
         }
-        if (otaType == EAOtaRequestTypeRes||otaType == EAOtaRequestTypeUserWf) {
+        if (otaType == 1) {
             
-            data = [data subdataWithRange:NSMakeRange(4, data.length - 4 )];
-            
+            otaType = EAOtaRequestTypeRes;
         }
-        [otaDatas appendData:data];
+        else if (otaType == 2) {
+            
+            otaType = EAOtaRequestTypeTp;
+        }
+        else if (otaType == 3) {
+            
+            otaType = EAOtaRequestTypeHr;
+        }
         
-        EAOTAModel *otaModel = [EAOTAModel new];
-        otaModel.otaType = otaType;
-        otaModel.binPath = binPath;
-        otaModel.currentSize = [data length];
-        otaModel.crc = [otaModel getCrcValue:(otaType == EAOtaRequestTypeRes||otaType == EAOtaRequestTypeUserWf) andBinPath:binPath];
-        otaModel.version = version;
-        i ++ ;
-        
-        if (otaType == EAOtaRequestTypeRes ) {
-            
-            [resDic setValue:otaModel forKey:[otaModel.version substringFromIndex:1]];
-        }else {
-            
-            if (otaModel.otaType == EAOtaRequestTypeApollo) {
-                
-                apolloModel = otaModel;
-            }
-            [models addObject:otaModel];
-        }
+        EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
+        [models addObject:fileModel];
     }
     
-    // 字库排序，小到大
-    if (resDic.allKeys.count > 1 ) {
-                
-        // 排序 时间戳 从小到大
-        NSMutableArray *sortKey = [NSMutableArray arrayWithArray:resDic.allKeys];
-        [sortKey sortUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
-            
-            //从小到大排列
-            if ([obj1 floatValue] > [obj2 floatValue]) {
-                
-                return NSOrderedDescending;
-            } else {
-                
-                return NSOrderedAscending;
-            }
-        }];
-        
-        for (NSString *key in sortKey) {
-            
-            [models addObject:resDic[key]];
-        }
-        
-    }else {
-        
-        [models addObjectsFromArray:resDic.allValues];
-    }
-    
-    // apollo 放置在最后
-    if (apolloModel) {
-        
-        [models removeObject:apolloModel];
-        [models addObject:apolloModel];
-    }
-    
-    // 配置序号
-    i = 1;
-    for (EAOTAModel *otaModel in models) {
-        
-        otaModel.number = i;
-        i ++;
-    }
     
     if (models.count > 0) {
         
-        EAOTA *ota = [EAOTA new];
-        ota.otaModels = [NSMutableArray arrayWithArray:models];
-        ota.totalSize = [otaDatas length];
-        ota.popUpInterface = YES;
-        ota.isTestMode = 0;
-        [[EABleSendManager defaultManager] upgrade:ota];
+        [[EABleSendManager defaultManager] upgradeFiles:models];
         
         _timerSec = kTimerSec;
         [self startTimer];
@@ -830,7 +767,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 }
 
 - (void)showFail {
-    
+    NSLog(@"~~~~~~ method:showFail");
     WeakSelf
     dispatch_async(dispatch_get_main_queue(), ^{
         

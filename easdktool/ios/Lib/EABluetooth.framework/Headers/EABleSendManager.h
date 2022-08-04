@@ -27,11 +27,6 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 + (instancetype)defaultManager;
 
 
-- (void)setNilBlock;
-- (void)setchannelDataNil;
-- (void)setBleQueueNil;
-
-
 /// 设置设备连接状态
 /// @param isConnected YES:已连接
 - (void)setIsConnected:(BOOL)isConnected;
@@ -42,8 +37,14 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 - (void)operationChangeModel:(EABaseModel *)changeModel respond:(RespondBlock )respond;
 /// 获取大数据【队列操作】
 - (void)operationgGetBigData:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;
-/// 手表OTA【队列操作】
+
+/// 手表OTA
+- (BOOL)upgradeFiles:(NSArray<EAFileModel *> *)list;
+/// 表盘OTA
+- (BOOL)upgradeWatchFaceFile:(EAFileModel *)watchFaceFile;
+/// AGPS OTA
 - (BOOL)upgrade:(EAOTA *)ota;
+
 /// 获取大数据（bigDataType 只支持大数据类型 3000~3999）
 - (NSArray *)getBigDataWithBigDataType:(EADataInfoType)bigDataType;
 /// 获取音频数据【通知收到 ‘录音完成’ 才能调用此方法获取录音数据】
@@ -69,7 +70,9 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 - (NSArray *)analyzeBigDataString:(NSString *)pbDataString andIdNmuber:(NSInteger )idNumber;
 
 
-
+- (void)setNilBlock;
+- (void)setchannelDataNil;
+- (void)setBleQueueNil;
 
 @end
 

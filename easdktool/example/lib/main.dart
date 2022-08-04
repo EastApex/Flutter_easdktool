@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "001004000000999038";
+    connectParam.snNumber = "002006000009999010";
     //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -702,11 +702,19 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView('4.Set the watch unit【设置手表单位】'),
+                child: TextView('4.Set the watch unit-metric【设置手表单位-KM】'),
                 onTap: () {
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.metric;
-                  setWatchData(kEADataInfoTypeLanguage, unifiedUnit.toMap());
+                  setWatchData(kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
+                },
+              ),
+              GestureDetector(
+                child: TextView('4.Set the watch unit-british【设置手表单位-MI】'),
+                onTap: () {
+                  EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
+                  unifiedUnit.unit = EAUnifiedUnitType.british;
+                  setWatchData(kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
                 },
               ),
               GestureDetector(
@@ -795,26 +803,35 @@ class _MyAppState extends State<MyApp> {
                  * SIndexArray does not need to pass values when eOps = is removed.【当 eOps = 删除时，sIndexArray 不需要传值】
                  */
 
-                  EAReminder reminder = EAReminder();
-                  reminder.reminderEventType = EAReminderEventType.Alarm;
-                  reminder.hour = 19;
-                  reminder.minute = 32;
-                  reminder.sw = 1;
-                  reminder.secSw = 0;
-                  reminder.remindActionType = EARemindActionType.NoAction;
-                  reminder.sleepDuration = 5 * 60;
+                  // EAReminder reminder = EAReminder();
+                  // reminder.reminderEventType = EAReminderEventType.Alarm;
+                  // reminder.hour = 11;
+                  // reminder.minute = 26;
+                  // reminder.sw = 1;
+                  // reminder.secSw = 0;
+                  // reminder.remindActionType = EARemindActionType.LongVibration;
+                  // reminder.sleepDuration = 5 * 60;
 
                   EAReminder reminder2 = EAReminder();
-                  reminder2.reminderEventType = EAReminderEventType.Sleep;
-                  reminder2.hour = 22;
-                  reminder2.minute = 30;
+                  reminder2.reminderEventType = EAReminderEventType.Drink;
+                  reminder2.hour = 11;
+                  reminder2.minute = 28;
                   reminder2.sw = 1;
                   reminder2.secSw = 0;
-                  reminder2.remindActionType = EARemindActionType.NoAction;
+                  reminder2.remindActionType = EARemindActionType.LongVibration;
                   reminder2.sleepDuration = 5 * 60;
 
+                  // EAReminder reminder3 = EAReminder();
+                  // reminder3.reminderEventType = EAReminderEventType.Drink;
+                  // reminder3.hour = 23;
+                  // reminder3.minute = 19;
+                  // reminder3.sw = 1;
+                  // reminder3.secSw = 0;
+                  // reminder3.remindActionType = EARemindActionType.LongVibration;
+                  // reminder3.sleepDuration = 5 * 60;
+
                   EAReminderOps reminderOps = EAReminderOps();
-                  reminderOps.list = [reminder, reminder2];
+                  reminderOps.list = [reminder2];
                   setWatchData(kEADataInfoTypeReminder, reminderOps.toMap());
                 },
               ),
@@ -1070,38 +1087,15 @@ class _MyAppState extends State<MyApp> {
                    * The screen and heart rate are just as logical as firmware. Upgrade to the largest version
                    */
 
-                  EAOTA ota1 = EAOTA(
-                      "固件AP0.1B1.1本地文件路径", EAFirmwareType.Apollo, "AP0.1B1.1");
-                  EAOTA ota2 = EAOTA("字库0.4本地文件路径", EAFirmwareType.Res, "R0.4");
-                  EAOTA ota3 = EAOTA("字库0.5本地文件路径", EAFirmwareType.Res, "R0.5");
+                  // EAOTA ota1 = EAOTA(
+                  //     "固件AP0.1B1.1本地文件路径", EAFirmwareType.Apollo, "AP0.1B1.1");
+                  // EAOTA ota2 = EAOTA("字库0.4本地文件路径", EAFirmwareType.Res, "R0.4");
+                  // EAOTA ota3 = EAOTA("字库0.5本地文件路径", EAFirmwareType.Res, "R0.5");
 
-                  EAOTAList otaList = EAOTAList(0, [ota1, ota2, ota3]);
+                  // EAOTAList otaList = EAOTAList(0, [ota1, ota2, ota3]);
 
-                  EASDKTool().otaUpgrade(
-                    otaList,
-                    EAOTAProgressCallback((progress) {
-                      if (progress == -1) {
-                        // transmit data fail;
-
-                      } else if (progress == 100) {
-                        // transmit data succ;
-                      } else {
-                        // transmit data progress
-                      }
-                    }));
-
-                  // var bytes = await rootBundle.load("assets/bin/AP0.2B2.3.bin");
-                  // String path = (await getApplicationSupportDirectory()).path;
-                  // final buffer = bytes.buffer;
-                  // await new File('$path/appolo.bin').writeAsBytes(buffer
-                  //     .asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-
-                  // EAOTA appoloOTA = EAOTA(
-                  //     '$path/appolo.bin', EAFirmwareType.Apollo, "AP0.2B2.3");
-                  // EAOTAList eaList = EAOTAList(0, [appoloOTA]);
-                  // EASDKTool().otaUpgrade(eaList,
+                  // EASDKTool().otaUpgrade(otaList,
                   //     EAOTAProgressCallback((progress) {
-                  //   print("OTA进度:" + progress.toString());
                   //   if (progress == -1) {
                   //     // transmit data fail;
 
@@ -1111,6 +1105,39 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
+
+                  var bytes =
+                      await rootBundle.load("assets/bin/002006_AP0.1B2.1.bin");
+                  String path = (await getApplicationSupportDirectory()).path;
+                  final buffer = bytes.buffer;
+                  await File('$path/appolo.bin').writeAsBytes(buffer
+                      .asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+
+                  var bytes2 =
+                      await rootBundle.load("assets/bin/002006_R0.7.bin");
+                  String path2 = (await getApplicationSupportDirectory()).path;
+                  final buffer2 = bytes.buffer;
+                  await File('$path2/Res.bin').writeAsBytes(buffer2.asUint8List(
+                      bytes2.offsetInBytes, bytes2.lengthInBytes));
+
+                  EAOTA appoloOTA = EAOTA(
+                      '$path/appolo.bin', EAFirmwareType.Apollo, "AP0.1B2.1");
+                  EAOTA resOTA =
+                      EAOTA('$path2/Res.bin', EAFirmwareType.Res, "R0.7");
+
+                  EAOTAList eaList = EAOTAList(0, [appoloOTA, resOTA]);
+                  EASDKTool().otaUpgrade(eaList,
+                      EAOTAProgressCallback((progress) {
+                    print("OTA进度:" + progress.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+
+                    } else if (progress == 100) {
+                      // transmit data succ;
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               TitleView('  unbindWatch【解绑】'),

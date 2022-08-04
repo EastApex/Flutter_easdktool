@@ -274,7 +274,7 @@ enum EAReminderEventType {
   /// 运动
   Sport,
 
-  /// 喝水
+  /// Drink water  喝水
   Drink,
 
   /// 吃药
@@ -285,6 +285,9 @@ enum EAReminderEventType {
 
   /// User defined【用户自定义】
   User,
+
+  /// 洗手
+  WashHand,
 }
 
 ///Alert event action type【提醒事件操作】
@@ -505,6 +508,7 @@ enum EAConnectStateType {
   /// 连接中
   EAConnectStateTypeConnecting,
 }
+
 enum EAPushMessageActionType {
   ///新增(来电属于新增)
   add,
@@ -521,8 +525,8 @@ enum EAPushMessageActionType {
   ///删除全部社交
   del_all,
 }
-enum EAPushMessageType {
 
+enum EAPushMessageType {
   ///来电
   incomingcall,
 

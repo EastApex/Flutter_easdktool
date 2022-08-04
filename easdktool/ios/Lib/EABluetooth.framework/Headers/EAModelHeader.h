@@ -62,7 +62,7 @@
 #import <EABluetooth/EAHabitTrackerDataModel.h>
 #import <EABluetooth/EASportShowDataModel.h>
 #import <EABluetooth/EABlePairStateModel.h>
-
+#import <EABluetooth/EATelephoneBookModel.h>
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>

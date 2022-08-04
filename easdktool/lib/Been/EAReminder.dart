@@ -88,6 +88,7 @@ class EAReminder {
   Map<String, dynamic> toMap() {
     return {
       "reminderEventType": reminderEventType.index,
+      "eType": reminderEventType.index,
       "id_p": id_p,
       "hour": hour,
       "minute": minute,
@@ -100,6 +101,7 @@ class EAReminder {
       "sleepDuration": sleepDuration,
       "content": content,
       "remindActionType": remindActionType.index,
+      "eAction": remindActionType.index,
     };
   }
 }

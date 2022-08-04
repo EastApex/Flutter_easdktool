@@ -34,6 +34,9 @@ NSLog(@"[EALog]:%s:%d" format, __func__, __LINE__, ##__VA_ARGS__);\
 /// 扫描所有设备 ，默认关闭
 @property (nonatomic, assign) BOOL canScanAllDevices;
 
+/// 测试专用（请无设置）
+@property (nonatomic, assign) NSInteger isTest;
+
 + (EABleConfig *)getDefaultConfig;
 
 

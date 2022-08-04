@@ -125,6 +125,9 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /**获取蓝牙配对状态 */
     EADataInfoTypeBlePairState = 41,
     
+    /**通讯录 */
+    EADataInfoTypeTelephoneBook = 42,
+    
     /** 操作手机命令 */
     EADataInfoTypePhoneOps = 2001,
     
@@ -789,279 +792,434 @@ typedef NS_ENUM(NSUInteger,EASportType) {
     
     /** 日常运动 */
     EASportTypeDaily = 0,
-    
+
     /** 户外步行 */
     EASportTypeOurdoorWalking = 1,
-    
+
     /** 户外跑步 */
     EASportTypeOurdoorRunning = 2,
-    
+
     /** 户外徒步 */
     EASportTypeOurdoorOnFoot = 3,
-    
+
     /** 户外登山 */
     EASportTypeOurdoorOnMountaineering = 4,
-    
+
     /** 户外越野跑 */
     EASportTypeOurdoorTrailRunning = 5,
-    
+
     /** 户外单车 */
     EASportTypeOurdoorCycling = 6,
-    
+
     /** 户外游泳 */
     EASportTypeOutdoorSwimming = 7,
-    
+
     /** 室内步行 */
     EASportTypeIndoorWalking = 8,
-    
+
     /** 室内跑步 */
     EASportTypeIndoorRunning = 9,
-    
+
     /** 室内锻炼 */
     EASportTypeIndoorExercise = 10,
-    
+
     /** 室内单车 */
     EASportTypeIndoorCycling = 11,
-    
+
     /** 椭圆机 */
     EASportTypeElliptical = 12,
-    
+
     /** 瑜伽 */
     EASportTypeYoga = 13,
-    
+
     /** 划船机 */
     EASportTypeRowing = 14,
-    
+
     /** 室内游泳 */
     EASportTypeIndoorSwimming = 15,
-    
-    /** 跳绳 */
-    EASportTypeRopeSkipping = 68,
-    
-    /** 网球 */
-    EASportTypeTennis = 69,
-    
-    /** 乒乓球 */
-    EASportTypePingPong = 70,
-    
-    /** 羽毛球 */
-    EASportTypeBadminton = 71,
-    
-    /** 篮球 */
-    EASportTypeBasketball = 72,
-    
-    /** 足球 */
-    EASportTypeFootball = 73,
-    
-    /** 棒球 */
-    EASportTypeBaseball = 74,
-    
-    /** 板球 */
-    EASportTypeCricket = 75,
-    
-    /** 排球 */
-    EASportTypeVolleyball = 76,
-    
-    /** 曲棍球 */
-    EASportTypeHockey = 77,
-    
-    /** 橄榄球 */
-    EASportTypeRugby = 78,
-    
-    /** 跳舞 */
-    EASportTypeDance = 79,
-    
-    /** 自定义运动 */
-    EASportTypeCustomSport = 80,
-    
-    /** 动感单车 */
-    EASportTypeSpinning = 81,
-    
-    /** 仰卧起坐 */
-    EASportTypeSitUp = 82,
-    
-    /** 体操 */
-    EASportTypeGymnastics = 83,
-    
-    /** 开合跳 */
-    EASportTypeJumpingJack = 84,
-    
-    /** 自由训练 */
-    EASportTypeFreeTraining = 85,
-    
-    /** 力量训练 */
-    EASportTypeStrengthTraining = 86,
-    
-    /** 踏步 */
-    EASportTypeMarkTime = 87,
-    
-    /** 骑马 */
-    EASportTypeHorseRiding = 88,
-    
-    /** 太极 */
-    EASportTypeTaiJi = 89,
-    
-    /** 毽球 */
-    EASportTypeShuttlecock = 90,
-    
-    /** 滑雪 */
-    EASportTypeSkiing = 91,
-    
-    /** 冰球 */
-    EASportTypeIceHockey = 92,
-    
-    /** 跆拳道 */
-    EASportTypeTaekwondo = 93,
-    
-    /** 漫步机 */
-    EASportTypeWalkingMachine = 94,
-    
-    /** 田径 */
-    EASportTypeAthletics = 95,
-    
-    /** 腰腹训练 */
-    EASportTypeLumbarAbdomenTraining = 96,
-    
-    /** 空手道 */
-    EASportTypeKarate = 97,
-    
-    /** 普拉提 */
-    EASportTypePilates = 98,
-    
-    /** 拉丁舞 */
-    EASportTypeLatinDance = 99,
-    
-    /** 街舞 */
-    EASportTypeStreetDance = 100,
-    
-    /** 芭蕾 */
-    EASportTypeBallet = 101,
-    
-    /** 武术 */
-    EASportTypeWushu = 102,
-    
-    /** 爬楼 */
-    EASportTypeClimbStairs = 103,
-    
-    /** 手球 */
-    EASportTypeHandball = 104,
-    
-    /** 保龄球 */
-    EASportTypeBowling = 105,
-    
-    /** 壁球 */
-    EASportTypeSquash = 106,
-    
-    /** 冰壶 */
-    EASportTypeCurling = 107,
-    
-    /** 钓鱼 */
-    EASportTypeFish = 108,
-    
-    /** 飞盘 */
-    EASportTypeFrisbee = 109,
-    
-    /** 高尔夫 */
-    EASportTypeGolf = 110,
-    
-    /** 民族舞 */
-    EASportTypeFolkDance = 111,
-    
-    /** 滑冰 */
-    EASportTypeSkating = 112,
-    
-    /** 健身操 */
-    EASportTypeBodybuildingExercise = 113,
-    
-    /** 长曲棍球 */
-    EASportTypeLacrosse = 114,
-    
-    /** 垒球 */
-    EASportTypeSoftball = 115,
-    
-    /** 呼啦圈 */
-    EASportTypeHulaHoop = 116,
-    
-    /** 飞镖 */
-    EASportTypeDarts = 117,
-    
-    /** 匹克球 */
-    EASportTypePeakBall = 118,
-    
-    /** 蹦床 */
-    EASportTypeTrampoline = 119,
-    
-    /** 滑板 */
-    EASportTypeSkateboarding = 120,
-    
-    /** 酷跑 */
-    EASportTypeParkour = 121,
-    
-    /** 引体向上 */
-    EASportTypeChinning = 122,
-    
-    /** 俯卧撑 */
-    EASportTypePushUp = 123,
-    
-    /** 平板支撑 */
-    EASportTypePlank = 124,
-    
+
     /** 攀岩 */
-    EASportTypeSportClimbing = 125,
-    
+    EASportTypeOdRock = 16,
+
+    /** 滑板 */
+    EASportTypeOdSkate = 17,
+
+    /** 轮滑 */
+    EASportTypeOdRoller = 18,
+
+    /** 跑酷 */
+    EASportTypeOdParkour = 19,
+
+    /** 跳伞 */
+    EASportTypeOdParachute = 20,
+
+    /** HIIT */
+    EASportTypeTrainHit = 21,
+
+    /** 举重 */
+    EASportTypeTrainWeight = 22,
+
+    /** 平板支撑 */
+    EASportTypeTrainPlank = 23,
+
+    /** 开合跳 */
+    EASportTypeTrainJumping = 24,
+
+    /** 爬楼机 */
+    EASportTypeTrainStair = 25,
+
+    /** 核心训练 */
+    EASportTypeTrainCore = 26,
+
+    /** 柔韧训练 */
+    EASportTypeTrainFlex = 27,
+
+    /** 普拉提 */
+    EASportTypeTrainPilates = 28,
+
+    /** 拉伸 */
+    EASportTypeTrainStretch = 29,
+
+    /** 力量训练 */
+    EASportTypeTrainStrength = 30,
+
+    /** 交叉训练 */
+    EASportTypeTrainCross = 31,
+
+    /** 哑铃训练 */
+    EASportTypeTrainDumbbell = 32,
+
+    /** 硬拉 */
+    EASportTypeTrainDeadlift = 33,
+
+    /** 仰卧起坐 */
+    EASportTypeTrainSit = 34,
+
+    /** 功能性训练 */
+    EASportTypeTrainFuncition = 35,
+
+    /** 上肢训练 */
+    EASportTypeTrainUpper = 36,
+
+    /** 下肢训练 */
+    EASportTypeTrainLower = 37,
+
+    /** 腹肌训练 */
+    EASportTypeTrainAbs = 38,
+
+    /** 背部训练 */
+    EASportTypeTrainBack = 39,
+
+    /** 帆船 */
+    EASportTypeWaterSailboat = 40,
+
+    /** 浆板 */
+    EASportTypeWaterSup = 41,
+
+    /** 水球 */
+    EASportTypeWaterPolo = 42,
+
+    /** 划水 */
+    EASportTypeWaterThrash = 43,
+
+    /** 皮划艇 */
+    EASportTypeWaterKayak = 44,
+
+    /** 漂流 */
+    EASportTypeWaterDrifting = 45,
+
+    /** 划船 */
+    EASportTypeWaterBoating = 46,
+
+    /** 蹼泳 */
+    EASportTypeWaterFin = 47,
+
+    /** 跳水 */
+    EASportTypeWaterDiving = 48,
+
+    /** 花样游泳 */
+    EASportTypeWaterArtistic = 49,
+
+    /** 潜水 */
+    EASportTypeWaterSnorkel = 50,
+
+    /** 风筝冲浪 */
+    EASportTypeWaterKitesurfing = 51,
+
+    /** 沙滩车 */
+    EASportTypeWaterAtv = 52,
+
+    /** 沙滩足球 */
+    EASportTypeWaterBeach = 53,
+
+    /** 舞蹈 */
+    EASportTypeDanceDance = 54,
+
+    /** 肚皮舞 */
+    EASportTypeDanceDelly = 55,
+
+    /** 体操 */
+    EASportTypeDanceGymnastics = 56,
+
+    /** 健身操 */
+    EASportTypeDanceAerobics = 57,
+
+    /** 街舞 */
+    EASportTypeDanceHipHop = 58,
+
+    /** 拳击 */
+    EASportTypeFightBoxing = 59,
+
+    /** 武术 */
+    EASportTypeFightWushu = 60,
+
+    /** 摔跤 */
+    EASportTypeFightWrestling = 61,
+
+    /** 太极 */
+    EASportTypeFightTaichi = 62,
+
+    /** 泰拳 */
+    EASportTypeFightMuayThai = 63,
+
+    /** 柔道 */
+    EASportTypeFightJudo = 64,
+
+    /** 跆拳道 */
+    EASportTypeFightTaekwondo = 65,
+
+    /** 空手道 */
+    EASportTypeFightKarate = 66,
+
+    /** 自由搏击 */
+    EASportTypeFightFreeSparring = 67,
+
+    /** 足球 */
+    EASportTypeBallSoccer = 68,
+
+    /** 篮球 */
+    EASportTypeBallBasketball = 69,
+
+    /** 排球 */
+    EASportTypeBallVolleyball = 70,
+
+    /** 羽毛球 */
+    EASportTypeBallBadminton = 71,
+
+    /** 乒乓球 */
+    EASportTypeBallPingpong = 72,
+
+    /** 板球 */
+    EASportTypeBallCricket = 73,
+
+    /** 橄榄球 */
+    EASportTypeBallFootball = 74,
+
+    /** 墙球 */
+    EASportTypeBallRacqurball = 75,
+
+    /** 手球 */
+    EASportTypeBallHandball = 76,
+
+    /** 壁球 */
+    EASportTypeBallSquash = 77,
+
+    /** 毽球 */
+    EASportTypeBallShuttlecock = 78,
+
+    /** 藤球 */
+    EASportTypeBallRaga = 79,
+
+    /** 雪车 */
+    EASportTypeSnowBoard = 80,
+
+    /** 双板滑雪 */
+    EASportTypeSnowSkis = 81,
+
+    /** 冰球 */
+    EASportTypeSnowPuck = 82,
+
+    /** 滑冰 */
+    EASportTypeSnowSkate = 83,
+
+    /** 冰壶 */
+    EASportTypeSnowCurling = 84,
+
+    /** 单板滑雪 */
+    EASportTypeSnowMobile = 85,
+
+    /** 雪橇 */
+    EASportTypeSnowSled = 86,
+
+    /** 冥想 */
+    EASportTypeLeisureMeditation = 87,
+
+    /** 剑道 */
+    EASportTypeLeisureKendo = 88,
+
+    /** 击剑 */
+    EASportTypeLeisureFence = 89,
+
+    /** 保龄球 */
+    EASportTypeLeisureBowling = 90,
+
+    /** 台球 */
+    EASportTypeLeisureBilliards = 91,
+
+    /** 射箭 */
+    EASportTypeLeisureArchery = 92,
+
+    /** 飞镖 */
+    EASportTypeLeisureDarts = 93,
+
+    /** 骑马 */
+    EASportTypeLeisureHorse = 94,
+
+    /** 呼啦圈 */
+    EASportTypeLeisureHula = 95,
+
+    /** 放风筝 */
+    EASportTypeLeisureKite = 96,
+
+    /** 钓鱼 */
+    EASportTypeLeisureFishing = 97,
+
+    /** 飞盘 */
+    EASportTypeLeisureFribee = 98,
+
+    /** 马术 */
+    EASportTypeLeisureEquestrian = 99,
+
+    /** 赛车 */
+    EASportTypeLeisureRacing = 100,
+
+    /** 自由锻炼 */
+    EASportTypeOtherFree = 101,
+
+    /** 跳绳 */
+    EASportTypeOtherRope = 102,
+
+    /** 上楼梯 */
+    EASportTypeOtherClimb = 103,
+
+    /** 拔河 */
+    EASportTypeOtherPush = 104,
+
+    /** 单杠 */
+    EASportTypeOtherHorizontal = 105,
+
+    /** 双杠 */
+    EASportTypeOtherParallel = 106,
+
+    /** 网球 */
+    EASportTypeTennis = 107,
+
+    /** 棒球 */
+    EASportTypeBaseball = 108,
+
+    /** 曲棍球 */
+    EASportTypeHockey = 109,
+
+    /** 自定义运动 */
+    EASportTypeCustomSport = 110,
+
+    /** 踏步 */
+    EASportTypeMarkTime = 111,
+
+    /** 漫步机 */
+    EASportTypeWalkingMachine = 112,
+
+    /** 田径 */
+    EASportTypeAthletics = 113,
+
+    /** 腰腹训练 */
+    EASportTypeLumbarAbdomenTraining = 114,
+
+    /** 拉丁舞 */
+    EASportTypeLatinDance = 115,
+
+    /** 芭蕾 */
+    EASportTypeBallet = 116,
+
+    /** 高尔夫 */
+    EASportTypeGolf = 117,
+
+    /** 民族舞 */
+    EASportTypeFolkDance = 118,
+
+    /** 长曲棍球 */
+    EASportTypeLacrosse = 119,
+
+    /** 垒球 */
+    EASportTypeSoftball = 120,
+
+    /** 匹克球 */
+    EASportTypePeakBall = 121,
+
+    /** 蹦床 */
+    EASportTypeTrampoline = 122,
+
+    /** 酷跑 */
+    EASportTypeParkour = 123,
+
+    /** 俯卧撑 */
+    EASportTypePushUp = 124,
+
     /** 跳高 */
-    EASportTypeHighJump = 126,
-    
+    EASportTypeHighJump = 125,
+
     /** 跳远 */
-    EASportTypeLongJump = 127,
+    EASportTypeLongJump = 126,
+
+    
     
     /** 智慧运动: 日常运动 */
-    EASportTypeDailyEx = 128,
-    
+    EASportTypeDailyEx = 32768,
+
     /** 智慧运动: 户外步行 */
-    EASportTypeOurdoorWalkingEx = 129,
-    
+    EASportTypeOurdoorWalkingEx = 32769,
+
     /** 智慧运动: 户外跑步 */
-    EASportTypeOurdoorRunningEx = 130,
-    
+    EASportTypeOurdoorRunningEx = 32770,
+
     /** 智慧运动: 户外徒步 */
-    EASportTypeOurdoorOnFootEx = 131,
-    
+    EASportTypeOurdoorOnFootEx = 32771,
+
     /** 智慧运动: 户外登山 */
-    EASportTypeOurdoorOnMountaineeringEx = 132,
-    
+    EASportTypeOurdoorOnMountaineeringEx = 32772,
+
     /** 智慧运动: 户外越野跑 */
-    EASportTypeOurdoorTrailRunningEx = 133,
-    
+    EASportTypeOurdoorTrailRunningEx = 32773,
+
     /** 智慧运动: 户外单车 */
-    EASportTypeOurdoorCyclingEx = 134,
-    
+    EASportTypeOurdoorCyclingEx = 32774,
+
     /** 智慧运动: 户外游泳 */
-    EASportTypeOutdoorSwimmingEx = 135,
-    
+    EASportTypeOutdoorSwimmingEx = 32775,
+
     /** 智慧运动: 室内步行 */
-    EASportTypeIndoorWalkingEx = 136,
-    
+    EASportTypeIndoorWalkingEx = 32776,
+
     /** 智慧运动: 室内跑步 */
-    EASportTypeIndoorRunningEx = 137,
-    
+    EASportTypeIndoorRunningEx = 32777,
+
     /** 智慧运动: 室内锻炼 */
-    EASportTypeIndoorExerciseEx = 138,
-    
+    EASportTypeIndoorExerciseEx = 32778,
+
     /** 智慧运动: 室内单车 */
-    EASportTypeIndoorCyclingEx = 139,
-    
+    EASportTypeIndoorCyclingEx = 32779,
+
     /** 智慧运动: 椭圆机 */
-    EASportTypeEllipticalEx = 140,
-    
+    EASportTypeEllipticalEx = 32780,
+
     /** 智慧运动: 瑜伽 */
-    EASportTypeYogaEx = 141,
-    
+    EASportTypeYogaEx = 32781,
+
     /** 智慧运动: 划船机 */
-    EASportTypeRowingEx = 142,
-    
+    EASportTypeRowingEx = 32782,
+
     /** 智慧运动: 室内游泳 */
-    EASportTypeIndoorSwimmingEx = 143,
+    EASportTypeIndoorSwimmingEx = 32783,
     
 };
 
@@ -1374,6 +1532,17 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerFlag) {
     
     /** 已取消 */
     EAHabitTrackerFlagCancel = 3,
+};
+
+
+#pragma mark - 通讯录flag
+typedef NS_ENUM(NSUInteger,EAPhoneContactFlag) {
+    
+    /** 标志: 起始包 */
+    EAPhoneContactFlagBegin = 0,
+
+    /** 标志: 非起始包 */
+    EAPhoneContactFlagProceed = 1,
 };
 
 #endif /* EAEnumh */
