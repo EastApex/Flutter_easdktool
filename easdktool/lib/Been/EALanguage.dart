@@ -4,6 +4,7 @@ part of easdktool.been;
 /// 手表语言
 class EALanguage {
   EALanguageType type = EALanguageType.default0;
+
   EALanguage();
   EALanguage.fromMap(Map<String, dynamic> map) {
     if (map["eType"] != null) {

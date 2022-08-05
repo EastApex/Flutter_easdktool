@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -107,27 +108,12 @@ import com.apex.bluetooth.model.EABleWeightFormat;
 import com.apex.bluetooth.model.TodayTotalData;
 import com.apex.bluetooth.utils.LogUtils;
 import com.example.easdktool.been.BindInfo;
-import com.example.easdktool.been.ConnectParam;
-import com.example.easdktool.been.DailyGoal;
-import com.example.easdktool.been.GeneralSportRespond;
-import com.example.easdktool.been.InfoPush;
-import com.example.easdktool.been.InfoPushItem;
 import com.example.easdktool.been.LogParam;
-import com.example.easdktool.been.MenuPage;
-import com.example.easdktool.been.OtaData;
-import com.example.easdktool.been.PageItem;
 import com.example.easdktool.been.Period;
-import com.example.easdktool.been.PersonInfo;
 import com.example.easdktool.been.ReminderItem;
-import com.example.easdktool.been.Sedentariness;
-import com.example.easdktool.been.SetWatchParam;
 import com.example.easdktool.been.ShowAppMessage;
-import com.example.easdktool.been.SyncTime;
 import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
-import com.example.easdktool.been.TempRemind;
-import com.example.easdktool.been.GetWatchParam;
-import com.example.easdktool.been.TempWeather;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -136,6 +122,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -536,18 +523,38 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     class MotionDataListener implements MotionDataReportCallback {
         @Override
         public void dailyExerciseData(final List<EABleDailyData> list, final CommonFlag commonFlag) {
-
+            bigDataRespond(3001, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("steps", list.get(i).getSteps());
+                map.put("calorie", list.get(i).getCalorie());
+                map.put("distance", list.get(i).getDistance());
+                map.put("duration", list.get(i).getDuration());
+                map.put("average_heart_rate", list.get(i).getAverage_heart_rate());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepData);
             sendBigWatchData(jsonObject);
+
         }
 
         @Override
         public void sleepData(final List<EABleSleepData> list, final CommonFlag commonFlag) {
+            bigDataRespond(3002, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("e_sleep_node", list.get(i).getE_sleep_node().getValue());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeSleepData);
             sendBigWatchData(jsonObject);
@@ -555,19 +562,35 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void heartData(final List<EABleHeartData> list, final CommonFlag commonFlag) {
-
+            bigDataRespond(3003, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("hr_value", list.get(i).getHr_value());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeHeartRateData);
             sendBigWatchData(jsonObject);
+
         }
 
         @Override
         public void gpsData(final List<EABleGpsData> list, final CommonFlag commonFlag) {
-
+            bigDataRespond(3004, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("latitude", list.get(i).getLatitude());
+                map.put("longitude", list.get(i).getLongitude());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeGPSData);
             sendBigWatchData(jsonObject);
@@ -575,48 +598,54 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void multiMotionData(List<EABleMultiData> list, CommonFlag commonFlag) {
-
-            JSONObject json = new JSONObject();
-
-            List<TempMotion> motionList = new ArrayList<>();
+            bigDataRespond(3005, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                TempMotion tempMotion = new TempMotion();
-                tempMotion.e_type = list.get(i).getE_type().getValue();
-                tempMotion.begin_time_stamp = list.get(i).getBegin_time_stamp();
-                tempMotion.end_time_stamp = list.get(i).getEnd_time_stamp();
-                tempMotion.steps = list.get(i).getSteps();
-                tempMotion.calorie = list.get(i).getCalorie();
-                tempMotion.distance = list.get(i).getDistance();
-                tempMotion.duration = list.get(i).getDuration();
-                tempMotion.training_effect_normal = list.get(i).getTraining_effect_normal();
-                tempMotion.training_effect_warmUp = list.get(i).getTraining_effect_warmUp();
-                tempMotion.training_effect_fatconsumption = list.get(i).getTraining_effect_fatconsumption();
-                tempMotion.training_effect_aerobic = list.get(i).getTraining_effect_aerobic();
-                tempMotion.training_effect_anaerobic = list.get(i).getTraining_effect_anaerobic();
-                tempMotion.training_effect_limit = list.get(i).getTraining_effect_limit();
-                tempMotion.average_heart_rate = list.get(i).getAverage_heart_rate();
-                tempMotion.average_temperature = list.get(i).getAverage_temperature();
-                tempMotion.average_speed = list.get(i).getAverage_speed();
-                tempMotion.average_pace = list.get(i).getAverage_pace();
-                tempMotion.average_step_freq = list.get(i).getAverage_step_freq();
-                tempMotion.average_stride = list.get(i).getAverage_stride();
-                tempMotion.average_altitude = list.get(i).getAverage_altitude();
-                tempMotion.average_heart_rate_max = list.get(i).getAverage_heart_rate_max();
-                tempMotion.average_heart_rate_min = list.get(i).getAverage_heart_rate_min();
-                motionList.add(tempMotion);
+                Map<String, Object> map = new HashMap<>();
+                map.put("e_type", list.get(i).getE_type().getValue());
+                map.put("begin_time_stamp", list.get(i).getBegin_time_stamp());
+                map.put("end_time_stamp", list.get(i).getEnd_time_stamp());
+                map.put("steps", list.get(i).getSteps());
+                map.put("calorie", list.get(i).getCalorie());
+                map.put("distance", list.get(i).getDistance());
+                map.put("duration", list.get(i).getDuration());
+                map.put("training_effect_normal", list.get(i).getTraining_effect_normal());
+                map.put("training_effect_warmUp", list.get(i).getTraining_effect_warmUp());
+                map.put("training_effect_fatconsumption", list.get(i).getTraining_effect_fatconsumption());
+                map.put("training_effect_aerobic", list.get(i).getTraining_effect_aerobic());
+                map.put("training_effect_anaerobic", list.get(i).getTraining_effect_anaerobic());
+                map.put("training_effect_limit", list.get(i).getTraining_effect_limit());
+                map.put("average_heart_rate", list.get(i).getAverage_heart_rate());
+                map.put("average_temperature", list.get(i).getAverage_temperature());
+                map.put("average_speed", list.get(i).getAverage_speed());
+                map.put("average_pace", list.get(i).getAverage_pace());
+                map.put("average_step_freq", list.get(i).getAverage_step_freq());
+                map.put("average_stride", list.get(i).getAverage_stride());
+                map.put("average_altitude", list.get(i).getAverage_altitude());
+                map.put("average_heart_rate_max", list.get(i).getAverage_heart_rate_max());
+                map.put("average_heart_rate_min", list.get(i).getAverage_heart_rate_min());
+                dataList.add(map);
             }
-            json.put("value", motionList);
-            json.put("flag", commonFlag.getValue());
-            json.put("dataType", kEADataInfoTypeSportsData);
-            sendBigWatchData(json);
-
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("value", dataList);
+            jsonObject.put("flag", commonFlag.getValue());
+            jsonObject.put("dataType", kEADataInfoTypeSportsData);
+            sendBigWatchData(jsonObject);
 
         }
 
         @Override
         public void bloodOxygenData(final List<EABleBloodOxygen> list, final CommonFlag commonFlag) {
+            bigDataRespond(3006, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("blood_oxygen_value", list.get(i).getBlood_oxygen_value());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeBloodOxygenData);
             sendBigWatchData(jsonObject);
@@ -624,9 +653,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void pressureData(List<EABlePressureData> list, CommonFlag commonFlag) {
-
+            bigDataRespond(3007, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("stess_value", list.get(i).getStess_value());
+                map.put("e_type", list.get(i).getE_type().getValue());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStressData);
             sendBigWatchData(jsonObject);
@@ -634,8 +671,16 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void stepFrequencyData(List<EABleStepFrequencyData> list, CommonFlag commonFlag) {
+            bigDataRespond(3008, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("step_freq_value", list.get(i).getStep_freq_value());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepFreqData);
             sendBigWatchData(jsonObject);
@@ -644,29 +689,64 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void speedData(List<EABlePaceData> list, CommonFlag commonFlag) {
+            bigDataRespond(3009, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("step_pace_value", list.get(i).getStep_pace_value());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeStepPaceData);
             sendBigWatchData(jsonObject);
+
         }
 
         @Override
         public void restingHeartRateData(List<EABleRestingRateData> list, CommonFlag commonFlag) {
+            bigDataRespond(3010, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("hr_value", list.get(i).getHr_value());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", kEADataInfoTypeRestingHeartRateData);
             sendBigWatchData(jsonObject);
+
         }
 
         @Override
         public void getHabitData(List<EABleHabitRecord> list, CommonFlag commonFlag) {
+            bigDataRespond(3011, commonFlag.getValue());
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("time_stamp", list.get(i).getTime_stamp());
+                map.put("begin_hour", list.get(i).getBegin_hour());
+                map.put("begin_minute", list.get(i).getBegin_minute());
+                map.put("end_hour", list.get(i).getEnd_hour());
+                map.put("end_minute", list.get(i).getEnd_minute());
+                map.put("redColor", list.get(i).getRedColor());
+                map.put("greenColor", list.get(i).getGreenColor());
+                map.put("blueColor", list.get(i).getBlueColor());
+                map.put("habitState", list.get(i).getHabitState().getValue());
+                map.put("habitIcon", list.get(i).getHabitIcon().getValue());
+                dataList.add(map);
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("value", list);
+            jsonObject.put("value", dataList);
             jsonObject.put("flag", commonFlag.getValue());
             jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
             sendBigWatchData(jsonObject);
+
         }
 
         @Override
@@ -964,7 +1044,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         }
                     }
                 });
-            }        
+            }
         } else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
             String arguments = (String) call.arguments;
@@ -1098,12 +1178,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     map.put("firmwareVersion", eaBleWatchInfo.getFirmwareVersion());
                                     map.put("userId", eaBleWatchInfo.getUserId());
                                     map.put("id_p", eaBleWatchInfo.getWatchId());
-                                    map.put("bleMacAddr",eaBleWatchInfo.getBle_mac_addr());
-                                    map.put("isWaitForBinding",eaBleWatchInfo.getIs_wait_for_binding());
+                                    map.put("bleMacAddr", eaBleWatchInfo.getBle_mac_addr());
+                                    map.put("isWaitForBinding", eaBleWatchInfo.getIs_wait_for_binding());
                                     String watchType = eaBleWatchInfo.getWatchType();
-                                    if (watchType.equals("G01")){
+                                    if (watchType.equals("G01")) {
                                         map.put("type", "iTouch Flex");
-                                    }else  {
+                                    } else {
                                         map.put("type", eaBleWatchInfo.getWatchType());
                                     }
                                     sendWatchDataWithMap(map, type);
@@ -1126,12 +1206,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //flutter: {weight: 65000, eHandInfo: 0, height: 170, age: 26, eSexInfo: 1, eSkinColor: 0}
                                     Map<String, Integer> map = new HashMap();
                                     map.put("eSexInfo", eaBlePersonInfo.e_sex_info.getValue());
                                     map.put("eHandInfo", eaBlePersonInfo.e_hand_info.getValue());
                                     map.put("eSkinColor", eaBlePersonInfo.e_skin_color.getValue());
-                                    sendWatchDataWithObjectMap(eaBlePersonInfo, map, type);
+                                    map.put("age", eaBlePersonInfo.getAge());
+                                    map.put("height", eaBlePersonInfo.getHeight());
+                                    map.put("weight", eaBlePersonInfo.getWeight());
+                                    //  sendWatchDataWithObjectMap(eaBlePersonInfo, map, type);
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
@@ -1144,7 +1227,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
-            case 5:{
+            case 5: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sync_time, new TimeCallback() {
                     @Override
                     public void syncTime(EABleSyncTime eaBleSyncTime) {
@@ -1158,7 +1241,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     map.put("timeZone", eaBleSyncTime.e_time_zone.getValue());
                                     map.put("timeZoneHour", eaBleSyncTime.getTime_zone_hour());
                                     map.put("timeZoneMinute", eaBleSyncTime.getTime_zone_minute());
-                                    sendWatchDataWithObjectMap(eaBleSyncTime, map, type);
+                                    map.put("year", eaBleSyncTime.getYear());
+                                    map.put("month", eaBleSyncTime.getMonth());
+                                    map.put("day", eaBleSyncTime.getDay());
+                                    map.put("hour", eaBleSyncTime.getHour());
+                                    map.put("minute", eaBleSyncTime.getMinute());
+                                    map.put("second", eaBleSyncTime.getSecond());
+                                    map.put("e_sync_mode", eaBleSyncTime.getE_sync_mode().getValue());
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
@@ -1169,7 +1259,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                     }
                 });
-            }break;
+            }
+            break;
             case 8: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.black_screen_time, new RestScreenCallback() {
                     @Override
@@ -1223,7 +1314,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                     //{eStatus: 0, level: 90}
                                     Map<String, Integer> map = new HashMap();
                                     map.put("eStatus", eaBleBatInfo.e_status.getValue());
-                                    sendWatchDataWithObjectMap(eaBleBatInfo, map, type);
+                                    map.put("level", eaBleBatInfo.getLevel());
+                                    sendWatchDataWithMap(map, type);
+
                                 }
                             });
                         }
@@ -1246,7 +1339,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                                     Map<String, Integer> map = new HashMap();
                                     map.put("eType", eaBleDeviceLanguage.e_type.getValue());
-                                    sendWatchDataWithObjectMap(eaBleDeviceLanguage, map, type);
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
@@ -1268,7 +1361,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 public void run() {
                                     Map<String, Integer> map = new HashMap();
                                     map.put("eFormat", eaBleDevUnit.e_format.getValue());
-                                    sendWatchDataWithObjectMap(eaBleDevUnit, map, type);
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
@@ -1501,6 +1594,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.e(TAG, "提醒字符串:" + eaBleReminder.toString());
                                     JSONObject jsonObject = new JSONObject();
                                     jsonObject.put("id", eaBleReminder.id);
                                     jsonObject.put("e_ops", eaBleReminder.getE_ops().getValue());
@@ -1665,16 +1759,26 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 @Override
                                 public void run() {
 
-                                    Map<String, Integer> map = new HashMap();
+                                    Map<String, Object> map = new HashMap();
                                     map.put("e_status", eaBleCombination.getE_status().getValue());
                                     map.put("e_vibrate_intensity", eaBleCombination.getE_vibrate_intensity().getValue());
                                     map.put("e_hand_info", eaBleCombination.getE_hand_info().getValue());
                                     map.put("e_unit_format", eaBleCombination.getE_unit_format().getValue());
-                                    sendWatchDataWithObjectMap(eaBleCombination, map, type);
+                                    map.put("bat_level", eaBleCombination.getBat_level());
+                                    map.put("auto_pressure_sw", eaBleCombination.getAuto_pressure_sw());
+                                    map.put("auto_sedentariness_sw", eaBleCombination.getAuto_sedentariness_sw());
+                                    map.put("gestures_sw", eaBleCombination.getGestures_sw());
+                                    map.put("auto_check_hr_sw", eaBleCombination.getAuto_check_hr_sw());
+                                    map.put("not_disturb_sw", eaBleCombination.getNot_disturb_sw());
+                                    map.put("set_vibrate_intensity", eaBleCombination.getSet_vibrate_intensity());
+                                    map.put("wf_id", eaBleCombination.getWf_id());
+                                    map.put("user_wf_id", eaBleCombination.getUser_wf_id());
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
                     }
+
                     @Override
                     public void mutualFail(int i) {
                     }
@@ -1735,6 +1839,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     }
                 });
             }
+            break;
             case 33: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.dial, new WatchFaceCallback() {
                     @Override
@@ -1744,8 +1849,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 @Override
                                 public void run() {
 
-                                    Map<String, Integer> map = new HashMap();
-                                    sendWatchDataWithObjectMap(eaBleWatchFace, map, type);
+                                    Map<String, Object> map = new HashMap();
+                                    map.put("id", eaBleWatchFace.getId());
+                                    map.put("user_wf_id", eaBleWatchFace.getUser_wf_id());
+                                    map.put("user_wf_id_0", eaBleWatchFace.getUser_wf_id_0());
+                                    map.put("user_wf_id_1", eaBleWatchFace.getUser_wf_id_1());
+                                    map.put("user_wf_id_2", eaBleWatchFace.getUser_wf_id_2());
+                                    map.put("user_wf_id_3", eaBleWatchFace.getUser_wf_id_3());
+                                    sendWatchDataWithMap(map, type);
 
                                 }
                             });
@@ -1766,54 +1877,94 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    JSONObject jsonObject = new JSONObject();
-                                    List integerList = new ArrayList<>();
                                     ShowAppMessage showAppMessage = new ShowAppMessage();
+                                    Map<String, Boolean> map = new HashMap<>();
                                     if (eaBleInfoPush.getS_app_sw() != null && !eaBleInfoPush.getS_app_sw().isEmpty()) {
-
-                                        showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true:false);
-                                        showAppMessage.wechat = (eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true:false);
-                                        showAppMessage.qq = (eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true:false);
-                                        showAppMessage.facebook = (eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true:false);
-                                        showAppMessage.twitter = (eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true:false);
-                                        showAppMessage.messenger = (eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true:false);
-                                        showAppMessage.hangouts = (eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true:false);
-                                        showAppMessage.gmail = (eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true:false);
-                                        showAppMessage.viber = (eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true:false);
-                                        showAppMessage.snapchat = (eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true:false);
-                                        showAppMessage.whatsApp = (eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true:false);
-                                        showAppMessage.instagram = (eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true:false);
-                                        showAppMessage.linkedin = (eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true:false);
-                                        showAppMessage.line = (eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true:false);
-                                        showAppMessage.skype = (eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true:false);
-                                        showAppMessage.booking = (eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true:false);
-                                        showAppMessage.airbnb = (eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true:false);
-                                        showAppMessage.flipboard = (eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true:false);
-                                        showAppMessage.spotify = (eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true:false);
-                                        showAppMessage.pandora = (eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true:false);
-                                        showAppMessage.telegram = (eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true:false);
-                                        showAppMessage.dropbox = (eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true:false);
-                                        showAppMessage.waze = (eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true:false);
-                                        showAppMessage.lift = (eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true:false);
-                                        showAppMessage.slack = (eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true:false);
-                                        showAppMessage.shazam = (eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true:false);
-                                        showAppMessage.deliveroo = (eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true:false);
-                                        showAppMessage.kakaotalk = (eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true:false);
-                                        showAppMessage.pinterest = (eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true:false);
-                                        showAppMessage.tumblr = (eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true:false);
-                                        showAppMessage.vk = (eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true:false);
-                                        showAppMessage.youtube = (eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true:false);
-                                        if (integerList.size()>=32) {
-                                            showAppMessage.amazon = (eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
-                                            showAppMessage.discord = (eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
-                                            showAppMessage.github = (eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
-                                            showAppMessage.googleMaps = (eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
-                                            showAppMessage.newsBreak = (eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
-                                            showAppMessage.rReddit = (eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
-                                            showAppMessage.teams = (eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
-                                            showAppMessage.tiktok = (eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
-                                            showAppMessage.twitch = (eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
-                                            showAppMessage.uberEats = (eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                                        map.put("unknow", eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
+                                        map.put("wechat", eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
+                                        map.put("qq", eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
+                                        map.put("facebook", eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
+                                        map.put("twitter", eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
+                                        map.put("messenger", eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
+                                        map.put("hangouts", eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
+                                        map.put("gmail", eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
+                                        map.put("viber", eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
+                                        map.put("snapchat", eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
+                                        map.put("whatsApp", eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
+                                        map.put("instagram", eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
+                                        map.put("linkedin", eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
+                                        map.put("line", eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
+                                        map.put("skype", eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
+                                        map.put("booking", eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
+                                        map.put("airbnb", eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
+                                        map.put("flipboard", eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
+                                        map.put("spotify", eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
+                                        map.put("pandora", eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
+                                        map.put("telegram", eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
+                                        map.put("dropbox", eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
+                                        map.put("waze", eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
+                                        map.put("lift", eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
+                                        map.put("slack", eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
+                                        map.put("shazam", eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
+                                        map.put("deliveroo", eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
+                                        map.put("kakaotalk", eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
+                                        map.put("pinterest", eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
+                                        map.put("tumblr", eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
+                                        map.put("vk", eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
+                                        map.put("youtube", eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
+                                        // showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
+                                        // showAppMessage.wechat = (eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
+                                        // showAppMessage.qq = (eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
+                                        // showAppMessage.facebook = (eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
+                                        //showAppMessage.twitter = (eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
+                                        // showAppMessage.messenger = (eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
+                                        //showAppMessage.hangouts = (eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
+                                        // showAppMessage.gmail = (eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
+                                        // showAppMessage.viber = (eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
+                                        // showAppMessage.snapchat = (eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
+                                        // showAppMessage.whatsApp = (eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
+                                        // showAppMessage.instagram = (eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
+                                        // showAppMessage.linkedin = (eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
+                                        // showAppMessage.line = (eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
+                                        // showAppMessage.skype = (eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
+                                        // showAppMessage.booking = (eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
+                                        // showAppMessage.airbnb = (eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
+                                        // showAppMessage.flipboard = (eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
+                                        // showAppMessage.spotify = (eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
+                                        // showAppMessage.pandora = (eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
+                                        // showAppMessage.telegram = (eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
+                                        // showAppMessage.dropbox = (eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
+                                        // showAppMessage.waze = (eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
+                                        // showAppMessage.lift = (eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
+                                        // showAppMessage.slack = (eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
+                                        // showAppMessage.shazam = (eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
+                                        // showAppMessage.deliveroo = (eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
+                                        // showAppMessage.kakaotalk = (eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
+                                        // showAppMessage.pinterest = (eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
+                                        // showAppMessage.tumblr = (eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
+                                        // showAppMessage.vk = (eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
+                                        // showAppMessage.youtube = (eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
+                                        if (eaBleInfoPush.getS_app_sw().size() > 32) {
+                                            map.put("amazon", eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+                                            map.put("discord", eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
+                                            map.put("github", eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
+                                            map.put("googleMaps", eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
+                                            map.put("newsBreak", eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
+                                            map.put("rReddit", eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
+                                            map.put("teams", eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
+                                            map.put("tiktok", eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
+                                            map.put("twitch", eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
+                                            map.put("uberEats", eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                                            // showAppMessage.amazon = (eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+                                            // showAppMessage.discord = (eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
+                                            // showAppMessage.github = (eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
+                                            // showAppMessage.googleMaps = (eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
+                                            // showAppMessage.newsBreak = (eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
+                                            // showAppMessage.rReddit = (eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
+                                            // showAppMessage.teams = (eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
+                                            // showAppMessage.tiktok = (eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
+                                            // showAppMessage.twitch = (eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
+                                            // showAppMessage.uberEats = (eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
                                         }
 
 
@@ -1826,8 +1977,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 //                                        jsonObject.put("sAppSwArray", integerList);
                                     }
 //                                    Map map = jsonObject.getInnerMap();
-                                    String jsonString = JSON.toJSONString(showAppMessage);
-                                    Map map = JSON.parseObject(jsonString);
                                     sendWatchDataWithMap(map, type);
                                 }
                             });
@@ -1845,11 +1994,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
             break;
 
-            case 38:{
+            case 38: {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.habit, new HabitCallback() {
                     @Override
                     public void habitInfo(EABleHabit eaBleHabit) {
-                        if (eaBleHabit!=null){
+                        if (eaBleHabit != null) {
                             if (mHandler != null) {
                                 mHandler.post(new Runnable() {
                                     @Override
@@ -1888,6 +2037,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             }
                         }
                     }
+
                     @Override
                     public void mutualFail(int i) {
 
@@ -1895,7 +2045,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
-            case 40:{
+            case 40: {
 
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.todayData, new TodayTotalDataCallback() {
                     @Override
@@ -1906,11 +2056,16 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 public void run() {
 
                                     Map<String, Integer> map = new HashMap();
-                                    sendWatchDataWithObjectMap(todayTotalData, map, type);
+                                    map.put("steps", todayTotalData.getSteps());
+                                    map.put("calorie", todayTotalData.getCalorie());
+                                    map.put("distance", todayTotalData.getDistance());
+                                    map.put("duration", todayTotalData.getDuration());
+                                    sendWatchDataWithMap(map, type);
                                 }
                             });
                         }
                     }
+
                     @Override
                     public void mutualFail(int i) {
 
@@ -1924,6 +2079,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 break;
         }
     }
+
     private EABleSocialContact.SocialContactType getPushInfoType(int type) {
         if (type == 0) {
             return EABleSocialContact.SocialContactType.incomingcall;
@@ -2027,6 +2183,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             return EABleSocialContact.SocialContactType.unknow;
         }
     }
+
     private EABleSocialContact.SocialContactOps getPushInfoAction(int action) {
         if (action == 0) {
             return EABleSocialContact.SocialContactOps.add;
@@ -2040,6 +2197,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             return EABleSocialContact.SocialContactOps.del_all;
         }
     }
+
     private void setWatchData(Map<String, Object> setWatchParam) {
         int type = (int) setWatchParam.get("type");
         String jsonString = (String) setWatchParam.get("jsonString");
@@ -2903,14 +3061,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private void sendWatchData(Object model, int type) {
-        String jsonString = JSON.toJSONString(model);
-        Map map = JSON.parseObject(jsonString);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("dataType", type);
-        jsonObject.put("value", map);
-        channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
-    }
 
     private void sendWatchDataWithOtherKeyValue(String key, int value, int type) {
         JSONObject jsonObject1 = new JSONObject();
@@ -2923,16 +3073,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
     }
 
-    private void sendWatchDataWithObjectMap(Object model, Map mapValue, int type) {
-        String jsonString = JSON.toJSONString(model);
-        Map map = JSON.parseObject(jsonString);
-        map.putAll(mapValue);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("dataType", type);
-        jsonObject.put("value", map);
-        System.out.println("打印" + jsonObject.toJSONString());
-        channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
-    }
 
     private void sendWatchDataWithMap(Map mapValue, int type) {
         JSONObject jsonObject = new JSONObject();
@@ -2941,6 +3081,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         String jsonString = jsonObject.toJSONString();
         channel.invokeMethod(kGetWatchResponse, jsonString);
     }
+
     ///addKeyValuesToJsonObjectWithJsonObjectKey
     private void addKeyValues(String key1, Object value1, String key2, Object value2, JSONObject jsonObject, String jsonObjectKey) {
         JSONObject jsonObject1 = new JSONObject();
@@ -2965,14 +3106,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         return true;
     }
 
-    private void sendBigWatchData(JSONObject jsonObject) {
+    private void sendBigWatchData(@NonNull JSONObject jsonObject) {
         if (mHandler != null) {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    int flag = jsonObject.getInteger("flag");
-                    int dataType = jsonObject.getInteger("dataType");
-                    bigDataRespond(dataType, flag);
+                    // int flag = jsonObject.getInteger("flag");
+                    // int dataType = jsonObject.getInteger("dataType");
+
                     channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
                 }
             });
@@ -3055,6 +3196,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            Log.e(TAG, "当前进度:" + i);
                             channel.invokeMethod(kProgress, i);
                         }
                     });
