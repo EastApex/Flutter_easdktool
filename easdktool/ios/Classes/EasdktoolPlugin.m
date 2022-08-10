@@ -122,17 +122,20 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)connectSucc {
     
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connectTimeOut) object:nil];
     [_channel invokeMethod:kConnectState arguments:@(ConnectState_succ)];
     
 }
 
 - (void)connectFailed {
     
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connectTimeOut) object:nil];
     [_channel invokeMethod:kConnectState arguments:@(ConnectState_fail)];
 }
 
 - (void)loseConnect {
     
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connectTimeOut) object:nil];
     [_channel invokeMethod:kConnectState arguments:@(ConnectState_disConnect)];
 }
 
@@ -245,7 +248,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 return;
             }
             [[EABleManager defaultManager] reConnectToPeripheral:snNumber];
+            
+            [self performSelector:@selector(connectTimeOut) withObject:nil afterDelay:20];
         }
+        
+        
         
     }
     else if ([call.method isEqualToString:kEADisConnectWatch]) { // FIXME: - 断开
@@ -734,6 +741,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 }
 
+
+- (void)connectTimeOut {
+    
+    [[EABleManager defaultManager] stopScanPeripherals];
+    [[EABleManager defaultManager] cancelConnectingPeripheral];
+    [_channel invokeMethod:kConnectState arguments:@(ConnectState_notFind)];
+}
 
 #pragma mark - Timer func
 - (void)startTimer{
