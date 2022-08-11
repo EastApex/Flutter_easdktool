@@ -12,10 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EARestingHeartRateModel : EABaseModel
 
-/** 时间戳 */
+/// The time stamp
+/// 时间戳
 @property(nonatomic, assign) NSInteger  timeStamp;
 
-/** 心率值 */
+/// heart rate
+/// 心率值
 @property(nonatomic, assign) NSInteger  hrValue;
 
 @end
@@ -23,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EARestingHeartRateDataModel : EABaseBigDataModel
 
-/** 心率包 */
 @property(nonatomic, strong) NSMutableArray<EARestingHeartRateModel*> *sIndexArray;
 
 + (EARestingHeartRateDataModel *)getRestingHeartRateData:(NSData *)data;

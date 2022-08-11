@@ -9,9 +9,24 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Automatic sleep monitoring
 /// 自动睡眠监测设置
 @interface EAAutoCheckSleepModel : EABaseModel
 
+/** Cycle: == "Sunday ~ Saturday,
+ 0: shut down
+ 1: open
+ Eg1: Sunday to Monday to Tuesday to Wednesday to Thursday to Friday to Saturday
+ 0, 1, 1, 0, 0, 0, 1
+ Switch 0110001 from binary to hexadecimal. That is, weekCycleBit is 49. Enable the Monday Tuesday check
+
+ Eg2: Sunday to Monday to Tuesday to Wednesday to Thursday to Friday to Saturday
+ 0 0 0 0 0 1 1
+ Change 0000010 binary to 10. WeekCycleBit is set to 3 to enable Friday and Saturday check
+
+ When weekCycleBit is set to 0, the monitoring function is disabled
+*/
+ 
 /** 周期：==》周日~周六，
  0：关闭
  1：开启
@@ -25,24 +40,19 @@ NS_ASSUME_NONNULL_BEGIN
  
  weekCycleBit 为0 即 关闭监测功能
  */
+
+/// cycle
 @property(nonatomic, assign) NSInteger weekCycleBit;
 
-/** 开始时间 ：小时 */
 @property(nonatomic, assign) NSInteger beginHour;
 
-/** 开始时间 ：分钟 */
 @property(nonatomic, assign) NSInteger beginMinute;
 
-/** 结束时间 ：小时 */
 @property(nonatomic, assign) NSInteger endHour;
 
-/** 结束时间 ：分钟 */
 @property(nonatomic, assign) NSInteger endMinute;
 
 
-
-/// MARK: - 获取自动睡眠监测设置相关信息
-/// @param data 数据流
 + (EAAutoCheckSleepModel *)getModelByData:(NSData *)data;
 
 

@@ -9,16 +9,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Binding watch
 /// 绑定操作 
 @interface EABingingOps : EABaseModel
 
-/** 绑定操作进度 */
+/// Binding watch operation type: defalut set EABindingOpsTypeEnd
+/// 绑定操作进度
 @property(nonatomic, assign) EABindingOpsType ops;
 
-/** 用户id */
+/// userId:you need set the userId to complete the binding watch
+/// 用户id:必须要设置 用户id才能完成绑定手表
 @property(nonatomic, strong) NSString *userId;
 
-/** 绑定模式 0: 正常模式  1: 计步数据固定间隔存储 */
+/// Daily step recording mode: 0: normal mode 1: Step data stored at fixed intervals (30 minutes)
+/// 日常步数记录方式：0: 正常模式  1: 计步数据固定间隔存储（30分钟）
 @property(nonatomic, assign) NSInteger bindMod;
 
 + (EABingingOps *)getModelByData:(NSData *)data ;

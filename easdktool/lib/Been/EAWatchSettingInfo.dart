@@ -31,7 +31,8 @@ class EAWatchSettingInfo {
   ///【心率监测开关：可设置】
   int autoCheckHrSw = 0;
 
-  ///【勿扰模式开关：不可设置】
+  /// App not disturb time period switch 【App勿扰模式开关：不可设置】
+  /// Use class EANotDisturb to set the Do Not Disturb period【使用 class EANotDisturb 设置免打扰时间段】
   int notDisturbSw = 0;
 
   ///【是否单独设定振动模式：可设置 （ 0:不单独设置 1:单独设置）】

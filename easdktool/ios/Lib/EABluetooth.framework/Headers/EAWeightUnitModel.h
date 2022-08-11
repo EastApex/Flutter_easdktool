@@ -9,12 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// Weight unit
 @interface EAWeightUnitModel : EABaseModel
 
 @property(nonatomic, assign) EAWeightUnit unit;
 
-/// MARK: - 获取重量单位相关信息
-/// @param data 数据流
 + (EAWeightUnitModel *)getModelByData:(NSData *)data;
 
 

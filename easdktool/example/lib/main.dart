@@ -3,6 +3,7 @@
 // import 'dart:typed_data';
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
@@ -149,7 +150,7 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "0020060000099990101";
+    connectParam.snNumber = "001007220516000001";
     //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -178,6 +179,37 @@ class _MyAppState extends State<MyApp> {
     })));
   }
 
+  /// Timestamp to date 【时间戳转日期】
+  /// [timestamp] 时间戳
+  /// [onlyNeedDate]Whether to display only the date but not the time【是否只显示日期 舍去时间】
+  static String timestampToDateStr(int timestamp, {onlyNeedDate = false}) {
+    DateTime dataTime = timestampToDate(timestamp);
+    String dateTime = dataTime.toString();
+
+    dateTime = dateTime.substring(0, dateTime.length - 4);
+    if (onlyNeedDate) {
+      List<String> dataList = dateTime.split(" ");
+      dateTime = dataList[0];
+    }
+    return dateTime;
+  }
+
+  static DateTime timestampToDate(int timestamp) {
+    DateTime dateTime = DateTime.now();
+
+    ///如果是十三位时间戳返回这个
+    if (timestamp.toString().length == 13) {
+      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    } else if (timestamp.toString().length == 16) {
+      ///如果是十六位时间戳
+      dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
+    } else if (timestamp.toString().length == 10) {
+      ///如果是十位时间戳
+      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    }
+    return dateTime;
+  }
+
   void getBigWatchData() {
     EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
       /// Determine what kind of big data "dataType" is
@@ -195,7 +227,8 @@ class _MyAppState extends State<MyApp> {
 
           for (Map<String, dynamic> item in list) {
             EABigDataStep model = EABigDataStep.fromMap(item);
-            print(model.steps);
+            print(model.timeStamp);
+            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
           }
           break;
         case kEADataInfoTypeSleepData: // sleep
@@ -208,6 +241,7 @@ class _MyAppState extends State<MyApp> {
           for (Map<String, dynamic> item in list) {
             EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
             print(model.timeStamp);
+            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
           }
 
           break;
@@ -220,7 +254,8 @@ class _MyAppState extends State<MyApp> {
         case kEADataInfoTypeSportsData: // sports
           for (Map<String, dynamic> item in list) {
             EABigDataSport model = EABigDataSport.fromMap(item);
-            print(model.sportType);
+            print(model.beginTimeStamp);
+            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
           }
           break;
         case kEADataInfoTypeBloodOxygenData: // Blood oxygen
@@ -683,8 +718,8 @@ class _MyAppState extends State<MyApp> {
                   syncTime.day = 20;
                   syncTime.month = 7;
                   syncTime.year = 2022;
-                  syncTime.hour = 10;
-                  syncTime.minute = 6;
+                  syncTime.hour = 14;
+                  syncTime.minute = 48;
                   syncTime.second = 0;
                   syncTime.timeHourType = EATimeHourType.hour24;
                   syncTime.timeZone = EATimeZone.east;
@@ -722,9 +757,9 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EANotDisturb notDisturb = EANotDisturb();
                   notDisturb.sw = 1;
-                  notDisturb.beginHour = 1;
+                  notDisturb.beginHour = 15;
                   notDisturb.beginMinute = 0;
-                  notDisturb.endHour = 12;
+                  notDisturb.endHour = 16;
                   notDisturb.endMinute = 0;
                   setWatchData(kEADataInfoTypeNotDisturb, notDisturb.toMap());
                 },

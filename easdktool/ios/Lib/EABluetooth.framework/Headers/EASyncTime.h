@@ -12,37 +12,48 @@ NS_ASSUME_NONNULL_BEGIN
 /// 同步时间
 @interface EASyncTime : EABaseModel
 
-/** 年 */
+/// year
+/// 年
 @property(nonatomic, assign) NSInteger year;
 
-/** 月 */
+/// month
+/// 月
 @property(nonatomic, assign) NSInteger month;
 
-/** 日 */
+/// day
+/// 日
 @property(nonatomic, assign) NSInteger day;
 
-/** 时 */
+/// hour
+/// 时
 @property(nonatomic, assign) NSInteger hour;
 
-/** 分 */
+/// minute
+/// 分
 @property(nonatomic, assign) NSInteger minute;
 
-/** 秒 */
+/// second
+/// 秒
 @property(nonatomic, assign) NSInteger second;
 
-/** 小时制 */
+/// Time formats：12h or 24h
+/// 小时制
 @property(nonatomic, assign) EATimeHourType timeHourType;
 
-/** 当前时区：0时区、东时区、西时区 */
+/// time zone:Time zone 0, East Time zone, West time zone
+/// 当前时区：0时区、东时区、西时区
 @property(nonatomic, assign) EATimeZone timeZone;
 
-/** 当前时区:时 */
+/// The current time zone of hour
+/// 当前时区:时
 @property(nonatomic, assign) NSInteger timeZoneHour;
 
-/** 当前时区:分 */
+/// The current time zone of minute
+/// 当前时区:分
 @property(nonatomic, assign) NSInteger timeZoneMinute;
 
-/** 同步模式：正常、同步至机芯 */
+/// Synchronous mode:No setting required
+/// 同步模式：
 @property(nonatomic, assign) EASyncType syncType;
 
 
@@ -53,6 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+/// Get the current time return class EASyncTime，cac used to set the watch time
 /// 获取当前时间
 + (EASyncTime *)getCurrentTime;
 

@@ -9,10 +9,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// The screen brightness of watch
 /// 屏幕亮度
 @interface EABlacklightModel : EABaseModel
 
-/** 亮度 0~100 */
+/// brightness  0~100
+/// 亮度 0~100
 @property(nonatomic, assign) NSInteger level;
 
 

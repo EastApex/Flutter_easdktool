@@ -9,18 +9,18 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Operating the watch
 /// 操作设备
 @interface EADeviceOps : EABaseModel
 
-/** 操作类型 */
+
+/// Operating Device Type
 @property(nonatomic, assign) EADeviceOpsType deviceOpsType;
 
-/** 操作状态 */
+/// need set EADeviceOpsStatusExecute to Operating the watch
 @property(nonatomic, assign) EADeviceOpsStatus deviceOpsStatus;
 
 
-
-/// @param data 数据流
 + (EADeviceOps *)getModelByData:(NSData *)data;
 
 

@@ -13,10 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// 血氧数据
 @interface EABloodOxygenDataModel : EABaseModel
 
-/** 时间戳 */
+/// The time stamp
+/// 时间戳
 @property(nonatomic, assign) NSInteger timeStamp;
 
-/** 血氧值 */
+/// blood Oxygen
+/// 血氧
 @property(nonatomic, assign) NSInteger bloodOxygenValue;
 
 @end
@@ -24,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EABloodOxygenData : EABaseBigDataModel
 
 
-/** 血氧包（大小详见对应OPTIONS文件） */
 @property(nonatomic, strong) NSMutableArray<EABloodOxygenDataModel*> *sIndexArray;
 
 + (EABloodOxygenData *)getBloodOxygenData:(NSData *)data;

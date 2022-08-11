@@ -14,67 +14,63 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EAReminderModel : EABaseModel
 
 
-/** 提醒事件类型 */
+/// Reminder Event Type
+/// 提醒事件类型
 @property(nonatomic, assign) EAReminderEventType reminderEventType;
 
-
+/// This parameter does not need to be set. If the parameter is modified, the ID needs to be set
+/// 新增不需要设置，修改需要设置id
 @property(nonatomic, assign) NSInteger id_p;
 
-/** 时 */
 @property(nonatomic, assign) NSInteger hour;
 
-/** 分 */
 @property(nonatomic, assign) NSInteger minute;
 
-/** 年 */
 @property(nonatomic, assign) NSInteger year;
 
-/** 月 */
 @property(nonatomic, assign) NSInteger month;
 
-/** 日 */
 @property(nonatomic, assign) NSInteger day;
 
-/** 周期：位对应从bit0~bit6对应周日~周六 */
+/** 周期：位对应从bit0~bit6对应周日~周六
+    The same of EAAutoCheckSleepModel.weekCycleBit
+ */
 @property(nonatomic, assign) NSInteger weekCycleBit;
 
-/** 开关 */
+/// on-off: 0 off 1 on
 @property(nonatomic, assign) NSInteger sw;
 
-/** 二次提醒开关 */
+/// Secondary reminder on-off: 0 off 1 on
 @property(nonatomic, assign) NSInteger secSw;
 
-/** 贪睡时间（单位：秒） */
+/// Sleep duration
 @property(nonatomic, assign) NSInteger sleepDuration;
 
-/** 提醒方式 */
 @property(nonatomic, assign) EARemindActionType remindActionType;
 
-/** 自定义内容：最多支持96字节的utf8，字符串（大小详见对应OPTIONS文件） */
+/// if reminderEventType==.User [EAReminderEventTypeUser] needs to be set
 @property(nonatomic, strong) NSString *content;
 
 @end
 
 
-/// 提醒事件操作
+
 @interface EAReminderOps : EABaseModel
 
+/// Reminder event operations
+/// 提醒事件操作
 @property(nonatomic, assign) EAReminderEventOps eOps;
 
+/// This parameter does not need to be set. If the parameter is modified, the ID needs to be set
+/// 新增不需要设置，修改需要设置id
 @property(nonatomic, assign) NSInteger id_p;
 
-/** 最多16个（大小详见对应OPTIONS文件） */
 @property(nonatomic,strong) NSMutableArray<EAReminderModel*> *sIndexArray;
 
 
-
-
-/// MARK: - 获取提醒事件操作设置相关信息
-/// @param data 数据流
 + (EAReminderOps *)getModelByData:(NSData *)data ;
 
 
-/// MARK: - 获取提醒事件操作设置数据流
 - (NSData *)getModelData ;
 
 

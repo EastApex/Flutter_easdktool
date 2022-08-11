@@ -10,15 +10,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Automatic heart rate monitoring
 /// 自动心率监测
 @interface EAAutoCheckHeartRateModel : EABaseModel
 
-/** 间隔时长：单位分钟，0为关闭监测功能 */
+/// Interval: Unit: minute. 0 indicates that the monitoring function is disabled
+/// 间隔时长：单位分钟，0为关闭监测功能
 @property(nonatomic, assign) NSInteger interval;
 
 
-/// MARK: - 获取自动心率监测设置相关信息
-/// @param data 数据流
 + (EAAutoCheckHeartRateModel *)getModelByData:(NSData *)data;
 
 

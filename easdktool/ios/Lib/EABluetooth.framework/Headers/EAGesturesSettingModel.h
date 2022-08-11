@@ -10,21 +10,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Raise the screen switch
 /// 抬手亮屏开关
 @interface EAGesturesSettingModel : EABaseModel
 
+/// Raised my hand against the bright screen type
 @property(nonatomic, assign) EAGesturesBrightType eBrightSrc;
 
-/** 开始时间 ：小时 */
+
 @property(nonatomic, assign) NSInteger beginHour;
 
-/** 开始时间 ：分钟 */
 @property(nonatomic, assign) NSInteger beginMinute;
 
-/** 结束时间 ：小时 */
 @property(nonatomic,  assign) NSInteger endHour;
 
-/** 结束时间 ：分钟 */
 @property(nonatomic,  assign) NSInteger endMinute;
 
 

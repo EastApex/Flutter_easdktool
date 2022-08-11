@@ -12,17 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// 步频数据
 @interface EAStepFreqDataModel : EABaseModel
 
-/** 时间戳 */
+/// The time stamp
+/// 时间戳
 @property(nonatomic, assign) NSInteger timeStamp;
 
-/** 步频值 */
+/// stride frequency
+/// 步频值
 @property(nonatomic, assign) NSInteger stepFreqValue;
 
 @end
 
 @interface EAStepFreqData : EABaseBigDataModel
 
-/** 步频包（大小详见对应OPTIONS文件） */
 @property(nonatomic, strong) NSMutableArray<EAStepFreqDataModel*> *sIndexArray;
 
 + (EAStepFreqData *)getStepFreqData:(NSData *)data;

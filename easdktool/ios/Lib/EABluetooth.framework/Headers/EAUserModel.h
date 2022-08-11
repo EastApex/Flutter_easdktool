@@ -9,25 +9,31 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// User information
 /// 用户信息
 @interface EAUserModel : EABaseModel
 
-/** 性别 */
+/// sex
+/// 性别
 @property(nonatomic, assign) EASexType sexType;
 
-/** 年龄 */
+/// age
+/// 年龄
 @property(nonatomic, assign) NSInteger age;
 
-/** 身高，单位：厘米 */
+/// height:unit cm
+/// 身高，单位：厘米
 @property(nonatomic, assign) NSInteger height;
 
-/** 体重，单位：克 */
+/// weight:unit g
+/// 体重，单位：克
 @property(nonatomic, assign) NSInteger weight;
 
-/** 穿戴方式 */
+/// Wear way
+/// 穿戴方式
 @property(nonatomic, assign) EAWearWayType wearWayType;
 
-/** 肤色 */
+/// 肤色 
 @property(nonatomic, assign) EASkinColorType eSkinColor;
 
 /// 获取用户相关信息

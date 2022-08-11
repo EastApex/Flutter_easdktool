@@ -8,51 +8,39 @@
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
-/**
- 目前仅支持 G01系列
- 
- */
-
 
 
 @interface EAHabitTrackerModel : EABaseModel
 
 @property(nonatomic, assign) EAHabitTrackerIconType eIconId;
 
-/** read respond中各提醒的id，其他情况为0 */
 @property(nonatomic, assign) NSInteger id_p;
 
-/** 起始时间(时) */
 @property(nonatomic, assign) NSInteger beginHour;
 
-/** 起始时间(分) */
 @property(nonatomic, assign) NSInteger beginMinute;
 
-/** 结束时间(时) */
 @property(nonatomic, assign) NSInteger endHour;
 
-/** 结束时间(分) */
 @property(nonatomic, assign) NSInteger endMinute;
 
-/** 调色版RGB565 (R) */
 @property(nonatomic, assign) NSInteger r;
 
-/** 调色版RGB565 (G) */
 @property(nonatomic, assign) NSInteger g;
 
-/** 调色版RGB565 (B) */
 @property(nonatomic, assign) NSInteger b;
 
-/** 贪睡时间（单位：分钟）写死30分钟 */
+
+/// Snooze time (Unit: minute)
+/// 贪睡时间（单位：分钟）写死30分钟 */
 @property(nonatomic, assign) NSInteger duration;
 
-/** 提醒方式 */
+
 @property(nonatomic, assign) EARemindActionType eAction;
 
-/** 自定义内容：最多支持32字节的utf8，字符串（大小详见对应OPTIONS文件） */
 @property(nonatomic, copy,) NSString *content;
 
-/** 标志  （read respond有效，write request写0） */
+/** 标志  （read respond有效，write request set 0） */
 @property(nonatomic, assign) EAHabitTrackerFlag eFlag;
 
 
@@ -67,10 +55,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, assign) EAHabitTrackerOps eOps;
 
-/** id: 在write request的ops为编辑 删除此条操作中赋值，其他情况为0 */
 @property(nonatomic, assign) NSInteger id_p;
 
-/** 最多20个 */
+/**  Up to 20 最多20个 */
 @property(nonatomic, strong) NSMutableArray<EAHabitTrackerModel*> *sIndexArray;
 
 + (EAHabitTrackers *)getModelByData:(NSData *)data;

@@ -22,43 +22,45 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 @interface EABleSendManager : NSObject
 
 
-
+/// The singleton
 /// 单例
 + (instancetype)defaultManager;
 
 
-/// 设置设备连接状态
-/// @param isConnected YES:已连接
-- (void)setIsConnected:(BOOL)isConnected;
 
-/// 获取数据【队列操作】
+
+/// Get data [Queue Operation]获取数据【队列操作】
 - (void)operationGetInfoWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
-/// 修改数据【队列操作】
+/// Set data 修改数据【队列操作】
 - (void)operationChangeModel:(EABaseModel *)changeModel respond:(RespondBlock )respond;
-/// 获取大数据【队列操作】
+/// Get big data 获取大数据【队列操作】
 - (void)operationgGetBigData:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;
 
-/// 手表OTA
+/// upgrade [OTA]
 - (BOOL)upgradeFiles:(NSArray<EAFileModel *> *)list;
-/// 表盘OTA
+/// Watch face [OTA]
 - (BOOL)upgradeWatchFaceFile:(EAFileModel *)watchFaceFile;
 /// AGPS OTA
 - (BOOL)upgrade:(EAOTA *)ota;
 
-/// 获取大数据（bigDataType 只支持大数据类型 3000~3999）
+/// Get big data by bigDataType 【Data will not be available until the watch sends the big data message：8803 Big data transmission completed】
+/// 获取大数据（bigDataType 只支持大数据类型 3000~3999）【需要等待手表发送完成大数据消息才会有数据：8803 Big data transmission completed】
 - (NSArray *)getBigDataWithBigDataType:(EADataInfoType)bigDataType;
+/// Retrieve audio data [Call this method to retrieve audio data only when notification 'recording completed' is received]
 /// 获取音频数据【通知收到 ‘录音完成’ 才能调用此方法获取录音数据】
 - (NSData *)getAudioDataData;
 
 
+/** * You are not advised to use */
+/** Need to operate in a single thread: make sure that the call does not respond until the last operation is complete. Try to use the queue operation method above */
 /** 以下不建议使用 */
 /** 需要在单线程操作:确保上次操作完成后，调用才会响应，尽量使用上面队列操作方法 */
 
-/// 获取数据【单线程操作】
+/// Get data 获取数据【单线程操作】
 - (void)getInfoByInfoType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
-/// 修改数据【单线程操作】
+/// Set data 修改数据【单线程操作】
 - (void)changeInfo:(EABaseModel *)baseModel respond:(RespondBlock )respond;
-/// 获取大数据【单线程操作】
+/// Get big data 获取大数据【单线程操作】
 - (void)getBigDataRequestModel:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;;
 
 
@@ -70,10 +72,11 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 - (NSArray *)analyzeBigDataString:(NSString *)pbDataString andIdNmuber:(NSInteger )idNumber;
 
 
+/// ignore：
 - (void)setNilBlock;
 - (void)setchannelDataNil;
 - (void)setBleQueueNil;
-
+- (void)setIsConnected:(BOOL)isConnected;
 @end
 
 NS_ASSUME_NONNULL_END

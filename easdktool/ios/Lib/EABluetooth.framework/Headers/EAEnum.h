@@ -10,731 +10,1006 @@
 
 
 /// 数据类型
+/// Watch data type
 typedef NS_ENUM(NSUInteger, EADataInfoType) {
     
     EADataInfoTypeRespond = 1,
     EADataInfoTypeRequest = 2,
-    /** 手表 */
+    
+    ///Watch information
+    ///手表
+    ///EAWatchModel
     EADataInfoTypeWatch = 3,
     
-    /** 用户 */
+    ///User information
+    ///用户
+    ///EAUserModel
     EADataInfoTypeUser = 4,
     
-    /** 同步时间 */
+    ///Sync watch time
+    ///同步时间
+    ///EASyncTime
     EADataInfoTypeSyncTime = 5,
     
-    /** 绑定 */
+    ///
+    /// Swift
+    /// Get value of watch to judge bindingType == .unBound need set EABingingOps().ops = .end to complete the binding
+    /// if (baseModel as! EAWatchModel).bindingType == .unBound {
+    ///     let bindWatch = EABingingOps()
+    ///      bindWatch.ops = EABindingOpsType.end // 设置 EABindingOpsType.end 完成绑定
+    ///     EABleSendManager.default().operationChange(bindWatch) { respondModel in
+    ///     }
+    /// }
+    ///
+    /// 获取手表信息，EAWatchModel.bindingType == .unBound 需要设置 EABingingOps().ops = .end 来完成绑定
+    ///
+    /// EABingingOps
     EADataInfoTypeBinding = 6,
     
-    /** 屏幕亮度 */
+    /// The screen brightness of watch
+    /// 屏幕亮度
+    /// EABlacklightModel
     EADataInfoTypeBlacklight = 7,
     
-    /** 屏幕自动灭屏时间 */
+    /// Time when the screen automatically dies
+    /// 屏幕自动灭屏时间
+    /// EABlacklightTimeoutModel
     EADataInfoTypeBlacklightTimeout = 8,
     
-    /** 设备电量信息 */
+    /// Watch power information
+    /// 手表电量信息
+    /// EABatteryModel
     EADataInfoTypeBattery = 9,
     
-    /** 设备语言信息 */
+    /// Watch language information
+    /// 手表语言信息
+    /// EALanguageModel
     EADataInfoTypeLanguage = 10,
     
-    /** 统一设备单位 */
+    /// watch unit
+    /// 统一手表单位
+    ///  EAUnifiedUnitModel
     EADataInfoTypeUnifiedUnit = 11,
     
-    /** 设备操作 */
+    /// Operating the watch
+    /// 操作手表
+    /// see class
     EADataInfoTypeDeviceOps = 12,
     
-    /** 免打扰时间段 */
+    /// Do not disturb Settings
+    /// 免打扰设置
+    /// EANotDisturbModel
     EADataInfoTypeNotDisturb = 13,
     
-    /** 家乡时区设置 */
+    /// ignore：
+    /// Home time zone setting
+    /// 家乡时区设置
+    /// EAHomeTimeZoneItem
     EADataInfoTypeHomeTimeZone = 14,
     
-    /** 日常目标值设置 */
+    /// Daily target value setting
+    /// 日常目标值设置
+    /// EADailyGoalModel
     EADataInfoTypeDailyGoal = 15,
     
-    /** 自动睡眠监测 */
+    /// Automatic sleep monitoring
+    /// 自动睡眠监测
+    /// EAAutoCheckSleepModel
     EADataInfoTypeAutoCheckSleep = 16,
     
-    /** 自动心率监测 */
+    /// Automatic heart rate monitoring
+    /// 自动心率监测
+    /// EAAutoCheckHeartRateModel
     EADataInfoTypeAutoCheckHeartRate = 17,
     
-    /** 久坐监测 */
+    /// Sedentary monitoring
+    /// 久坐监测
+    /// EAAutoCheckSedentarinessModel
     EADataInfoTypeAutoCheckSedentariness = 18,
     
-    /** 通用天气 */
+    /// Weather
+    /// 天气
+    /// EAWeatherModel and EADayWeatherModel
     EADataInfoTypeWeather = 20,
     
-    /** 社交提醒开关 */
+    /// Social alert switch
+    /// 社交提醒开关
+    /// EASocialSwitchModel
     EADataInfoTypeSocialSwitch = 21,
     
-    /** 提醒 */
+    /// Reminder
+    /// 提醒
+    /// EAReminderOps and EAReminderModel
     EADataInfoTypeReminder = 22,
     
-    /** 提醒回应 */
+    /// 提醒回应
     EADataInfoTypeReminderRespond = 23,
     
-    /** 距离单位 */
+    /// Distance uint
+    /// 距离单位
+    /// EADistanceUintModel
     EADataInfoTypeDistanceUnit = 24,
     
-    /** 重量单位 */
+    /// Weight unit
+    /// 重量单位
+    /// EAWeightUnitModel
     EADataInfoTypeWeightUnit = 25,
     
-    /** 心率报警门限 */
+    /// Heart rate alarm setting
+    /// 心率报警设置
+    /// EAHeartRateWaringSettingModel
     EADataInfoTypeHeartRateWaringSetting = 26,
     
-    /** 基础卡路里开关 */
+    /// Base calorie switch
+    /// 基础卡路里开关
+    /// EACaloriesSettingModel
     EADataInfoTypeCaloriesSetting = 27,
     
-    /** 抬手亮屏开关 */
+    /// Raise the screen switch
+    /// 抬手亮屏开关
+    /// EAGesturesSettingModel
     EADataInfoTypeGesturesSetting = 28,
     
-    /** 大数据获取命令 */
+    /// Big data acquisition command
+    /// 大数据获取命令
+    /// EAGetBigDataRequestModel
     EADataInfoTypeGetBigData = 29,
     
-    /** 设置组合命令 */
+    /// Basic Device Information
+    /// 设备基本信息
+    /// EACombinationModel
     EADataInfoTypeCombination = 30,
     
-    /** 一级菜单设置命令 */
+    /// Level 1 menu setting command
+    /// 一级菜单设置命令
+    /// EAHomePageModel
     EADataInfoTypeHomePage = 31,
     
-    /** 经期命令 */
+    /// Period
+    /// 经期
+    /// EAMenstruals
     EADataInfoTypeMenstrual = 32,
     
-    /** 表盘命令 */
+    /// The watch face command
+    /// 表盘命令
+    /// EADialPlateModel
     EADataInfoTypeDialPlate = 33,
     
-    /** 消息推送开关 */
+    /// Message push switch
+    /// 消息推送开关
+    /// EAShowAppMessageModel
     EADataInfoTypeAppMessage = 34,
     
-    /** 血压校准值 （老人表）*/
+    /// 血压校准值 （老人表）*/
     EADataInfoTypeBloodPressure = 36,
     
-    /** 自动监测 心率 血氧 血压 （老人表） */
+    /// 自动监测 心率 血氧 血压 （老人表）
     EADataInfoTypeAutoMonitor = 37,
     
-    /** 习惯追踪 */
+    /// Habit tracker
+    /// 习惯追踪
+    /// EAHabitTrackerModel
     EADataInfoTypeHabitTracker = 38,
     
-    /**习惯追踪回应 */
+    /// Habit tracker respond
+    /// 习惯追踪回应
     EADataInfoTypeHabitTrackerRespond = 39,
     
-    /**当前运动显示值 */
+    /// Value displayed on the motion screen of the current watch
+    /// 当前手表运动界面显示值
+    /// EASportShowDataModel
     EADataInfoTypeSportShowData = 40,
     
-    /**获取蓝牙配对状态 */
+    /// Gets Bluetooth pairing status
+    /// 获取蓝牙配对状态
+    /// EABlePairStateModel
     EADataInfoTypeBlePairState = 41,
     
-    /**通讯录 */
+    /// Telephone book
+    /// 通讯录
+    /// EATelephoneBookModel and EAContactModel
     EADataInfoTypeTelephoneBook = 42,
     
-    /** 操作手机命令 */
+    /// Operating Phone Commands
+    /// 操作手机命令
+    /// EAPhoneOpsModel
     EADataInfoTypePhoneOps = 2001,
     
-    /** MTU */
+    /// MTU
     EADataInfoTypeMTU = 2006,
     
-    /** 大数据步数 */
+    /// Daily steps
+    /// 大数据步数
+    /// EAStepModel
     EADataInfoTypeStepData = 3001,
     
-    /** 大数据睡眠 */
+    /// Sleep data
+    /// 大数据睡眠
+    /// EASleepDataModel
     EADataInfoTypeSleepData = 3002,
     
-    /** 大数据心率  */
+    /// Heart rate data
+    /// 大数据心率
+    /// EAHeartRateModel
     EADataInfoTypeHeartRateData = 3003,
     
-    /** 大数据GPS */
+    /// GPS data
+    /// 大数据GPS
+    /// EAGPSDataModel
     EADataInfoTypeGPSData = 3004,
     
-    /** 大数据多运动 */
+    /// Sports data
+    /// 大数据多运动
+    /// EASportsDataModel
     EADataInfoTypeSportsData = 3005,
     
-    /** 大数据血氧 */
+    /// Bloodoxygen data
+    /// 大数据血氧
+    /// EABloodOxygenDataModel
     EADataInfoTypeBloodOxygenData = 3006,
     
-    /** 大数据压力 */
+    /// Stress data
+    /// 大数据压力
+    /// EAStressDataModel
     EADataInfoTypeStressData = 3007,
     
-    /** 大数据步频 */
+    /// stride frequency data
+    /// 大数据步频
+    /// EAStepFreqDataModel
     EADataInfoTypeStepFreqData = 3008,
     
-    /** 大数据配速 */
+    /// speed data
+    /// 大数据配速
+    /// EAStepPaceDataModel
     EADataInfoTypeStepPaceData = 3009,
     
-    /** 大数据静息心率 */
+    /// Resting heart rate data
+    /// 大数据静息心率
+    /// EARestingHeartRateModel
     EADataInfoTypeRestingHeartRateData = 3010,
     
-    /** 习惯数据 */
+    /// Habit tracker data
+    /// 习惯数据
+    /// EAHabitTrackerDataModel
     EADataInfoTypeHabitTrackerData = 3011,
     
 
     
-    /** OTA命令 */
+    /// OTA命令
     EADataInfoTypeOTARequest = 9001,
     
-    /** OTA命令回应 */
+    /// OTA命令回应
     EADataInfoTypeOTARespond = 9000,
 };
 
 /// MARK: -  通道类型类型
 typedef NS_ENUM(NSUInteger, EACharacteristicType) {
     
-    /** 小数据通道，上位机*/
+    /// 小数据通道，上位机*/
     EACharacteristicTypeSmall = 0, // 8801
     
-    /** 小数据通道，固件*/
+    /// 小数据通道，固件*/
     EACharacteristicTypeSmall2,  // 8802
     
-    /** 大数据通道 */
+    /// 大数据通道
     EACharacteristicTypeBig,  // 8803
     
-    /** OTA通道 */
+    /// OTA通道
     EACharacteristicTypeOTAMessage, // 9901
     
-    /** OTA通道 */
+    /// OTA通道
     EACharacteristicTypeOTAData, // 9902
     
 };
 
 
+/// Watch connection status
 /// MARK: - 手表连接状态
 typedef NS_ENUM(NSUInteger,EAConnectStateType) {
     
-    /** 断开连接 */
+    /// disconnect
+    /// 断开连接
     EAConnectStateTypeUnconnected = 0,
     
-    /** 已连接 */
+    /// The connected
+    /// 已连接
     EAConnectStateTypeConnected = 1,
     
-    /** 连接中 */
+    /// In the connection
+    /// 连接中
     EAConnectStateTypeConnecting = 2,
 };
 
 
-/// MARK: -  绑定类型
+/// Respond type
+/// MARK: -  回应类型
 typedef NS_ENUM(NSUInteger, EARespondCodeType) {
     
-    /** 成功 */
+    /// Success
+    /// 成功
     EARespondCodeTypeSuccess = 0,
     
-    /** 失败 */
+    /// Fail
+    /// 失败
     EARespondCodeTypeFail,
     
-    /** 超过支持的最大数量 */
+    /// The maximum number supported is exceeded
+    /// 超过支持的最大数量
     EARespondCodeTypeMemFull,
     
-    /** 时间重复 */
+    /// Time to repeat
+    /// 时间重复
     EARespondCodeTypeTimeConflict,
 };
 
+/// Binding type
 /// MARK: -  绑定类型
 typedef NS_ENUM(NSUInteger, EABindingType) {
     
-    /** 已绑定 */
+    /// Bound
+    /// 已绑定
     EABindingTypeBound = 0,
-    /** 未绑定 */
+    
+    /// UnBound
+    /// 未绑定
     EABindingTypeUnBound,
 };
 
 
+/// Sex
 /// MARK: -  性别类型
 typedef NS_ENUM(NSUInteger, EASexType) {
     
-    /** 男士 */
+    /// Male
+    /// 男士
     EASexTypeMale = 0,
-    /** 女士 */
+    
+    /// Female
+    /// 女士
     EASexTypeFemale,
 };
 
 /// MARK: -  穿戴方式
 typedef NS_ENUM(NSUInteger, EAWearWayType) {
     
-    /** 左手戴 */
+    /// Left hand
+    /// 左手戴
     EAWearWayTypeLeftHand = 0,
-    /** 右手戴 */
+    
+    /// Right hand
+    /// 右手戴
     EAWearWayTypeRightHand,
 };
 
+/// Color of skin
 /// MARK: -  肤色
 typedef NS_ENUM(NSUInteger, EASkinColorType) {
     
-    /** 白 */
+    /// White color of skin
+    /// 白
     EASkinColorTypeWhite = 0,
     
-    /** 白偏黄 */
+    /// White-yellow color of skin
+    /// 白偏黄
     EASkinColorTypeWhiteYellow = 1,
     
-    /** 黄 */
+    /// Yellow color of skin
+    /// 黄
     EASkinColorTypeYellow = 2,
     
-    /** 黄偏黑 */
+    /// Yellow-black color of skin
+    /// 黄偏黑
     EASkinColorTypeYellowBlack = 3,
     
-    /** 黑 */
+    /// Black color of skin
+    /// 黑
     EASkinColorTypeBalck = 4,
 };
 
+/// Time formats
 /// MARK: -  时间制式
 typedef NS_ENUM(NSUInteger, EATimeHourType) {
     
-    /** 12小时制 */
+    /// 12-hour
+    /// 12小时制
     EATimeHourTypeHour12 = 0,
-    /** 24小时制 */
+    
+    /// 24-hour
+    /// 24小时制
     EATimeHourTypeHour24,
 };
 
+/// Time zone
 /// MARK: -  时区
 typedef NS_ENUM(NSUInteger, EATimeZone) {
     
-    /** 0时区 */
+    /// Time zone 0,
+    /// 0时区
     EATimeZoneZero = 0,
-    /** 东时区 */
+    
+    /// East Time zone,
+    /// 东时区
     EATimeZoneEast,
-    /** 西时区 */
+    
+    /// West time zone
+    /// 西时区
     EATimeZoneWest,
 };
 
-/// MARK: - 同步模式：正常、同步至机芯
+/// MARK: - 同步模式
 typedef NS_ENUM(NSUInteger, EASyncType) {
     
-    /** 正常 */
+    /// 正常
     EASyncTypeNormal = 0,
-    /** 同步至机芯 */
+    /// 同步至机芯
     EASyncTypeWatch,
 };
 
 /// MARK: - 绑定操作
 typedef NS_ENUM(NSUInteger,EABindingOpsType) {
     
-    /** 正常绑定开始 */
+    /// Normal binding starts
+    /// 正常绑定开始
     EABindingOpsTypeNormalBegin = 0,
     
-    /** 二维码绑定开始 */
+    /// Start of two-dimensional code binding
+    /// 二维码绑定开始
     EABindingOpsTypeQrCodeBegin = 1,
     
-    /** 绑定结束 */
+    /// End of the binding
+    /// 绑定结束
     EABindingOpsTypeEnd = 2,
 };
 
 
+/// Battery status
 /// MARK: - 电池状态
 typedef NS_ENUM(NSUInteger,EABatteryStatus) {
     
-    /** 正常 */
+    /// Normal
+    /// 正常
     EABatteryStatusNormal = 0,
     
-    /** 充电中 */
+    /// In the charging
+    /// 充电中
     EABatteryStatusInCharging = 1,
 };
 
 
+/// Language type
 /// MARK: - 语言类型
 typedef NS_ENUM(NSUInteger,EALanguageType) {
     
-    /** 默认 */
+    /// Default English
+    /// 默认
     EALanguageTypeDefault = 0,
     
-    /** 英文 */
+    /// English
+    /// 英文
     EALanguageTypeEnglish = 1,
     
-    /** 中文简体 */
+    /// Chinese simplifid
+    /// 中文简体
     EALanguageTypeChineseSimplifid = 2,
     
-    /** 中文繁体 */
+    /// Chinese traditional
+    /// 中文繁体
     EALanguageTypeChineseTraditional = 3,
     
-    /** 韩文 */
+    /// Korean
+    /// 韩文
     EALanguageTypeKorean = 4,
     
-    /** 泰文 */
+    /// Thai
+    /// 泰文
     EALanguageTypeThai = 5,
     
-    /** 日文 */
+    /// Japanese
+    /// 日文
     EALanguageTypeJapanese = 6,
     
-    /** 西班牙文 */
+    /// Spanish
+    /// 西班牙文
     EALanguageTypeSpanish = 7,
     
-    /** 法文 */
+    /// Francais
+    /// 法文
     EALanguageTypeFrancais = 8,
     
-    /** 德文 */
+    /// Deutsch
+    /// 德文
     EALanguageTypeDeutsch = 9,
     
-    /** 意大利文 */
+    /// Italiano
+    /// 意大利文
     EALanguageTypeItaliano = 10,
     
-    /** 波兰文 */
+    /// Polski
+    /// 波兰文
     EALanguageTypePolski = 11,
     
-    /** 葡萄牙文 */
+    /// Portuguese
+    /// 葡萄牙文
     EALanguageTypePortuguese = 12,
     
-    /** 俄文 */
+    /// Russian
+    /// 俄文
     EALanguageTypeRussian = 13,
     
-    /** 荷兰文 */
+    /// Dutch
+    /// 荷兰文
     EALanguageTypeDutch = 14,
     
-    /** 阿拉伯文 */
+    /// Arabic
+    /// 阿拉伯文
     EALanguageTypeArabic = 15,
     
-    /** 希腊文 */
+    /// Greek
+    /// 希腊文
     EALanguageTypeGreek = 16,
     
-    /** 希伯来文 */
+    /// Hebrew
+    /// 希伯来文
     EALanguageTypeHebrew = 17,
     
-    /** 瑞典文 */
+    /// Swedish
+    /// 瑞典文
     EALanguageTypeSwedish = 18,
     
 };
 
 
+/// Watch unit
 /// MARK: - 统一单位
 typedef NS_ENUM(NSUInteger,EAUnifiedUnit) {
     
-    /** 公制 */
+    /// Metric
+    /// 公制
     EALengthUnitMetric = 0,
     
-    /** 英制 */
+    /// British
+    /// 英制
     EALengthUnitBritish = 1,
 };
 
-/// MARK: - 操作设备类型
+/// Operating Device Type
+/// MARK: - 操作手表类型
 typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     
-    /** 恢复出厂设置 */
+    /// factory data reset
+    /// 恢复出厂设置
     EADeviceOpsTypeRestoreFactory = 0,
     
-    /** 重启设备 */
+    /// Restart the watch
+    /// 重启手表
     EADeviceOpsTypeReset = 1,
     
-    /** 设备关机 */
+    /// Watch to turn it off
+    /// 手表关机
     EADeviceOpsTypePowerOff = 2,
     
-    /** 断开蓝牙 */
+    /// Disconnect the bluetooth
+    /// 断开蓝牙
     EADeviceOpsTypeDisconnectBle = 3,
     
-    /** 进入飞行模式 */
+    /// Go into flight mode
+    /// 进入飞行模式
     EADeviceOpsTypeEnteringFlightMode = 4,
     
-    /** 点亮屏幕 */
+    /// Light up the screen
+    /// 点亮屏幕
     EADeviceOpsTypeLightUpTheScreen = 5,
     
-    /** 熄灭屏幕 */
+    /// Put out the screen
+    /// 熄灭屏幕
     EADeviceOpsTypeTurnOffTheScreen = 6,
     
-    /** 停止寻找手机(上位机需求) */
+    /// Stop Looking for your phone
+    /// 停止寻找手机(上位机需求)
     EADeviceOpsTypeStopSearchPhone = 7,
     
-    /** 工厂模式专用：进入工厂测试模式 */
+    /// 工厂模式专用：进入工厂测试模式
     EADeviceOpsTypeEnterFactoryTestMode = 8,
 
-    /** 工厂模式专用：退出工厂测试模式 */
+    /// 工厂模式专用：退出工厂测试模式
     EADeviceOpsTypeExitFactoryTestMode = 9,
     
-    /** 寻找手表 */
+    /// Looking for a watch
+    /// 寻找手表
     EADeviceOpsTypeStartSearchWatch = 10,
     
-    /** 停止寻找手表 */
+    /// Stop Looking for a Watch
+    /// 停止寻找手表
     EADeviceOpsTypeStopSearchWatch = 11,
     
-    /** 停止相机 */
+    /// Exit the photo
+    /// 退出拍照
     EADeviceOpsTypeStopCamera = 12,
     
-    /** 使能设备操作IOS手机弹出配对框 */
+    /// Enable Watch operation The pairing box is displayed on the IOS phone
+    /// 使能手表操作IOS手机弹出配对框
     EADeviceOpsTypeShowiPhonePairingAlert = 13,
 };
 
 
-/// MARK: - 设备操作状态
+/// Watch operating state
+/// MARK: - 手表操作状态
 typedef NS_ENUM(NSUInteger,EADeviceOpsStatus) {
     
-    /** 执行 */
+    /// Execute
+    /// 执行
     EADeviceOpsStatusExecute = 0,
     
-    /** 执行成功 */
+    /// Execute successfully
+    /// 执行成功
     EADeviceOpsStatusSuccess = 1,
     
-    /** 执行失败 */
+    /// On failure
+    /// 执行失败
     EADeviceOpsStatusFail = 2,
 };
 
 
+/// Temperature of the unit
 /// MARK: - 温度单位
 typedef NS_ENUM(NSUInteger,EAWeatherUnit) {
     
-    /** 摄氏度 */
+    /// Centigrade
+    /// 摄氏度
     EAWeatherUnitCentigrade = 0,
     
-    /** 华氏度 */
+    /// Fahrenheit
+    /// 华氏度
     EAWeatherUnitFahrenheit = 1,
 };
 
+/// The weather types
 /// MARK: - 天气类型
 typedef NS_ENUM(NSUInteger,EAWeatherType) {
     
-    /** 晴 （100 102 150） */
+    /// Clear
+    /// 晴 （100 102 150）
     EAWeatherTypeClear = 0,
     
-    /** 多云（101 103 153 502~515） */
+    /// Cloudy
+    /// 多云（101 103 153 502~515）
     EAWeatherTypeCloudy = 1,
     
-    /** 阴（104 154 500 501 999） */
+    /// Gloomy
+    /// 阴（104 154 500 501 999）
     EAWeatherTypeGloomy = 2,
     
-    /** 阵雨（300 305 309 350） */
+    /// A shower or Drizzle
+    /// 阵雨（300 305 309 350）
     EAWeatherTypeDrizzle = 3,
     
-    /** 强阵雨（301 306 314 399 351） */
+    /// Strong rain shower or Moderate rain
+    /// 强阵雨（301 306 314 399 351）
     EAWeatherTypeModerateRain = 4,
     
-    /** 雷阵雨（302 303 304） */
+    /// Thunder shower or Thunderstorm
+    /// 雷阵雨（302 303 304）
     EAWeatherTypeThunderstorm = 5,
     
-    /** 大雨（307 308 310 311 312 315 316 317 318） */
+    /// Heavy rain
+    /// 大雨（307 308 310 311 312 315 316 317 318）
     EAWeatherTypeHeavyRain = 6,
     
-    /** 冻雨（313 404 405 406 456） */
+    /// Sleet or Freezing rain
+    /// 冻雨（313 404 405 406 456）
     EAWeatherTypeSleet = 7,
     
-    /** 小雪（400 407 457） */
+    /// Light snow
+    /// 小雪（400 407 457）
     EAWeatherTypeLightSnow = 8,
     
-    /** 中雪（401 408 499） */
+    /// Moderate snow
+    /// 中雪（401 408 499）
     EAWeatherTypeModerateSnow = 9,
     
-    /** 大雪（402 403 409 410） */
+    /// Heavy snow
+    /// 大雪（402 403 409 410）
     EAWeatherTypeHeavySnow = 10,
 };
 
+/// Air quality types
 /// MARK: - 空气质量类型
 typedef NS_ENUM(NSUInteger,EAWeatherAirType) {
     
-    /** 优 */
+    /// Excellent
+    /// 优
     EAWeatherAirTypeExcellent = 0,
     
-    /** 良 */
+    /// Good
+    /// 良
     EAWeatherAirTypeGood = 1,
     
-    /** 差 */
+    /// Bad
+    /// 差
     EAWeatherAirTypeBad = 2,
 };
 
+/// Ultraviolet light intensity
 /// MARK: - 紫外线强度
 typedef NS_ENUM(NSUInteger,EAWeatherRaysType) {
     
-    /** 弱 */
+    /// Weak
+    /// 弱
     EAWeatherRaysTypeWeak = 0,
     
-    /** 中等 */
+    /// Medium
+    /// 中等
     EAWeatherRaysTypeMedium = 1,
     
-    /** 强 */
+    /// Strong
+    /// 强
     EAWeatherRaysTypeStrong = 2,
     
-    /** 很强 */
+    /// Very strong
+    /// 很强
     EAWeatherRaysTypeVeryStrong = 3,
     
-    /** 超级强 */
+    /// Super strong
+    /// 超级强
     EAWeatherRaysTypeSuperStrong = 4,
 };
 
+/// The moon type
 /// MARK: - 月相类型
 typedef NS_ENUM(NSUInteger,EAWeatherMoonType) {
     
-    /** 新月 */
+    /// The new moon
+    /// 新月
     EAWeatherMoonTypeNewMoon = 0,
     
-    /** 峨眉月 */
+    /// crescent moon
+    /// 峨眉月
     EAWeatherMoonTypeWaxingCrescentMoon = 1,
     
-    /** 上弦月 */
+    /// Quarter moon
+    /// 上弦月
     EAWeatherMoonTypeQuarterMoon = 2,
     
-    /** 盈半月 */
+    /// Half moon 1
+    /// 盈半月
     EAWeatherMoonTypeHalfMoon1 = 3,
     
-    /** 盈凸月 */
+    /// Waxing gibbous moon
+    /// 盈凸月
     EAWeatherMoonTypeWaxingGibbousMoon = 4,
     
-    /** 满月 */
+    /// full moon
+    /// 满月
     EAWeatherMoonTypeFullMoon = 5,
     
-    /** 亏凸月 */
+    /// Waning gibbous moon
+    /// 亏凸月
     EAWeatherMoonTypeWaningGibbousMoon = 6,
     
-    /** 亏半月 */
+    /// Half moon 2
+    /// 亏半月
     EAWeatherMoonTypeHalfMoon2 = 7,
     
-    /** 下弦月 */
+    /// Quarter moon
+    /// 下弦月
     EAWeatherMoonTypeLastQuarterMoon = 8,
     
-    /** 残月 */
+    /// Crescent moon
+    /// 残月
     EAWeatherMoonTypeWaningCrescentMoon = 9,
 };
 
+/// Remind the way of vibration
 /// MARK: - 提醒方式
 typedef NS_ENUM(NSUInteger,EARemindActionType) {
     
-    /** 不动作 */
+    /// No action
+    /// 不动作
     EARemindActionTypeNoAction = 0,
     
-    /** 单次长震 */
+    /// Single long shock
+    /// 单次长震
     EARemindActionTypeOneLongVibration = 1,
     
-    /** 单次短震 */
+    /// A single short
+    /// 单次短震
     EARemindActionTypeOneShortVibration = 2,
     
-    /** 两次长震 */
+    /// Two long shock
+    /// 两次长震
     EARemindActionTypeTwoLongVibration = 3,
     
-    /** 两次短震 */
+    /// Two short shock
+    /// 两次短震
     EARemindActionTypeTwoShortVibration = 4,
     
-    /** 一直长震 */
+    /// Has been long shock
+    /// 一直长震
     EARemindActionTypeLongVibration = 5,
     
-    /** 一直长短震 */
+    /// Long and short earthquake
+    /// 一直长短震
     EARemindActionTypeLongShortVibration = 6,
     
-    /** 单次响铃 */
+    /// A single ring 【The watch does not support the speaker】
+    /// 单次响铃
     EARemindActionTypeOneRing = 7,
     
-    /** 两次响铃 */
+    /// Ring the bell twice Ring the bell twice 【The watch does not support the speaker】
+    /// 两次响铃
     EARemindActionTypeTwoRing = 8,
     
-    /** 一直响铃 */
+    /// Ring the bell 【The watch does not support the speaker】
+    /// 一直响铃
     EARemindActionTypeRing = 9,
     
-    /** 一次震动+响铃 */
+    /// A shock + a bell 【The watch does not support the speaker】
+    /// 一次震动+响铃
     EARemindActionTypeOneVibrationRing = 10,
     
-    /** 一直震动+响铃 */
+    /// Always vibrate + ring the bell  【The watch does not support the speaker】
+    /// 一直震动+响铃
     EARemindActionTypeVibrationRing = 11,
 };
 
 
+/// Reminder Event Type
 /// MARK: - 提醒事件类型
 typedef NS_ENUM(NSUInteger,EAReminderEventType) {
     
-    /** 闹钟 */
+    /// The alarm clock
+    /// 闹钟
     EAReminderEventTypeAlarm = 0,
     
-    /** 睡觉 */
+    /// Sleep 【Go to bed】
+    /// 睡觉
     EAReminderEventTypeSleep = 1,
     
-    /** 运动 */
+    /// Sport
+    /// 运动
     EAReminderEventTypeSport = 2,
     
-    /** 喝水 */
+    /// Drink water
+    /// 喝水
     EAReminderEventTypeDrink = 3,
     
-    /** 吃药 */
+    /// Take the medicine
+    /// 吃药
     EAReminderEventTypeMedicine = 4,
     
-    /** 会议 */
+    /// Meeting
+    /// 会议
     EAReminderEventTypeMeeting = 5,
     
-    /** 用户自定义 */
+    /// User Customization
+    /// 用户自定义
     EAReminderEventTypeUser = 6,
 };
 
 
+/// Reminder event operations
 /// MARK: - 提醒事件操作
 typedef NS_ENUM(NSUInteger,EAReminderEventOps) {
     
-    /** 操作：新增 */
+    /// add
+    /// 操作：新增
     EAReminderEventOpsAdd = 0,
     
-    /** 操作：编辑 */
+    ///edit
+    /// 操作：编辑
     EAReminderEventOpsEdit = 1,
     
-    /** 操作：删除此条 */
+    /// delete this
+    /// 操作：删除此条
     EAReminderEventOpsDel = 2,
     
-    /** 操作：删除全部提醒 */
+    /// delete all remind 【Except for the alarm clock】
+    /// 操作：删除全部提醒
     EAReminderEventOpsDelRemind = 3,
     
-    /** 操作：删除全部闹钟 */
+    /// delete all alarm
+    /// 操作：删除全部闹钟
     EAReminderEventOpsDelAlarm = 4,
     
-    /** 操作：删除全部闹钟及提醒 */
+    /// delete all alarm clock & remind
+    ///  操作：删除全部闹钟及提醒
     EAReminderEventOpsDelRemindAlarm = 5,
 };
 
 
+/// The unit distance
 /// MARK: - 距离单位类型
 typedef NS_ENUM(NSUInteger,EADistanceUnit) {
     
-    /** 公里 */
+    /// Kilometre
+    /// 公里
     EADistanceUnitKilometre = 0,
     
-    /** 英里 */
+    /// Mile
+    /// 英里
     EADistanceUnitMile = 1,
 };
 
+/// The unit weight
 /// MARK: - 体重单位类型
 typedef NS_ENUM(NSUInteger,EAWeightUnit) {
     
-    /** 千克 */
+    /// Kilogram
+    /// 千克
     EAWeightUnitKilogram = 0,
     
-    /** 英镑 */
+    /// Pound
+    /// 英镑
     EAWeightUnitPound = 1,
 };
 
+/// Watch operating type of mobile phone
 /// MARK: - 操作手机类型
 typedef NS_ENUM(NSUInteger,EAPhoneOps) {
     
-    /** 寻找手机 */
+    /// Looking for mobile phone
+    /// 寻找手机
     EAPhoneOpsSearchPhone = 0,
     
-    /** 停止寻找手机(固件需求) */
+    /// Stop Looking for your phone
+    /// 停止寻找手机(固件需求)
     EAPhoneOpsStopSearchPhone = 1,
     
-    /** 连接相机 */
+    /// Open the App camera
+    /// 连接相机
     EAPhoneOpsConnectTheCamera = 2,
     
-    /** 开启拍照 */
+    /// Taking pictures
+    /// 开启拍照
     EAPhoneOpsStartTakingPictures = 3,
     
-    /** 停止拍照 */
+    /// Stop taking pictures
+    /// 停止拍照
     EAPhoneOpsStopTakingPictures = 4,
     
-    /** 请求最新天气信息 */
+    /// Request the latest weather data
+    /// 请求最新天气信息
     EAPhoneOpsRequestTheLatestWeather = 5,
     
-    /** 请求最新agps星历数据 */
+    /// Request the latest AGPS data
+    /// 请求最新agps星历数据
     EAPhoneOpsRequestTheAgps = 6,
     
-    /** 请求最新经期数据 */
+    /// Request the latest period data
+    /// 请求最新经期数据
     EAPhoneOpsRequestTheMenstrualCycle = 7,
     
-    /** 8803大数据传输完成 */
+    /// 8803 Big data transmission completed
+    /// 8803大数据传输完成
     EAPhoneOpsBig8803DataUpdateFinish = 8,
     
-    /** mic录音准备 lin */
+    /// Recording Preparation
+    /// mic录音准备
     EAPhoneOpsMicRecordReady = 9,
     
-    /** mic录音结束 lin */
+    /// Recording stop
+    /// mic录音结束 lin
     EAPhoneOpsMicRecordStop = 10,
     
-    /** 停止寻找手表(固件需求) */
+    /// Stop Looking for a Watch
+    /// 停止寻找手表(固件需求)
     EAPhoneOpsStopSearchWatch = 11,
 };
 
+/// Operating mobile phone status
 /// MARK: - 操作手机状态
 typedef NS_ENUM(NSUInteger,EAPhoneOpsStatus) {
     
-    /** 执行 */
+    /// Execute
+    /// 执行
     EAPhoneOpsStatusExecute = 0,
     
-    /** 执行成功 */
+    /// Success
+    /// 执行成功
     EAPhoneOpsStatusSuccess = 1,
     
-    /** 执行失败 */
+    /// Fail
+    /// 执行失败
     EAPhoneOpsStatusFail = 2,
 };
 
@@ -742,534 +1017,700 @@ typedef NS_ENUM(NSUInteger,EAPhoneOpsStatus) {
 /// MARK: - 上传状态
 typedef NS_ENUM(NSUInteger,EAUploadRespondStatus) {
     
-    /** 起始包 */
+    /// 起始包
     EAUploadRespondStatusBegin = 0,
     
-    /** 中间包 */
+    /// 中间包
     EAUploadRespondStatusContinue = 1,
     
-    /** 结束包 */
+    /// 结束包
     EAUploadRespondStatusEnd = 2,
     
-    /** 开始即结束包 */
+    /// 开始即结束包
     EAUploadRespondStatusBeginEnd = 3,
 };
 
 
+/// sleep status
 /// MARK: - 睡眠状态
 typedef NS_ENUM(NSUInteger,EASleepNode) {
     
-    /** 活动状态 */
+    /// Activity
+    /// 活动状态
     EASleepNodeActivity = 0,
     
-    /** 进入睡眠 (!!!) */
+    /// Enter sleep
+    /// 进入睡眠 (!!!)
     EASleepNodeEnter = 1,
     
-    /** 睡眠中途醒来 */
+    /// Wake
+    /// 睡眠中途醒来
     EASleepNodeWake = 2,
     
-    /** 快速眼动 */
+    /// Rem
+    /// 快速眼动
     EASleepNodeRem = 3,
     
-    /** 浅睡 */
+    /// Light sleep
+    /// 浅睡
     EASleepNodeLight = 4,
     
-    /** 深睡 */
+    /// Deep sleep
+    /// 深睡
     EASleepNodeDeep = 5,
     
-    /** 退出睡眠(!!!) */
+    /// Quit sleep
+    /// 退出睡眠(!!!)
     EASleepNodeQuit = 6,
     
-    /** 未知 */
+    /// Unknown
+    /// 未知
     EASleepNodeUnknown = 7,
     
-    /** 睡眠摘要 */
+    /// Summary
+    /// 睡眠摘要
     EASleepNodeSummary = 8,
 };
 
+/// Sport type
 /// MARK: - 运动类型
 typedef NS_ENUM(NSUInteger,EASportType) {
     
-    /** 日常运动 */
+    /// Daily
+    /// 日常运动
     EASportTypeDaily = 0,
 
-    /** 户外步行 */
+    /// Ourdoor walking
+    /// 户外步行
     EASportTypeOurdoorWalking = 1,
 
-    /** 户外跑步 */
+    /// Ourdoor running
+    /// 户外跑步
     EASportTypeOurdoorRunning = 2,
 
-    /** 户外徒步 */
+    /// Outdoor on foot
+    /// 户外徒步
     EASportTypeOurdoorOnFoot = 3,
 
-    /** 户外登山 */
+    /// Ourdoor on mountaineering
+    /// 户外登山
     EASportTypeOurdoorOnMountaineering = 4,
 
-    /** 户外越野跑 */
+    /// Outdoor trail running
+    /// 户外越野跑
     EASportTypeOurdoorTrailRunning = 5,
 
-    /** 户外单车 */
+    /// Outdoor cycling
+    /// 户外单车
     EASportTypeOurdoorCycling = 6,
 
-    /** 户外游泳 */
+    /// Outdoor swimming
+    /// 户外游泳
     EASportTypeOutdoorSwimming = 7,
 
-    /** 室内步行 */
+    /// Indoor walking
+    /// 室内步行
     EASportTypeIndoorWalking = 8,
 
-    /** 室内跑步 */
+    /// Indoor running
+    /// 室内跑步
     EASportTypeIndoorRunning = 9,
 
-    /** 室内锻炼 */
+    /// Indoor exercise
+    /// 室内锻炼
     EASportTypeIndoorExercise = 10,
 
-    /** 室内单车 */
+    /// Indoor cycling
+    /// 室内单车
     EASportTypeIndoorCycling = 11,
 
-    /** 椭圆机 */
+    /// The elliptical machine
+    /// 椭圆机
     EASportTypeElliptical = 12,
 
-    /** 瑜伽 */
+    /// Yoga
+    /// 瑜伽
     EASportTypeYoga = 13,
 
-    /** 划船机 */
+    /// Rowing
+    /// 划船机
     EASportTypeRowing = 14,
 
-    /** 室内游泳 */
+    /// Indoor swimming
+    /// 室内游泳
     EASportTypeIndoorSwimming = 15,
 
-    /** 攀岩 */
+    /// sports climbing
+    /// 攀岩
     EASportTypeOdRock = 16,
 
-    /** 滑板 */
+    /// skateboarding
+    /// 滑板
     EASportTypeOdSkate = 17,
 
-    /** 轮滑 */
+    /// Roller skating
+    /// 轮滑
     EASportTypeOdRoller = 18,
 
-    /** 跑酷 */
+    /// parkour
+    /// 跑酷
     EASportTypeOdParkour = 19,
 
-    /** 跳伞 */
+    /// A parachute jump
+    /// 跳伞
     EASportTypeOdParachute = 20,
 
-    /** HIIT */
+    /// Hit
+    /// HIIT
     EASportTypeTrainHit = 21,
 
-    /** 举重 */
+    /// Weight lifting
+    /// 举重
     EASportTypeTrainWeight = 22,
 
-    /** 平板支撑 */
+    /// Tablet support
+    /// 平板支撑
     EASportTypeTrainPlank = 23,
 
-    /** 开合跳 */
+    /// Jumping jacks
+    /// 开合跳
     EASportTypeTrainJumping = 24,
 
-    /** 爬楼机 */
+    /// Climb building machine
+    /// 爬楼机
     EASportTypeTrainStair = 25,
 
-    /** 核心训练 */
+    /// Core training
+    /// 核心训练
     EASportTypeTrainCore = 26,
 
-    /** 柔韧训练 */
+    /// Flexible training
+    /// 柔韧训练
     EASportTypeTrainFlex = 27,
 
-    /** 普拉提 */
+    /// pilates
+    /// 普拉提
     EASportTypeTrainPilates = 28,
 
-    /** 拉伸 */
+    /// The tensile
+    /// 拉伸
     EASportTypeTrainStretch = 29,
 
-    /** 力量训练 */
+    /// Strength training
+    /// 力量训练
     EASportTypeTrainStrength = 30,
 
-    /** 交叉训练 */
+    /// Cross training
+    /// 交叉训练
     EASportTypeTrainCross = 31,
 
-    /** 哑铃训练 */
+    /// The dumbbell training
+    /// 哑铃训练
     EASportTypeTrainDumbbell = 32,
 
-    /** 硬拉 */
+    /// Deadlift
+    /// 硬拉
     EASportTypeTrainDeadlift = 33,
 
-    /** 仰卧起坐 */
+    /// sit-ups
+    /// 仰卧起坐
     EASportTypeTrainSit = 34,
 
-    /** 功能性训练 */
+    /// Functional training
+    /// 功能性训练
     EASportTypeTrainFuncition = 35,
 
-    /** 上肢训练 */
+    /// Upper limb training
+    /// 上肢训练
     EASportTypeTrainUpper = 36,
 
-    /** 下肢训练 */
+    /// Lower limb training
+    /// 下肢训练
     EASportTypeTrainLower = 37,
 
-    /** 腹肌训练 */
+    /// Abdominal muscle training
+    /// 腹肌训练
     EASportTypeTrainAbs = 38,
 
-    /** 背部训练 */
+    /// The back of the train
+    /// 背部训练
     EASportTypeTrainBack = 39,
 
-    /** 帆船 */
+    /// Sailboat
+    /// 帆船
     EASportTypeWaterSailboat = 40,
 
-    /** 浆板 */
+    /// Pulp board
+    /// 浆板
     EASportTypeWaterSup = 41,
 
-    /** 水球 */
+    /// Water polo
+    /// 水球
     EASportTypeWaterPolo = 42,
 
-    /** 划水 */
+    /// The stroke
+    /// 划水
     EASportTypeWaterThrash = 43,
 
-    /** 皮划艇 */
+    /// canoe
+    /// 皮划艇
     EASportTypeWaterKayak = 44,
 
-    /** 漂流 */
+    /// drifting
+    /// 漂流
     EASportTypeWaterDrifting = 45,
 
-    /** 划船 */
+    /// rowing
+    /// 划船
     EASportTypeWaterBoating = 46,
 
-    /** 蹼泳 */
+    /// Fin swimming
+    /// 蹼泳
     EASportTypeWaterFin = 47,
 
-    /** 跳水 */
+    /// The diving
+    /// 跳水
     EASportTypeWaterDiving = 48,
 
-    /** 花样游泳 */
+    /// Synchronized swimming
+    /// 花样游泳
     EASportTypeWaterArtistic = 49,
 
-    /** 潜水 */
+    /// Snorkel
+    /// 潜水
     EASportTypeWaterSnorkel = 50,
 
-    /** 风筝冲浪 */
+    /// Kitesurfing
+    /// 风筝冲浪
     EASportTypeWaterKitesurfing = 51,
 
-    /** 沙滩车 */
+    /// Atv
+    /// 沙滩车
     EASportTypeWaterAtv = 52,
 
-    /** 沙滩足球 */
+    /// Beach football
+    /// 沙滩足球
     EASportTypeWaterBeach = 53,
 
-    /** 舞蹈 */
+    /// Dance
+    /// 舞蹈
     EASportTypeDanceDance = 54,
 
-    /** 肚皮舞 */
+    /// Belly dance
+    /// 肚皮舞
     EASportTypeDanceDelly = 55,
 
-    /** 体操 */
+    /// Gymnastics
+    /// 体操
     EASportTypeDanceGymnastics = 56,
 
-    /** 健身操 */
+    /// Setting-up exercise
+    /// 健身操
     EASportTypeDanceAerobics = 57,
 
-    /** 街舞 */
+    /// HipHop
+    /// 街舞
     EASportTypeDanceHipHop = 58,
 
-    /** 拳击 */
+    /// Boxing
+    /// 拳击
     EASportTypeFightBoxing = 59,
 
-    /** 武术 */
+    /// Wushu
+    /// 武术
     EASportTypeFightWushu = 60,
 
-    /** 摔跤 */
+    /// Wrestling
+    /// 摔跤
     EASportTypeFightWrestling = 61,
 
-    /** 太极 */
+    /// Taichi
+    /// 太极
     EASportTypeFightTaichi = 62,
 
-    /** 泰拳 */
+    /// Muay Thai
+    /// 泰拳
     EASportTypeFightMuayThai = 63,
 
-    /** 柔道 */
+    /// Judo
+    /// 柔道
     EASportTypeFightJudo = 64,
 
-    /** 跆拳道 */
+    /// Taekwondo
+    /// 跆拳道
     EASportTypeFightTaekwondo = 65,
 
-    /** 空手道 */
+    /// Karate
+    /// 空手道
     EASportTypeFightKarate = 66,
 
-    /** 自由搏击 */
+    /// Free combat
+    /// 自由搏击
     EASportTypeFightFreeSparring = 67,
 
-    /** 足球 */
+    /// Soccer
+    /// 足球
     EASportTypeBallSoccer = 68,
 
-    /** 篮球 */
+    /// Basketball
+    /// 篮球
     EASportTypeBallBasketball = 69,
 
-    /** 排球 */
+    /// Volleyball
+    /// 排球
     EASportTypeBallVolleyball = 70,
 
-    /** 羽毛球 */
+    /// Badminton
+    /// 羽毛球
     EASportTypeBallBadminton = 71,
 
-    /** 乒乓球 */
+    /// Pingpong
+    /// 乒乓球
     EASportTypeBallPingpong = 72,
 
-    /** 板球 */
+    /// Cricket
+    /// 板球
     EASportTypeBallCricket = 73,
 
-    /** 橄榄球 */
+    /// Football or rugby
+    /// 橄榄球
     EASportTypeBallFootball = 74,
 
-    /** 墙球 */
-    EASportTypeBallRacqurball = 75,
+    /// Racquetball
+    /// 墙球
+    EASportTypeBallRacquetball = 75,
 
-    /** 手球 */
+    /// Handball
+    /// 手球
     EASportTypeBallHandball = 76,
 
-    /** 壁球 */
+    /// Squash
+    /// 壁球
     EASportTypeBallSquash = 77,
 
-    /** 毽球 */
+    /// Shuttlecock
+    /// 毽球
     EASportTypeBallShuttlecock = 78,
 
-    /** 藤球 */
+    /// Raga
+    /// 藤球
     EASportTypeBallRaga = 79,
 
-    /** 雪车 */
+    /// snowmobiles
+    /// 雪车
     EASportTypeSnowBoard = 80,
 
-    /** 双板滑雪 */
+    /// Double plate skiing
+    /// 双板滑雪
     EASportTypeSnowSkis = 81,
 
-    /** 冰球 */
+    /// Ice Hockey
+    /// 冰球
     EASportTypeSnowPuck = 82,
 
-    /** 滑冰 */
+    /// skating
+    /// 滑冰
     EASportTypeSnowSkate = 83,
 
-    /** 冰壶 */
+    /// Curling
+    /// 冰壶
     EASportTypeSnowCurling = 84,
 
-    /** 单板滑雪 */
+    /// Snowboarding
+    /// 单板滑雪
     EASportTypeSnowMobile = 85,
 
-    /** 雪橇 */
+    /// Luge
+    /// 雪橇
     EASportTypeSnowSled = 86,
 
-    /** 冥想 */
+    /// Meditation
+    /// 冥想
     EASportTypeLeisureMeditation = 87,
 
-    /** 剑道 */
+    /// Kendo
+    /// 剑道
     EASportTypeLeisureKendo = 88,
 
-    /** 击剑 */
+    /// Fence
+    /// 击剑
     EASportTypeLeisureFence = 89,
 
-    /** 保龄球 */
+    /// Bowling
+    /// 保龄球
     EASportTypeLeisureBowling = 90,
 
-    /** 台球 */
+    /// billiards
+    /// 台球
     EASportTypeLeisureBilliards = 91,
 
-    /** 射箭 */
+    /// archery
+    /// 射箭
     EASportTypeLeisureArchery = 92,
 
-    /** 飞镖 */
+    /// darts
+    /// 飞镖
     EASportTypeLeisureDarts = 93,
 
-    /** 骑马 */
+    /// Riding a horse
+    /// 骑马
     EASportTypeLeisureHorse = 94,
 
-    /** 呼啦圈 */
+    /// The hoop
+    /// 呼啦圈
     EASportTypeLeisureHula = 95,
 
-    /** 放风筝 */
+    /// Flying a kite
+    /// 放风筝
     EASportTypeLeisureKite = 96,
 
-    /** 钓鱼 */
+    /// Fishing
+    /// 钓鱼
     EASportTypeLeisureFishing = 97,
 
-    /** 飞盘 */
+    /// Fribee
+    /// 飞盘
     EASportTypeLeisureFribee = 98,
 
-    /** 马术 */
+    /// Equestrianism
+    /// 马术
     EASportTypeLeisureEquestrian = 99,
 
-    /** 赛车 */
+    /// Cycle racing
+    /// 赛车
     EASportTypeLeisureRacing = 100,
 
-    /** 自由锻炼 */
+    /// Free exercise
+    /// 自由锻炼
     EASportTypeOtherFree = 101,
 
-    /** 跳绳 */
+    /// Rope
+    /// 跳绳
     EASportTypeOtherRope = 102,
 
-    /** 上楼梯 */
+    /// Climb
+    /// 上楼梯
     EASportTypeOtherClimb = 103,
 
-    /** 拔河 */
+    /// Tug of war
+    /// 拔河
     EASportTypeOtherPush = 104,
 
-    /** 单杠 */
+    /// Horizontal bar
+    /// 单杠
     EASportTypeOtherHorizontal = 105,
 
-    /** 双杠 */
+    /// Parallel bars
+    /// 双杠
     EASportTypeOtherParallel = 106,
 
-    /** 网球 */
+    /// Tennis
+    /// 网球
     EASportTypeTennis = 107,
 
-    /** 棒球 */
+    /// Baseball
+    /// 棒球
     EASportTypeBaseball = 108,
 
-    /** 曲棍球 */
+    /// Hockey
+    /// 曲棍球
     EASportTypeHockey = 109,
 
-    /** 自定义运动 */
+    /// CustomSport
+    /// 自定义运动
     EASportTypeCustomSport = 110,
 
-    /** 踏步 */
+    /// MarkTime
+    /// 踏步
     EASportTypeMarkTime = 111,
 
-    /** 漫步机 */
+    /// Walking machine
+    /// 漫步机
     EASportTypeWalkingMachine = 112,
 
-    /** 田径 */
+    /// Athletics
+    /// 田径
     EASportTypeAthletics = 113,
 
-    /** 腰腹训练 */
+    /// Lumbar abdomen training
+    /// 腰腹训练
     EASportTypeLumbarAbdomenTraining = 114,
 
-    /** 拉丁舞 */
+    /// Latin dance
+    /// 拉丁舞
     EASportTypeLatinDance = 115,
 
-    /** 芭蕾 */
+    /// Ballet
+    /// 芭蕾
     EASportTypeBallet = 116,
 
-    /** 高尔夫 */
+    /// Golf
+    /// 高尔夫
     EASportTypeGolf = 117,
 
-    /** 民族舞 */
+    /// Folk dance
+    /// 民族舞
     EASportTypeFolkDance = 118,
 
-    /** 长曲棍球 */
+    /// Lacrosse
+    /// 长曲棍球
     EASportTypeLacrosse = 119,
 
-    /** 垒球 */
+    /// Softball
+    /// 垒球
     EASportTypeSoftball = 120,
 
-    /** 匹克球 */
+    /// PeakBall
+    /// 匹克球
     EASportTypePeakBall = 121,
 
-    /** 蹦床 */
+    /// Trampoline
+    /// 蹦床
     EASportTypeTrampoline = 122,
 
-    /** 酷跑 */
+    /// Parkour
+    /// 酷跑
     EASportTypeParkour = 123,
 
-    /** 俯卧撑 */
+    /// Push-ups
+    /// 俯卧撑
     EASportTypePushUp = 124,
 
-    /** 跳高 */
+    /// High jump
+    /// 跳高
     EASportTypeHighJump = 125,
 
-    /** 跳远 */
+    /// Long jump
+    /// 跳远
     EASportTypeLongJump = 126,
 
     
     
-    /** 智慧运动: 日常运动 */
+    /// Intelligent movement: Daily
+    /// 智慧运动: 日常运动
     EASportTypeDailyEx = 32768,
 
-    /** 智慧运动: 户外步行 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外步行
     EASportTypeOurdoorWalkingEx = 32769,
 
-    /** 智慧运动: 户外跑步 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外跑步
     EASportTypeOurdoorRunningEx = 32770,
 
-    /** 智慧运动: 户外徒步 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外徒步
     EASportTypeOurdoorOnFootEx = 32771,
 
-    /** 智慧运动: 户外登山 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外登山
     EASportTypeOurdoorOnMountaineeringEx = 32772,
 
-    /** 智慧运动: 户外越野跑 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外越野跑
     EASportTypeOurdoorTrailRunningEx = 32773,
 
-    /** 智慧运动: 户外单车 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外单车
     EASportTypeOurdoorCyclingEx = 32774,
 
-    /** 智慧运动: 户外游泳 */
+    /// Intelligent movement:
+    /// 智慧运动: 户外游泳
     EASportTypeOutdoorSwimmingEx = 32775,
 
-    /** 智慧运动: 室内步行 */
+    /// Intelligent movement:
+    /// 智慧运动: 室内步行
     EASportTypeIndoorWalkingEx = 32776,
 
-    /** 智慧运动: 室内跑步 */
+    /// Intelligent movement:
+    /// 智慧运动: 室内跑步
     EASportTypeIndoorRunningEx = 32777,
 
-    /** 智慧运动: 室内锻炼 */
+    /// Intelligent movement:
+    /// 智慧运动: 室内锻炼
     EASportTypeIndoorExerciseEx = 32778,
 
-    /** 智慧运动: 室内单车 */
+    /// Intelligent movement:
+    /// 智慧运动: 室内单车
     EASportTypeIndoorCyclingEx = 32779,
 
-    /** 智慧运动: 椭圆机 */
+    /// Intelligent movement:
+    /// 智慧运动: 椭圆机
     EASportTypeEllipticalEx = 32780,
 
-    /** 智慧运动: 瑜伽 */
+    /// Intelligent movement:
+    /// 智慧运动: 瑜伽
     EASportTypeYogaEx = 32781,
 
-    /** 智慧运动: 划船机 */
+    /// Intelligent movement:
+    /// 智慧运动: 划船机
     EASportTypeRowingEx = 32782,
 
-    /** 智慧运动: 室内游泳 */
+    /// Intelligent movement:
+    /// 智慧运动: 室内游泳
     EASportTypeIndoorSwimmingEx = 32783,
     
 };
 
+/// OTA respond status
 /// MARK: - OTA 响应类型
 typedef NS_ENUM(NSUInteger,EAOtaRespondStatus) {
     
-    /** 接受ota请求 */
+    /// Accept
+    /// 接受ota请求
     EAOtaRespondStatusAccept = 0,
     
-    /** 拒绝ota请求 : 其他原因 */
+    /// Reject:unkown
+    /// 拒绝ota请求 : 其他原因
     EAOtaRespondStatusReject = 1,
     
-    /** 拒绝ota请求 : 设备已经更新此版本 */
+    ///Reject:The watch has been updated with this version
+    /// 拒绝ota请求 : 手表已经更新此版本
     EAOtaRespondStatusRejectVersionError = 2,
     
-    /** 请继续发送数据包 */
+    /// Reject
+    /// 请继续发送数据包
     EAOtaRespondStatusProceed = 3,
     
-    /** 传输完成，crc校验错误 */
+    /// Crc error
+    /// 传输完成，crc校验错误
     EAOtaRespondStatusCrcError = 4,
     
-    /** 传输完成 */
+    /// Complete
+    /// 传输完成
     EAOtaRespondStatusComplete = 5,
 };
 
 /// MARK: - OTA 请求类型
 typedef NS_ENUM(NSUInteger,EAOtaRequestType) {
     
-    /** 阿波罗 */
+    /// Apollo
+    /// 阿波罗
     EAOtaRequestTypeApollo = 0,
     
-    /** stm */
+    /// stm
     EAOtaRequestTypeStm32 = 1,
     
-    /** res */
+    /// Font & Picture
+    /// res
     EAOtaRequestTypeRes = 2,
     
-    /** tp */
+    /// The screen
+    /// tp
     EAOtaRequestTypeTp = 3,
     
-    /** 心率 */
+    /// Heart rate
+    /// 心率
     EAOtaRequestTypeHr = 4,
     
-    /** gps */
+    /// gps
     EAOtaRequestTypeGps = 5,
     
-    /** agps */
+    /// agps
     EAOtaRequestTypeAgps = 6,
     
-    /** 自定义表盘 */
+    /// Watch face
+    /// 自定义表盘
     EAOtaRequestTypeUserWf = 7,
 };
 
@@ -1277,117 +1718,125 @@ typedef NS_ENUM(NSUInteger,EAOtaRequestType) {
 /// MARK: - OTA 图片类型
 typedef NS_ENUM(NSUInteger,EAUIType) {
     
-    /** 未知的归类 */
+    /// 未知的归类
     EAUITypeUnknow = 0,
     
-    /** 背景 */
+    /// 背景
     EAUITypeBackground = 1,
     
-    /** 数字字体，打包0~9,固定宽高，在bin中按0~9排序 */
+    /// 数字字体，打包0~9,固定宽高，在bin中按0~9排序
     EAUITypeNumberFont = 2,
     
-    /** 年 */
+    /// 年
     EAUITypeYear = 3,
     
-    /** 月 */
+    /// 月
     EAUITypeMonth = 4,
     
-    /** 日 */
+    /// 日
     EAUITypeDay = 5,
     
-    /** 时 */
+    /// 时
     EAUITypeHour = 6,
     
-    /** 分 */
+    /// 分
     EAUITypeMinute = 7,
     
-    /** 秒 */
+    /// 秒
     EAUITypeSecond = 8,
     
-    /** 时针 */
+    /// 时针
     EAUITypeHourHand = 9,
     
-    /** 分针 */
+    /// 分针
     EAUITypeMinuteHand = 10,
     
-    /** 秒针 */
+    /// 秒针
     EAUITypeSecondHand = 11,
     
-    /** 家乡时区时针 */
+    /// 家乡时区时针
     EAUITypeHomeHourHand = 12,
     
-    /** 家乡时区分针 */
+    /// 家乡时区分针
     EAUITypeHomeMinuteHand = 13,
     
-    /** 家乡时区秒针 */
+    /// 家乡时区秒针
     EAUITypeHomeSecondHand = 14,
     
-    /** 步数图标 */
+    /// 步数图标
     EAUITypeSteps = 15,
     
-    /** 步数字体 */
+    /// 步数字体
     EAUITypeStepsNumberFont = 16,
     
-    /** 卡路里 */
+    /// 卡路里
     EAUITypeCalorie = 17,
     
-    /** 卡路里字体 */
+    /// 卡路里字体
     EAUITypeCalorieNumberFont = 18,
     
-    /** 距离 */
+    /// 距离
     EAUITypeDistance = 19,
     
-    /** 距离 字体 */
+    /// 距离 字体
     EAUITypeDistanceNumberFont = 20,
     
-    /** 运动时长 */
+    /// 运动时长
     EAUITypeDuration = 21,
     
-    /** 运动时长字体 */
+    /// 运动时长字体
     EAUITypeDurationNumberFont = 22,
     
-    /** 心率 */
+    /// 心率
     EAUITypeHeartRate = 23,
     
-    /** 心率字体 */
+    /// 心率字体
     EAUITypeHeartRateNumberFont = 24,
     
-    /** 天气 */
+    /// 天气
     EAUITypeWeather = 25,
     
-    /** 电池 */
+    /// 电池
     EAUITypeBattery = 26,
 };
 
+/// Stress data type
 /// MARK: - 压力数据类型
 typedef NS_ENUM(NSUInteger,EAStressDataType) {
     
-    /** * */
+    /// Unkown
     EAStressDataTypeStressUnkown = 0,
     
-    /** 放松 */
+    /// Relax
+    /// 放松
     EAStressDataTypeStressRelax = 1,
     
-    /** 正常 */
+    /// Normal
+    /// 正常
     EAStressDataTypeStressNormal = 2,
     
-    /** 中等 */
+    /// Middle
+    /// 中等
     EAStressDataTypeStressMiddle = 3,
     
-    /** 高 */
+    /// High
+    /// 高
     EAStressDataTypeStressHigh = 4,
 };
 
 /// MARK: - 振动模式
 typedef NS_ENUM(NSUInteger,EAVibrateIntensityType) {
     
-    /** 弱 */
+    /// Light
+    /// 弱
     EAVibrateIntensityTypeLight = 0,
     
-    /** 正常 */
+    /// Normal
+    /// 正常
     EAVibrateIntensityTypeMedium = 1,
     
-    /** 强 */
+    /// Strong
+    /// 强
     EAVibrateIntensityTypeStrong = 2,
     
 };
@@ -1395,28 +1844,36 @@ typedef NS_ENUM(NSUInteger,EAVibrateIntensityType) {
 /// MARK: - 一级菜单样式
 typedef NS_ENUM(NSUInteger,EAFirstLeverType) {
     
-    /** 无 */
+    /// Null
+    /// 无
     EAFirstLeverTypePageNull = 0,
     
-    /** 心率 */
+    /// HeartRate
+    /// 心率
     EAFirstLeverTypePageHeartRate = 1,
     
-    /** 压力 */
+    /// Stress or Pressure
+    /// 压力
     EAFirstLeverTypePagePressure = 2,
     
-    /** 天气 */
+    /// Weather
+    /// 天气
     EAFirstLeverTypePageWeather = 3,
     
-    /** 音乐 */
+    /// Music
+    /// 音乐
     EAFirstLeverTypePageMusic = 4,
     
-    /** 呼吸 */
+    /// Breath
+    /// 呼吸
     EAFirstLeverTypePageBreath = 5,
     
-    /** 睡眠 */
+    /// Sleep
+    /// 睡眠
     EAFirstLeverTypePageSleep = 6,
     
-    /** 生理周期 */
+    /// Menstrual cycle
+    /// 生理周期
     EAFirstLeverTypePageMenstrualCycle = 7,
     
 };
@@ -1424,56 +1881,72 @@ typedef NS_ENUM(NSUInteger,EAFirstLeverType) {
 /// MARK: - 经期类型
 typedef NS_ENUM(NSUInteger, EAMenstruationType) {
     
-    /** 第一次安全期 */
+    /// First safe period
+    /// 第一次安全期
     EAMenstruationTypeFirstSafePeriod        = 0,
     
-    /** 第2次安全期 */
+    /// Second safe period,
+    /// 第2次安全期
     EAMenstruationTypeSecondSafePeriod,
     
-    /** 经期 */
+    /// SecondSafePeriod,
+    /// 经期
     EAMenstruationTypePeriod,
     
-    /** 易孕期 */
+    /// Easy pregnancy
+    /// 易孕期
     EAMenstruationTypeEasyPregnancy,
     
-    /** 排卵日 */
+    /// Ovulation day
+    /// 排卵日
     EAMenstruationTypeOvulationDay,
     
-    /** 未设置时间 */
+    /// Un setting
+    /// 未设置时间
     EAMenstruationTypeUnSetting,
     
 };
 
+/// Raised my hand against the bright screen type
 /// MARK: - 抬手亮屏
 typedef NS_ENUM(NSUInteger, EAGesturesBrightType) {
     
-    /** 关闭 */
+    /// Close
+    /// 关闭
     EAGesturesBrightTypeClose = 0,
     
-    /** 全天开启 */
+    /// All day open
+    /// 全天开启
     EAGesturesBrightTypeAllDay = 1,
     
-    /** 选择时间段开启 */
+    /// Select time
+    /// 选择时间段开启
     EAGesturesBrightTypeSelectTime = 2,
 };
 
 
+/// Habit tracker operation
 /// MARK: - 习惯事件操作
 typedef NS_ENUM(NSUInteger,EAHabitTrackerOps) {
     
-    /** 操作：新增 */
+    /// add
+    /// 操作：新增
     EAHabitTrackerOpsAdd = 0,
     
-    /** 操作：编辑 */
+    ///edit
+    /// 操作：编辑
     EAHabitTrackerOpsEdit = 1,
     
-    /** 操作：删除此条 */
+    /// delete this
+    /// 操作：删除此条
     EAHabitTrackerOpsDel = 2,
     
-    /** 操作：删除全部 */
+    /// delete all
+    /// 操作：删除全部
     EAHabitTrackerOpsDelAll = 3,
 };
 
+/// Habit tracker icon type
 /// MARK: - 习惯图标类型
 typedef NS_ENUM(NSUInteger,EAHabitTrackerIconType) {
     
@@ -1501,19 +1974,24 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerIconType) {
 
 
 
+/// Add habit tracker respond
 /// MARK: - 习惯追踪回应状态
 typedef NS_ENUM(NSUInteger,EAHabitTrackerRespondType) {
     
-    /** 执行成功 */
+    /// Success
+    /// 执行成功
     EAHabitTrackerRespondTypeSuccess = 0,
     
-    /** 执行失败 */
+    /// Fail
+    /// 执行失败
     EAHabitTrackerRespondTypeFail = 1,
     
-    /** 超过支持的最大数量 */
+    ///  The maximum number supported is exceeded
+    /// 超过支持的最大数量
     EAHabitTrackerRespondTypeMemFull = 2,
     
-    /** 时间重复 */
+    /// Time to repeat
+    /// 时间重复
     EAHabitTrackerRespondTypeTimeConflict = 3,
 };
 
@@ -1521,16 +1999,20 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerRespondType) {
 #pragma mark - 习惯追踪flag
 typedef NS_ENUM(NSUInteger,EAHabitTrackerFlag) {
     
-    /** 初始态 */
+    /// Initial
+    /// 初始态
     EAHabitTrackerFlagInitial = 0,
     
-    /** 进行中 */
+    /// Progress
+    /// 进行中
     EAHabitTrackerFlagInProgress = 1,
     
-    /** 已完成 */
+    /// Completed
+    /// 已完成
     EAHabitTrackerFlagCompleted = 2,
     
-    /** 已取消 */
+    /// Cancel
+    /// 已取消
     EAHabitTrackerFlagCancel = 3,
 };
 
@@ -1538,10 +2020,10 @@ typedef NS_ENUM(NSUInteger,EAHabitTrackerFlag) {
 #pragma mark - 通讯录flag
 typedef NS_ENUM(NSUInteger,EAPhoneContactFlag) {
     
-    /** 标志: 起始包 */
+    /// 标志: 起始包
     EAPhoneContactFlagBegin = 0,
 
-    /** 标志: 非起始包 */
+    /// 标志: 非起始包
     EAPhoneContactFlagProceed = 1,
 };
 

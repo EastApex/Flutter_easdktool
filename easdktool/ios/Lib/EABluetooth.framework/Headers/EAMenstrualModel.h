@@ -11,13 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EAMenstrualModel : EABaseModel
 
-/** 经期类型描述 */
 @property(nonatomic, assign) EAMenstruationType eType;
 
-/** 时间戳 */
+/// The time stamp
+/// 时间戳
 @property(nonatomic, assign) NSInteger timeStamp;
 
-/** 提示的天数：（如果e_type是安全期，days>0，则表示下一个经期的天数。如果是经期，days>0，则代表经期第几天) */
+/// Days of prompt :(if e_type is a safe period, days>0, indicates the number of days of the next period. If you are menstruating, days>0 is the number of days you are menstruating.
+/// 提示的天数：（如果e_type是安全期，days>0，则表示下一个经期的天数。如果是经期，days>0，则代表经期第几天)
 @property(nonatomic, assign) NSInteger days;
 
 @end
@@ -25,10 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EAMenstruals : EABaseModel
 
-/** 最多支持45个 */
+/// A maximum of 45 are supported
+/// 最多支持45个
 @property(nonatomic, strong) NSMutableArray<EAMenstrualModel*> *sDateArray;
 
 
+/// Obtain period data
+/// start: indicates the start date. eg. 2022-02-06 [yyyy-MM-dd]
+/// keepDay: indicates the keepDay duration. eg.7
+/// cycleDay: cycle . eg.28
 + (EAMenstruals *)allocInitWithStartDate:(NSString *)start keepDay:(NSInteger)keepDay cycleDay:(NSInteger)cycleDay;
 
 

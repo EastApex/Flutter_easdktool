@@ -12,23 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EAPageModel : EABaseModel
 
-/** 一级菜单类型描述 */
 @property(nonatomic, assign) EAFirstLeverType eType;
 
 @end
 
-
-/// 一级菜单
 @interface EAHomePageModel : EABaseModel
 
 
 @property(nonatomic, strong) NSMutableArray<EAPageModel*> *sPageArray;
 
-/** 当前项目支持的page，最多支持7个（大小详见对应OPTIONS文件） */
 @property(nonatomic, strong) NSMutableArray<EAPageModel*> *supportPageArray;
 
-/// MARK: - 获取一级菜单
-/// @param data 数据流
+
 + (EAHomePageModel *)getModelByData:(NSData *)data;
 @end
 

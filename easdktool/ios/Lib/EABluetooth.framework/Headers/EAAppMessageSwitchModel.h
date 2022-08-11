@@ -121,11 +121,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) NSMutableArray<EAAppMessageSwitchModel*> *sAppSwArray;
 
-/// MARK: - 
 + (EAAppMessageSwitchData *)getModelByData:(NSData *)data;
 
 
-/// MARK: - 获取提醒事件操作设置数据流
 - (NSData *)getModelData ;
 
 

@@ -13,61 +13,80 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Connect status
 /// MARK: -  绑定类型
 typedef NS_ENUM(NSUInteger, EAConnectStatus) {
     
-    /** 链接失败 */
+    /// Connect failed
+    /// 链接失败
     EAConnectStatusFailed = 0,
     
-    /** 链接成功 */
+    /// Connect succeed
+    /// 链接成功
     EAConnectStatusSucceed = 1,
     
-    /** 断开链接 */
+    /// Disconnect
+    /// 断开链接
     EAConnectStatusDisconnect = 2,
     
-    /** 蓝牙开启 */
+    /// Bluetooth on
+    /// 蓝牙开启
     EABlePoweredOn = 3,
     
-    /** 蓝牙关闭 */
+    /// Bluetooth off
+    /// 蓝牙关闭
     EABlePoweredOff = 4,
     
-    /** 链接失败,需要忽略设备 */
+    /// Connect failed and need removed pairing
+    /// 链接失败,需要忽略设备
     EAConnectStatusFailedWithRemovedPairing = 5,
     
-    /** 链接失败,超时 */
+    /// Connect failed time out
+    /// 链接失败,超时
     EAConnectStatusFailedWithTimeOut = 6,
     
 };
 
-/** 连接失败 */
+/// Notification Name:Connect failed
+/// 连接失败
 #define kNTF_EAConnectStatusFailed              @"EAConnectStatusFailed"
-/** 连接成功（已获取服务） */
+
+/// Notification Name:Connect succeed
+/// 连接成功（已获取服务）
 #define kNTF_EAConnectStatusSucceed             @"EAConnectStatusSucceed"
-/** 断开链接 */
+
+/// Notification Name: Disconnect
+/// 断开链接
 #define kNTF_EAConnectStatusDisconnect          @"EAConnectStatusDisconnect"
-/** 尝试连接成功（未获取服务） */
+
+/// Notification Name:Connection attempt succeeded (service not obtained)
+/// 尝试连接成功（未获取服务）
 #define kNTF_EAConnectStatusSucceedUnGetServer  @"EAConnectStatusSucceedUnGetServer"
 
-/** 蓝牙开启 */
+
+/// Notification Name: Bluetooth on
+/// 蓝牙开启
 #define kNTF_EABlePoweredOn                 @"EABlePoweredOn"
-/** 蓝牙关闭 */
+/// Notification Name: Bluetooth off
+/// 蓝牙关闭
 #define kNTF_EABlePoweredOff                @"EABlePoweredOff"
-/** 收到手表发送的操作手机消息 */
+
+/// Notification Name: Receive a mobile phone message from the watch
+/// 收到手表发送的操作手机消息
 #define kNTF_EAGetDeviceOpsPhoneMessage     @"EAGetDeviceOpsPhoneMessage"
 
-/** OTA数据传输完成 */
+/// Notification Name: OTA data transmission is complete
+/// OTA数据传输完成
 #define kNTF_EAOTAAGPSDataFinish            @"EAOTAAGPSDataFinish"
-/** OTA进度 */
+
+/// Notification Name: OTA progress
+/// OTA进度
 #define kNTF_EAOTAAGPSDataing               @"EAOTAAGPSDataing"
 
-/**  */
+///
 #define kNTF_EABackgroundTask               @"EABackgroundTask"
 
-/**
-    必须实现的 通知
-    
 
- */
 
 #define kKeychainService        @"com.eastapex.bluetooth"
 #define kKeychainDataAccount    @"data_apexwear"
@@ -75,90 +94,107 @@ typedef NS_ENUM(NSUInteger, EAConnectStatus) {
 
 @protocol EABleManagerDelegate <NSObject>
 
+
+/// Scanning Discovered watch (in real time)
 /// 扫描发现的设备 （实时）
-/// @param peripheralModel 设备
+/// @param peripheralModel peripheral 设备
 - (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel;
 
 @end
 
+/// Bluetooth data Broker
 /// 蓝牙数据代理
 @protocol EABleManagerDataDelegate <NSObject>
 
-/// 蓝牙数据
-/// @param characteristic 通道
-/// @param error 错误信息
+/// Bluetooth data 蓝牙数据
+/// @param characteristic characteristic 通道
+/// @param error error 错误信息
 - (void)updateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error;
 
 @end
 
 
+/// Bluetooth data
 /// 蓝牙数据
 typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error);
 
 @interface EABleManager : NSObject
 
+/// The bluetooth Settings
 /// 蓝牙设置
 @property (nonatomic,strong) EABleConfig *bleConfig;
 
+/// Searching for watch Agents
 /// 搜索设备代理
 @property(nonatomic,weak) id<EABleManagerDelegate> delegate;
 
-/// 蓝牙数据代理
+/// ignore：Bluetooth data Broker
+/// 忽略：蓝牙数据代理
 @property(nonatomic,weak) id<EABleManagerDataDelegate> dataDelegate;
 
-///// 链接设备状态
-//@property(nonatomic,assign) BOOL isConnected;
-
+/// Watch connection status
 /// 连接设备状态
 @property(nonatomic,assign) EAConnectStateType connectState;
 
 
+/// The singleton
 /// 单例
 + (instancetype)defaultManager;
 
 
-#pragma mark - 设备相关方法
+#pragma mark - Equipment related Methods 设备相关方法
 
+/// scan watch
 /// 扫描
 - (void)scanPeripherals;
+
+/// stop scan watch
 /// 停止扫描设备
 - (void)stopScanPeripherals;
 
+/// connect watch
 /// 连接设备
-/// @param peripheralModel 设备
 - (void)connectToPeripheral:(EAPeripheralModel *)peripheralModel;
 
+/// reconnection
 /// 重连设备
 - (void)reConnectToPeripheral ;
-/// 重连设备
+
+/// reconnection（Need the SN number of the watch）
+/// 重连设备（传手表的SN号）
 - (void)reConnectToPeripheral:(NSString *)sn;
 
+/// The broken connection
+/// 断连连接
 - (void)cancelConnectingPeripheral;
 
+/// Unbind the watch (remove association)
 /// 解绑设备（移除关联）
 - (void)unbindPeripheral;
 
+/// Unbind the device and reset (remove association)
 /// 解绑设备并重置（移除关联）
 - (void)unbindAndResetPeripheral;
 
+/// Chain breaking watch (does not remove association)
 /// 断链设备(不移除关联)
 - (void)disconnectPeripheral;
 
-
-/// 设备数据交互
-/// @param Data 数据流
-/// @param characteristicType 通道类型
-- (void)writeValue:(NSData *)Data forCharacteristic:(EACharacteristicType )characteristicType;
-
+/// Check whether to enable Bluetooth
 /// 是否开启蓝牙
 - (BOOL)isBleOn;
 
+/// Check whether the watch is connected
 /// 是否已连接设备
 - (BOOL)isConnected;
 
+/// Gets the connected watch
 /// 获取链接的设备信息
 - (EAPeripheralModel *)getPeripheralModel;
 
+
+/// ignore：
+- (void)writeValue:(NSData *)Data forCharacteristic:(EACharacteristicType )characteristicType;
 
 @end
 

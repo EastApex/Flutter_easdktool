@@ -9,15 +9,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+/// Watch language information
 /// 设备语言
 @interface EALanguageModel : EABaseModel
 
-/** 设备语言类型 --》具体见枚举*/
+
 @property(nonatomic, assign) EALanguageType language;
 
 
-/// MARK: - 获取设备语言相关信息
-/// @param data 数据流
+
 + (EALanguageModel *)getModelByData:(NSData *)data;
 
 
