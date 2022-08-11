@@ -4,279 +4,577 @@ part of easdktool.been;
 
 /// MARK: - 运动类型
 
-// 户外步行
-const int kEASportTypeOurdoorWalking = 1;
+/// Ourdoor walking
+    /// 户外步行
+   const kEASportTypeOurdoorWalking = 1;
+
+    /// Ourdoor running
+    /// 户外跑步
+   const kEASportTypeOurdoorRunning = 2;
+
+    /// Outdoor on foot
+    /// 户外徒步
+   const kEASportTypeOurdoorOnFoot = 3;
+
+    /// Ourdoor on mountaineering
+    /// 户外登山
+   const kEASportTypeOurdoorOnMountaineering = 4;
+
+    /// Outdoor trail running
+    /// 户外越野跑
+   const kEASportTypeOurdoorTrailRunning = 5;
+
+    /// Outdoor cycling
+    /// 户外单车
+   const kEASportTypeOurdoorCycling = 6;
+
+    /// Outdoor swimming
+    /// 户外游泳
+   const kEASportTypeOutdoorSwimming = 7;
+
+    /// Indoor walking
+    /// 室内步行
+   const kEASportTypeIndoorWalking = 8;
+
+    /// Indoor running
+    /// 室内跑步
+   const kEASportTypeIndoorRunning = 9;
+
+    /// Indoor exercise
+    /// 室内锻炼
+   const kEASportTypeIndoorExercise = 10;
+
+    /// Indoor cycling
+    /// 室内单车
+   const kEASportTypeIndoorCycling = 11;
+
+    /// The elliptical machine
+    /// 椭圆机
+   const kEASportTypeElliptical = 12;
+
+    /// Yoga
+    /// 瑜伽
+   const kEASportTypeYoga = 13;
+
+    /// Rowing
+    /// 划船机
+   const kEASportTypeRowing = 14;
+
+    /// Indoor swimming
+    /// 室内游泳
+   const kEASportTypeIndoorSwimming = 15;
+
+    /// sports climbing
+    /// 攀岩
+   const kEASportTypeOdRock = 16;
+
+    /// skateboarding
+    /// 滑板
+   const kEASportTypeOdSkate = 17;
+
+    /// Roller skating
+    /// 轮滑
+   const kEASportTypeOdRoller = 18;
+
+    /// parkour
+    /// 跑酷
+   const kEASportTypeOdParkour = 19;
+
+    /// A parachute jump
+    /// 跳伞
+   const kEASportTypeOdParachute = 20;
+
+    /// Hit
+    /// HIIT
+   const kEASportTypeTrainHit = 21;
+
+    /// Weight lifting
+    /// 举重
+   const kEASportTypeTrainWeight = 22;
+
+    /// Tablet support
+    /// 平板支撑
+   const kEASportTypeTrainPlank = 23;
+
+    /// Jumping jacks
+    /// 开合跳
+   const kEASportTypeTrainJumping = 24;
+
+    /// Climb building machine
+    /// 爬楼机
+   const kEASportTypeTrainStair = 25;
+
+    /// Core training
+    /// 核心训练
+   const kEASportTypeTrainCore = 26;
+
+    /// Flexible training
+    /// 柔韧训练
+   const kEASportTypeTrainFlex = 27;
+
+    /// pilates
+    /// 普拉提
+   const kEASportTypeTrainPilates = 28;
+
+    /// The tensile
+    /// 拉伸
+   const kEASportTypeTrainStretch = 29;
+
+    /// Strength training
+    /// 力量训练
+   const kEASportTypeTrainStrength = 30;
+
+    /// Cross training
+    /// 交叉训练
+   const kEASportTypeTrainCross = 31;
+
+    /// The dumbbell training
+    /// 哑铃训练
+   const kEASportTypeTrainDumbbell = 32;
+
+    /// Deadlift
+    /// 硬拉
+   const kEASportTypeTrainDeadlift = 33;
+
+    /// sit-ups
+    /// 仰卧起坐
+   const kEASportTypeTrainSit = 34;
+
+    /// Functional training
+    /// 功能性训练
+   const kEASportTypeTrainFuncition = 35;
+
+    /// Upper limb training
+    /// 上肢训练
+   const kEASportTypeTrainUpper = 36;
+
+    /// Lower limb training
+    /// 下肢训练
+   const kEASportTypeTrainLower = 37;
+
+    /// Abdominal muscle training
+    /// 腹肌训练
+   const kEASportTypeTrainAbs = 38;
+
+    /// The back of the train
+    /// 背部训练
+   const kEASportTypeTrainBack = 39;
+
+    /// Sailboat
+    /// 帆船
+   const kEASportTypeWaterSailboat = 40;
+
+    /// Pulp board
+    /// 浆板
+   const kEASportTypeWaterSup = 41;
+
+    /// Water polo
+    /// 水球
+   const kEASportTypeWaterPolo = 42;
+
+    /// The stroke
+    /// 划水
+   const kEASportTypeWaterThrash = 43;
+
+    /// canoe
+    /// 皮划艇
+   const kEASportTypeWaterKayak = 44;
+
+    /// drifting
+    /// 漂流
+   const kEASportTypeWaterDrifting = 45;
+
+    /// rowing
+    /// 划船
+   const kEASportTypeWaterBoating = 46;
 
-// 户外跑步
-const int kEASportTypeOurdoorRunning = 2;
+    /// Fin swimming
+    /// 蹼泳
+   const kEASportTypeWaterFin = 47;
 
-// 户外徒步
-const int kEASportTypeOurdoorOnFoot = 3;
+    /// The diving
+    /// 跳水
+   const kEASportTypeWaterDiving = 48;
 
-// 户外登山
-const int kEASportTypeOurdoorOnMountaineering = 4;
+    /// Synchronized swimming
+    /// 花样游泳
+   const kEASportTypeWaterArtistic = 49;
 
-// 户外越野跑
-const int kEASportTypeOurdoorTrailRunning = 5;
+    /// Snorkel
+    /// 潜水
+   const kEASportTypeWaterSnorkel = 50;
 
-// 户外单车
-const int kEASportTypeOurdoorCycling = 6;
+    /// Kitesurfing
+    /// 风筝冲浪
+   const kEASportTypeWaterKitesurfing = 51;
 
-// 户外游泳
-const int kEASportTypeOutdoorSwimming = 7;
+    /// Atv
+    /// 沙滩车
+   const kEASportTypeWaterAtv = 52;
 
-// 室内步行
-const int kEASportTypeIndoorWalking = 8;
+    /// Beach football
+    /// 沙滩足球
+   const kEASportTypeWaterBeach = 53;
 
-// 室内跑步
-const int kEASportTypeIndoorRunning = 9;
+    /// Dance
+    /// 舞蹈
+   const kEASportTypeDanceDance = 54;
 
-// 室内锻炼
-const int kEASportTypeIndoorExercise = 10;
+    /// Belly dance
+    /// 肚皮舞
+   const kEASportTypeDanceDelly = 55;
 
-// 室内单车
-const int kEASportTypeIndoorCycling = 11;
+    /// Gymnastics
+    /// 体操
+   const kEASportTypeDanceGymnastics = 56;
 
-// 椭圆机
-const int kEASportTypeElliptical = 12;
+    /// Setting-up exercise
+    /// 健身操
+   const kEASportTypeDanceAerobics = 57;
 
-// 瑜伽
-const int kEASportTypeYoga = 13;
+    /// HipHop
+    /// 街舞
+   const kEASportTypeDanceHipHop = 58;
 
-// 划船机
-const int kEASportTypeRowing = 14;
+    /// Boxing
+    /// 拳击
+   const kEASportTypeFightBoxing = 59;
 
-// 室内游泳
-const int kEASportTypeIndoorSwimming = 15;
+    /// Wushu
+    /// 武术
+   const kEASportTypeFightWushu = 60;
 
-// 跳绳
-const int kEASportTypeRopeSkipping = 68;
+    /// Wrestling
+    /// 摔跤
+   const kEASportTypeFightWrestling = 61;
 
-// 网球
-const int kEASportTypeTennis = 69;
+    /// Taichi
+    /// 太极
+   const kEASportTypeFightTaichi = 62;
 
-// 乒乓球
-const int kEASportTypePingPong = 70;
+    /// Muay Thai
+    /// 泰拳
+   const kEASportTypeFightMuayThai = 63;
 
-// 羽毛球
-const int kEASportTypeBadminton = 71;
+    /// Judo
+    /// 柔道
+   const kEASportTypeFightJudo = 64;
 
-// 篮球
-const int kEASportTypeBasketball = 72;
+    /// Taekwondo
+    /// 跆拳道
+   const kEASportTypeFightTaekwondo = 65;
 
-// 足球
-const int kEASportTypeFootball = 73;
+    /// Karate
+    /// 空手道
+   const kEASportTypeFightKarate = 66;
 
-// 棒球
-const int kEASportTypeBaseball = 74;
+    /// Free combat
+    /// 自由搏击
+   const kEASportTypeFightFreeSparring = 67;
 
-// 板球
-const int kEASportTypeCricket = 75;
+    /// Soccer
+    /// 足球
+   const kEASportTypeBallSoccer = 68;
 
-// 排球
-const int kEASportTypeVolleyball = 76;
+    /// Basketball
+    /// 篮球
+   const kEASportTypeBallBasketball = 69;
 
-// 曲棍球
-const int kEASportTypeHockey = 77;
+    /// Volleyball
+    /// 排球
+   const kEASportTypeBallVolleyball = 70;
 
-// 橄榄球
-const int kEASportTypeRugby = 78;
 
-// 跳舞
-const int kEASportTypeDance = 79;
+    /// Badminton
+    /// 羽毛球
+   const kEASportTypeBallBadminton = 71;
 
-// 自定义运动
-const int kEASportTypeCustomSport = 80;
+    /// Pingpong
+    /// 乒乓球
+   const kEASportTypeBallPingpong = 72;
 
-// 动感单车
-const int kEASportTypeSpinning = 81;
+    /// Cricket
+    /// 板球
+   const kEASportTypeBallCricket = 73;
 
-// 仰卧起坐
-const int kEASportTypeSitUp = 82;
+    /// Football or rugby
+    /// 橄榄球
+   const kEASportTypeBallFootball = 74;
 
-// 体操
-const int kEASportTypeGymnastics = 83;
+    /// Racquetball
+    /// 墙球
+   const kEASportTypeBallRacquetball = 75;
 
-// 开合跳
-const int kEASportTypeJumpingJack = 84;
+    /// Handball
+    /// 手球
+   const kEASportTypeBallHandball = 76;
 
-// 自由训练
-const int kEASportTypeFreeTraining = 85;
+    /// Squash
+    /// 壁球
+   const kEASportTypeBallSquash = 77;
 
-// 力量训练
-const int kEASportTypeStrengthTraining = 86;
+    /// Shuttlecock
+    /// 毽球
+   const kEASportTypeBallShuttlecock = 78;
 
-// 踏步
-const int kEASportTypeMarkTime = 87;
+    /// Raga
+    /// 藤球
+   const kEASportTypeBallRaga = 79;
 
-// 骑马
-const int kEASportTypeHorseRiding = 88;
+    /// snowmobiles
+    /// 雪车
+   const kEASportTypeSnowBoard = 80;
 
-// 太极
-const int kEASportTypeTaiJi = 89;
+    /// Double plate skiing
+    /// 双板滑雪
+   const kEASportTypeSnowSkis = 81;
 
-// 毽球
-const int kEASportTypeShuttlecock = 90;
+    /// Ice Hockey
+    /// 冰球
+   const kEASportTypeSnowPuck = 82;
 
-// 滑雪
-const int kEASportTypeSkiing = 91;
+    /// skating
+    /// 滑冰
+   const kEASportTypeSnowSkate = 83;
 
-// 冰球
-const int kEASportTypeIceHockey = 92;
+    /// Curling
+    /// 冰壶
+   const kEASportTypeSnowCurling = 84;
 
-// 跆拳道
-const int kEASportTypeTaekwondo = 93;
+    /// Snowboarding
+    /// 单板滑雪
+   const kEASportTypeSnowMobile = 85;
 
-// 漫步机
-const int kEASportTypeWalkingMachine = 94;
+    /// Luge
+    /// 雪橇
+   const kEASportTypeSnowSled = 86;
 
-// 田径
-const int kEASportTypeAthletics = 95;
+    /// Meditation
+    /// 冥想
+   const kEASportTypeLeisureMeditation = 87;
 
-// 腰腹训练
-const int kEASportTypeLumbarAbdomenTraining = 96;
+    /// Kendo
+    /// 剑道
+   const kEASportTypeLeisureKendo = 88;
 
-// 空手道
-const int kEASportTypeKarate = 97;
+    /// Fence
+    /// 击剑
+   const kEASportTypeLeisureFence = 89;
 
-// 普拉提
-const int kEASportTypePilates = 98;
+    /// Bowling
+    /// 保龄球
+   const kEASportTypeLeisureBowling = 90;
 
-// 拉丁舞
-const int kEASportTypeLatinDance = 99;
+    /// billiards
+    /// 台球
+   const kEASportTypeLeisureBilliards = 91;
 
-// 街舞
-const int kEASportTypeStreetDance = 100;
+    /// archery
+    /// 射箭
+   const kEASportTypeLeisureArchery = 92;
 
-// 芭蕾
-const int kEASportTypeBallet = 101;
+    /// darts
+    /// 飞镖
+   const kEASportTypeLeisureDarts = 93;
 
-// 武术
-const int kEASportTypeWushu = 102;
+    /// Riding a horse
+    /// 骑马
+   const kEASportTypeLeisureHorse = 94;
 
-// 爬楼
-const int kEASportTypeClimbStairs = 103;
+    /// The hoop
+    /// 呼啦圈
+   const kEASportTypeLeisureHula = 95;
 
-// 手球
-const int kEASportTypeHandball = 104;
+    /// Flying a kite
+    /// 放风筝
+   const kEASportTypeLeisureKite = 96;
 
-// 保龄球
-const int kEASportTypeBowling = 105;
+    /// Fishing
+    /// 钓鱼
+   const kEASportTypeLeisureFishing = 97;
 
-// 壁球
-const int kEASportTypeSquash = 106;
+    /// Fribee
+    /// 飞盘
+   const kEASportTypeLeisureFribee = 98;
 
-// 冰壶
-const int kEASportTypeCurling = 107;
+    /// Equestrianism
+    /// 马术
+   const kEASportTypeLeisureEquestrian = 99;
 
-// 钓鱼
-const int kEASportTypeFish = 108;
+    /// Cycle racing
+    /// 赛车
+   const kEASportTypeLeisureRacing = 100;
 
-// 飞盘
-const int kEASportTypeFrisbee = 109;
+    /// Free exercise
+    /// 自由锻炼
+   const kEASportTypeOtherFree = 101;
 
-// 高尔夫
-const int kEASportTypeGolf = 110;
+    /// Rope
+    /// 跳绳
+   const kEASportTypeOtherRope = 102;
 
-// 民族舞
-const int kEASportTypeFolkDance = 111;
+    /// Climb
+    /// 上楼梯
+   const kEASportTypeOtherClimb = 103;
 
-// 滑冰
-const int kEASportTypeSkating = 112;
+    /// Tug of war
+    /// 拔河
+   const kEASportTypeOtherPush = 104;
 
-// 健身操
-const int kEASportTypeBodybuildingExercise = 113;
+    /// Horizontal bar
+    /// 单杠
+   const kEASportTypeOtherHorizontal = 105;
 
-// 长曲棍球
-const int kEASportTypeLacrosse = 114;
+    /// Parallel bars
+    /// 双杠
+   const kEASportTypeOtherParallel = 106;
 
-// 垒球
-const int kEASportTypeSoftball = 115;
+    /// Tennis
+    /// 网球
+   const kEASportTypeTennis = 107;
 
-// 呼啦圈
-const int kEASportTypeHulaHoop = 116;
+    /// Baseball
+    /// 棒球
+   const kEASportTypeBaseball = 108;
 
-// 飞镖
-const int kEASportTypeDarts = 117;
+    /// Hockey
+    /// 曲棍球
+   const kEASportTypeHockey = 109;
 
-// 匹克球
-const int kEASportTypePeakBall = 118;
+    /// CustomSport
+    /// 自定义运动
+   const kEASportTypeCustomSport = 110;
 
-// 蹦床
-const int kEASportTypeTrampoline = 119;
+    /// MarkTime
+    /// 踏步
+   const kEASportTypeMarkTime = 111;
 
-// 滑板
-const int kEASportTypeSkateboarding = 120;
+    /// Walking machine
+    /// 漫步机
+   const kEASportTypeWalkingMachine = 112;
 
-// 酷跑
-const int kEASportTypeParkour = 121;
+    /// Athletics
+    /// 田径
+   const kEASportTypeAthletics = 113;
 
-// 引体向上
-const int kEASportTypeChinning = 122;
+    /// Lumbar abdomen training
+    /// 腰腹训练
+   const kEASportTypeLumbarAbdomenTraining = 114;
 
-// 俯卧撑
-const int kEASportTypePushUp = 123;
+    /// Latin dance
+    /// 拉丁舞
+   const kEASportTypeLatinDance = 115;
 
-// 平板支撑
-const int kEASportTypePlank = 124;
+    /// Ballet
+    /// 芭蕾
+   const kEASportTypeBallet = 116;
 
-// 攀岩
-const int kEASportTypeSportClimbing = 125;
+    /// Golf
+    /// 高尔夫
+   const kEASportTypeGolf = 117;
 
-// 跳高
-const int kEASportTypeHighJump = 126;
-
-// 跳远
-const int kEASportTypeLongJump = 127;
-
-// 智慧运动: 日常运动
-const int kEASportTypeDailyEx = 128;
-
-// 智慧运动: 户外步行
-const int kEASportTypeOurdoorWalkingEx = 129;
-
-// 智慧运动: 户外跑步
-const int kEASportTypeOurdoorRunningEx = 130;
-
-// 智慧运动: 户外徒步
-const int kEASportTypeOurdoorOnFootEx = 131;
-
-// 智慧运动: 户外登山
-const int kEASportTypeOurdoorOnMountaineeringEx = 132;
-
-// 智慧运动: 户外越野跑
-const int kEASportTypeOurdoorTrailRunningEx = 133;
-
-// 智慧运动: 户外单车
-const int kEASportTypeOurdoorCyclingEx = 134;
-
-// 智慧运动: 户外游泳
-const int kEASportTypeOutdoorSwimmingEx = 135;
-
-// 智慧运动: 室内步行
-const int kEASportTypeIndoorWalkingEx = 136;
-
-// 智慧运动: 室内跑步
-const int kEASportTypeIndoorRunningEx = 137;
-
-// 智慧运动: 室内锻炼
-const int kEASportTypeIndoorExerciseEx = 138;
-
-// 智慧运动: 室内单车
-const int kEASportTypeIndoorCyclingEx = 139;
-
-// 智慧运动: 椭圆机
-const int kEASportTypeEllipticalEx = 140;
-
-// 智慧运动: 瑜伽
-const int kEASportTypeYogaEx = 141;
-
-// 智慧运动: 划船机
-const int kEASportTypeRowingEx = 142;
-
-// 智慧运动: 室内游泳
-const int kEASportTypeIndoorSwimmingEx = 143;
-
+    /// Folk dance
+    /// 民族舞
+   const kEASportTypeFolkDance = 118;
+
+    /// Lacrosse
+    /// 长曲棍球
+   const kEASportTypeLacrosse = 119;
+
+    /// Softball
+    /// 垒球
+   const kEASportTypeSoftball = 120;
+
+    /// PeakBall
+    /// 匹克球
+   const kEASportTypePeakBall = 121;
+
+    /// Trampoline
+    /// 蹦床
+   const kEASportTypeTrampoline = 122;
+
+    /// Parkour
+    /// 酷跑
+   const kEASportTypeParkour = 123;
+
+    /// Push-ups
+    /// 俯卧撑
+   const kEASportTypePushUp = 124;
+
+    /// High jump
+    /// 跳高
+   const kEASportTypeHighJump = 125;
+
+    /// Long jump
+    /// 跳远
+   const kEASportTypeLongJump = 126;
+
+    
+    
+    /// Intelligent movement: Daily
+    /// 智慧运动: 日常运动
+   const kEASportTypeDailyEx = 32768;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外步行
+   const kEASportTypeOurdoorWalkingEx = 32769;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外跑步
+   const kEASportTypeOurdoorRunningEx = 32770;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外徒步
+   const kEASportTypeOurdoorOnFootEx = 32771;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外登山
+   const kEASportTypeOurdoorOnMountaineeringEx = 32772;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外越野跑
+   const kEASportTypeOurdoorTrailRunningEx = 32773;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外单车
+   const kEASportTypeOurdoorCyclingEx = 32774;
+
+    /// Intelligent movement:
+    /// 智慧运动: 户外游泳
+   const kEASportTypeOutdoorSwimmingEx = 32775;
+
+    /// Intelligent movement:
+    /// 智慧运动: 室内步行
+   const kEASportTypeIndoorWalkingEx = 32776;
+
+    /// Intelligent movement:
+    /// 智慧运动: 室内跑步
+   const kEASportTypeIndoorRunningEx = 32777;
+
+    /// Intelligent movement:
+    /// 智慧运动: 室内锻炼
+   const kEASportTypeIndoorExerciseEx = 32778;
+
+    /// Intelligent movement:
+    /// 智慧运动: 室内单车
+   const kEASportTypeIndoorCyclingEx = 32779;
+
+    /// Intelligent movement:
+    /// 智慧运动: 椭圆机
+   const kEASportTypeEllipticalEx = 32780;
+
+    /// Intelligent movement:
+    /// 智慧运动: 瑜伽
+   const kEASportTypeYogaEx = 32781;
+
+    /// Intelligent movement:
+    /// 智慧运动: 划船机
+   const kEASportTypeRowingEx = 32782;
+
+    /// Intelligent movement:
+    /// 智慧运动: 室内游泳
+   const kEASportTypeIndoorSwimmingEx = 32783;
+    
 class EABigDataSport {
   // 运动类型
   int sportType = 0;
