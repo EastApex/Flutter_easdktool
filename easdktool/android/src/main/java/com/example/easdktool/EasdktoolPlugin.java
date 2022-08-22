@@ -1,6 +1,7 @@
 package com.example.easdktool;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -114,6 +115,8 @@ import com.example.easdktool.been.ReminderItem;
 import com.example.easdktool.been.ShowAppMessage;
 import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
+import com.example.easdktool.service.PushService;
+import com.example.easdktool.service.SystemRunningUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -772,7 +775,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     }
                 });
             }
+            if (!SystemRunningUtils.isServiceRunning(PushService.class.getName(), mContext)) {
+                
+                mContext.startService(new Intent(mContext, PushService.class));
+            }
         }
+
 
         @Override
         public void deviceDisconnect() {

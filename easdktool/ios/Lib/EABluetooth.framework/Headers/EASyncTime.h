@@ -65,6 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// Get the current time return class EASyncTime，cac used to set the watch time
+/// note: If it's wrong, you need to fix it.
 /// 获取当前时间
 + (EASyncTime *)getCurrentTime;
 

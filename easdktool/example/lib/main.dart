@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> {
     EAConnectParam connectParam = EAConnectParam();
     connectParam.connectAddress =
         "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "001007220516000001";
+    connectParam.snNumber = "002006000009999010";
     //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
     EASDKTool().connectToPeripheral(connectParam);
   }
@@ -1080,7 +1080,7 @@ class _MyAppState extends State<MyApp> {
                           字库    Res: Rxx
                           屏幕    Tp: Txx
                           心率    Hr: Hxx
-                 * * * 3.【firmwareType】：固件类型，0Apollo 2Res 3Tp 4Hr
+                 * * * 3.【firmwareType】：
                  * 
                  *  [type == 1], firmware upgrade precautions
                  * * * 1. The upgrade must be larger than the current version to succeed.
@@ -1089,7 +1089,7 @@ class _MyAppState extends State<MyApp> {
                       Word stock Res: Rxx
                       Tp: screen Txx
                       Heart rate Hr: Hxx
-                 * * * firmwareType: firmwareType, 0Apollo 2Res 3Tp 4Hr           
+                 * * * firmwareType:            
                  */
 
                   /**

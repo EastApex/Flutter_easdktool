@@ -5,6 +5,15 @@
 //  Created by Aye on 2021/3/15.
 //
 
+/**
+ 
+ SDK接入文档
+ SDK access documentation
+ https://www.showdoc.com.cn/2042713679210858/0
+ 
+ */
+
+
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "EAPeripheralModel.h"
