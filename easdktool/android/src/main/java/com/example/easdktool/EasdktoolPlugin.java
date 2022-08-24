@@ -115,8 +115,7 @@ import com.example.easdktool.been.ReminderItem;
 import com.example.easdktool.been.ShowAppMessage;
 import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
-import com.example.easdktool.service.PushService;
-import com.example.easdktool.service.SystemRunningUtils;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -774,10 +773,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         channel.invokeMethod(kConnectState, ConnectState.succ.getValue());
                     }
                 });
-            }
-            if (!SystemRunningUtils.isServiceRunning(PushService.class.getName(), mContext)) {
-                
-                mContext.startService(new Intent(mContext, PushService.class));
             }
         }
 
