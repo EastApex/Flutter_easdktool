@@ -2,8 +2,11 @@ package com.example.easdktool;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -115,6 +118,9 @@ import com.example.easdktool.been.ReminderItem;
 import com.example.easdktool.been.ShowAppMessage;
 import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
+import com.example.easdktool.broadcast.CallReceiveBroadcast;
+import com.example.easdktool.broadcast.SMSReceiveBroadcast;
+import com.example.easdktool.service.SmsObserver;
 
 
 import java.io.ByteArrayOutputStream;
@@ -319,9 +325,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     /* OTA命令回应 */
     final int kEADataInfoTypeOTARespond = 9000;
 
+    private CallReceiveBroadcast callReceiveBroadcast;
+    SMSReceiveBroadcast smsReceiveBroadcast;
+
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
+        destroyIncomingCall();
+        destroySmsListener();
     }
 
     class DeviceOperationListener implements DataReportCallback {
@@ -762,6 +773,41 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     }
 
+    private void initIncomingCall() {
+        IntentFilter intentFilter = new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        if (callReceiveBroadcast == null) {
+            callReceiveBroadcast = new CallReceiveBroadcast();
+            mContext.registerReceiver(callReceiveBroadcast, intentFilter);
+        }
+
+    }
+    private void initSmsListener() {
+
+        IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+        if (smsReceiveBroadcast == null) {
+            smsReceiveBroadcast = new SMSReceiveBroadcast();
+            mContext.registerReceiver(smsReceiveBroadcast, intentFilter);
+        }
+
+
+    }
+    private void destroyIncomingCall() {
+        if (callReceiveBroadcast != null) {
+            mContext.unregisterReceiver(callReceiveBroadcast);
+            callReceiveBroadcast = null;
+        }
+    }
+
+    private void destroySmsListener() {
+
+        if (smsReceiveBroadcast != null) {
+            mContext.unregisterReceiver(smsReceiveBroadcast);
+            smsReceiveBroadcast = null;
+        }
+
+
+    }
+
     class ConnectListener implements EABleConnectListener {
 
         @Override
@@ -774,6 +820,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     }
                 });
             }
+
         }
 
 
@@ -871,7 +918,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         flutterEngine = flutterPluginBinding.getFlutterEngine();
         mContext = flutterPluginBinding.getApplicationContext();
         mHandler = new Handler(Looper.myLooper());
+
+        initIncomingCall();
+        initSmsListener();
     }
+
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
