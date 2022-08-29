@@ -2673,6 +2673,37 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
+            case (kEADataInfoTypeSocialSwitch): {
+                Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+                EABleAncsSw eaBleAncsSw = new EABleAncsSw();
+
+                Map<String, Object> sIncomingcall = (Map<String, Object>)map.get("sIncomingcall");
+                Map<String, Object> sMissedcall = (Map<String, Object>)map.get("sMissedcall");
+                Map<String, Object> sSms = (Map<String, Object>)map.get("sSms");
+                Map<String, Object> sSocial = (Map<String, Object>)map.get("sSocial");
+                Map<String, Object> sEmail = (Map<String, Object>)map.get("sEmail");
+                Map<String, Object> sSchedule = (Map<String, Object>)map.get("sSchedule");
+
+                eaBleAncsSw.s_incomingcall = getAncsSwItem(sIncomingcall);
+                eaBleAncsSw.s_missedcall = getAncsSwItem(sMissedcall);
+                eaBleAncsSw.s_sms = getAncsSwItem(sSms);
+                eaBleAncsSw.s_social = getAncsSwItem(sSocial);
+                eaBleAncsSw.s_email = getAncsSwItem(sEmail);
+                eaBleAncsSw.s_schedule = getAncsSwItem(sSchedule);
+
+                EABleManager.getInstance().setAncsSwitch(eaBleAncsSw, new GeneralCallback() {
+                    @Override
+                    public void result(boolean b) {
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                    }
+                });
+            }
+            break;
             case (kEADataInfoTypeReminder): {
                 Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
                 EABleReminder eaBleReminder = new EABleReminder();
@@ -3115,6 +3146,42 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
+    private CommonAction getCommonAction(int remindActionType){
+
+        if (remindActionType == 0) {
+            return CommonAction.no_action;
+        } else if (remindActionType == 1) {
+            return CommonAction.one_long_vibration;
+        } else if (remindActionType == 2) {
+            return CommonAction.one_short_vibration;
+        } else if (remindActionType == 3) {
+            return CommonAction.two_long_vibration;
+        } else if (remindActionType == 4) {
+            return CommonAction.two_short_vibration;
+        } else if (remindActionType == 5) {
+            return CommonAction.long_vibration;
+        } else if (remindActionType == 6) {
+            return CommonAction.long_short_vibration;
+        } else if (remindActionType == 7) {
+            return CommonAction.one_ring;
+        } else if (remindActionType == 8) {
+            return CommonAction.two_ring;
+        } else if (remindActionType == 9) {
+            return CommonAction.ring;
+        } else if (remindActionType == 10) {
+            return CommonAction.one_vibration_ring;
+        } else if (remindActionType == 11) {
+            return CommonAction.vibration_ring;
+        }
+        return CommonAction.no_action;
+    }
+
+    private EABleAncsSw.EABleAncsSwItem getAncsSwItem(Map<String, Object> map){
+        EABleAncsSw.EABleAncsSwItem ancsSwItem = new EABleAncsSw.EABleAncsSwItem();
+        ancsSwItem.sw = (int)map.get("sw");
+        ancsSwItem.e_action = getCommonAction((int)map.get("remindActionType"));
+        return ancsSwItem;
+    }
 
     private void sendWatchDataWithOtherKeyValue(String key, int value, int type) {
         JSONObject jsonObject1 = new JSONObject();

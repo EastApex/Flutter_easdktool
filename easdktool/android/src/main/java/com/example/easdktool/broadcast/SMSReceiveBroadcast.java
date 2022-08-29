@@ -1,11 +1,18 @@
 package com.example.easdktool.broadcast;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import com.apex.bluetooth.callback.GeneralCallback;
 import com.apex.bluetooth.core.EABleManager;
@@ -38,17 +45,17 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
                 if (sender.equalsIgnoreCase(currentName)) {
                     content += smsMessage.getDisplayMessageBody();
                 } else {
-                    sendSms(date, sender, content);
+                    sendSms(context,date, sender, content);
                     currentName = sender;
                     content = smsMessage.getDisplayMessageBody();
                     date = smsMessage.getTimestampMillis();
                 }
             }
-            sendSms(date, currentName, content);
+            sendSms(context,date, currentName, content);
         }
     }
 
-    private void sendSms(long dateTime, String sender, String smsContent) {
+    private void sendSms(Context mContent,long dateTime, String sender, String smsContent) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(dateTime);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -61,7 +68,7 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
         eaBleSocialContact.seteType(EABleSocialContact.SocialContactType.sms);
         eaBleSocialContact.setE_ops(EABleSocialContact.SocialContactOps.add);
         eaBleSocialContact.setContent(smsContent);
-        eaBleSocialContact.setTitle(sender);
+        eaBleSocialContact.setTitle(getSenderName(mContent,sender));
         eaBleSocialContact.setDate(hintTime);
         Log.e(TAG, "短信发送者:" + sender);
         if (EABleManager.getInstance().getDeviceConnectState() == EABleConnectState.STATE_CONNECTED) {
@@ -82,5 +89,26 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
                 }
             });
         }
+    }
+
+    private String getSenderName(Context mContent, String phoneNum) {
+        String contactName = phoneNum;
+        if (ActivityCompat.checkSelfPermission(mContent, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            Uri personUri = Uri.withAppendedPath(
+                    ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNum));
+            Cursor cur = mContent.getContentResolver().query(personUri,
+                    new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME},
+                    null, null, null);
+
+            if (cur != null) {
+                if (cur.moveToFirst()) {
+                    int nameIdx = cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
+                    contactName = cur.getString(nameIdx);
+                }
+                cur.close();
+            }
+        }
+        return contactName;
+
     }
 }

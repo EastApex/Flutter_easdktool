@@ -540,7 +540,18 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                         }
                     }];
                 }break;
-            
+                    
+                case  EADataInfoTypeSocialSwitch:{
+                    
+                    EASocialSwitchModel *model = [EASocialSwitchModel yy_modelWithJSON:value];
+                    [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                        if ([respondModel isKindOfClass:[EAHabitTrackerRespondModel class]]) {
+                            
+                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        }
+                    }];
+                }break;
                 default:
                     [_channel invokeMethod:kArgumentsError arguments:@"arguments error"];
                     break;

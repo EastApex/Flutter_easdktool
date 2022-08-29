@@ -996,6 +996,15 @@ class _MyAppState extends State<MyApp> {
                   setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap());
                 },
               ),
+              GestureDetector(
+                child: TextView('19.Set social switch【社交提醒开关】'),
+                onTap: () {
+                  EASocialSwitch eaSocialSwitch = EASocialSwitch.init(
+                      1, 1, 1, 1, 1, 1, EARemindActionType.LongShortVibration);
+                  setWatchData(
+                      kEADataInfoTypeSocialSwitch, eaSocialSwitch.toMap());
+                },
+              ),
               TitleView(' Getting big data【获取大数据】'),
               GestureDetector(
                 child:
