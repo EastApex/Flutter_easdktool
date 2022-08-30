@@ -331,8 +331,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
-        destroyIncomingCall();
-        destroySmsListener();
+
     }
 
     class DeviceOperationListener implements DataReportCallback {
@@ -918,9 +917,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         flutterEngine = flutterPluginBinding.getFlutterEngine();
         mContext = flutterPluginBinding.getApplicationContext();
         mHandler = new Handler(Looper.myLooper());
-
-        initIncomingCall();
-        initSmsListener();
     }
 
 
@@ -3116,7 +3112,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
                     }
                 });
-            }
+            }break;
 
             default: {
                 if (mHandler != null) {
