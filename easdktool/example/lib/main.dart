@@ -2,15 +2,21 @@
 
 // import 'dart:typed_data';
 
+import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
+import 'package:flutter/material.dart';
 import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/Been/EABeen.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:path_provider/path_provider.dart';
+import 'FirstMethodPackageData.dart';
+import 'ForegroundTaskHandler.dart';
 
 // import 'package:dio/dio.dart';
 // import 'dart:io';
@@ -23,97 +29,6 @@ void main() {
 
 String connectState = "Unknown";
 
-class ConnectListener implements EABleConnectListener {
-  @override
-  void connectError() {
-    print("connectError");
-  }
-
-  @override
-  void connectTimeOut() {
-    print("connectTimeOut");
-  }
-
-  @override
-  void deviceConnected() {
-    print('Device connected');
-
-    EASDKTool().getWatchData(
-        kEADataInfoTypeWatch,
-        EAGetDataCallback(
-            onSuccess: ((info) async {
-              Map<String, dynamic> value = info["value"];
-              EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
-
-              if (eaBleWatchInfo.userId.isEmpty) {
-                /**
-                 1st. 
-               * get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
-                 2nd.
-               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
-               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
-                  The watch displays a waiting for confirmation binding screen,
-                  Wait to click OK or cancel
-               */
-
-                EABindInfo bindInfo = EABindInfo();
-                bindInfo.user_id = "1008690";
-                // Turn on the daily step interval for 30 minutes
-                bindInfo.bindMod = 1;
-                if (eaBleWatchInfo.isWaitForBinding == 0) {
-                  //Bind command type: End【绑定命令类型：结束】
-                  bindInfo.bindingCommandType = 1;
-                } else {
-                  //Bind command type: Begin【绑定命令类型：开始】
-                  bindInfo.bindingCommandType = 0;
-                }
-                EASDKTool().bindingWatch(bindInfo);
-              }
-            }),
-            onFail: ((info) {})));
-  }
-
-  @override
-  void deviceDisconnect() {
-    print("deviceDisconnect");
-  }
-
-  @override
-  void deviceNotFind() {
-    print("deviceNotFind");
-  }
-
-  @override
-  void notOpenLocation() {
-    print("notOpenLocation");
-  }
-
-  @override
-  void paramError() {
-    print("paramError");
-  }
-
-  @override
-  void unopenedBluetooth() {
-    print("unopenedBluetooth");
-  }
-
-  @override
-  void unsupportedBLE() {
-    print("unsupportedBLE");
-  }
-
-  @override
-  void iOSRelievePair() {
-    print("iOSRelievePair");
-  }
-
-  @override
-  void iOSUnAuthorized() {
-    print("iOSUnAuthorized");
-  }
-}
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -122,190 +37,131 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  T? _ambiguate<T>(T? value) => value;
+
+  // The second method is initialization
+  EASDKTool secondEasdkTool = new EASDKTool();
+  ReceivePort getReceivePort = new ReceivePort();
+  ReceivePort setReceivePort = new ReceivePort();
+  EAGetDataCallback? eaGetDataCallback;
+  EASetDataCallback? eaSetDataCallback;
+
   @override
   void initState() {
     super.initState();
+    initGetIsolate();
+    initSetIsolate();
+    foregroundTask();
+    //The second method is to initialize the channel
+    secondEasdkTool.initChannel();
 
     /// 打开 SDKLog
-    EASDKTool().showLog(1);
-
-    connectBluetooth(); // test
-
-    /// 【添加监听】
-    EASDKTool.addBleConnectListener(ConnectListener());
-    EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
-      operationPhoneListener(info);
-    }));
-
-    /// search watch
-    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-    //   print(connectParam.name);
-    // }));
-
-    // EASDKTool().stopWatch();
   }
 
-  /// 【绑定手表】
-  void connectBluetooth() {
-    EAConnectParam connectParam = EAConnectParam();
-    connectParam.connectAddress =
-        "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "002006000009999010";
-    //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
-    EASDKTool().connectToPeripheral(connectParam);
+  void initGetIsolate() {
+    IsolateNameServer.removePortNameMapping("_ui_get_isolate");
+    bool success = IsolateNameServer.registerPortWithName(
+        getReceivePort.sendPort, "_ui_get_isolate");
+    getReceivePort.listen((message) {
+      eaGetDataCallback?.onSuccess(message);
+    });
   }
 
-  void getWatchData(int dataType) {
-    EASDKTool().getWatchData(
-        dataType,
-        EAGetDataCallback(
-            onSuccess: ((info) {
-              int dataType = info["dataType"];
-              Map<String, dynamic> value = info["value"];
-              returnClassValue(dataType, value);
-            }),
-            onFail: ((info) {})));
+  void initSetIsolate() {
+    IsolateNameServer.removePortNameMapping("_ui_set_isolate");
+    bool success = IsolateNameServer.registerPortWithName(
+        setReceivePort.sendPort, "_ui_set_isolate");
+    setReceivePort.listen((message) {
+      eaSetDataCallback?.onRespond(message);
+    });
   }
 
-  void getWacthStateInfo() async {
-    EAConnectStateInfo connectStateInfo = await EASDKTool().getWacthStateInfo();
-    print(connectStateInfo.connectState.index);
+  foregroundTask() {
+    _ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) async {
+      // You can get the previous ReceivePort without restarting the service.
+      if (await FlutterForegroundTask.isRunningService) {
+        final newReceivePort = await FlutterForegroundTask.receivePort;
+        registerReceivePort(newReceivePort);
+      } else {
+        initForegroundTask();
+        startForegroundTask();
+      }
+    });
   }
 
-  void setWatchData(int dataType, Map map) {
-    EASDKTool().setWatchData(dataType, map,
+  bool registerReceivePort(ReceivePort? receivePort) {
+    closeReceivePort(receivePort);
+
+    if (receivePort != null) {
+      receivePort = receivePort;
+      receivePort.listen((message) {
+        print(message);
+      });
+
+      return true;
+    }
+    return false;
+  }
+
+  void closeReceivePort(ReceivePort? receivePort) {
+    receivePort?.close();
+    receivePort = null;
+  }
+
+  Future<void> initForegroundTask() async {
+    await FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'notification_channel_id',
+        channelName: 'Foreground Notification',
+        channelDescription:
+            'This notification appears when the foreground service is running.',
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
+        iconData: const NotificationIconData(
+          resType: ResourceType.mipmap,
+          resPrefix: ResourcePrefix.ic,
+          name: 'launcher',
+          // backgroundColor: Colors.orange,
+        ),
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: true,
+        playSound: false,
+      ),
+      foregroundTaskOptions: const ForegroundTaskOptions(
+        interval: 5000,
+        autoRunOnBoot: true,
+        allowWifiLock: true,
+      ),
+      printDevLog: true,
+    );
+  }
+
+  Future<bool> startForegroundTask() async {
+    ReceivePort? receivePort;
+    bool reqResult;
+    if (await FlutterForegroundTask.isRunningService) {
+      reqResult = await FlutterForegroundTask.restartService();
+    } else {
+      reqResult = await FlutterForegroundTask.startService(
+        notificationTitle: '',
+        notificationText: '',
+        callback: ForegroundTaskCallback,
+      );
+    }
+
+    if (reqResult) {
+      receivePort = await FlutterForegroundTask.receivePort;
+    }
+
+    return registerReceivePort(receivePort);
+  }
+
+  void secondMethodSetWatchData(int dataType, Map map) {
+    secondEasdkTool.setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
       print(respond.respondCodeType);
     })));
-  }
-
-  /// Timestamp to date 【时间戳转日期】
-  /// [timestamp] 时间戳
-  /// [onlyNeedDate]Whether to display only the date but not the time【是否只显示日期 舍去时间】
-  static String timestampToDateStr(int timestamp, {onlyNeedDate = false}) {
-    DateTime dataTime = timestampToDate(timestamp);
-    String dateTime = dataTime.toString();
-
-    dateTime = dateTime.substring(0, dateTime.length - 4);
-    if (onlyNeedDate) {
-      List<String> dataList = dateTime.split(" ");
-      dateTime = dataList[0];
-    }
-    return dateTime;
-  }
-
-  static DateTime timestampToDate(int timestamp) {
-    DateTime dateTime = DateTime.now();
-
-    ///如果是十三位时间戳返回这个
-    if (timestamp.toString().length == 13) {
-      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    } else if (timestamp.toString().length == 16) {
-      ///如果是十六位时间戳
-      dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
-    } else if (timestamp.toString().length == 10) {
-      ///如果是十位时间戳
-      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    }
-    return dateTime;
-  }
-
-  void getBigWatchData() {
-    EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
-      /// Determine what kind of big data "dataType" is
-      ///【判断dataType是属于那种大数据】
-
-      int dataType = info['dataType'];
-      List<dynamic> list = info['value'];
-      print(dataType);
-
-      if (list.isEmpty) {
-        return;
-      }
-      switch (dataType) {
-        case kEADataInfoTypeStepData: //Daily steps【日常步数】
-
-          for (Map<String, dynamic> item in list) {
-            EABigDataStep model = EABigDataStep.fromMap(item);
-            print(model.timeStamp);
-            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
-          }
-          break;
-        case kEADataInfoTypeSleepData: // sleep
-          for (Map<String, dynamic> item in list) {
-            EABigDataSleep model = EABigDataSleep.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeHeartRateData: // heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
-            print(model.timeStamp);
-            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
-          }
-
-          break;
-        case kEADataInfoTypeGPSData: // gps
-          for (Map<String, dynamic> item in list) {
-            EABigDataGPS model = EABigDataGPS.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeSportsData: // sports
-          for (Map<String, dynamic> item in list) {
-            EABigDataSport model = EABigDataSport.fromMap(item);
-            print(model.beginTimeStamp);
-            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
-          }
-          break;
-        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
-          for (Map<String, dynamic> item in list) {
-            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStressData: // Stress
-          for (Map<String, dynamic> item in list) {
-            EABigDataStress model = EABigDataStress.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStepFreqData: // stride frequency
-          for (Map<String, dynamic> item in list) {
-            EABigDataStrideFrequency model =
-                EABigDataStrideFrequency.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStepPaceData: // stride Pace
-          for (Map<String, dynamic> item in list) {
-            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataRestingHeartRate model =
-                EABigDataRestingHeartRate.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case EADataInfoTypeHabitTrackerData: // habit tracker
-          for (Map<String, dynamic> item in list) {
-            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-
-        default:
-          break;
-      }
-    })));
-  }
-
-  void operationPhoneListener(Map info) {
-    ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
-    /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
   }
 
   void returnClassValue(int dataType, Map<String, dynamic> value) {
@@ -500,8 +356,49 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  void firstMethodGetWatchData(
+      int dataType, EAGetDataCallback getetDataCallback) {
+    eaGetDataCallback = getetDataCallback;
+    PackageData packageData = new PackageData();
+    packageData.action = 1;
+    packageData.param = dataType;
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName("_notifications_");
+    send?.send(packageData);
+  }
+
+  void firstMethodSetWatchData(
+      int dataType, Map map, EASetDataCallback setDataCallback) {
+    eaSetDataCallback = setDataCallback;
+    PackageData packageData = new PackageData();
+    packageData.action = 2;
+    packageData.dataType = dataType;
+    packageData.param = map;
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName("_notifications_");
+    send?.send(packageData);
+  }
+
+  void secondMethodGetWatchData(int dataType) {
+    secondEasdkTool.getWatchData(
+        dataType,
+        EAGetDataCallback(
+            onSuccess: ((info) {
+              int dataType = info["dataType"];
+              Map<String, dynamic> value = info["value"];
+              returnClassValue(dataType, value);
+            }),
+            onFail: ((info) {})));
+  }
+
+  void getWacthStateInfo() async {
+    EAConnectStateInfo connectStateInfo = await EASDKTool().getWacthStateInfo();
+    print(connectStateInfo.connectState.index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    //初始化通知
     return MaterialApp(
       debugShowCheckedModeBanner: false, // 加入这行代码,即可关闭'DEBUG'字样
       home: Scaffold(
@@ -515,137 +412,149 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Obtaining watch Information【获取手表信息】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeWatch);
+                  firstMethodGetWatchData(
+                      kEADataInfoTypeWatch,
+                      EAGetDataCallback(
+                          onSuccess: (onSuccess) {
+                            int dataType = onSuccess["dataType"];
+                            Map<String, dynamic> value = onSuccess["value"];
+                            print("The first method is to get the callback");
+                            returnClassValue(dataType, value);
+                          },
+                          onFail: (onFail) {}));
                 },
               ),
               GestureDetector(
                 child: TextView('2.Obtaining User information【获取用户信息】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeUser);
+                  secondMethodGetWatchData(kEADataInfoTypeUser);
                 },
               ),
               GestureDetector(
                 child: TextView('3.Get watch screen brightness【获取手表屏幕亮度】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeBlacklight);
+                  secondMethodGetWatchData(kEADataInfoTypeBlacklight);
                 },
               ),
               GestureDetector(
                 child: TextView('4.Obtain the battery【获取手表电量信息】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeBattery);
+                  secondMethodGetWatchData(kEADataInfoTypeBattery);
                 },
               ),
               GestureDetector(
                 child: TextView('5.Obtain the device language【设备语言信息】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeLanguage);
+                  secondMethodGetWatchData(kEADataInfoTypeLanguage);
                 },
               ),
               GestureDetector(
                 child: TextView('6.Obtain the device unit system【设备单位制度】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeUnifiedUnit);
+                  secondMethodGetWatchData(kEADataInfoTypeUnifiedUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('7.Obtain the DND period【获取手表免打扰时间段】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeNotDisturb);
+                  secondMethodGetWatchData(kEADataInfoTypeNotDisturb);
                 },
               ),
               GestureDetector(
                 child: TextView('8.Obtain the daily target value【获取手表日常目标值】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeDailyGoal);
+                  secondMethodGetWatchData(kEADataInfoTypeDailyGoal);
                 },
               ),
               GestureDetector(
                 child: TextView(
                     '9.Obtain the automatic sleep monitoring【获取手表自动睡眠监测】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeAutoCheckSleep);
+                  secondMethodGetWatchData(kEADataInfoTypeAutoCheckSleep);
                 },
               ),
               GestureDetector(
                 child: TextView(
                     '10.Get watch automatic heart rate monitoring【获取手表自动心率监测】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeAutoCheckHeartRate);
+                  secondMethodGetWatchData(kEADataInfoTypeAutoCheckHeartRate);
                 },
               ),
               GestureDetector(
                 child: TextView('11.Get watch sedentary monitoring【获取手表久坐监测】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeAutoCheckSedentariness);
+                  secondMethodGetWatchData(
+                      kEADataInfoTypeAutoCheckSedentariness);
                 },
               ),
               GestureDetector(
                 child: TextView(
                     '12.Get watch Social alert switch(SMS、PhoneCall、Email)【社交提醒开关】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeSocialSwitch);
+                  secondMethodGetWatchData(kEADataInfoTypeSocialSwitch);
                 },
               ),
               GestureDetector(
                 child: TextView('13.Get watch alerts【获取手表提醒】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeReminder);
+                  secondMethodGetWatchData(kEADataInfoTypeReminder);
                 },
               ),
               GestureDetector(
                 child:
                     TextView('14.Get heart rate alarm threshold【获取手表心率报警门限】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeHeartRateWaringSetting);
+                  secondMethodGetWatchData(
+                      kEADataInfoTypeHeartRateWaringSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('15.Get distance unit【获取距离单位】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeDistanceUnit);
+                  secondMethodGetWatchData(kEADataInfoTypeDistanceUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('16.Get weight Unit【获取重量单位】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeWeightUnit);
+                  secondMethodGetWatchData(kEADataInfoTypeWeightUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('17.Get heart rate waring【心率报警门限】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeHeartRateWaringSetting);
+                  secondMethodGetWatchData(
+                      kEADataInfoTypeHeartRateWaringSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('18.Get calories open state【卡路里开关】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeCaloriesSetting);
+                  secondMethodGetWatchData(kEADataInfoTypeCaloriesSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('19.Get gestures open state【抬手亮屏开关】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeGesturesSetting);
+                  secondMethodGetWatchData(kEADataInfoTypeGesturesSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('20.Get general information【获取手表通用信息】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeWatchSettingInfo);
+                  secondMethodGetWatchData(kEADataInfoTypeWatchSettingInfo);
                 },
               ),
               GestureDetector(
                 child: TextView('21.Get the first-level menu【获取手表一级菜单】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeHomePage);
+                  secondMethodGetWatchData(kEADataInfoTypeHomePage);
                 },
               ),
               GestureDetector(
                 child: TextView('22.Interest rates screen time【息屏时间】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeBlacklightTimeout);
+                  secondMethodGetWatchData(kEADataInfoTypeBlacklightTimeout);
                 },
               ),
               GestureDetector(
@@ -659,13 +568,13 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeHabitTracker);
+                  secondMethodGetWatchData(kEADataInfoTypeHabitTracker);
                 },
               ),
               GestureDetector(
                 child: TextView('25.Obtain sport show data【获取运动显示值】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeSportShowData);
+                  secondMethodGetWatchData(kEADataInfoTypeSportShowData);
                 },
               ),
               GestureDetector(
@@ -673,27 +582,19 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   // getWatchData(EADataInfoTypeBlePairState);
 
-                  EASDKTool().getWatchData(
-                      EADataInfoTypeBlePairState,
-                      EAGetDataCallback(
-                          onSuccess: ((info) {
-                            Map<String, dynamic> value = info["value"];
-                            EAWatchPairStateModel sportShowData =
-                                EAWatchPairStateModel.fromMap(value);
-                          }),
-                          onFail: ((info) {})));
+                  secondMethodGetWatchData(EADataInfoTypeBlePairState);
                 },
               ),
               GestureDetector(
                 child: TextView('27.Obtain watch time【获取手表时间】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeSyncTime);
+                  secondMethodGetWatchData(kEADataInfoTypeSyncTime);
                 },
               ),
               GestureDetector(
                 child: TextView('28.Obtain App notifications 【获取App消息推送】'),
                 onTap: () {
-                  getWatchData(kEADataInfoTypeAppMessage);
+                  secondMethodGetWatchData(kEADataInfoTypeAppMessage);
                 },
               ),
               TitleView('  Setting【设置信息】'),
@@ -707,8 +608,12 @@ class _MyAppState extends State<MyApp> {
                   personInfo.height = 172;
                   personInfo.skinColor = EASkinColor.skinYellow;
                   personInfo.sex = EAPersonSex.female;
-
-                  setWatchData(kEADataInfoTypeUser, personInfo.toMap());
+                  firstMethodSetWatchData(
+                      kEADataInfoTypeUser, personInfo.toMap(),
+                      EASetDataCallback(onRespond: (onRespond) {
+                    print("set data,The first method is to get the callback" +
+                        onRespond.respondCodeType.toString());
+                  }));
                 },
               ),
               GestureDetector(
@@ -725,7 +630,8 @@ class _MyAppState extends State<MyApp> {
                   syncTime.timeZone = EATimeZone.east;
                   syncTime.timeZoneHour = 8;
                   syncTime.timeZoneMinute = 0;
-                  setWatchData(kEADataInfoTypeSyncTime, syncTime.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeSyncTime, syncTime.toMap());
                 },
               ),
               GestureDetector(
@@ -733,7 +639,8 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EALanguage language = EALanguage();
                   language.type = EALanguageType.english;
-                  setWatchData(kEADataInfoTypeLanguage, language.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeLanguage, language.toMap());
                 },
               ),
               GestureDetector(
@@ -741,7 +648,8 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.metric;
-                  setWatchData(kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
                 },
               ),
               GestureDetector(
@@ -749,7 +657,8 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.british;
-                  setWatchData(kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeUnifiedUnit, unifiedUnit.toMap());
                 },
               ),
               GestureDetector(
@@ -761,7 +670,8 @@ class _MyAppState extends State<MyApp> {
                   notDisturb.beginMinute = 0;
                   notDisturb.endHour = 16;
                   notDisturb.endMinute = 0;
-                  setWatchData(kEADataInfoTypeNotDisturb, notDisturb.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeNotDisturb, notDisturb.toMap());
                 },
               ),
               GestureDetector(
@@ -774,7 +684,8 @@ class _MyAppState extends State<MyApp> {
                   dailyGoals.sDuration =
                       EADailyGoalItem.wihtValue(1, 2 * 60 * 60);
                   dailyGoals.sSleep = EADailyGoalItem.wihtValue(1, 8 * 60 * 60);
-                  setWatchData(kEADataInfoTypeDailyGoal, dailyGoals.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeDailyGoal, dailyGoals.toMap());
                 },
               ),
               GestureDetector(
@@ -783,7 +694,7 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EAAutoCheckHeartRate autoCheckHeartRate =
                       EAAutoCheckHeartRate(60);
-                  setWatchData(kEADataInfoTypeAutoCheckHeartRate,
+                  secondMethodSetWatchData(kEADataInfoTypeAutoCheckHeartRate,
                       autoCheckHeartRate.toMap());
                 },
               ),
@@ -796,7 +707,8 @@ class _MyAppState extends State<MyApp> {
                   autoCheckSedentariness.endHour = 22;
                   autoCheckSedentariness.stepThreshold = 100;
                   autoCheckSedentariness.interval = 45;
-                  setWatchData(kEADataInfoTypeAutoCheckSedentariness,
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeAutoCheckSedentariness,
                       autoCheckSedentariness.toMap());
                 },
               ),
@@ -826,17 +738,18 @@ class _MyAppState extends State<MyApp> {
                   weathers.place = "hxhhiox";
                   weathers.days = [dayWeather, dayWeather2];
                   weathers.weatherUnit = EAWeatherUnit.Fahrenheit;
-                  setWatchData(kEADataInfoTypeWeather, weathers.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeWeather, weathers.toMap());
                 },
               ),
               GestureDetector(
                 child: TextView('10.Set the alarm and remind time【设置闹钟、提醒时间】'),
                 onTap: () {
                   /** Note:【注意事项：】
-                 * 【id_p】：edit, delete only need to assign, edit, delete the corresponding reminder.【编辑、删除才需要赋值，编辑、删除对应的提醒。】
-                 * The assignment to content will only be displayed when reminderEventType = 6【当 reminderEventType = 6时，给 content 赋值才会显示】
-                 * SIndexArray does not need to pass values when eOps = is removed.【当 eOps = 删除时，sIndexArray 不需要传值】
-                 */
+                   * 【id_p】：edit, delete only need to assign, edit, delete the corresponding reminder.【编辑、删除才需要赋值，编辑、删除对应的提醒。】
+                   * The assignment to content will only be displayed when reminderEventType = 6【当 reminderEventType = 6时，给 content 赋值才会显示】
+                   * SIndexArray does not need to pass values when eOps = is removed.【当 eOps = 删除时，sIndexArray 不需要传值】
+                   */
 
                   // EAReminder reminder = EAReminder();
                   // reminder.reminderEventType = EAReminderEventType.Alarm;
@@ -867,7 +780,8 @@ class _MyAppState extends State<MyApp> {
 
                   EAReminderOps reminderOps = EAReminderOps();
                   reminderOps.list = [reminder2];
-                  setWatchData(kEADataInfoTypeReminder, reminderOps.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeReminder, reminderOps.toMap());
                 },
               ),
               GestureDetector(
@@ -876,7 +790,8 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EAHeartRateWaringSetting heartRateWaringSetting =
                       EAHeartRateWaringSetting(1, 160, 40);
-                  setWatchData(kEADataInfoTypeHeartRateWaringSetting,
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeHeartRateWaringSetting,
                       heartRateWaringSetting.toMap());
                 },
               ),
@@ -887,7 +802,7 @@ class _MyAppState extends State<MyApp> {
                   // 全天开启
                   EAScreenGesturesSetting screenGesturesSetting =
                       EAScreenGesturesSetting.allDay();
-                  setWatchData(kEADataInfoTypeGesturesSetting,
+                  secondMethodSetWatchData(kEADataInfoTypeGesturesSetting,
                       screenGesturesSetting.toMap());
                 },
               ),
@@ -900,21 +815,23 @@ class _MyAppState extends State<MyApp> {
                   EAPage menstrualCyclePage = EAPage.menstrualCycle();
                   EAHomePages homePages = EAHomePages();
                   homePages.list = [hrPage, musicPage, menstrualCyclePage];
-                  setWatchData(kEADataInfoTypeHomePage, homePages.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeHomePage, homePages.toMap());
                 },
               ),
               GestureDetector(
                 child: TextView('14.Set the period【设置经期】'),
                 onTap: () {
                   EAMenstrual menstrual = EAMenstrual("2022-04-15", 5, 28);
-                  setWatchData(kEADataInfoTypeMenstrual, menstrual.toMap());
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeMenstrual, menstrual.toMap());
                 },
               ),
               GestureDetector(
                 child: TextView('15.Set the built-in dial【设置内置表盘】'),
                 onTap: () {
                   EAWatchFacelInfo watchFacelInfo = EAWatchFacelInfo.buildIn(3);
-                  setWatchData(
+                  secondMethodSetWatchData(
                       kEADataInfoTypeWatchFace, watchFacelInfo.toMap());
                 },
               ),
@@ -924,23 +841,12 @@ class _MyAppState extends State<MyApp> {
                   /*
                   1. Use kEADataInfoTypeAppMessage to obtain EAShowAppMessage first
                   2. Set EAShowAppMessage
-                  
+
                   1.先使用 kEADataInfoTypeAppMessage 获取 EAShowAppMessage
                   2.再设置 EAShowAppMessage
                   */
 
-                  EASDKTool().getWatchData(
-                      kEADataInfoTypeAppMessage,
-                      EAGetDataCallback(
-                          onSuccess: ((info) {
-                            Map<String, dynamic> value = info["value"];
-                            EAShowAppMessage showAppMessage =
-                                EAShowAppMessage.fromMap(value);
-                            showAppMessage.wechat = false;
-                            setWatchData(kEADataInfoTypeAppMessage,
-                                showAppMessage.toMap());
-                          }),
-                          onFail: ((info) {})));
+                  secondMethodGetWatchData(kEADataInfoTypeAppMessage);
                 },
               ),
               GestureDetector(
@@ -962,38 +868,42 @@ class _MyAppState extends State<MyApp> {
                   EAHabitTrackers habitTrackers = EAHabitTrackers();
                   habitTrackers.list = [habitTracker];
                   habitTrackers.eOps = EAHabitTrackerOps.Add;
-                  setWatchData(
+                  secondMethodSetWatchData(
                       kEADataInfoTypeHabitTracker, habitTrackers.toMap());
                 },
               ),
               GestureDetector(
                 child: TextView('18.Push message【推送信息到手表】'),
                 onTap: () {
-                  EAPushMessage eapushMessage = EAPushMessage();
-                  eapushMessage.messageType = EAPushMessageType.facebook;
-                  eapushMessage.messageActionType = EAPushMessageActionType.add;
-                  eapushMessage.title = "test";
-                  DateTime dateTime = DateTime.now();
-                  eapushMessage.date = "2022" +
-                      (dateTime.month < 10
-                          ? "0" + dateTime.month.toString()
-                          : dateTime.month.toString()) +
-                      (dateTime.day < 10
-                          ? "0" + dateTime.day.toString()
-                          : dateTime.day.toString()) +
-                      "T" +
-                      (dateTime.hour < 10
-                          ? "0" + dateTime.hour.toString()
-                          : dateTime.hour.toString()) +
-                      (dateTime.minute < 10
-                          ? "0" + dateTime.minute.toString()
-                          : dateTime.minute.toString()) +
-                      (dateTime.second < 10
-                          ? "0" + dateTime.second.toString()
-                          : dateTime.second.toString());
-                  eapushMessage.content =
-                      "Test push information" + dateTime.second.toString();
-                  setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap());
+                  Timer.periodic(Duration(seconds: 5), (timer) {
+                    EAPushMessage eapushMessage = EAPushMessage();
+                    eapushMessage.messageType = EAPushMessageType.facebook;
+                    eapushMessage.messageActionType =
+                        EAPushMessageActionType.add;
+                    eapushMessage.title = "test";
+                    DateTime dateTime = DateTime.now();
+                    eapushMessage.date = "2022" +
+                        (dateTime.month < 10
+                            ? "0" + dateTime.month.toString()
+                            : dateTime.month.toString()) +
+                        (dateTime.day < 10
+                            ? "0" + dateTime.day.toString()
+                            : dateTime.day.toString()) +
+                        "T" +
+                        (dateTime.hour < 10
+                            ? "0" + dateTime.hour.toString()
+                            : dateTime.hour.toString()) +
+                        (dateTime.minute < 10
+                            ? "0" + dateTime.minute.toString()
+                            : dateTime.minute.toString()) +
+                        (dateTime.second < 10
+                            ? "0" + dateTime.second.toString()
+                            : dateTime.second.toString());
+                    eapushMessage.content =
+                        "Test push information" + dateTime.second.toString();
+                    secondMethodSetWatchData(
+                        kEADataInfoTypePushInfo, eapushMessage.toMap());
+                  });
                 },
               ),
               GestureDetector(
@@ -1001,7 +911,7 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   EASocialSwitch eaSocialSwitch = EASocialSwitch.init(
                       1, 1, 1, 1, 1, 1, EARemindActionType.LongShortVibration);
-                  setWatchData(
+                  secondMethodSetWatchData(
                       kEADataInfoTypeSocialSwitch, eaSocialSwitch.toMap());
                 },
               ),
@@ -1011,12 +921,12 @@ class _MyAppState extends State<MyApp> {
                     TextView('Send a request to obtain big data 【发送获取大数据请求】'),
                 onTap: () {
                   /**
-                 * 返回所有的大数据，手表会自动清除已返回的大数据
-                 * 注意监听 _dataChannel 返回 8后,即可获取各类型的大数据
-                 * Return all big data, the watch will automatically clear the returned big data
-                 * Notice after listener _dataChannel returns 8, you can obtain all types of big data
-                 */
-                  getBigWatchData();
+                   * 返回所有的大数据，手表会自动清除已返回的大数据
+                   * 注意监听 _dataChannel 返回 8后,即可获取各类型的大数据
+                   * Return all big data, the watch will automatically clear the returned big data
+                   * Notice after listener _dataChannel returns 8, you can obtain all types of big data
+                   */
+                  //  getBigWatchData();
                 },
               ),
               TitleView('  Operating watch commands【操作手表命令】'),
@@ -1024,30 +934,30 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('1.Stop looking for your phone【停止寻找手机】'),
                 onTap: () {
                   /**
-                 * 【EAOperationWatchType】
-                  /// 恢复出厂设置
-                  RestoreFactory,
-                  /// 重启设备
-                  Reset,
-                  /// 设备关机
-                  PowerOff,
-                  /// 断开蓝牙
-                  DisconnectBle,
-                  /// 进入飞行模式
-                  EnteringFlightMode,
-                  /// 点亮屏幕
-                  LightUpTheScreen,
-                  /// 熄灭屏幕
-                  TurnOffTheScreen,
-                  /// 停止寻找手机
-                  StopSearchPhone,
-                  /// 寻找手表
-                  StartSearchWatch,
-                  /// 停止寻找手表
-                  StopSearchWatch,
-                 */
+                   * 【EAOperationWatchType】
+                      /// 恢复出厂设置
+                      RestoreFactory,
+                      /// 重启设备
+                      Reset,
+                      /// 设备关机
+                      PowerOff,
+                      /// 断开蓝牙
+                      DisconnectBle,
+                      /// 进入飞行模式
+                      EnteringFlightMode,
+                      /// 点亮屏幕
+                      LightUpTheScreen,
+                      /// 熄灭屏幕
+                      TurnOffTheScreen,
+                      /// 停止寻找手机
+                      StopSearchPhone,
+                      /// 寻找手表
+                      StartSearchWatch,
+                      /// 停止寻找手表
+                      StopSearchWatch,
+                   */
 
-                  EASDKTool().operationWatch(
+                  secondEasdkTool.operationWatch(
                       EAOperationWatchType.StopSearchPhone,
                       OperationWatchCallback((info) {}));
                 },
@@ -1055,7 +965,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2. Looking for your watch【寻找手表】'),
                 onTap: () {
-                  EASDKTool().operationWatch(
+                  secondEasdkTool.operationWatch(
                       EAOperationWatchType.StartSearchWatch,
                       OperationWatchCallback((info) {}));
                 },
@@ -1063,7 +973,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Stop looking for your watch【停止寻找手表】'),
                 onTap: () {
-                  EASDKTool().operationWatch(
+                  secondEasdkTool.operationWatch(
                       EAOperationWatchType.StopSearchWatch,
                       OperationWatchCallback((info) {}));
                 },
@@ -1071,7 +981,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
                 onTap: () {
-                  EASDKTool().operationWatch(
+                  secondEasdkTool.operationWatch(
                       EAOperationWatchType.ShowiPhonePairingAlert,
                       OperationWatchCallback((info) {}));
                 },
@@ -1080,26 +990,26 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.To upgrade the firmware【升级固件】'),
                 onTap: () async {
-                  /** 
-                 * 
-                 * 【type == 1】，升级固件注意事项
-                 * * * 1.必须要比当前版本大才能升级成功，
-                 * * * 2.version 必须按照 一定的格式来 (以下 xx 代表为数值)
-                          阿波罗  Apollo: APxxBxx
-                          字库    Res: Rxx
-                          屏幕    Tp: Txx
-                          心率    Hr: Hxx
-                 * * * 3.【firmwareType】：
-                 * 
-                 *  [type == 1], firmware upgrade precautions
-                 * * * 1. The upgrade must be larger than the current version to succeed.
-                 * * * 2. The version must be in a certain format (xx represents a number below).
+                  /**
+                   *
+                   * 【type == 1】，升级固件注意事项
+                   * * * 1.必须要比当前版本大才能升级成功，
+                   * * * 2.version 必须按照 一定的格式来 (以下 xx 代表为数值)
+                      阿波罗  Apollo: APxxBxx
+                      字库    Res: Rxx
+                      屏幕    Tp: Txx
+                      心率    Hr: Hxx
+                   * * * 3.【firmwareType】：
+                   *
+                   *  [type == 1], firmware upgrade precautions
+                   * * * 1. The upgrade must be larger than the current version to succeed.
+                   * * * 2. The version must be in a certain format (xx represents a number below).
                       Apollo Apollo: APxxBxx
                       Word stock Res: Rxx
                       Tp: screen Txx
                       Heart rate Hr: Hxx
-                 * * * firmwareType:            
-                 */
+                   * * * firmwareType:
+                   */
 
                   /**
                    * 假设 当前手表 firmwareVersion => AP0.1B0.9R0.3T0.1G0.1
@@ -1107,10 +1017,10 @@ class _MyAppState extends State<MyApp> {
                    * R0.3=>字库版本号是0.3
                    * T0.1=>屏幕版本号0.1
                    * H0.1=>心率版本号0.1
-                   * 
+                   *
                    * 有新的 固件版本号 是 AP0.1B1.0 和 AP0.1B1.1
                    * 有新的 字库版本号是 R0.4 和 R0.5
-                   * 
+                   *
                    * 固件版本升级 升级 最大版本号就可以了，即升级 AP0.1B1.1，不需要升级 AP0.1B1.0
                    * 字库版本升级 需要升级所有比当前字库版本大的版本，即 R0.4 和 R0.5都要升级
                    * 屏幕和心率同固件一样逻辑，升级最大版本的就行
@@ -1170,7 +1080,7 @@ class _MyAppState extends State<MyApp> {
                       EAOTA('$path2/Res.bin', EAFirmwareType.Res, "R0.7");
 
                   EAOTAList eaList = EAOTAList(0, [appoloOTA, resOTA]);
-                  EASDKTool().otaUpgrade(eaList,
+                  secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress) {
                     print("OTA进度:" + progress.toString());
                     if (progress == -1) {
@@ -1188,13 +1098,13 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Unbundling equipment【解绑设备】'),
                 onTap: () {
-                  EASDKTool().unbindWatch();
+                  secondEasdkTool.unbindWatch();
                 },
               ),
               GestureDetector(
                 child: TextView('2.disconnect equipment【断开设备】'),
                 onTap: () {
-                  EASDKTool().disConnectWatch();
+                  secondEasdkTool.disConnectWatch();
                 },
               ),
             ],
@@ -1203,14 +1113,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-class EADevice {
-  String name = "";
-  String snNumber = "";
-  String macAddress = "";
-  int rssi = 0;
-
-  EADevice.n();
-  EADevice(this.name, this.snNumber, this.macAddress, this.rssi);
 }

@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'EACallback.dart';
 import 'dart:convert' as convert;
@@ -38,22 +41,22 @@ const String kOperationWacthResponse = "OperationWacthResponse";
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
 
-  EASDKTool._privateConstructor();
+  // EASDKTool._privateConstructor();
 
-  static final EASDKTool _instance = EASDKTool._privateConstructor();
+  // static final EASDKTool _instance = EASDKTool._privateConstructor();
 
-  factory EASDKTool() {
-    return _instance;
-  }
+  // factory EASDKTool() {
+  //   return _instance;
+  // }
 
-  static EAGetDataCallback? mGetDataCallback;
-  static EASetDataCallback? mSetDataCallback;
+  EAGetDataCallback? mGetDataCallback;
+  EASetDataCallback? mSetDataCallback;
   static EAGetBitDataCallback? mGetBitDataCallback;
   static OperationPhoneCallback? mOperationPhoneCallback;
   static EABleConnectListener? mEaBleConnectListener;
-  static OperationWatchCallback? mOperationCallback;
-  static EAOTAProgressCallback? mOTAProgressCallback;
-  static EAScanWatchCallback? mScanWatchCallback;
+  OperationWatchCallback? mOperationCallback;
+  EAOTAProgressCallback? mOTAProgressCallback;
+  EAScanWatchCallback? mScanWatchCallback;
 
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
@@ -62,6 +65,9 @@ class EASDKTool {
 
   static void addBleConnectListener(EABleConnectListener eaBleConnectListener) {
     mEaBleConnectListener = eaBleConnectListener;
+  }
+
+  void initChannel() {
     _channel.setMethodCallHandler(platformCallHandler);
   }
 
@@ -168,10 +174,10 @@ class EASDKTool {
   }
 
   //
-  static Future<dynamic> platformCallHandler(MethodCall methodCall) async {
-    /* methodName 
+  Future<dynamic> platformCallHandler(MethodCall methodCall) async {
+    /* methodName
      *  1.ArgumentsError    => Parameter error, please check parameter【参数错误，请检查参数】
-     *  2.ConnectState      => Binding status 0: connection failed 1: connection succeeded 2: disconnected 3: connection timed out 4: no device 5:iOS needs to remove pairing【绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对】 
+     *  2.ConnectState      => Binding status 0: connection failed 1: connection succeeded 2: disconnected 3: connection timed out 4: no device 5:iOS needs to remove pairing【绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对】
      *  3.BluetoothState    => Bluetooth status 0: disabled Bluetooth 1: Enabled Bluetooth 2: unauthorized Bluetooth 3: enabled location 4: not supported BLE【蓝牙状态 0:未开启蓝牙 1:蓝牙开启 2:蓝牙未授权 3:定位未开启 4:不支持BLE 】
      *  4.SetWatchResponse  => Set the watch data response 0: failed 1: succeeded 2: unknown【设置手表数据回应 0:失败 1:成功 2:未知】
      *  5.GetWatchResponse  => Get the watch data response【获取手表数据回应】
@@ -242,31 +248,36 @@ class EASDKTool {
   }
 
   // Device Connection status【设备连接状态】
-  static Future<void> deviceConnectState(int code) async {
+  Future<void> deviceConnectState(int code) async {
     ///Binding status 0: connection failed 1: connection succeeded 2: disconnected 3: connection timed out 4: no device 5:iOS needs to remove pairing
     ///【绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对】
     switch (code) {
       case 0: // connection failed【连接失败】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.connectError();
         }
         break;
       case 1: //connection succeeded 【连接成功】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.deviceConnected();
         }
         break;
       case 2: //disconnected 【断开连接】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.deviceDisconnect();
         }
         break;
       case 3: //connection timed out 【连接超时】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.connectTimeOut();
         }
         break;
       case 4: //no device 【无此设备】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.deviceNotFind();
         }
@@ -291,16 +302,19 @@ class EASDKTool {
         }
         break;
       case 2: //unauthorized Bluetooth 【蓝牙未授权】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.iOSUnAuthorized();
         }
         break;
       case 3: //enabled location【定位未开启】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.notOpenLocation();
         }
         break;
       case 4: //not supported BLE【支持BLE】
+
         if (mEaBleConnectListener != null) {
           mEaBleConnectListener?.unsupportedBLE();
         }

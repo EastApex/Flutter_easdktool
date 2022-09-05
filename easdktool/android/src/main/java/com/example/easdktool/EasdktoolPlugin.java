@@ -1,9 +1,9 @@
 package com.example.easdktool;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
@@ -13,7 +13,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -116,11 +115,9 @@ import com.example.easdktool.been.LogParam;
 import com.example.easdktool.been.Period;
 import com.example.easdktool.been.ReminderItem;
 import com.example.easdktool.been.ShowAppMessage;
-import com.example.easdktool.been.TempMotion;
 import com.example.easdktool.been.TempOtaData;
 import com.example.easdktool.broadcast.CallReceiveBroadcast;
 import com.example.easdktool.broadcast.SMSReceiveBroadcast;
-import com.example.easdktool.service.SmsObserver;
 
 
 import java.io.ByteArrayOutputStream;
@@ -130,12 +127,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.FlutterEngineCache;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -147,6 +144,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
  */
 public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     private final String TAG = this.getClass().getSimpleName();
+    private final String ENGINE_CACHE_KEY = "engine_cache";
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -193,7 +191,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     private MethodChannel channel;
     private Context mContext;
-    private Handler mHandler;
+    // private Handler mHandler;
     private FlutterEngine flutterEngine;
 
     /// MARK: -call method Name
@@ -327,11 +325,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     private CallReceiveBroadcast callReceiveBroadcast;
     SMSReceiveBroadcast smsReceiveBroadcast;
+    private final String CID_KEY = "CID_KEY_CACHE";
+    private final String DISPATCHER_HANDLE_KEY = "dispatch_handler";
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
-
+        Log.e(TAG, "页面结束");
+        //  destroyIncomingCall();
+        //  destroySmsListener();
     }
 
     class DeviceOperationListener implements DataReportCallback {
@@ -407,126 +409,126 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void queryMusic(final EABleQueryMusic eaBleQueryMusic) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("dataType", 0x0B);
-                        if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.default_type) {
-                            jsonObject.put("appType", 0);
-                        } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.apple_music) {
-                            jsonObject.put("appType", 1);
-                        } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
-                            jsonObject.put("appType", 2);
-                        } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
-                            jsonObject.put("appType", 3);
-                        }
-                        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                        if (methodChannel != null) {
-                            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                        }
+            //  if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("dataType", 0x0B);
+                    if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.default_type) {
+                        jsonObject.put("appType", 0);
+                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.apple_music) {
+                        jsonObject.put("appType", 1);
+                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
+                        jsonObject.put("appType", 2);
+                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
+                        jsonObject.put("appType", 3);
                     }
-                });
-            }
+                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+                    if (methodChannel != null) {
+                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+                    }
+                }
+            });
         }
+        // }
 
         @Override
         public void musicControl(final EABleMusicControl eaBleMusicControl) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("dataType", 0x0C);
-                        jsonObject.put("volume", eaBleMusicControl.volume);
-                        jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
-                            jsonObject.put("action", 0);
-                        }
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
-                            jsonObject.put("action", 1);
-                        }
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
-                            jsonObject.put("action", 2);
-                        }
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
-                            jsonObject.put("action", 3);
-                        }
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
-                            jsonObject.put("action", 4);
-                        }
-                        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
-                            jsonObject.put("action", 5);
-                        }
-                        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                        if (methodChannel != null) {
-                            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                        }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("dataType", 0x0C);
+                    jsonObject.put("volume", eaBleMusicControl.volume);
+                    jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
+                        jsonObject.put("action", 0);
                     }
-                });
-
-            }
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
+                        jsonObject.put("action", 1);
+                    }
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
+                        jsonObject.put("action", 2);
+                    }
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
+                        jsonObject.put("action", 3);
+                    }
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
+                        jsonObject.put("action", 4);
+                    }
+                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
+                        jsonObject.put("action", 5);
+                    }
+                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+                    if (methodChannel != null) {
+                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+                    }
+                }
+            });
 
         }
 
+        //  }
+
         @Override
         public void socialResponse(final EABleSocialResponse eaBleSocialResponse) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("dataType", 0x0D);
-                        jsonObject.put("socialId", eaBleSocialResponse.id);
-                        jsonObject.put("content", eaBleSocialResponse.content);
-                        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                        if (methodChannel != null) {
-                            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                        }
+            //  if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("dataType", 0x0D);
+                    jsonObject.put("socialId", eaBleSocialResponse.id);
+                    jsonObject.put("content", eaBleSocialResponse.content);
+                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+                    if (methodChannel != null) {
+                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
                     }
-                });
-            }
+                }
+            });
+            // }
 
 
         }
 
         @Override
         public void mtu(final EABleMtu eaBleMtu) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("dataType", 0x0E);
-                        jsonObject.put("mtu", eaBleMtu.getMtu_value());
-                        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                        if (methodChannel != null) {
-                            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                        }
+            //if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("dataType", 0x0E);
+                    jsonObject.put("mtu", eaBleMtu.getMtu_value());
+                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+                    if (methodChannel != null) {
+                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
                     }
-                });
-            }
+                }
+            });
+            // }
 
 
         }
 
         @Override
         public void mutualFail(final int i) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("dataType", 0x0F);
-                        jsonObject.put("errorCode", i);
-                        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                        if (methodChannel != null) {
-                            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                        }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("dataType", 0x0F);
+                    jsonObject.put("errorCode", i);
+                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+                    if (methodChannel != null) {
+                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
                     }
-                });
-            }
+                }
+            });
+            // }
 
         }
     }
@@ -772,139 +774,105 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     }
 
-    private void initIncomingCall() {
-        IntentFilter intentFilter = new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
-        if (callReceiveBroadcast == null) {
-            callReceiveBroadcast = new CallReceiveBroadcast();
-            mContext.registerReceiver(callReceiveBroadcast, intentFilter);
-        }
-
-    }
-    private void initSmsListener() {
-
-        IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        if (smsReceiveBroadcast == null) {
-            smsReceiveBroadcast = new SMSReceiveBroadcast();
-            mContext.registerReceiver(smsReceiveBroadcast, intentFilter);
-        }
-
-
-    }
-    private void destroyIncomingCall() {
-        if (callReceiveBroadcast != null) {
-            mContext.unregisterReceiver(callReceiveBroadcast);
-            callReceiveBroadcast = null;
-        }
-    }
-
-    private void destroySmsListener() {
-
-        if (smsReceiveBroadcast != null) {
-            mContext.unregisterReceiver(smsReceiveBroadcast);
-            smsReceiveBroadcast = null;
-        }
-
-
-    }
 
     class ConnectListener implements EABleConnectListener {
 
         @Override
         public void deviceConnected() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kConnectState, ConnectState.succ.getValue());
-                    }
-                });
-            }
 
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kConnectState, ConnectState.succ.getValue());
+                }
+            });
+            // }
         }
 
 
         @Override
         public void deviceDisconnect() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kConnectState, ConnectState.disConnect.getValue());
-                    }
-                });
-            }
+            //if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kConnectState, ConnectState.disConnect.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void deviceNotFind() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kConnectState, ConnectState.notFind.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kConnectState, ConnectState.notFind.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void connectError(int i) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kConnectState, ConnectState.fail.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kConnectState, ConnectState.fail.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void connectTimeOut() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kConnectState, ConnectState.timeout.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kConnectState, ConnectState.timeout.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void unsupportedBLE() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kBluetoothState, BluetoothState.unSupportBle.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kBluetoothState, BluetoothState.unSupportBle.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void unopenedBluetooth() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kBluetoothState, BluetoothState.unOpen.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kBluetoothState, BluetoothState.unOpen.getValue());
+                }
+            });
+            // }
         }
 
         @Override
         public void notOpenLocation() {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kBluetoothState, BluetoothState.unOpenLocation.getValue());
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kBluetoothState, BluetoothState.unOpenLocation.getValue());
+                }
+            });
+            //  }
         }
 
 
@@ -912,11 +880,31 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "easdktool");
-        channel.setMethodCallHandler(this);
+        Log.e(TAG, "页面开始");
+        // if (flutterEngine==null) {
+        //     FlutterEngine mFlutterEngine = FlutterEngineCache.getInstance().get(ENGINE_CACHE_KEY);
+        //     if (mFlutterEngine != null) {
+        //         flutterEngine = mFlutterEngine;
+        //     } else {
         flutterEngine = flutterPluginBinding.getFlutterEngine();
-        mContext = flutterPluginBinding.getApplicationContext();
-        mHandler = new Handler(Looper.myLooper());
+        //         FlutterEngineCache.getInstance().put(ENGINE_CACHE_KEY, flutterEngine);
+        //     }
+        // }
+        //  if (channel == null) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "easdktool");
+
+        //  } else {
+        //      Log.e(TAG, "channel不为空");
+        //  }
+        channel.setMethodCallHandler(this);
+        if (mContext == null) {
+            mContext = flutterPluginBinding.getApplicationContext();
+        }
+        //  if (mHandler == null) {
+        //      mHandler = new Handler(Looper);
+        //  }
+
+
     }
 
 
@@ -950,34 +938,34 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 @Override
                 public void scanDevice(EABleDevice eaBleDevice) {
 
-                    if (mHandler != null) {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("name", eaBleDevice.deviceName);
-                                jsonObject.put("connectAddress", eaBleDevice.deviceAddress);
-                                jsonObject.put("rssi", eaBleDevice.rssi);
-                                jsonObject.put("snNumber", eaBleDevice.deviceSign);
-                                channel.invokeMethod(kScanWacthResponse, jsonObject.toJSONString());
-                            }
-                        });
-                    }
+                    //  if (mHandler != null) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("name", eaBleDevice.deviceName);
+                            jsonObject.put("connectAddress", eaBleDevice.deviceAddress);
+                            jsonObject.put("rssi", eaBleDevice.rssi);
+                            jsonObject.put("snNumber", eaBleDevice.deviceSign);
+                            channel.invokeMethod(kScanWacthResponse, jsonObject.toJSONString());
+                        }
+                    });
+                    //  }
 
                 }
 
                 @Override
                 public void scanError(int i) {
 
-                    if (mHandler != null) {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                    // if (mHandler != null) {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
 
-                                channel.invokeMethod(kArgumentsError, "scan error");
-                            }
-                        });
-                    }
+                            channel.invokeMethod(kArgumentsError, "scan error");
+                        }
+                    });
+                    // }
 
                 }
             };
@@ -993,16 +981,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             Map<String, String> map = JSONObject.parseObject(arguments, Map.class);
             String address = map.get("connectAddress");
             if (TextUtils.isEmpty(address)) {// 判断空地址
-                if (mHandler != null) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod(kArgumentsError, "connectAddress error");
-                        }
-                    });
-                }
+                // if (mHandler != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        channel.invokeMethod(kArgumentsError, "connectAddress error");
+                    }
+                });
+                // }
                 return;
             }
+
             EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectListener(), 128, new DeviceOperationListener(), new MotionDataListener());
         } else if (call.method.equals(kEADisConnectWatch)) { // 手动断开设备
 
@@ -1010,14 +999,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             if (connectState == EABleConnectState.STATE_CONNECTED) {
                 EABleManager.getInstance().disconnectPeripheral();
 
-                if (mHandler != null) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod(kConnectState, ConnectState.disConnect.getValue());
-                        }
-                    });
-                }
+                //  if (mHandler != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        channel.invokeMethod(kConnectState, ConnectState.disConnect.getValue());
+                    }
+                });
+                // }
             }
         } else if (call.method.equals(kEAUnbindWatch)) { // 解绑设备
             EABleDev eaBleDev = new EABleDev();
@@ -1062,14 +1051,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                                     @Override
                                     public void mutualFail(int i) {
-                                        if (mHandler != null) {
-                                            mHandler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    channel.invokeMethod(kArgumentsError, "user_id error");
-                                                }
-                                            });
-                                        }
+                                        // if (mHandler != null) {
+                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                channel.invokeMethod(kArgumentsError, "user_id error");
+                                            }
+                                        });
+                                        // }
                                     }
                                 });
                             }
@@ -1085,13 +1074,13 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void mutualFail(int i) {
                         Log.e(TAG, "收到错误");
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                }
-                            });
-                        }
+                        //  if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        });
+                        // }
                     }
                 });
             }
@@ -1157,17 +1146,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void result(boolean b) {
 
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("operationType", action);
-                                    jsonObject.put("respondCodeType", b);
-                                    channel.invokeMethod(kOperationWacthResponse, jsonObject.toJSONString());
-                                }
-                            });
-                        }
+                        //  if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("operationType", action);
+                                jsonObject.put("respondCodeType", b);
+                                channel.invokeMethod(kOperationWacthResponse, jsonObject.toJSONString());
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -1216,30 +1205,30 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
                     @Override
                     public void watchInfo(EABleWatchInfo eaBleWatchInfo) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    // {agpsUpdateTimestamp: 1648811935, eBindingInfo: 0, type: A02, userId: 10086, firmwareVersion: AP0.1B4.6R0.6T0.1H0.1G0.1, id_p: 001001211112000028}
-                                    Map map = new HashMap();
-                                    map.put("eBindingInfo", eaBleWatchInfo.bindingInfo.getValue());
-                                    map.put("agpsUpdateTimestamp", eaBleWatchInfo.getAgps_update_timestamp());
-                                    map.put("firmwareVersion", eaBleWatchInfo.getFirmwareVersion());
-                                    map.put("userId", eaBleWatchInfo.getUserId());
-                                    map.put("id_p", eaBleWatchInfo.getWatchId());
-                                    map.put("bleMacAddr", eaBleWatchInfo.getBle_mac_addr());
-                                    map.put("isWaitForBinding", eaBleWatchInfo.getIs_wait_for_binding());
-                                    String watchType = eaBleWatchInfo.getWatchType();
-                                    if (watchType.equals("G01")) {
-                                        map.put("type", "iTouch Flex");
-                                    } else {
-                                        map.put("type", eaBleWatchInfo.getWatchType());
-                                    }
-                                    sendWatchDataWithMap(map, type);
+                                // {agpsUpdateTimestamp: 1648811935, eBindingInfo: 0, type: A02, userId: 10086, firmwareVersion: AP0.1B4.6R0.6T0.1H0.1G0.1, id_p: 001001211112000028}
+                                Map map = new HashMap();
+                                map.put("eBindingInfo", eaBleWatchInfo.bindingInfo.getValue());
+                                map.put("agpsUpdateTimestamp", eaBleWatchInfo.getAgps_update_timestamp());
+                                map.put("firmwareVersion", eaBleWatchInfo.getFirmwareVersion());
+                                map.put("userId", eaBleWatchInfo.getUserId());
+                                map.put("id_p", eaBleWatchInfo.getWatchId());
+                                map.put("bleMacAddr", eaBleWatchInfo.getBle_mac_addr());
+                                map.put("isWaitForBinding", eaBleWatchInfo.getIs_wait_for_binding());
+                                String watchType = eaBleWatchInfo.getWatchType();
+                                if (watchType.equals("G01")) {
+                                    map.put("type", "iTouch Flex");
+                                } else {
+                                    map.put("type", eaBleWatchInfo.getWatchType());
                                 }
-                            });
-                        }
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1252,22 +1241,22 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.user_info, new PersonInfoCallback() {
                     @Override
                     public void personInfo(EABlePersonInfo eaBlePersonInfo) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("eSexInfo", eaBlePersonInfo.e_sex_info.getValue());
-                                    map.put("eHandInfo", eaBlePersonInfo.e_hand_info.getValue());
-                                    map.put("eSkinColor", eaBlePersonInfo.e_skin_color.getValue());
-                                    map.put("age", eaBlePersonInfo.getAge());
-                                    map.put("height", eaBlePersonInfo.getHeight());
-                                    map.put("weight", eaBlePersonInfo.getWeight());
-                                    //  sendWatchDataWithObjectMap(eaBlePersonInfo, map, type);
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Map<String, Integer> map = new HashMap();
+                                map.put("eSexInfo", eaBlePersonInfo.e_sex_info.getValue());
+                                map.put("eHandInfo", eaBlePersonInfo.e_hand_info.getValue());
+                                map.put("eSkinColor", eaBlePersonInfo.e_skin_color.getValue());
+                                map.put("age", eaBlePersonInfo.getAge());
+                                map.put("height", eaBlePersonInfo.getHeight());
+                                map.put("weight", eaBlePersonInfo.getWeight());
+                                //  sendWatchDataWithObjectMap(eaBlePersonInfo, map, type);
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -1281,27 +1270,27 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sync_time, new TimeCallback() {
                     @Override
                     public void syncTime(EABleSyncTime eaBleSyncTime) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("timeHourType", eaBleSyncTime.e_hour_system.getValue());
-                                    map.put("timeZone", eaBleSyncTime.e_time_zone.getValue());
-                                    map.put("timeZoneHour", eaBleSyncTime.getTime_zone_hour());
-                                    map.put("timeZoneMinute", eaBleSyncTime.getTime_zone_minute());
-                                    map.put("year", eaBleSyncTime.getYear());
-                                    map.put("month", eaBleSyncTime.getMonth());
-                                    map.put("day", eaBleSyncTime.getDay());
-                                    map.put("hour", eaBleSyncTime.getHour());
-                                    map.put("minute", eaBleSyncTime.getMinute());
-                                    map.put("second", eaBleSyncTime.getSecond());
-                                    map.put("e_sync_mode", eaBleSyncTime.getE_sync_mode().getValue());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                Map<String, Integer> map = new HashMap();
+                                map.put("timeHourType", eaBleSyncTime.e_hour_system.getValue());
+                                map.put("timeZone", eaBleSyncTime.e_time_zone.getValue());
+                                map.put("timeZoneHour", eaBleSyncTime.getTime_zone_hour());
+                                map.put("timeZoneMinute", eaBleSyncTime.getTime_zone_minute());
+                                map.put("year", eaBleSyncTime.getYear());
+                                map.put("month", eaBleSyncTime.getMonth());
+                                map.put("day", eaBleSyncTime.getDay());
+                                map.put("hour", eaBleSyncTime.getHour());
+                                map.put("minute", eaBleSyncTime.getMinute());
+                                map.put("second", eaBleSyncTime.getSecond());
+                                map.put("e_sync_mode", eaBleSyncTime.getE_sync_mode().getValue());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -1315,15 +1304,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.black_screen_time, new RestScreenCallback() {
                     @Override
                     public void restScreen(int i) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    sendWatchDataWithOtherKeyValue("timeout", i, type);
-                                }
-                            });
-                        }
+                                sendWatchDataWithOtherKeyValue("timeout", i, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1336,15 +1325,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.screen_light, new ScreenBrightnessCallback() {
                     @Override
                     public void screenBrightness(int i) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    sendWatchDataWithOtherKeyValue("level", i, type);
-                                }
-                            });
-                        }
+                                sendWatchDataWithOtherKeyValue("level", i, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1357,19 +1346,19 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.battery_info, new BatterInfoCallback() {
                     @Override
                     public void batterInfo(EABleBatInfo eaBleBatInfo) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //{eStatus: 0, level: 90}
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("eStatus", eaBleBatInfo.e_status.getValue());
-                                    map.put("level", eaBleBatInfo.getLevel());
-                                    sendWatchDataWithMap(map, type);
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //{eStatus: 0, level: 90}
+                                Map<String, Integer> map = new HashMap();
+                                map.put("eStatus", eaBleBatInfo.e_status.getValue());
+                                map.put("level", eaBleBatInfo.getLevel());
+                                sendWatchDataWithMap(map, type);
 
-                                }
-                            });
-                        }
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1382,17 +1371,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.language, new LanguageCallback() {
                     @Override
                     public void languageInfo(EABleDeviceLanguage eaBleDeviceLanguage) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("eType", eaBleDeviceLanguage.e_type.getValue());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                Map<String, Integer> map = new HashMap();
+                                map.put("eType", eaBleDeviceLanguage.e_type.getValue());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1405,16 +1394,16 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.unit_format, new UnitCallback() {
                     @Override
                     public void unitInfo(EABleDevUnit eaBleDevUnit) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("eFormat", eaBleDevUnit.e_format.getValue());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Map<String, Integer> map = new HashMap();
+                                map.put("eFormat", eaBleDevUnit.e_format.getValue());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1428,21 +1417,21 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.not_disturb, new DonDisturbCallback() {
                     @Override
                     public void donDisturbInfo(EABleNotDisturb eaBleNotDisturb) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 //                                    {endHour: 23, beginMinute: 0, beginHour: 0, endMinute: 59, sw: 0}
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("beginHour", eaBleNotDisturb.getBegin_hour());
-                                    map.put("beginMinute", eaBleNotDisturb.getBegin_minute());
-                                    map.put("endHour", eaBleNotDisturb.getEnd_hour());
-                                    map.put("endMinute", eaBleNotDisturb.getBegin_minute());
-                                    map.put("sw", eaBleNotDisturb.getSw());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                Map<String, Integer> map = new HashMap();
+                                map.put("beginHour", eaBleNotDisturb.getBegin_hour());
+                                map.put("beginMinute", eaBleNotDisturb.getBegin_minute());
+                                map.put("endHour", eaBleNotDisturb.getEnd_hour());
+                                map.put("endMinute", eaBleNotDisturb.getBegin_minute());
+                                map.put("sw", eaBleNotDisturb.getSw());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1455,34 +1444,34 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.daily_goal, new GoalCallback() {
                     @Override
                     public void goalInfo(EABleDailyGoal eaBleDailyGoal) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    String sw = "sw";
-                                    String goal = "goal";
-                                    JSONObject jsonObject = new JSONObject();
-                                    if (eaBleDailyGoal.getS_step() != null) {
-                                        addKeyValues(sw, eaBleDailyGoal.getS_step().getSw(), goal, eaBleDailyGoal.getS_step().getGoal(), jsonObject, "sStep");
-                                    }
-                                    if (eaBleDailyGoal.getS_calorie() != null) {
-                                        addKeyValues(sw, eaBleDailyGoal.getS_calorie().getSw(), goal, eaBleDailyGoal.getS_calorie().getGoal(), jsonObject, "sCalorie");
-                                    }
-                                    if (eaBleDailyGoal.getS_distance() != null) {
-                                        addKeyValues(sw, eaBleDailyGoal.getS_distance().getSw(), goal, eaBleDailyGoal.getS_distance().getGoal(), jsonObject, "sDistance");
-                                    }
-                                    if (eaBleDailyGoal.getS_duration() != null) {
-                                        addKeyValues(sw, eaBleDailyGoal.getS_duration().getSw(), goal, eaBleDailyGoal.getS_duration().getGoal(), jsonObject, "sDuration");
-                                    }
-                                    if (eaBleDailyGoal.getS_sleep() != null) {
-                                        addKeyValues(sw, eaBleDailyGoal.getS_sleep().getSw(), goal, eaBleDailyGoal.getS_sleep().getGoal(), jsonObject, "sSleep");
-                                    }
-                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
+                                String sw = "sw";
+                                String goal = "goal";
+                                JSONObject jsonObject = new JSONObject();
+                                if (eaBleDailyGoal.getS_step() != null) {
+                                    addKeyValues(sw, eaBleDailyGoal.getS_step().getSw(), goal, eaBleDailyGoal.getS_step().getGoal(), jsonObject, "sStep");
                                 }
-                            });
-                        }
+                                if (eaBleDailyGoal.getS_calorie() != null) {
+                                    addKeyValues(sw, eaBleDailyGoal.getS_calorie().getSw(), goal, eaBleDailyGoal.getS_calorie().getGoal(), jsonObject, "sCalorie");
+                                }
+                                if (eaBleDailyGoal.getS_distance() != null) {
+                                    addKeyValues(sw, eaBleDailyGoal.getS_distance().getSw(), goal, eaBleDailyGoal.getS_distance().getGoal(), jsonObject, "sDistance");
+                                }
+                                if (eaBleDailyGoal.getS_duration() != null) {
+                                    addKeyValues(sw, eaBleDailyGoal.getS_duration().getSw(), goal, eaBleDailyGoal.getS_duration().getGoal(), jsonObject, "sDuration");
+                                }
+                                if (eaBleDailyGoal.getS_sleep() != null) {
+                                    addKeyValues(sw, eaBleDailyGoal.getS_sleep().getSw(), goal, eaBleDailyGoal.getS_sleep().getGoal(), jsonObject, "sSleep");
+                                }
+                                Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1496,21 +1485,21 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sleep_check, new SleepCheckCallback() {
                     @Override
                     public void sleepInfo(EABleAutoCheckSleep eaBleAutoCheckSleep) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("weekCycleBit", eaBleAutoCheckSleep.getWeek_cycle_bit());
-                                    jsonObject.put("beginHour", eaBleAutoCheckSleep.getBegin_hour());
-                                    jsonObject.put("beginMinute", eaBleAutoCheckSleep.getBegin_minute());
-                                    jsonObject.put("endHour", eaBleAutoCheckSleep.getEnd_hour());
-                                    jsonObject.put("endMinute", eaBleAutoCheckSleep.getEnd_minute());
-                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("weekCycleBit", eaBleAutoCheckSleep.getWeek_cycle_bit());
+                                jsonObject.put("beginHour", eaBleAutoCheckSleep.getBegin_hour());
+                                jsonObject.put("beginMinute", eaBleAutoCheckSleep.getBegin_minute());
+                                jsonObject.put("endHour", eaBleAutoCheckSleep.getEnd_hour());
+                                jsonObject.put("endMinute", eaBleAutoCheckSleep.getEnd_minute());
+                                Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1524,15 +1513,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.heart_rate_check, new HeartCheckCallback() {
                     @Override
                     public void heartInfo(int i) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // interval
-                                    sendWatchDataWithOtherKeyValue("interval", i, type);
-                                }
-                            });
-                        }
+                        //  if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // interval
+                                sendWatchDataWithOtherKeyValue("interval", i, type);
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -1546,24 +1535,24 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sit_check, new SedentaryCheckCallback() {
                     @Override
                     public void sedentaryInfo(EABleSedentariness eaBleSedentariness) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("interval", eaBleSedentariness.getInterval());
-                                    jsonObject.put("weekCycleBit", eaBleSedentariness.getWeek_cycle_bit());
-                                    jsonObject.put("beginHour", eaBleSedentariness.getBegin_hour());
-                                    jsonObject.put("beginMinute", eaBleSedentariness.getBegin_minute());
-                                    jsonObject.put("endHour", eaBleSedentariness.getEnd_hour());
-                                    jsonObject.put("endMinute", eaBleSedentariness.getEnd_minute());
-                                    jsonObject.put("stepThreshold", eaBleSedentariness.getStep_threshold());
-                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("interval", eaBleSedentariness.getInterval());
+                                jsonObject.put("weekCycleBit", eaBleSedentariness.getWeek_cycle_bit());
+                                jsonObject.put("beginHour", eaBleSedentariness.getBegin_hour());
+                                jsonObject.put("beginMinute", eaBleSedentariness.getBegin_minute());
+                                jsonObject.put("endHour", eaBleSedentariness.getEnd_hour());
+                                jsonObject.put("endMinute", eaBleSedentariness.getEnd_minute());
+                                jsonObject.put("stepThreshold", eaBleSedentariness.getStep_threshold());
+                                Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1577,55 +1566,55 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.ancs_sw, new RemindCallback() {
                     @Override
                     public void remindInfo(EABleAncsSw eaBleAncsSw) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    JSONObject jsonObject = new JSONObject();
-                                    if (eaBleAncsSw.getS_incomingcall() != null) {
-                                        JSONObject jsonObject1 = new JSONObject();
-                                        jsonObject1.put("sw", eaBleAncsSw.getS_incomingcall().getSw());
-                                        jsonObject1.put("remindActionType", eaBleAncsSw.getS_incomingcall().getE_action().getValue());
-                                        jsonObject.put("sIncomingcall", jsonObject1.getInnerMap());
+                                JSONObject jsonObject = new JSONObject();
+                                if (eaBleAncsSw.getS_incomingcall() != null) {
+                                    JSONObject jsonObject1 = new JSONObject();
+                                    jsonObject1.put("sw", eaBleAncsSw.getS_incomingcall().getSw());
+                                    jsonObject1.put("remindActionType", eaBleAncsSw.getS_incomingcall().getE_action().getValue());
+                                    jsonObject.put("sIncomingcall", jsonObject1.getInnerMap());
 
-                                    }
-                                    if (eaBleAncsSw.getS_missedcall() != null) {
-                                        JSONObject jsonObject2 = new JSONObject();
-                                        jsonObject2.put("sw", eaBleAncsSw.getS_missedcall().getSw());
-                                        jsonObject2.put("remindActionType", eaBleAncsSw.getS_missedcall().getE_action().getValue());
-                                        jsonObject.put("sMissedcall", jsonObject2.getInnerMap());
-
-                                    }
-                                    if (eaBleAncsSw.getS_email() != null) {
-                                        JSONObject jsonObject3 = new JSONObject();
-                                        jsonObject3.put("sw", eaBleAncsSw.getS_email().getSw());
-                                        jsonObject3.put("remindActionType", eaBleAncsSw.getS_email().getE_action().getValue());
-                                        jsonObject.put("sEmail", jsonObject3.getInnerMap());
-                                    }
-                                    if (eaBleAncsSw.getS_sms() != null) {
-                                        JSONObject jsonObject4 = new JSONObject();
-                                        jsonObject4.put("sw", eaBleAncsSw.getS_sms().getSw());
-                                        jsonObject4.put("remindActionType", eaBleAncsSw.getS_sms().getE_action().getValue());
-                                        jsonObject.put("sSms", jsonObject4.getInnerMap());
-                                    }
-                                    if (eaBleAncsSw.getS_social() != null) {
-                                        JSONObject jsonObject5 = new JSONObject();
-                                        jsonObject5.put("sw", eaBleAncsSw.getS_social().getSw());
-                                        jsonObject5.put("remindActionType", eaBleAncsSw.getS_social().getE_action().getValue());
-                                        jsonObject.put("sSocial", jsonObject5.getInnerMap());
-                                    }
-                                    if (eaBleAncsSw.getS_schedule() != null) {
-                                        JSONObject jsonObject6 = new JSONObject();
-                                        jsonObject6.put("sw", eaBleAncsSw.getS_schedule().getSw());
-                                        jsonObject6.put("remindActionType", eaBleAncsSw.getS_schedule().getE_action().getValue());
-                                        jsonObject.put("sSchedule", jsonObject6.getInnerMap());
-                                    }
-                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
                                 }
-                            });
-                        }
+                                if (eaBleAncsSw.getS_missedcall() != null) {
+                                    JSONObject jsonObject2 = new JSONObject();
+                                    jsonObject2.put("sw", eaBleAncsSw.getS_missedcall().getSw());
+                                    jsonObject2.put("remindActionType", eaBleAncsSw.getS_missedcall().getE_action().getValue());
+                                    jsonObject.put("sMissedcall", jsonObject2.getInnerMap());
+
+                                }
+                                if (eaBleAncsSw.getS_email() != null) {
+                                    JSONObject jsonObject3 = new JSONObject();
+                                    jsonObject3.put("sw", eaBleAncsSw.getS_email().getSw());
+                                    jsonObject3.put("remindActionType", eaBleAncsSw.getS_email().getE_action().getValue());
+                                    jsonObject.put("sEmail", jsonObject3.getInnerMap());
+                                }
+                                if (eaBleAncsSw.getS_sms() != null) {
+                                    JSONObject jsonObject4 = new JSONObject();
+                                    jsonObject4.put("sw", eaBleAncsSw.getS_sms().getSw());
+                                    jsonObject4.put("remindActionType", eaBleAncsSw.getS_sms().getE_action().getValue());
+                                    jsonObject.put("sSms", jsonObject4.getInnerMap());
+                                }
+                                if (eaBleAncsSw.getS_social() != null) {
+                                    JSONObject jsonObject5 = new JSONObject();
+                                    jsonObject5.put("sw", eaBleAncsSw.getS_social().getSw());
+                                    jsonObject5.put("remindActionType", eaBleAncsSw.getS_social().getE_action().getValue());
+                                    jsonObject.put("sSocial", jsonObject5.getInnerMap());
+                                }
+                                if (eaBleAncsSw.getS_schedule() != null) {
+                                    JSONObject jsonObject6 = new JSONObject();
+                                    jsonObject6.put("sw", eaBleAncsSw.getS_schedule().getSw());
+                                    jsonObject6.put("remindActionType", eaBleAncsSw.getS_schedule().getE_action().getValue());
+                                    jsonObject.put("sSchedule", jsonObject6.getInnerMap());
+                                }
+                                Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1640,40 +1629,40 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.reminder, new AttentionCallback() {
                     @Override
                     public void attentionInfo(EABleReminder eaBleReminder) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.e(TAG, "提醒字符串:" + eaBleReminder.toString());
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("id", eaBleReminder.id);
-                                    jsonObject.put("e_ops", eaBleReminder.getE_ops().getValue());
-                                    List<ReminderItem> items = new ArrayList<>();
-                                    if (eaBleReminder.getS_index() != null && !eaBleReminder.getS_index().isEmpty()) {
-                                        for (int i = 0; i < eaBleReminder.getS_index().size(); i++) {
-                                            ReminderItem reminderItem = new ReminderItem();
-                                            reminderItem.reminderEventType = eaBleReminder.getS_index().get(i).getE_type().getValue();
-                                            reminderItem.id_p = eaBleReminder.getS_index().get(i).getId();
-                                            reminderItem.hour = eaBleReminder.getS_index().get(i).getHour();
-                                            reminderItem.minute = eaBleReminder.getS_index().get(i).getMinute();
-                                            reminderItem.year = eaBleReminder.getS_index().get(i).getYear();
-                                            reminderItem.month = eaBleReminder.getS_index().get(i).getMonth();
-                                            reminderItem.day = eaBleReminder.getS_index().get(i).getDay();
-                                            reminderItem.weekCycleBit = eaBleReminder.getS_index().get(i).getWeek_cycle_bit();
-                                            reminderItem.sw = eaBleReminder.getS_index().get(i).getSw();
-                                            reminderItem.secSw = eaBleReminder.getS_index().get(i).getSec_sw();
-                                            reminderItem.sleepDuration = eaBleReminder.getS_index().get(i).getSleep_duration();
-                                            reminderItem.remindActionType = eaBleReminder.getS_index().get(i).getE_action().getValue();
-                                            reminderItem.content = eaBleReminder.getS_index().get(i).getContent();
-                                            items.add(reminderItem);
-                                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e(TAG, "提醒字符串:" + eaBleReminder.toString());
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("id", eaBleReminder.id);
+                                jsonObject.put("e_ops", eaBleReminder.getE_ops().getValue());
+                                List<ReminderItem> items = new ArrayList<>();
+                                if (eaBleReminder.getS_index() != null && !eaBleReminder.getS_index().isEmpty()) {
+                                    for (int i = 0; i < eaBleReminder.getS_index().size(); i++) {
+                                        ReminderItem reminderItem = new ReminderItem();
+                                        reminderItem.reminderEventType = eaBleReminder.getS_index().get(i).getE_type().getValue();
+                                        reminderItem.id_p = eaBleReminder.getS_index().get(i).getId();
+                                        reminderItem.hour = eaBleReminder.getS_index().get(i).getHour();
+                                        reminderItem.minute = eaBleReminder.getS_index().get(i).getMinute();
+                                        reminderItem.year = eaBleReminder.getS_index().get(i).getYear();
+                                        reminderItem.month = eaBleReminder.getS_index().get(i).getMonth();
+                                        reminderItem.day = eaBleReminder.getS_index().get(i).getDay();
+                                        reminderItem.weekCycleBit = eaBleReminder.getS_index().get(i).getWeek_cycle_bit();
+                                        reminderItem.sw = eaBleReminder.getS_index().get(i).getSw();
+                                        reminderItem.secSw = eaBleReminder.getS_index().get(i).getSec_sw();
+                                        reminderItem.sleepDuration = eaBleReminder.getS_index().get(i).getSleep_duration();
+                                        reminderItem.remindActionType = eaBleReminder.getS_index().get(i).getE_action().getValue();
+                                        reminderItem.content = eaBleReminder.getS_index().get(i).getContent();
+                                        items.add(reminderItem);
                                     }
-                                    jsonObject.put("sIndexArray", items);
-                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
                                 }
-                            });
-                        }
+                                jsonObject.put("sIndexArray", items);
+                                Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1688,14 +1677,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.distance_unit, new DistanceUnitCallback() {
                     @Override
                     public void distanceUnitInfo(EABleDistanceFormat eaBleDistanceFormat) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    sendWatchDataWithOtherKeyValue("eFormat", eaBleDistanceFormat.e_format.getValue(), type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendWatchDataWithOtherKeyValue("eFormat", eaBleDistanceFormat.e_format.getValue(), type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1709,14 +1698,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.weight_unit, new WeightUnitCallback() {
                     @Override
                     public void weightUnitInfo(EABleWeightFormat eaBleWeightFormat) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    sendWatchDataWithOtherKeyValue("eFormat", eaBleWeightFormat.e_format.getValue(), type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendWatchDataWithOtherKeyValue("eFormat", eaBleWeightFormat.e_format.getValue(), type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1731,18 +1720,18 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.heart_rate_limit, new HeartLimitCallback() {
                     @Override
                     public void heartLimitInfo(EABleHr eaBleHr) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("sw", eaBleHr.getSw());
-                                    jsonObject.put("maxHr", eaBleHr.getMax_hr());
-                                    jsonObject.put("minHr", eaBleHr.getMin_hr());
-                                    sendWatchDataWithMap(jsonObject.getInnerMap(), type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("sw", eaBleHr.getSw());
+                                jsonObject.put("maxHr", eaBleHr.getMax_hr());
+                                jsonObject.put("minHr", eaBleHr.getMin_hr());
+                                sendWatchDataWithMap(jsonObject.getInnerMap(), type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1756,14 +1745,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.base_calories, new CalorieSwitchCallback() {
                     @Override
                     public void switchInfo(int i) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    sendWatchDataWithOtherKeyValue("sw", i, type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendWatchDataWithOtherKeyValue("sw", i, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1777,20 +1766,20 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.gestures, new RaiseHandBrightScreenCallback() {
                     @Override
                     public void switchInfo(EABleGesturesBrightScreen eaBleGesturesBrightScreen) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("eBrightSrc", eaBleGesturesBrightScreen.getBrightScreenSwitch().getValue());
-                                    jsonObject.put("beginHour", eaBleGesturesBrightScreen.getBegin_hour());
-                                    jsonObject.put("beginMinute", eaBleGesturesBrightScreen.getBegin_minute());
-                                    jsonObject.put("endHour", eaBleGesturesBrightScreen.getEnd_hour());
-                                    jsonObject.put("endMinute", eaBleGesturesBrightScreen.getEnd_minute());
-                                    sendWatchDataWithMap(jsonObject.getInnerMap(), type);
-                                }
-                            });
-                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("eBrightSrc", eaBleGesturesBrightScreen.getBrightScreenSwitch().getValue());
+                                jsonObject.put("beginHour", eaBleGesturesBrightScreen.getBegin_hour());
+                                jsonObject.put("beginMinute", eaBleGesturesBrightScreen.getBegin_minute());
+                                jsonObject.put("endHour", eaBleGesturesBrightScreen.getEnd_hour());
+                                jsonObject.put("endMinute", eaBleGesturesBrightScreen.getEnd_minute());
+                                sendWatchDataWithMap(jsonObject.getInnerMap(), type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1804,29 +1793,29 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.combination, new CombinationCallback() {
                     @Override
                     public void combinationInfo(final EABleCombination eaBleCombination) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    Map<String, Object> map = new HashMap();
-                                    map.put("e_status", eaBleCombination.getE_status().getValue());
-                                    map.put("e_vibrate_intensity", eaBleCombination.getE_vibrate_intensity().getValue());
-                                    map.put("e_hand_info", eaBleCombination.getE_hand_info().getValue());
-                                    map.put("e_unit_format", eaBleCombination.getE_unit_format().getValue());
-                                    map.put("bat_level", eaBleCombination.getBat_level());
-                                    map.put("auto_pressure_sw", eaBleCombination.getAuto_pressure_sw());
-                                    map.put("auto_sedentariness_sw", eaBleCombination.getAuto_sedentariness_sw());
-                                    map.put("gestures_sw", eaBleCombination.getGestures_sw());
-                                    map.put("auto_check_hr_sw", eaBleCombination.getAuto_check_hr_sw());
-                                    map.put("not_disturb_sw", eaBleCombination.getNot_disturb_sw());
-                                    map.put("set_vibrate_intensity", eaBleCombination.getSet_vibrate_intensity());
-                                    map.put("wf_id", eaBleCombination.getWf_id());
-                                    map.put("user_wf_id", eaBleCombination.getUser_wf_id());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                Map<String, Object> map = new HashMap();
+                                map.put("e_status", eaBleCombination.getE_status().getValue());
+                                map.put("e_vibrate_intensity", eaBleCombination.getE_vibrate_intensity().getValue());
+                                map.put("e_hand_info", eaBleCombination.getE_hand_info().getValue());
+                                map.put("e_unit_format", eaBleCombination.getE_unit_format().getValue());
+                                map.put("bat_level", eaBleCombination.getBat_level());
+                                map.put("auto_pressure_sw", eaBleCombination.getAuto_pressure_sw());
+                                map.put("auto_sedentariness_sw", eaBleCombination.getAuto_sedentariness_sw());
+                                map.put("gestures_sw", eaBleCombination.getGestures_sw());
+                                map.put("auto_check_hr_sw", eaBleCombination.getAuto_check_hr_sw());
+                                map.put("not_disturb_sw", eaBleCombination.getNot_disturb_sw());
+                                map.put("set_vibrate_intensity", eaBleCombination.getSet_vibrate_intensity());
+                                map.put("wf_id", eaBleCombination.getWf_id());
+                                map.put("user_wf_id", eaBleCombination.getUser_wf_id());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -1852,34 +1841,34 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 types.add(EABleMenuPage.MenuType.page_weather);
                                 eaBleMenuPage.setAllSupportList(types);
                             }
-                            if (mHandler != null) {
-                                mHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            // if (mHandler != null) {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                        List<Map> aList = new ArrayList<>();
-                                        List<Map> sList = new ArrayList<>();
+                                    List<Map> aList = new ArrayList<>();
+                                    List<Map> sList = new ArrayList<>();
 
-                                        for (int i = 0; i < eaBleMenuPage.getTypeList().size(); i++) {
-
-                                            JSONObject jsonObject = new JSONObject();
-                                            jsonObject.put("eType", eaBleMenuPage.getTypeList().get(i).getValue());
-                                            aList.add(jsonObject);
-                                        }
-                                        for (int i = 0; i < eaBleMenuPage.getAllSupportList().size(); i++) {
-
-                                            JSONObject jsonObject = new JSONObject();
-                                            jsonObject.put("eType", eaBleMenuPage.getAllSupportList().get(i).getValue());
-                                            sList.add(jsonObject);
-                                        }
+                                    for (int i = 0; i < eaBleMenuPage.getTypeList().size(); i++) {
 
                                         JSONObject jsonObject = new JSONObject();
-                                        jsonObject.put("aList", aList);
-                                        jsonObject.put("sList", sList);
-                                        sendWatchDataWithMap(jsonObject.getInnerMap(), type);
+                                        jsonObject.put("eType", eaBleMenuPage.getTypeList().get(i).getValue());
+                                        aList.add(jsonObject);
                                     }
-                                });
-                            }
+                                    for (int i = 0; i < eaBleMenuPage.getAllSupportList().size(); i++) {
+
+                                        JSONObject jsonObject = new JSONObject();
+                                        jsonObject.put("eType", eaBleMenuPage.getAllSupportList().get(i).getValue());
+                                        sList.add(jsonObject);
+                                    }
+
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("aList", aList);
+                                    jsonObject.put("sList", sList);
+                                    sendWatchDataWithMap(jsonObject.getInnerMap(), type);
+                                }
+                            });
+                            //  }
                         }
                     }
 
@@ -1894,23 +1883,23 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.dial, new WatchFaceCallback() {
                     @Override
                     public void watchFaceInfo(EABleWatchFace eaBleWatchFace) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    Map<String, Object> map = new HashMap();
-                                    map.put("id", eaBleWatchFace.getId());
-                                    map.put("user_wf_id", eaBleWatchFace.getUser_wf_id());
-                                    map.put("user_wf_id_0", eaBleWatchFace.getUser_wf_id_0());
-                                    map.put("user_wf_id_1", eaBleWatchFace.getUser_wf_id_1());
-                                    map.put("user_wf_id_2", eaBleWatchFace.getUser_wf_id_2());
-                                    map.put("user_wf_id_3", eaBleWatchFace.getUser_wf_id_3());
-                                    sendWatchDataWithMap(map, type);
+                                Map<String, Object> map = new HashMap();
+                                map.put("id", eaBleWatchFace.getId());
+                                map.put("user_wf_id", eaBleWatchFace.getUser_wf_id());
+                                map.put("user_wf_id_0", eaBleWatchFace.getUser_wf_id_0());
+                                map.put("user_wf_id_1", eaBleWatchFace.getUser_wf_id_1());
+                                map.put("user_wf_id_2", eaBleWatchFace.getUser_wf_id_2());
+                                map.put("user_wf_id_3", eaBleWatchFace.getUser_wf_id_3());
+                                sendWatchDataWithMap(map, type);
 
-                                }
-                            });
-                        }
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -1923,99 +1912,99 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.push_info, new InfoPushCallback() {
                     @Override
                     public void pushInfo(EABleInfoPush eaBleInfoPush) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ShowAppMessage showAppMessage = new ShowAppMessage();
-                                    Map<String, Boolean> map = new HashMap<>();
-                                    if (eaBleInfoPush.getS_app_sw() != null && !eaBleInfoPush.getS_app_sw().isEmpty()) {
-                                        map.put("unknow", eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
-                                        map.put("wechat", eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
-                                        map.put("qq", eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
-                                        map.put("facebook", eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
-                                        map.put("twitter", eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
-                                        map.put("messenger", eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
-                                        map.put("hangouts", eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
-                                        map.put("gmail", eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
-                                        map.put("viber", eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
-                                        map.put("snapchat", eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
-                                        map.put("whatsApp", eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
-                                        map.put("instagram", eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
-                                        map.put("linkedin", eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
-                                        map.put("line", eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
-                                        map.put("skype", eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
-                                        map.put("booking", eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
-                                        map.put("airbnb", eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
-                                        map.put("flipboard", eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
-                                        map.put("spotify", eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
-                                        map.put("pandora", eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
-                                        map.put("telegram", eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
-                                        map.put("dropbox", eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
-                                        map.put("waze", eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
-                                        map.put("lift", eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
-                                        map.put("slack", eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
-                                        map.put("shazam", eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
-                                        map.put("deliveroo", eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
-                                        map.put("kakaotalk", eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
-                                        map.put("pinterest", eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
-                                        map.put("tumblr", eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
-                                        map.put("vk", eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
-                                        map.put("youtube", eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
-                                        // showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
-                                        // showAppMessage.wechat = (eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
-                                        // showAppMessage.qq = (eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
-                                        // showAppMessage.facebook = (eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
-                                        //showAppMessage.twitter = (eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
-                                        // showAppMessage.messenger = (eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
-                                        //showAppMessage.hangouts = (eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
-                                        // showAppMessage.gmail = (eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
-                                        // showAppMessage.viber = (eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
-                                        // showAppMessage.snapchat = (eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
-                                        // showAppMessage.whatsApp = (eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
-                                        // showAppMessage.instagram = (eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
-                                        // showAppMessage.linkedin = (eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
-                                        // showAppMessage.line = (eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
-                                        // showAppMessage.skype = (eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
-                                        // showAppMessage.booking = (eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
-                                        // showAppMessage.airbnb = (eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
-                                        // showAppMessage.flipboard = (eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
-                                        // showAppMessage.spotify = (eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
-                                        // showAppMessage.pandora = (eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
-                                        // showAppMessage.telegram = (eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
-                                        // showAppMessage.dropbox = (eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
-                                        // showAppMessage.waze = (eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
-                                        // showAppMessage.lift = (eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
-                                        // showAppMessage.slack = (eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
-                                        // showAppMessage.shazam = (eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
-                                        // showAppMessage.deliveroo = (eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
-                                        // showAppMessage.kakaotalk = (eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
-                                        // showAppMessage.pinterest = (eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
-                                        // showAppMessage.tumblr = (eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
-                                        // showAppMessage.vk = (eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
-                                        // showAppMessage.youtube = (eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
-                                        if (eaBleInfoPush.getS_app_sw().size() > 32) {
-                                            map.put("amazon", eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
-                                            map.put("discord", eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
-                                            map.put("github", eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
-                                            map.put("googleMaps", eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
-                                            map.put("newsBreak", eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
-                                            map.put("rReddit", eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
-                                            map.put("teams", eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
-                                            map.put("tiktok", eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
-                                            map.put("twitch", eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
-                                            map.put("uberEats", eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
-                                            // showAppMessage.amazon = (eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
-                                            // showAppMessage.discord = (eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
-                                            // showAppMessage.github = (eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
-                                            // showAppMessage.googleMaps = (eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
-                                            // showAppMessage.newsBreak = (eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
-                                            // showAppMessage.rReddit = (eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
-                                            // showAppMessage.teams = (eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
-                                            // showAppMessage.tiktok = (eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
-                                            // showAppMessage.twitch = (eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
-                                            // showAppMessage.uberEats = (eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
-                                        }
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowAppMessage showAppMessage = new ShowAppMessage();
+                                Map<String, Boolean> map = new HashMap<>();
+                                if (eaBleInfoPush.getS_app_sw() != null && !eaBleInfoPush.getS_app_sw().isEmpty()) {
+                                    map.put("unknow", eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
+                                    map.put("wechat", eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
+                                    map.put("qq", eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
+                                    map.put("facebook", eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
+                                    map.put("twitter", eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
+                                    map.put("messenger", eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
+                                    map.put("hangouts", eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
+                                    map.put("gmail", eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
+                                    map.put("viber", eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
+                                    map.put("snapchat", eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
+                                    map.put("whatsApp", eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
+                                    map.put("instagram", eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
+                                    map.put("linkedin", eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
+                                    map.put("line", eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
+                                    map.put("skype", eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
+                                    map.put("booking", eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
+                                    map.put("airbnb", eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
+                                    map.put("flipboard", eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
+                                    map.put("spotify", eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
+                                    map.put("pandora", eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
+                                    map.put("telegram", eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
+                                    map.put("dropbox", eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
+                                    map.put("waze", eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
+                                    map.put("lift", eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
+                                    map.put("slack", eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
+                                    map.put("shazam", eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
+                                    map.put("deliveroo", eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
+                                    map.put("kakaotalk", eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
+                                    map.put("pinterest", eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
+                                    map.put("tumblr", eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
+                                    map.put("vk", eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
+                                    map.put("youtube", eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
+                                    // showAppMessage.unknow = (eaBleInfoPush.getS_app_sw().get(0).getSw() == 1 ? true : false);
+                                    // showAppMessage.wechat = (eaBleInfoPush.getS_app_sw().get(1).getSw() == 1 ? true : false);
+                                    // showAppMessage.qq = (eaBleInfoPush.getS_app_sw().get(2).getSw() == 1 ? true : false);
+                                    // showAppMessage.facebook = (eaBleInfoPush.getS_app_sw().get(3).getSw() == 1 ? true : false);
+                                    //showAppMessage.twitter = (eaBleInfoPush.getS_app_sw().get(4).getSw() == 1 ? true : false);
+                                    // showAppMessage.messenger = (eaBleInfoPush.getS_app_sw().get(5).getSw() == 1 ? true : false);
+                                    //showAppMessage.hangouts = (eaBleInfoPush.getS_app_sw().get(6).getSw() == 1 ? true : false);
+                                    // showAppMessage.gmail = (eaBleInfoPush.getS_app_sw().get(7).getSw() == 1 ? true : false);
+                                    // showAppMessage.viber = (eaBleInfoPush.getS_app_sw().get(8).getSw() == 1 ? true : false);
+                                    // showAppMessage.snapchat = (eaBleInfoPush.getS_app_sw().get(9).getSw() == 1 ? true : false);
+                                    // showAppMessage.whatsApp = (eaBleInfoPush.getS_app_sw().get(10).getSw() == 1 ? true : false);
+                                    // showAppMessage.instagram = (eaBleInfoPush.getS_app_sw().get(11).getSw() == 1 ? true : false);
+                                    // showAppMessage.linkedin = (eaBleInfoPush.getS_app_sw().get(12).getSw() == 1 ? true : false);
+                                    // showAppMessage.line = (eaBleInfoPush.getS_app_sw().get(13).getSw() == 1 ? true : false);
+                                    // showAppMessage.skype = (eaBleInfoPush.getS_app_sw().get(14).getSw() == 1 ? true : false);
+                                    // showAppMessage.booking = (eaBleInfoPush.getS_app_sw().get(15).getSw() == 1 ? true : false);
+                                    // showAppMessage.airbnb = (eaBleInfoPush.getS_app_sw().get(16).getSw() == 1 ? true : false);
+                                    // showAppMessage.flipboard = (eaBleInfoPush.getS_app_sw().get(17).getSw() == 1 ? true : false);
+                                    // showAppMessage.spotify = (eaBleInfoPush.getS_app_sw().get(18).getSw() == 1 ? true : false);
+                                    // showAppMessage.pandora = (eaBleInfoPush.getS_app_sw().get(19).getSw() == 1 ? true : false);
+                                    // showAppMessage.telegram = (eaBleInfoPush.getS_app_sw().get(20).getSw() == 1 ? true : false);
+                                    // showAppMessage.dropbox = (eaBleInfoPush.getS_app_sw().get(21).getSw() == 1 ? true : false);
+                                    // showAppMessage.waze = (eaBleInfoPush.getS_app_sw().get(22).getSw() == 1 ? true : false);
+                                    // showAppMessage.lift = (eaBleInfoPush.getS_app_sw().get(23).getSw() == 1 ? true : false);
+                                    // showAppMessage.slack = (eaBleInfoPush.getS_app_sw().get(24).getSw() == 1 ? true : false);
+                                    // showAppMessage.shazam = (eaBleInfoPush.getS_app_sw().get(25).getSw() == 1 ? true : false);
+                                    // showAppMessage.deliveroo = (eaBleInfoPush.getS_app_sw().get(26).getSw() == 1 ? true : false);
+                                    // showAppMessage.kakaotalk = (eaBleInfoPush.getS_app_sw().get(27).getSw() == 1 ? true : false);
+                                    // showAppMessage.pinterest = (eaBleInfoPush.getS_app_sw().get(28).getSw() == 1 ? true : false);
+                                    // showAppMessage.tumblr = (eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
+                                    // showAppMessage.vk = (eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
+                                    // showAppMessage.youtube = (eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
+                                    if (eaBleInfoPush.getS_app_sw().size() > 32) {
+                                        map.put("amazon", eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+                                        map.put("discord", eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
+                                        map.put("github", eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
+                                        map.put("googleMaps", eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
+                                        map.put("newsBreak", eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
+                                        map.put("rReddit", eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
+                                        map.put("teams", eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
+                                        map.put("tiktok", eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
+                                        map.put("twitch", eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
+                                        map.put("uberEats", eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                                        // showAppMessage.amazon = (eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+                                        // showAppMessage.discord = (eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
+                                        // showAppMessage.github = (eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
+                                        // showAppMessage.googleMaps = (eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
+                                        // showAppMessage.newsBreak = (eaBleInfoPush.getS_app_sw().get(36).getSw() == 1 ? true : false);
+                                        // showAppMessage.rReddit = (eaBleInfoPush.getS_app_sw().get(37).getSw() == 1 ? true : false);
+                                        // showAppMessage.teams = (eaBleInfoPush.getS_app_sw().get(38).getSw() == 1 ? true : false);
+                                        // showAppMessage.tiktok = (eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
+                                        // showAppMessage.twitch = (eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
+                                        // showAppMessage.uberEats = (eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                                    }
 
 
 //                                        for (int i = 0; i < eaBleInfoPush.getS_app_sw().size(); i++) {
@@ -2025,12 +2014,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 //                                            integerList.add(jsonObject1);
 //                                        }
 //                                        jsonObject.put("sAppSwArray", integerList);
-                                    }
-//                                    Map map = jsonObject.getInnerMap();
-                                    sendWatchDataWithMap(map, type);
                                 }
-                            });
-                        }
+//                                    Map map = jsonObject.getInnerMap();
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        //  }
                     }
 
                     @Override
@@ -2049,42 +2038,42 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void habitInfo(EABleHabit eaBleHabit) {
                         if (eaBleHabit != null) {
-                            if (mHandler != null) {
-                                mHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            // if (mHandler != null) {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                        JSONObject jsonObject = new JSONObject();
-                                        jsonObject.put("id", eaBleHabit.id);
-                                        jsonObject.put("eOps", eaBleHabit.getE_ops().getValue());
-                                        List<JSONObject> items = new ArrayList<>();
-                                        if (eaBleHabit.getItemList() != null && !eaBleHabit.getItemList().isEmpty()) {
-                                            for (int i = 0; i < eaBleHabit.getItemList().size(); i++) {
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("id", eaBleHabit.id);
+                                    jsonObject.put("eOps", eaBleHabit.getE_ops().getValue());
+                                    List<JSONObject> items = new ArrayList<>();
+                                    if (eaBleHabit.getItemList() != null && !eaBleHabit.getItemList().isEmpty()) {
+                                        for (int i = 0; i < eaBleHabit.getItemList().size(); i++) {
 
-                                                EABleHabit.HabitItem habitItem = eaBleHabit.getItemList().get(i);
-                                                JSONObject item = new JSONObject();
-                                                item.put("eIconId", habitItem.getE_icon_id().getValue());
-                                                item.put("id_p", habitItem.getId());
-                                                item.put("beginHour", habitItem.getBegin_hour());
-                                                item.put("beginMinute", habitItem.getBegin_minute());
-                                                item.put("endHour", habitItem.getEnd_hour());
-                                                item.put("endMinute", habitItem.getEnd_minute());
-                                                item.put("r", habitItem.getRedColor());
-                                                item.put("g", habitItem.getGreenColor());
-                                                item.put("b", habitItem.getBlueColor());
-                                                item.put("duration", habitItem.getDuration());
-                                                item.put("eAction", habitItem.getE_action().getValue());
-                                                item.put("content", habitItem.getContent());
-                                                item.put("eFlag", habitItem.getHabitState().getValue());
-                                                items.add(item);
-                                            }
+                                            EABleHabit.HabitItem habitItem = eaBleHabit.getItemList().get(i);
+                                            JSONObject item = new JSONObject();
+                                            item.put("eIconId", habitItem.getE_icon_id().getValue());
+                                            item.put("id_p", habitItem.getId());
+                                            item.put("beginHour", habitItem.getBegin_hour());
+                                            item.put("beginMinute", habitItem.getBegin_minute());
+                                            item.put("endHour", habitItem.getEnd_hour());
+                                            item.put("endMinute", habitItem.getEnd_minute());
+                                            item.put("r", habitItem.getRedColor());
+                                            item.put("g", habitItem.getGreenColor());
+                                            item.put("b", habitItem.getBlueColor());
+                                            item.put("duration", habitItem.getDuration());
+                                            item.put("eAction", habitItem.getE_action().getValue());
+                                            item.put("content", habitItem.getContent());
+                                            item.put("eFlag", habitItem.getHabitState().getValue());
+                                            items.add(item);
                                         }
-                                        jsonObject.put("sIndexArray", items);
-                                        Map map = jsonObject.getInnerMap();
-                                        sendWatchDataWithMap(map, type);
                                     }
-                                });
-                            }
+                                    jsonObject.put("sIndexArray", items);
+                                    Map map = jsonObject.getInnerMap();
+                                    sendWatchDataWithMap(map, type);
+                                }
+                            });
+                            // }
                         }
                     }
 
@@ -2100,20 +2089,20 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.todayData, new TodayTotalDataCallback() {
                     @Override
                     public void todayData(TodayTotalData todayTotalData) {
-                        if (mHandler != null) {
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        // if (mHandler != null) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                    Map<String, Integer> map = new HashMap();
-                                    map.put("steps", todayTotalData.getSteps());
-                                    map.put("calorie", todayTotalData.getCalorie());
-                                    map.put("distance", todayTotalData.getDistance());
-                                    map.put("duration", todayTotalData.getDuration());
-                                    sendWatchDataWithMap(map, type);
-                                }
-                            });
-                        }
+                                Map<String, Integer> map = new HashMap();
+                                map.put("steps", todayTotalData.getSteps());
+                                map.put("calorie", todayTotalData.getCalorie());
+                                map.put("distance", todayTotalData.getDistance());
+                                map.put("duration", todayTotalData.getDuration());
+                                sendWatchDataWithMap(map, type);
+                            }
+                        });
+                        // }
                     }
 
                     @Override
@@ -2673,12 +2662,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
                 EABleAncsSw eaBleAncsSw = new EABleAncsSw();
 
-                Map<String, Object> sIncomingcall = (Map<String, Object>)map.get("sIncomingcall");
-                Map<String, Object> sMissedcall = (Map<String, Object>)map.get("sMissedcall");
-                Map<String, Object> sSms = (Map<String, Object>)map.get("sSms");
-                Map<String, Object> sSocial = (Map<String, Object>)map.get("sSocial");
-                Map<String, Object> sEmail = (Map<String, Object>)map.get("sEmail");
-                Map<String, Object> sSchedule = (Map<String, Object>)map.get("sSchedule");
+                Map<String, Object> sIncomingcall = (Map<String, Object>) map.get("sIncomingcall");
+                Map<String, Object> sMissedcall = (Map<String, Object>) map.get("sMissedcall");
+                Map<String, Object> sSms = (Map<String, Object>) map.get("sSms");
+                Map<String, Object> sSocial = (Map<String, Object>) map.get("sSocial");
+                Map<String, Object> sEmail = (Map<String, Object>) map.get("sEmail");
+                Map<String, Object> sSchedule = (Map<String, Object>) map.get("sSchedule");
 
                 eaBleAncsSw.s_incomingcall = getAncsSwItem(sIncomingcall);
                 eaBleAncsSw.s_missedcall = getAncsSwItem(sMissedcall);
@@ -3112,37 +3101,37 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
                     }
                 });
-            }break;
-
+            }
+            break;
             default: {
-                if (mHandler != null) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod(kArgumentsError, "argument error");
-                        }
-                    });
-                }
+                // if (mHandler != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        channel.invokeMethod(kArgumentsError, "argument error");
+                    }
+                });
+                // }
             }
             break;
         }
     }
 
     private void setWatchDataResponse(int respondCodeType, int type) {
-        if (mHandler != null) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", type);
-                    jsonObject.put("respondCodeType", respondCodeType);
-                    channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
-                }
-            });
-        }
+        // if (mHandler != null) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("dataType", type);
+                jsonObject.put("respondCodeType", respondCodeType);
+                channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
+            }
+        });
+        // }
     }
 
-    private CommonAction getCommonAction(int remindActionType){
+    private CommonAction getCommonAction(int remindActionType) {
 
         if (remindActionType == 0) {
             return CommonAction.no_action;
@@ -3172,10 +3161,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         return CommonAction.no_action;
     }
 
-    private EABleAncsSw.EABleAncsSwItem getAncsSwItem(Map<String, Object> map){
+    private EABleAncsSw.EABleAncsSwItem getAncsSwItem(Map<String, Object> map) {
         EABleAncsSw.EABleAncsSwItem ancsSwItem = new EABleAncsSw.EABleAncsSwItem();
-        ancsSwItem.sw = (int)map.get("sw");
-        ancsSwItem.e_action = getCommonAction((int)map.get("remindActionType"));
+        ancsSwItem.sw = (int) map.get("sw");
+        ancsSwItem.e_action = getCommonAction((int) map.get("remindActionType"));
         return ancsSwItem;
     }
 
@@ -3210,42 +3199,42 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     private boolean checkArgumentName(String argumentName, String arguments) {
 
         if (!arguments.contains(argumentName)) {
-            if (mHandler != null) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kArgumentsError, argumentName + " error");
-                    }
-                });
-            }
+            // if (mHandler != null) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    channel.invokeMethod(kArgumentsError, argumentName + " error");
+                }
+            });
+            // }
             return false;
         }
         return true;
     }
 
     private void sendBigWatchData(@NonNull JSONObject jsonObject) {
-        if (mHandler != null) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    // int flag = jsonObject.getInteger("flag");
-                    // int dataType = jsonObject.getInteger("dataType");
+        // if (mHandler != null) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // int flag = jsonObject.getInteger("flag");
+                // int dataType = jsonObject.getInteger("dataType");
 
-                    channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
-                }
-            });
-        }
+                channel.invokeMethod(kGetBigWatchData, jsonObject.toJSONString());
+            }
+        });
+        // }
     }
 
     private void sendOpePhone(JSONObject jsonObject) {
-        if (mHandler != null) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    channel.invokeMethod(kOperationPhone, jsonObject.toJSONString());
-                }
-            });
-        }
+        // if (mHandler != null) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                channel.invokeMethod(kOperationPhone, jsonObject.toJSONString());
+            }
+        });
+        // }
     }
 
     private void otaAction(List otas) {
@@ -3262,7 +3251,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             EABleOta eaBleOta = new EABleOta();
             File file = new File(tempOtaData.binPath);
             if (!file.exists() || file.isDirectory()) {
-                mHandler.post(new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -3286,7 +3275,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 otaList.add(eaBleOta);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                mHandler.post(new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         channel.invokeMethod(kArgumentsError, "binpath file error");
@@ -3299,7 +3288,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
                 @Override
                 public void success() {
-                    mHandler.post(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             channel.invokeMethod(kProgress, 100);
@@ -3310,7 +3299,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                 @Override
                 public void progress(int i) {
-                    mHandler.post(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             Log.e(TAG, "当前进度:" + i);
@@ -3322,7 +3311,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                 @Override
                 public void mutualFail(int i) {
-                    mHandler.post(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             channel.invokeMethod(kProgress, -1);
@@ -3371,26 +3360,26 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         EABleManager.getInstance().motionDataResponse(eaBleGeneralSportRespond, new MotionDataResponseCallback() {
             @Override
             public void mutualSuccess() {
-                if (mHandler != null) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
+                // if (mHandler != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
 
-                        }
-                    });
-                }
+                    }
+                });
+                // }
             }
 
             @Override
             public void mutualFail(int i) {
-                if (mHandler != null) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
+                //  if (mHandler != null) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
 
-                        }
-                    });
-                }
+                    }
+                });
+                // }
             }
         });
     }
