@@ -285,7 +285,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 return;
             }
             
-            EABindingOpsType ops = [arguments[@"bindingCommandType"] integerValue] == 1 ? EABindingOpsTypeEnd:EABindingOpsTypeNormalBegin;
+            EABindingOpsType ops = [arguments[@"ops"] integerValue] == 1 ? EABindingOpsTypeEnd:EABindingOpsTypeNormalBegin;
             __block EABingingOps *bingingOps = [[EABingingOps alloc] init];
             bingingOps.ops = ops;
             bingingOps.bindMod = [arguments[@"bindMod"] integerValue];
