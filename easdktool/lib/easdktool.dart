@@ -203,8 +203,10 @@ class EASDKTool {
         break;
       case kSetWatchResponse:
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        print("^^^^^^^^ info = " + methodCall.arguments);
         EARespond respond = EARespond.fromMap(info);
         if (mSetDataCallback != null) {
+          print("^^^^^^^^ respond");
           mSetDataCallback!.onRespond(respond);
         }
         break;
