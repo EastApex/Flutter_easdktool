@@ -297,25 +297,30 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             WeakSelf;
             [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                 
-                
+                                NSLog(@"^^^^^^^^^ 1");
+
                 if (ops == EABindingOpsTypeNormalBegin && respondModel.eErrorCode == EARespondCodeTypeSuccess) {
                     
                     bingingOps.ops = EABindingOpsTypeEnd;
                     [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         //[selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
-                        
+                                        NSLog(@"^^^^^^^^^ 2");
+
                         EADeviceOps *ops = [[EADeviceOps alloc] init];
                         ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;
                         ops.deviceOpsStatus = EADeviceOpsStatusExecute;
                         [[EABleSendManager defaultManager] changeInfo:ops respond:^(EARespondModel * _Nonnull respondModel) {
                             
+                                            NSLog(@"^^^^^^^^^ 3");
+
                             [selfWeak setWatchRespondWithDataType:EADataInfoTypeDeviceOps respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                         }];
                     }];
                     
                 }else {
-                    
+                                    NSLog(@"^^^^^^^^^ 4");
+
                     [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                     if (respondModel.eErrorCode == EARespondCodeTypeFail) {
                         
