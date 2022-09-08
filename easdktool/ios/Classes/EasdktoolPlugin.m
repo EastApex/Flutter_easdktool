@@ -303,7 +303,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     bingingOps.ops = EABindingOpsTypeEnd;
                     [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                        [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
+                        //[selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                         
                         EADeviceOps *ops = [[EADeviceOps alloc] init];
                         ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;

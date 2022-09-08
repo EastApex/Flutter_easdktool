@@ -342,7 +342,10 @@ class ConnectListener implements EABleConnectListener {
                   //Bind command type: Begin【绑定命令类型：开始】
                   bindInfo.bindingCommandType = 0;
                 }
-                _easdkTool?.bindingWatch(bindInfo);
+                _easdkTool?.bindingWatch(bindInfo,
+                    EASetDataCallback(onRespond: ((respond) {
+                  print(respond.respondCodeType); 
+                })));
               }
             }),
             onFail: ((info) {})));

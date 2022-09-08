@@ -107,7 +107,8 @@ class EASDKTool {
 
   /// 绑定手表
   /// Binding a watch
-  void bindingWatch(EABindInfo bindInfo) {
+  void bindingWatch(EABindInfo bindInfo, EASetDataCallback setDataCallback) {
+    mSetDataCallback = setDataCallback;
     Map map = bindInfo.toMap();
     _channel.invokeMethod(kEAbindingWatch, convert.jsonEncode(map));
   }
