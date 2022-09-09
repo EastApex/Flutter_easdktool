@@ -30,6 +30,7 @@ const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接�
 const String kConnectState = "ConnectState";
 const String kArgumentsError = "ArgumentsError";
 const String kBluetoothState = "BluetoothState";
+const String kBingdingWatchResponse = "BingdingWatchResponse";
 const String kSetWatchResponse = "SetWatchResponse";
 const String kGetWatchResponse = "GetWatchResponse";
 const String kGetBigWatchData = "GetBigWatchData";
@@ -51,6 +52,7 @@ class EASDKTool {
 
   EAGetDataCallback? mGetDataCallback;
   EASetDataCallback? mSetDataCallback;
+  EABindingWatchCallback? mBindingWatchCallback;
   static EAGetBitDataCallback? mGetBitDataCallback;
   static OperationPhoneCallback? mOperationPhoneCallback;
   static EABleConnectListener? mEaBleConnectListener;
@@ -107,8 +109,9 @@ class EASDKTool {
 
   /// 绑定手表
   /// Binding a watch
-  void bindingWatch(EABindInfo bindInfo, EASetDataCallback setDataCallback) {
-    mSetDataCallback = setDataCallback;
+  void bindingWatch(
+      EABindInfo bindInfo, EABindingWatchCallback bindingWatchCallback) {
+    mBindingWatchCallback = bindingWatchCallback;
     Map map = bindInfo.toMap();
     _channel.invokeMethod(kEAbindingWatch, convert.jsonEncode(map));
   }
@@ -201,12 +204,20 @@ class EASDKTool {
         int state = methodCall.arguments;
         bluetoothState(state);
         break;
-      case kSetWatchResponse:
+      case kBingdingWatchResponse:
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         print("^^^^^^^^ info = " + methodCall.arguments);
         EARespond respond = EARespond.fromMap(info);
-        if (mSetDataCallback != null) {
+        if (mBindingWatchCallback != null) {
+          mBindingWatchCallback!.onRespond(respond);
           print("^^^^^^^^ respond");
+        }
+        break;
+      case kSetWatchResponse:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        EARespond respond = EARespond.fromMap(info);
+
+        if (mSetDataCallback != null) {
           mSetDataCallback!.onRespond(respond);
         }
         break;

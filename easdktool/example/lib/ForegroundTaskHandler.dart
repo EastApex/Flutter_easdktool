@@ -343,8 +343,8 @@ class ConnectListener implements EABleConnectListener {
                   bindInfo.bindingCommandType = 0;
                 }
                 _easdkTool?.bindingWatch(bindInfo,
-                    EASetDataCallback(onRespond: ((respond) {
-                  print(respond.respondCodeType); 
+                    EABindingWatchCallback(onRespond: ((respond) {
+                  print(respond.respondCodeType);
                 })));
               }
             }),

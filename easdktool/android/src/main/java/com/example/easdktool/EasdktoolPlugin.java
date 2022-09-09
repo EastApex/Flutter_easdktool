@@ -213,6 +213,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kConnectState = "ConnectState";
     final String kArgumentsError = "ArgumentsError";
     final String kBluetoothState = "BluetoothState";
+    const String kBingdingWatchResponse = "BingdingWatchResponse";
     final String kSetWatchResponse = "SetWatchResponse";
     final String kGetWatchResponse = "GetWatchResponse";
     final String kGetBigWatchData = "GetBigWatchData";
@@ -3125,7 +3126,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dataType", type);
                 jsonObject.put("respondCodeType", respondCodeType);
-                channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
+                if(dataType == kEADataInfoTypeBingWatch){
+                    channel.invokeMethod(kBingdingWatchResponse, jsonObject.toJSONString());
+                }else {
+                    channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
+                }
             }
         });
         // }

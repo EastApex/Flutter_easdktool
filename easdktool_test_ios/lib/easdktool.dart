@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'EACallback.dart';
@@ -28,6 +30,7 @@ const String kConnectState = "ConnectState";
 const String kArgumentsError = "ArgumentsError";
 const String kBluetoothState = "BluetoothState";
 const String kSetWatchResponse = "SetWatchResponse";
+const String kBingdingWatchResponse = "BingdingWatchResponse";
 const String kGetWatchResponse = "GetWatchResponse";
 const String kGetBigWatchData = "GetBigWatchData";
 const String kOperationPhone = "OperationPhone";
@@ -48,6 +51,7 @@ class EASDKTool {
 
   static EAGetDataCallback? mGetDataCallback;
   static EASetDataCallback? mSetDataCallback;
+  static EABindingWatchCallback? mBindingWatchCallback;
   static EAGetBitDataCallback? mGetBitDataCallback;
   static OperationPhoneCallback? mOperationPhoneCallback;
   static EABleConnectListener? mEaBleConnectListener;
@@ -101,8 +105,9 @@ class EASDKTool {
 
   /// 绑定手表
   /// Binding a watch
-  void bindingWatch(EABindInfo bindInfo, EASetDataCallback setDataCallback) {
-    mSetDataCallback = setDataCallback;
+  void bindingWatch(
+      EABindInfo bindInfo, EABindingWatchCallback bindingWatchCallback) {
+    mBindingWatchCallback = bindingWatchCallback;
     Map map = bindInfo.toMap();
     _channel.invokeMethod(kEAbindingWatch, convert.jsonEncode(map));
   }
@@ -195,9 +200,19 @@ class EASDKTool {
         int state = methodCall.arguments;
         bluetoothState(state);
         break;
+      case kBingdingWatchResponse:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        print("^^^^^^^^ info = " + methodCall.arguments);
+        EARespond respond = EARespond.fromMap(info);
+        if (mBindingWatchCallback != null) {
+          mBindingWatchCallback!.onRespond(respond);
+          print("^^^^^^^^ respond");
+        }
+        break;
       case kSetWatchResponse:
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EARespond respond = EARespond.fromMap(info);
+
         if (mSetDataCallback != null) {
           mSetDataCallback!.onRespond(respond);
         }

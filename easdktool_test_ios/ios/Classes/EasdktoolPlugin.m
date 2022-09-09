@@ -40,6 +40,7 @@
 #define kArgumentsError             @"ArgumentsError"
 #define kConnectState               @"ConnectState"
 #define kBluetoothState             @"BluetoothState"
+#define kBingdingWatchResponse      @"BingdingWatchResponse"
 #define kSetWatchResponse           @"SetWatchResponse"
 #define kGetWatchResponse           @"GetWatchResponse"
 #define kGetBigWatchData            @"GetBigWatchData"
@@ -87,7 +88,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     instance.channel = [FlutterMethodChannel
                         methodChannelWithName:@"easdktool"
                         binaryMessenger:[registrar messenger]];
-
+    
     [instance setBleConfig];
     [registrar addMethodCallDelegate:instance channel:instance.channel];
 }
@@ -98,7 +99,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     _config.debug = YES;
     _config.canScanAllDevices = YES;
     [[EABleManager defaultManager] setBleConfig:_config];
-
+    
     [self addNotification];
 }
 
@@ -207,7 +208,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] setBleConfig:_config];
         }
     }
-
+    
     else if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
         
         EAConnectStateType connectStateType = [EABleManager defaultManager].connectState;
@@ -219,12 +220,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
         
-//        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-//        if ([self checkArgumentName:@"scanAll" inArguments:arguments]) {
-//
-//            _config.canScanAllDevices = [arguments[@"scanAll"] boolValue];
-//            [[EABleManager defaultManager] setBleConfig:_config];
-//        }
+        //        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        //        if ([self checkArgumentName:@"scanAll" inArguments:arguments]) {
+        //
+        //            _config.canScanAllDevices = [arguments[@"scanAll"] boolValue];
+        //            [[EABleManager defaultManager] setBleConfig:_config];
+        //        }
         
         [EABleManager defaultManager].delegate = self;
         [[EABleManager defaultManager] scanPeripherals];
@@ -303,6 +304,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     bingingOps.ops = EABindingOpsTypeEnd;
                     [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                         
+                        [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
+                        
                         EADeviceOps *ops = [[EADeviceOps alloc] init];
                         ops.deviceOpsType = EADeviceOpsTypeShowiPhonePairingAlert;
                         ops.deviceOpsStatus = EADeviceOpsStatusExecute;
@@ -319,7 +322,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                         
                         //
                         [[EABleManager defaultManager] unbindPeripheral];
-                       
+                        
                     }
                 }
             }];
@@ -358,7 +361,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             
             return;
         }
-    
+        
         NSString *valueJsonString = arguments[@"jsonString"];
         NSDictionary *value = [self dictionaryWithJsonString:valueJsonString];
         
@@ -455,7 +458,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             
                             EAReminderRespondModel *model = (EAReminderRespondModel*)respondModel;
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
-
+                            
                         }
                     }];
                 }break;
@@ -487,7 +490,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                 }break;
                 case EADataInfoTypeMenstrual: {
-                 
+                    
                     // 判断参数
                     NSString *startDate = value[@"startDate"];
                     NSInteger keepDay = [value[@"keepDay"] integerValue];
@@ -534,7 +537,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             
                             EAHabitTrackerRespondModel *model = (EAHabitTrackerRespondModel*)respondModel;
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
-
+                            
                         }
                     }];
                 }break;
@@ -568,7 +571,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
-     
+        
         EAGetBigDataRequestModel *model = [[EAGetBigDataRequestModel alloc] init];
         model.sportDataReq = 1;
         [[EABleSendManager defaultManager] getBigDataRequestModel:model respond:^(EARespondModel * _Nonnull respondModel) {
@@ -600,18 +603,18 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             model.deviceOpsType = index;
             model.deviceOpsStatus = EADeviceOpsStatusExecute;
             [[EABleSendManager defaultManager] changeInfo:model respond:^(EARespondModel * _Nonnull respondModel) {
-               
+                
                 NSDictionary *info = @{
                     @"respondCodeType":@(respondModel.eErrorCode),
                     @"operationType":@([[arguments valueForKey:@"type"] integerValue]),
                 };
                 [self.channel invokeMethod:kOperationWacthResponse arguments:[info yy_modelToJSONString]];
             }];
-        
+            
         }
     }
     else if ([call.method isEqualToString:kEAOTA]) { // FIXME: - OTA
-         
+        
         // 判断断连
         if (![EABleManager defaultManager].isConnected) {
             
@@ -699,7 +702,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         @"respondCodeType":@(respondCodeType),
         @"dataType":@(dataType),
     };
-    [self.channel invokeMethod:kSetWatchResponse arguments:[info yy_modelToJSONString]];
+    if (dataType == EADataInfoTypeBinding) {
+        [self.channel invokeMethod:kBingdingWatchResponse arguments:[info yy_modelToJSONString]];
+        
+    }else {
+        [self.channel invokeMethod:kSetWatchResponse arguments:[info yy_modelToJSONString]];
+        
+    }
 }
 
 
@@ -713,7 +722,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         NSString *binPath = item[@"binPath"];
         NSInteger otaType = [item[@"firmwareType"] integerValue];  // Apollo, Res, Tp, Hr
         NSString *version = item[@"version"];
-
+        
         NSFileManager *manager = [NSFileManager defaultManager];
         NSData *data = [manager contentsAtPath:binPath];
         
@@ -748,7 +757,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         _timerSec = kTimerSec;
         [self startTimer];
     }
-
+    
 }
 
 
@@ -771,7 +780,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         dispatch_source_set_event_handler(_timer, ^{
             
             selfWeak.timerSec --;
-
+            
             if (selfWeak.timerSec == 0) {
                 
                 [selfWeak cancelTimer];
@@ -822,7 +831,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         return nil;
     }
-  
+    
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&err];

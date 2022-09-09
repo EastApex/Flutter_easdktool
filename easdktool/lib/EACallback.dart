@@ -19,6 +19,12 @@ class EASetDataCallback {
   EASetDataCallback({required this.onRespond});
 }
 
+/// Example Set the watch data callback【设置手表数据回调】
+class EABindingWatchCallback {
+  OnRespond onRespond;
+  EABindingWatchCallback({required this.onRespond});
+}
+
 /// Get watch big data callback【获取手表大数据回调】
 class EAGetBitDataCallback {
   OnSuccess callback;
