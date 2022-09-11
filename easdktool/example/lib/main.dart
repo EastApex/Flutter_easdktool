@@ -36,28 +36,146 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+class ConnectListener implements EABleConnectListener {
+  @override
+  void connectError() {
+    print("connectError");
+  }
+
+  @override
+  void connectTimeOut() {
+    print("connectTimeOut");
+  }
+
+  @override
+  void deviceConnected() {
+    print('Device connected');
+
+    EASDKTool().getWatchData(
+        kEADataInfoTypeWatch,
+        EAGetDataCallback(
+            onSuccess: ((info) async {
+              Map<String, dynamic> value = info["value"];
+              EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
+
+              if (eaBleWatchInfo.userId.isEmpty) {
+                /**
+                 1st. 
+               * get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
+                 2nd.
+               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
+               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
+                  The watch displays a waiting for confirmation binding screen,
+                  Wait to click OK or cancel
+               */
+
+                EABindInfo bindInfo = EABindInfo();
+                bindInfo.user_id = "144766772845744125";
+                // Turn on the daily step interval for 30 minutes
+                bindInfo.bindMod = 1;
+                if (eaBleWatchInfo.isWaitForBinding == 0) {
+                  //Bind command type: End【绑定命令类型：结束】
+                  bindInfo.bindingCommandType = 1;
+                } else {
+                  //Bind command type: Begin【绑定命令类型：开始】
+                  bindInfo.bindingCommandType = 0;
+                }
+                EASDKTool().bindingWatch(bindInfo,
+                    EABindingWatchCallback(onRespond: ((respond) {
+                  print(respond.respondCodeType);
+                })));
+              }
+            }),
+            onFail: ((info) {})));
+  }
+
+  @override
+  void deviceDisconnect() {
+    print("deviceDisconnect");
+  }
+
+  @override
+  void deviceNotFind() {
+    print("deviceNotFind");
+  }
+
+  @override
+  void notOpenLocation() {
+    print("notOpenLocation");
+  }
+
+  @override
+  void paramError() {
+    print("paramError");
+  }
+
+  @override
+  void unopenedBluetooth() {
+    print("unopenedBluetooth");
+  }
+
+  @override
+  void unsupportedBLE() {
+    print("unsupportedBLE");
+  }
+
+  @override
+  void iOSRelievePair() {
+    print("iOSRelievePair");
+  }
+
+  @override
+  void iOSUnAuthorized() {
+    print("iOSUnAuthorized");
+  }
+}
+
 class _MyAppState extends State<MyApp> {
   T? _ambiguate<T>(T? value) => value;
 
   // The second method is initialization
-  EASDKTool secondEasdkTool = new EASDKTool();
-  ReceivePort getReceivePort = new ReceivePort();
-  ReceivePort setReceivePort = new ReceivePort();
+  EASDKTool secondEasdkTool = EASDKTool();
+  ReceivePort getReceivePort = ReceivePort();
+  ReceivePort setReceivePort = ReceivePort();
   EAGetDataCallback? eaGetDataCallback;
   EASetDataCallback? eaSetDataCallback;
 
   @override
   void initState() {
     super.initState();
-    initGetIsolate();
-    initSetIsolate();
-    foregroundTask();
-    //The second method is to initialize the channel
-    secondEasdkTool.initChannel();
+
+    if (Platform.isAndroid) {
+      initGetIsolate();
+      initSetIsolate();
+      foregroundTask();
+      //The second method is to initialize the channel
+      secondEasdkTool.initChannel();
+    } else {
+
+      secondEasdkTool.showLog(1);
+      secondEasdkTool.initChannel();
+
+      /// 【添加监听】
+      EASDKTool.addBleConnectListener(ConnectListener());
+      EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
+        operationPhoneListener(info);
+      }));
+
+      EAConnectParam connectParam = EAConnectParam();
+      connectParam.connectAddress =
+          "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+      connectParam.snNumber = "001004000000999036";
+      //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+      EASDKTool().connectToPeripheral(connectParam);
+    }
 
     /// 打开 SDKLog
   }
 
+  void operationPhoneListener(Map info) {
+    ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
+    /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
+  }
   void initGetIsolate() {
     IsolateNameServer.removePortNameMapping("_ui_get_isolate");
     bool success = IsolateNameServer.registerPortWithName(
@@ -164,6 +282,127 @@ class _MyAppState extends State<MyApp> {
     })));
   }
 
+  void getBigWatchData() {
+    EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
+      /// Determine what kind of big data "dataType" is
+      ///【判断dataType是属于那种大数据】
+
+      int dataType = info['dataType'];
+      List<dynamic> list = info['value'];
+      print(dataType);
+
+      if (list.isEmpty) {
+        return;
+      }
+      switch (dataType) {
+        case kEADataInfoTypeStepData: //Daily steps【日常步数】
+
+          for (Map<String, dynamic> item in list) {
+            EABigDataStep model = EABigDataStep.fromMap(item);
+            print(model.timeStamp);
+            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+          }
+          break;
+        case kEADataInfoTypeSleepData: // sleep
+          for (Map<String, dynamic> item in list) {
+            EABigDataSleep model = EABigDataSleep.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeHeartRateData: // heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+            print(model.timeStamp);
+            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+          }
+
+          break;
+        case kEADataInfoTypeGPSData: // gps
+          for (Map<String, dynamic> item in list) {
+            EABigDataGPS model = EABigDataGPS.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeSportsData: // sports
+          for (Map<String, dynamic> item in list) {
+            EABigDataSport model = EABigDataSport.fromMap(item);
+            print(model.beginTimeStamp);
+            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+          }
+          break;
+        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+          for (Map<String, dynamic> item in list) {
+            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStressData: // Stress
+          for (Map<String, dynamic> item in list) {
+            EABigDataStress model = EABigDataStress.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepFreqData: // stride frequency
+          for (Map<String, dynamic> item in list) {
+            EABigDataStrideFrequency model =
+                EABigDataStrideFrequency.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepPaceData: // stride Pace
+          for (Map<String, dynamic> item in list) {
+            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataRestingHeartRate model =
+                EABigDataRestingHeartRate.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case EADataInfoTypeHabitTrackerData: // habit tracker
+          for (Map<String, dynamic> item in list) {
+            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+
+        default:
+          break;
+      }
+    })));
+  }
+  /// Timestamp to date 【时间戳转日期】
+  /// [timestamp] 时间戳
+  /// [onlyNeedDate]Whether to display only the date but not the time【是否只显示日期 舍去时间】
+  static String timestampToDateStr(int timestamp, {onlyNeedDate = false}) {
+    DateTime dataTime = timestampToDate(timestamp);
+    String dateTime = dataTime.toString();
+
+    dateTime = dateTime.substring(0, dateTime.length - 4);
+    if (onlyNeedDate) {
+      List<String> dataList = dateTime.split(" ");
+      dateTime = dataList[0];
+    }
+    return dateTime;
+  }
+   static DateTime timestampToDate(int timestamp) {
+    DateTime dateTime = DateTime.now();
+
+    ///如果是十三位时间戳返回这个
+    if (timestamp.toString().length == 13) {
+      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    } else if (timestamp.toString().length == 16) {
+      ///如果是十六位时间戳
+      dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
+    } else if (timestamp.toString().length == 10) {
+      ///如果是十位时间戳
+      dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    }
+    return dateTime;
+  }
   void returnClassValue(int dataType, Map<String, dynamic> value) {
     switch (dataType) {
       case kEADataInfoTypeWatch:
@@ -341,8 +580,9 @@ class _MyAppState extends State<MyApp> {
   Widget TextView(String text) {
     return Container(
       child: Text(text,
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
       height: 60,
+      color: Colors.white,
     );
   }
 
@@ -350,33 +590,60 @@ class _MyAppState extends State<MyApp> {
   Widget TitleView(String title) {
     return Container(
       child: Text(title,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       height: 30,
       color: Colors.grey.shade300,
     );
   }
 
+  void getWatchData(int dataType) {
+    EASDKTool().getWatchData(
+        dataType,
+        EAGetDataCallback(
+            onSuccess: ((info) {
+              int dataType = info["dataType"];
+              Map<String, dynamic> value = info["value"];
+              returnClassValue(dataType, value);
+            }),
+            onFail: ((info) {})));
+  }
+
+  void setWatchData(int dataType, Map map) {
+    EASDKTool().setWatchData(dataType, map,
+        EASetDataCallback(onRespond: ((respond) {
+      print(respond.respondCodeType);
+    })));
+  }
+
   void firstMethodGetWatchData(
       int dataType, EAGetDataCallback getetDataCallback) {
-    eaGetDataCallback = getetDataCallback;
-    PackageData packageData = new PackageData();
-    packageData.action = 1;
-    packageData.param = dataType;
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName("_notifications_");
-    send?.send(packageData);
+    if (Platform.isAndroid) {
+      eaGetDataCallback = getetDataCallback;
+      PackageData packageData = PackageData();
+      packageData.action = 1;
+      packageData.param = dataType;
+      final SendPort? send =
+          IsolateNameServer.lookupPortByName("_notifications_");
+      send?.send(packageData);
+    } else {
+      getWatchData(dataType);
+    }
   }
 
   void firstMethodSetWatchData(
       int dataType, Map map, EASetDataCallback setDataCallback) {
-    eaSetDataCallback = setDataCallback;
-    PackageData packageData = new PackageData();
-    packageData.action = 2;
-    packageData.dataType = dataType;
-    packageData.param = map;
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName("_notifications_");
-    send?.send(packageData);
+    if (Platform.isAndroid) {
+      eaSetDataCallback = setDataCallback;
+      PackageData packageData = PackageData();
+      packageData.action = 2;
+      packageData.dataType = dataType;
+      packageData.param = map;
+      final SendPort? send =
+          IsolateNameServer.lookupPortByName("_notifications_");
+      send?.send(packageData);
+    } else {
+      setWatchData(dataType, map);
+    }
   }
 
   void secondMethodGetWatchData(int dataType) {
@@ -926,7 +1193,7 @@ class _MyAppState extends State<MyApp> {
                    * Return all big data, the watch will automatically clear the returned big data
                    * Notice after listener _dataChannel returns 8, you can obtain all types of big data
                    */
-                  //  getBigWatchData();
+                   getBigWatchData();
                 },
               ),
               TitleView('  Operating watch commands【操作手表命令】'),
