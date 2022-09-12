@@ -36,7 +36,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class ConnectListener implements EABleConnectListener {
+/* class ConnectListener implements EABleConnectListener {
   @override
   void connectError() {
     print("connectError");
@@ -59,6 +59,10 @@ class ConnectListener implements EABleConnectListener {
               EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
 
               if (eaBleWatchInfo.userId.isEmpty) {
+                // or use this judgment
+                // if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
+
+
                 /**
                  1st. 
                * get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
@@ -74,7 +78,7 @@ class ConnectListener implements EABleConnectListener {
                 // Turn on the daily step interval for 30 minutes
                 bindInfo.bindMod = 1;
                 if (eaBleWatchInfo.isWaitForBinding == 0) {
-                  //Bind command type: End【绑定命令类型：结束】
+                  //Bind command type: End，not show pair view【绑定命令类型：结束，不显示手表确定绑定页面】
                   bindInfo.bindingCommandType = 1;
                 } else {
                   //Bind command type: Begin【绑定命令类型：开始】
@@ -129,6 +133,125 @@ class ConnectListener implements EABleConnectListener {
     print("iOSUnAuthorized");
   }
 }
+*/
+
+class ConnectListener implements EABleConnectListener {
+  EASDKTool easdkTool;
+
+  ConnectListener(this.easdkTool);
+  @override
+  void connectError() {
+    print('XWatch Package: connection Listener - connect Error');
+  }
+
+  @override
+  void connectTimeOut() {
+    print('XWatch Package: connection Listener - connect Timeout');
+  }
+
+  @override
+  void deviceConnected() {
+    /// 绑定手表
+    print('XWatch Package: connection Listener - connected');
+    easdkTool.getWatchData(
+        kEADataInfoTypeWatch,
+        EAGetDataCallback(onSuccess: ((info) async {
+          Map<String, dynamic> value = info["value"];
+          EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
+          print('info $value');
+
+          /** 2nd.
+               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
+               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
+                  The watch displays a waiting for confirmation binding screen,
+                  Wait to click OK or cancel
+               */
+          if (eaBleWatchInfo.userId.isEmpty) {
+            EABindInfo bindInfo = EABindInfo();
+            bindInfo.user_id = "1008690";
+            // Turn on the daily step interval for 30 minutes
+
+            bindInfo.bindMod = 1;
+            if (eaBleWatchInfo.isWaitForBinding == 0) {
+              //Bind command type: End【绑定命令类型：结束】
+              bindInfo.bindingCommandType = 1;
+            } else {
+              //Bind command type: Begin【绑定命令类型：开始】
+              bindInfo.bindingCommandType = 0;
+            }
+            print("bindingcommandtype ${bindInfo.bindingCommandType}");
+
+            easdkTool.bindingWatch(bindInfo,
+                EABindingWatchCallback(onRespond: ((respond) {
+              print('binding response  ${respond.respondCodeType}');
+            })));
+            if (Platform.isIOS) {
+              print('is iOS');
+              easdkTool.getWatchData(
+                  kEADataInfoTypeBingWatch,
+                  EAGetDataCallback(onFail: (Map<String, dynamic> info) {
+                    print('====> error $info');
+                    // XWatch.xWatchConnectionListener
+                    // ?.deviceDisconnected();
+                  }, onSuccess: (Map<String, dynamic> info) async {
+                    print('====> $info');
+                    // XWatch.xWatchConnectionListener?.deviceConnected();
+                  }));
+            } else {
+              // XWatch.xWatchConnectionListener?.deviceConnected();
+            }
+            // XWatchHeartRate().setContinuousHeartRate(30);
+          } else {
+            // XWatch.xWatchConnectionListener?.deviceConnected();
+          }
+        }), onFail: ((info) {
+          // XWatch.xWatchConnectionListener?.deviceDisconnected();
+        })));
+  }
+
+  @override
+  void deviceDisconnect() {
+    print('XWatch Package: connection Listener - device disconnect');
+    // XWatch.xWatchConnectionListener?.deviceDisconnected();
+  }
+
+  @override
+  void deviceNotFind() {
+    print('XWatch Package: connection Listener - device not find');
+    // XWatch.xWatchConnectionListener?.deviceNotFound();
+  }
+
+  @override
+  void notOpenLocation() {
+    print('XWatch Package: connection Listener - not open location');
+  }
+
+  @override
+  void paramError() {
+    print('XWatch Package: connection Listener - Param error');
+    // XWatch.xWatchConnectionListener?.deviceConnectionError();
+  }
+
+  @override
+  void unopenedBluetooth() {
+    print('XWatch Package: connection Listener - unopened Bluetooth');
+  }
+
+  @override
+  void unsupportedBLE() {
+    print('XWatch Package: connection Listener - unsupported BLE');
+  }
+
+  @override
+  void iOSRelievePair() {
+    print('XWatch Package: connection Listener - iOS Relieve Pair');
+  }
+
+  @override
+  void iOSUnAuthorized() {
+    print('XWatch Package: connection Listener - iOS Unauthorized');
+  }
+}
 
 class _MyAppState extends State<MyApp> {
   T? _ambiguate<T>(T? value) => value;
@@ -155,7 +278,7 @@ class _MyAppState extends State<MyApp> {
       secondEasdkTool.initChannel();
 
       /// 【添加监听】
-      EASDKTool.addBleConnectListener(ConnectListener());
+      EASDKTool.addBleConnectListener(ConnectListener(secondEasdkTool));
       EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
         operationPhoneListener(info);
       }));

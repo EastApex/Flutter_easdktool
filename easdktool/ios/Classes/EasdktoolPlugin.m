@@ -296,13 +296,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 bingingOps.userId = userId;
             }
             WeakSelf;
-            [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
+            [[EABleSendManager defaultManager] operationChangeModel:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                 
                 
                 if (ops == EABindingOpsTypeNormalBegin && respondModel.eErrorCode == EARespondCodeTypeSuccess) {
                     
                     bingingOps.ops = EABindingOpsTypeEnd;
-                    [[EABleSendManager defaultManager] changeInfo:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
+                    [[EABleSendManager defaultManager] operationChangeModel:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                         
