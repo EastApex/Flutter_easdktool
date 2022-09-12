@@ -151,7 +151,6 @@ class _MyAppState extends State<MyApp> {
       //The second method is to initialize the channel
       secondEasdkTool.initChannel();
     } else {
-
       secondEasdkTool.showLog(1);
       secondEasdkTool.initChannel();
 
@@ -374,6 +373,7 @@ class _MyAppState extends State<MyApp> {
       }
     })));
   }
+
   /// Timestamp to date 【时间戳转日期】
   /// [timestamp] 时间戳
   /// [onlyNeedDate]Whether to display only the date but not the time【是否只显示日期 舍去时间】
@@ -388,7 +388,8 @@ class _MyAppState extends State<MyApp> {
     }
     return dateTime;
   }
-   static DateTime timestampToDate(int timestamp) {
+
+  static DateTime timestampToDate(int timestamp) {
     DateTime dateTime = DateTime.now();
 
     ///如果是十三位时间戳返回这个
@@ -403,6 +404,7 @@ class _MyAppState extends State<MyApp> {
     }
     return dateTime;
   }
+
   void returnClassValue(int dataType, Map<String, dynamic> value) {
     switch (dataType) {
       case kEADataInfoTypeWatch:
@@ -1193,7 +1195,7 @@ class _MyAppState extends State<MyApp> {
                    * Return all big data, the watch will automatically clear the returned big data
                    * Notice after listener _dataChannel returns 8, you can obtain all types of big data
                    */
-                   getBigWatchData();
+                  getBigWatchData();
                 },
               ),
               TitleView('  Operating watch commands【操作手表命令】'),

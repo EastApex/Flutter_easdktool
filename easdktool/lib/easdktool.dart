@@ -42,13 +42,13 @@ const String kOperationWacthResponse = "OperationWacthResponse";
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
 
-  // EASDKTool._privateConstructor();
+  EASDKTool._privateConstructor();
 
-  // static final EASDKTool _instance = EASDKTool._privateConstructor();
+  static final EASDKTool _instance = EASDKTool._privateConstructor();
 
-  // factory EASDKTool() {
-  //   return _instance;
-  // }
+  factory EASDKTool() {
+    return _instance;
+  }
 
   EAGetDataCallback? mGetDataCallback;
   EASetDataCallback? mSetDataCallback;
