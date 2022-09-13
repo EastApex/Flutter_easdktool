@@ -179,27 +179,28 @@ class ConnectListener implements EABleConnectListener {
               //Bind command type: Begin【绑定命令类型：开始】
               bindInfo.bindingCommandType = 0;
             }
+            bindInfo.bindingCommandType = 1;
             print("bindingcommandtype ${bindInfo.bindingCommandType}");
 
             easdkTool.bindingWatch(bindInfo,
                 EABindingWatchCallback(onRespond: ((respond) {
               print('binding response  ${respond.respondCodeType}');
             })));
-            if (Platform.isIOS) {
-              print('is iOS');
-              easdkTool.getWatchData(
-                  kEADataInfoTypeBingWatch,
-                  EAGetDataCallback(onFail: (Map<String, dynamic> info) {
-                    print('====> error $info');
-                    // XWatch.xWatchConnectionListener
-                    // ?.deviceDisconnected();
-                  }, onSuccess: (Map<String, dynamic> info) async {
-                    print('====> $info');
-                    // XWatch.xWatchConnectionListener?.deviceConnected();
-                  }));
-            } else {
-              // XWatch.xWatchConnectionListener?.deviceConnected();
-            }
+            // if (Platform.isIOS) {
+            //   print('is iOS');
+            //   easdkTool.getWatchData(
+            //       kEADataInfoTypeBingWatch,
+            //       EAGetDataCallback(onFail: (Map<String, dynamic> info) {
+            //         print('====> error $info');
+            //         // XWatch.xWatchConnectionListener
+            //         // ?.deviceDisconnected();
+            //       }, onSuccess: (Map<String, dynamic> info) async {
+            //         print('====> $info');
+            //         // XWatch.xWatchConnectionListener?.deviceConnected();
+            //       }));
+            // } else {
+            //   // XWatch.xWatchConnectionListener?.deviceConnected();
+            // }
             // XWatchHeartRate().setContinuousHeartRate(30);
           } else {
             // XWatch.xWatchConnectionListener?.deviceConnected();
@@ -286,7 +287,7 @@ class _MyAppState extends State<MyApp> {
       EAConnectParam connectParam = EAConnectParam();
       connectParam.connectAddress =
           "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-      connectParam.snNumber = "001004000000999036";
+      connectParam.snNumber = "001007220516000002";
       //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
       EASDKTool().connectToPeripheral(connectParam);
     }
