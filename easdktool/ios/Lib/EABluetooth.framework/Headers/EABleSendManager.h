@@ -10,13 +10,12 @@
 #import <EABluetooth/EABleManager.h>
 #import <EABluetooth/EAEnum.h>
 #import <EABluetooth/EABleConfig.h>
+#import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
 
 
 typedef void(^ResultGetInfoBlock)(EABaseModel *baseModel);
 typedef void(^RespondBlock)(EARespondModel *respondModel);
-
-
 
 
 @interface EABleSendManager : NSObject
@@ -25,9 +24,6 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 /// The singleton
 /// 单例
 + (instancetype)defaultManager;
-
-
-
 
 /// Get data [Queue Operation]获取数据【队列操作】
 - (void)operationGetInfoWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
@@ -42,6 +38,11 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 - (BOOL)upgradeWatchFaceFile:(EAFileModel *)watchFaceFile;
 /// AGPS OTA
 - (BOOL)upgrade:(EAOTA *)ota;
+
+/// Customize the background watch face
+- (NSInteger )customWatchFaceBackgroundImage:(UIImage *)backgroundImage colorType:(EATimerColorType )colorType;
+
+
 
 /// Get big data by bigDataType 【Data will not be available until the watch sends the big data message：8803 Big data transmission completed】
 /// 获取大数据（bigDataType 只支持大数据类型 3000~3999）【需要等待手表发送完成大数据消息才会有数据：8803 Big data transmission completed】

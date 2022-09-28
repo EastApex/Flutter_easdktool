@@ -9,6 +9,8 @@
 #define EAModelHeader_h
 
 // model
+
+
 #import <EABluetooth/EAPeripheralModel.h>
 #import <EABluetooth/EAWatchModel.h>
 #import <EABluetooth/EAUserModel.h>
@@ -63,6 +65,9 @@
 #import <EABluetooth/EASportShowDataModel.h>
 #import <EABluetooth/EABlePairStateModel.h>
 #import <EABluetooth/EATelephoneBookModel.h>
+#import <EABluetooth/EAWatchSupportModel.h>
+#import <EABluetooth/EAMonitorReminder.h>
+
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>

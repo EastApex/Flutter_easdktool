@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
 @interface EATelephoneBookModel : EABaseModel
 
 /** 标志 */
@@ -28,6 +29,27 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) NSMutableArray<EAContactModel*> *sIndexArray;
 
 @property(nonatomic, readonly) NSUInteger sIndexArray_Count;
+
++ (EATelephoneBookModel *)getModelByData:(NSData *)data;
+
+@end
+
+
+
+@interface EAPhoneModel : EABaseModel
+/** 号码 */
+@property(nonatomic, strong) NSString *num;
+
+@end
+
+@interface EAReadTelephoneBookModel : EABaseModel
+
+/** 通信包 */
+@property(nonatomic,strong) NSMutableArray<EAPhoneModel*> *sIndexArray;
+
+@property(nonatomic, readonly) NSUInteger sIndexArray_Count;
+
++ (EATelephoneBookModel *)getModelByData:(NSData *)data;
 
 @end
 

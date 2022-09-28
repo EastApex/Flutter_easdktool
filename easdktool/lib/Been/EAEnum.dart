@@ -527,25 +527,12 @@ enum EAPushMessageActionType {
 }
 
 enum EAPushMessageType {
-  ///来电
   incomingcall,
-
-  ///未接来电
   missedcall,
-
-  ///社交
   social,
-
-  ///日程
   schedule,
-
-  ///邮件
   email,
-
-  ///短信
   sms,
-
-  ///未知社交类型
   unknow,
   wechat,
   qq,
@@ -589,4 +576,10 @@ enum EAPushMessageType {
   tiktok,
   twitch,
   uber_eats,
+}
+
+enum EAMonitorReminderType {
+  drink,
+  washHands,
+  sedentary,
 }

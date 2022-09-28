@@ -19,6 +19,7 @@
 #import "EAPeripheralModel.h"
 #import "EABleConfig.h"
 #import <EABluetooth/EAEnum.h>
+#import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -173,20 +174,20 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// 重连设备（传手表的SN号）
 - (void)reConnectToPeripheral:(NSString *)sn;
 
-/// The broken connection
-/// 断连连接
+/// cancel connection
+/// 取消连接（连接时可用）
 - (void)cancelConnectingPeripheral;
 
 /// Unbind the watch (remove association)
-/// 解绑设备（移除关联）
+/// 解绑设备（移除关联，不会自动重连）
 - (void)unbindPeripheral;
 
 /// Unbind the device and reset (remove association)
-/// 解绑设备并重置（移除关联）
+/// 解绑设备并重置（移除关联，不会自动重连）
 - (void)unbindAndResetPeripheral;
 
 /// Chain breaking watch (does not remove association)
-/// 断链设备(不移除关联)
+/// 断链设备(不移除关联，会自动重连设备)
 - (void)disconnectPeripheral;
 
 /// Check whether to enable Bluetooth
@@ -201,9 +202,11 @@ typedef void(^UpdateValueBlock)(CBCharacteristic *characteristic,NSError *error)
 /// 获取链接的设备信息
 - (EAPeripheralModel *)getPeripheralModel;
 
-
 /// ignore：
 - (void)writeValue:(NSData *)Data forCharacteristic:(EACharacteristicType )characteristicType;
+
+
+
 
 @end
 

@@ -37,6 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger  stepThreshold;
 
 
+/// 久坐开关 (10:关闭，11:打开)（如果手机能读到10或11，代表设备已经支持了这个开关，就不用interval来控制关闭了）
+@property(nonatomic, assign) NSInteger sw;
+
+
+
 + (EAAutoCheckSedentarinessModel *)getModelByData:(NSData *)data;
 
 

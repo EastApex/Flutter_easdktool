@@ -698,6 +698,12 @@ class _MyAppState extends State<MyApp> {
           print(showAppMessage);
         }
         break;
+      case EADataInfoTypeMonitorReminderRead:
+        {
+          print(value);
+          EAMonitorReminderRead read = EAMonitorReminderRead.fromMap(value);
+        }
+        break;
       default:
     }
   }
@@ -988,6 +994,12 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('28.Obtain App notifications 【获取App消息推送】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeAppMessage);
+                },
+              ),
+              GestureDetector(
+                child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
+                onTap: () {
+                  secondMethodGetWatchData(EADataInfoTypeMonitorReminderRead);
                 },
               ),
               TitleView('  Setting【设置信息】'),
@@ -1306,6 +1318,23 @@ class _MyAppState extends State<MyApp> {
                       1, 1, 1, 1, 1, 1, EARemindActionType.LongShortVibration);
                   secondMethodSetWatchData(
                       kEADataInfoTypeSocialSwitch, eaSocialSwitch.toMap());
+                },
+              ),
+              GestureDetector(
+                child: TextView('20.Monitor reminder event【提醒事件监测】'),
+                onTap: () {
+                  EAMonitorReminder monitorReminder = EAMonitorReminder();
+                  monitorReminder.eReminderType = EAMonitorReminderType.drink;
+                  monitorReminder.sw = 1;
+                  monitorReminder.weekCycleBit = 0;
+                  monitorReminder.interval = 60;
+                  monitorReminder.beginHour = 8;
+                  monitorReminder.beginMinute = 0;
+                  monitorReminder.endHour = 20;
+                  monitorReminder.endMinute = 0;
+                  monitorReminder.cup = 2;
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeSocialSwitch, monitorReminder.toMap());
                 },
               ),
               TitleView(' Getting big data【获取大数据】'),

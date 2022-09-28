@@ -46,3 +46,4 @@ part 'EABigDataStress.dart';
 part 'EABigDataStrideFrequency.dart';
 part 'EABigDataStridePace.dart';
 part 'EAPushMessage.dart';
+part 'EAMonitorReminder.dart';

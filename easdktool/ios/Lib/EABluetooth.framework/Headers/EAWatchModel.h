@@ -48,6 +48,37 @@ NS_ASSUME_NONNULL_BEGIN
 /// 是否需要等待设备确认绑定
 @property(nonatomic,assign) NSInteger isWaitForBinding;
 
+/// 手表功能列表: 0 不支持 1:支持
+/// Watch function list: 0 Not supported 1: supported
+/// see class EAWatchSupportModel
+@property(nonatomic, assign) BOOL projSettings;
+
+/// 手表尺寸-宽度
+/// Watch size - width
+@property(nonatomic, assign) NSInteger width;
+
+/// 手表尺寸-高度
+/// Watch size - height
+@property(nonatomic, assign) NSInteger height;
+
+/// 手表缩略图尺寸-宽度
+/// Watch thumbnail size - width
+@property(nonatomic, assign) NSInteger thumbnailWidth;
+
+/// 手表缩略图尺寸-高度
+/// Watch thumbnail size - height
+@property(nonatomic, assign) NSInteger thumbnailHeight;
+
+/// 手表缩略图-圆角
+/// Watch thumbnail - Rounded corners
+@property(nonatomic, assign) NSInteger thumbnailRadius;
+
+/// 手表屏幕类型: 0:方屏 1:圆屏
+/// Screen type: 0: square screen 1: round screen
+@property(nonatomic, assign) NSInteger screenType;
+
+
+
 /// 获取手表相关信息
 /// @param data 数据流
 + (EAWatchModel *)getModelByData:(NSData *)data;

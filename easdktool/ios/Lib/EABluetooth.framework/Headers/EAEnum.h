@@ -210,6 +210,28 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /// EATelephoneBookModel and EAContactModel
     EADataInfoTypeTelephoneBook = 42,
     
+    /// Read telephone book
+    /// 读取通讯录
+    /// EAReadTelephoneBookModel and EAPhoneModel
+    EADataInfoTypeReadTelephoneBook = 43,
+    
+    
+    /// 手表支持设置的功能（备注：EAWatchModel.projSettings = 1 才支持此协议）
+    /// The watch supports Settings(note: EAWatchModel.projSettings = 1 to support this agreement)
+    /// EAWatchSupportModel
+    EADataInfoTypeWatchSupport = 44,
+    
+    
+    /// 提醒事件监测
+    /// Monitor reminder event
+    /// EAMonitorReminder
+    EADataInfoTypeMonitorReminder = 45,
+    
+    /// 提醒事件监测（读取）
+    /// read monitor reminder event
+    /// EAMonitorReminderRead
+    EADataInfoTypeMonitorReminderRead = 46,
+    
     /// Operating Phone Commands
     /// 操作手机命令
     /// EAPhoneOpsModel
@@ -710,6 +732,18 @@ typedef NS_ENUM(NSUInteger,EAWeatherType) {
     /// Heavy snow
     /// 大雪（402 403 409 410）
     EAWeatherTypeHeavySnow = 10,
+    
+    /// 台风
+    /// Typhoon
+    EAWeatherTypeTyphoon = 11,
+
+    /// 灰尘
+    /// Dust
+    EAWeatherTypeDust = 12,
+
+    /// 沙尘暴
+    /// Sandstorm
+    EAWeatherTypeSandstorm = 13,
 };
 
 /// Air quality types
@@ -1876,6 +1910,14 @@ typedef NS_ENUM(NSUInteger,EAFirstLeverType) {
     /// 生理周期
     EAFirstLeverTypePageMenstrualCycle = 7,
     
+    /// 拍照
+    /// Camera
+    EAFirstLeverTypePageCamera = 8,
+
+    /// 多运动
+    /// Workout
+    EAFirstLeverTypePageWorkout = 9,
+    
 };
 
 /// MARK: - 经期类型
@@ -2026,5 +2068,26 @@ typedef NS_ENUM(NSUInteger,EAPhoneContactFlag) {
     /// 标志: 非起始包
     EAPhoneContactFlagProceed = 1,
 };
+
+#pragma mark - 自定义表盘时间颜色
+typedef NS_ENUM(NSUInteger, EATimerColorType) {
+    
+    EATimerColorTypeBlack         = 0,
+    EATimerColorTypeWhite         
+};
+
+#pragma mark - 监测提醒类型
+typedef NS_ENUM(NSUInteger, EAMonitorReminderType) {
+    
+    /** 喝水 */
+    EAMonitorReminderTypeDrink = 0,
+
+    /** 洗手 */
+    EAMonitorReminderTypeWashHands = 1,
+
+    /** 久坐【未实现】 */
+    EAMonitorReminderTypeSedentary = 2,
+};
+
 
 #endif /* EAEnumh */

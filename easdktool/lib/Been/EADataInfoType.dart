@@ -63,10 +63,6 @@ const int kEADataInfoTypeMenstrual = 32;
 const int kEADataInfoTypeWatchFace = 33;
 /* 消息推送开关 */
 const int kEADataInfoTypeAppMessage = 34;
-/* 血压校准值 （老人表）*/
-const int kEADataInfoTypeBloodPressure = 36;
-/* 自动监测 心率 血氧 血压 （老人表） */
-const int kEADataInfoTypeAutoMonitor = 37;
 /* 习惯追踪 */
 const int kEADataInfoTypeHabitTracker = 38;
 /*习惯追踪回应 */
@@ -75,6 +71,15 @@ const int kEADataInfoTypeHabitTrackerRespond = 39;
 const int kEADataInfoTypeSportShowData = 40;
 /*获取蓝牙配对状态 */
 const int EADataInfoTypeBlePairState = 41;
+
+/// 提醒事件监测
+/// Monitor reminder event
+const int EADataInfoTypeMonitorReminder = 45;
+
+/// 提醒事件监测（读取）
+/// read monitor reminder event
+const int EADataInfoTypeMonitorReminderRead = 46;
+
 /* 操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
 /* MTU */
