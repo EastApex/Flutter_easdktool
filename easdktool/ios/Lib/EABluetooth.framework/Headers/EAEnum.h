@@ -227,10 +227,6 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /// EAMonitorReminder
     EADataInfoTypeMonitorReminder = 45,
     
-    /// 提醒事件监测（读取）
-    /// read monitor reminder event
-    /// EAMonitorReminderRead
-    EADataInfoTypeMonitorReminderRead = 46,
     
     /// Operating Phone Commands
     /// 操作手机命令

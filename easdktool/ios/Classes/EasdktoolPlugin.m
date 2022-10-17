@@ -350,7 +350,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     else if ([call.method isEqualToString:kEAGetWatchInfo]) { // FIXME: - 获取手表信息
         
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        if ([self checkArgumentName:@"type" inArguments:arguments]) {
+        if ([self checkArgumentName:@"dataType" inArguments:arguments]) {
             
             // 判断断连
             if (![EABleManager defaultManager].isConnected) {
@@ -358,8 +358,15 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 [self loseConnect];
                 return;
             }
-            EADataInfoType dataInfoType = [arguments[@"type"] integerValue];
-            [self getWatchInfo:dataInfoType];
+            EADataInfoType dataInfoType = [arguments[@"dataType"] integerValue];
+            if (dataInfoType == EADataInfoTypeMonitorReminder) {
+                
+                NSInteger type = [arguments[@"type"] integerValue];
+                [self getWatchInfo:dataInfoType type:type];
+            }else {
+                
+                [self getWatchInfo:dataInfoType];
+            }
         }
     }
     else if ([call.method isEqualToString:kEASetWatchInfo]) { // FIXME: - 设置手表信息
@@ -372,7 +379,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         }
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
         // 判断设置类型
-        if (![self checkArgumentName:@"type" inArguments:arguments]) {
+        if (![self checkArgumentName:@"dataType" inArguments:arguments]) {
             
             return;
         }
@@ -386,7 +393,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if ([value isKindOfClass:[NSDictionary class]]) {
             
-            EADataInfoType dataInfoType = [[arguments objectForKey:@"type"] integerValue];
+            EADataInfoType dataInfoType = [[arguments objectForKey:@"dataType"] integerValue];
             WeakSelf;
             switch (dataInfoType) {
                 case EADataInfoTypeUser:{
@@ -619,11 +626,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             
             NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
             // 判断设置类型
-            if (![self checkArgumentName:@"type" inArguments:arguments]) {
+            if (![self checkArgumentName:@"dataType" inArguments:arguments]) {
                 
                 return;
             }
-            NSInteger index = [[arguments valueForKey:@"type"] integerValue];
+            NSInteger index = [[arguments valueForKey:@"dataType"] integerValue];
             if (index >= 8) {
                 
                 index += 2;
@@ -635,7 +642,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 
                 NSDictionary *info = @{
                     @"respondCodeType":@(respondModel.eErrorCode),
-                    @"operationType":@([[arguments valueForKey:@"type"] integerValue]),
+                    @"operationType":@([[arguments valueForKey:@"dataType"] integerValue]),
                 };
                 [self.channel invokeMethod:kOperationWacthResponse arguments:[info yy_modelToJSONString]];
             }];
@@ -723,6 +730,36 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }];
 }
 
+- (void)getWatchInfo:(EADataInfoType )dataInfoType type:(NSInteger )type {
+    
+    EARequestModel *requestModel = [[EARequestModel alloc] initWithRequestId:dataInfoType type:type];
+    
+    WeakSelf
+    [[EABleSendManager defaultManager] operationGetInfoWithRequestModel:requestModel result:^(EABaseModel * _Nonnull baseModel) {
+        
+        NSDictionary *value = [baseModel yy_modelToJSONObject];
+        
+        if (dataInfoType == EADataInfoTypeAppMessage) {
+            
+            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel allocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
+            value = [showAppMessageModel yy_modelToJSONObject];
+        }
+        if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
+            
+            NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
+            newValue[@"type"] = @"iTouch Flex";
+            
+            value = [newValue copy];
+        }
+        
+        NSDictionary *info = @{
+            @"dataType":@(dataInfoType),
+            @"type":@(type),
+            @"value":value,
+        };
+        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info yy_modelToJSONString]];
+    }];
+}
 
 
 - (void)setWatchRespondWithDataType:(NSInteger)dataType respondCodeType:(NSInteger )respondCodeType {

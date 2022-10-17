@@ -286,9 +286,9 @@ class _MyAppState extends State<MyApp> {
 
       EAConnectParam connectParam = EAConnectParam();
       connectParam.connectAddress =
-          "45:41:CD:11:11:02"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-      connectParam.snNumber = "001007220516000002";
-      //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+          "45:41:46:03:F2:A2"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+      connectParam.snNumber = "002006000009999010";
+      //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
       EASDKTool().connectToPeripheral(connectParam);
     }
 
@@ -698,12 +698,7 @@ class _MyAppState extends State<MyApp> {
           print(showAppMessage);
         }
         break;
-      case EADataInfoTypeMonitorReminderRead:
-        {
-          print(value);
-          EAMonitorReminderRead read = EAMonitorReminderRead.fromMap(value);
-        }
-        break;
+
       default:
     }
   }
@@ -781,6 +776,19 @@ class _MyAppState extends State<MyApp> {
   void secondMethodGetWatchData(int dataType) {
     secondEasdkTool.getWatchData(
         dataType,
+        EAGetDataCallback(
+            onSuccess: ((info) {
+              int dataType = info["dataType"];
+              Map<String, dynamic> value = info["value"];
+              returnClassValue(dataType, value);
+            }),
+            onFail: ((info) {})));
+  }
+
+  void secondMethodGetWatchData2(int dataType, int type) {
+    secondEasdkTool.getWatchData2(
+        dataType,
+        type,
         EAGetDataCallback(
             onSuccess: ((info) {
               int dataType = info["dataType"];
@@ -999,7 +1007,8 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
                 onTap: () {
-                  secondMethodGetWatchData(EADataInfoTypeMonitorReminderRead);
+                  secondMethodGetWatchData2(EADataInfoTypeMonitorReminder,
+                      EAMonitorReminderType.drink.index);
                 },
               ),
               TitleView('  Setting【设置信息】'),

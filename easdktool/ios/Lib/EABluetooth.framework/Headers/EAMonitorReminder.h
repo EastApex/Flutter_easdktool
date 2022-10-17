@@ -72,14 +72,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-/// 提醒事件监测（读取）
-/// read monitor reminder event
-@interface EAMonitorReminderRead : EABaseModel
-
-@property(nonatomic, strong) NSArray<EAMonitorReminder *> *sIndexArray;
-
-+ (EAMonitorReminderRead *)getModelByData:(NSData *)data;
-@end
 
 
 NS_ASSUME_NONNULL_END

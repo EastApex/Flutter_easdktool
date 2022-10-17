@@ -1088,15 +1088,15 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
             String arguments = (String) call.arguments;
-            if (checkArgumentName("type", arguments)) {
+            if (checkArgumentName("dataType", arguments)) {
                 Map<String, Integer> map = JSONObject.parseObject(arguments, Map.class);
-                int type = map.get("type");
+                int type = map.get("dataType");
                 getWatchData(type);
             }
         } else if (call.method.equals(kEASetWatchInfo)) { // 设置手表
 
             String arguments = (String) call.arguments;
-            if (checkArgumentName("type", arguments) && checkArgumentName("jsonString", arguments)) {
+            if (checkArgumentName("dataType", arguments) && checkArgumentName("jsonString", arguments)) {
 
                 Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
                 setWatchData(map);
@@ -1117,10 +1117,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals(kEAOperationWatch)) {
 
             String arguments = (String) call.arguments;
-            if (checkArgumentName("type", arguments)) {
+            if (checkArgumentName("dataType", arguments)) {
                 Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
                 //  SetWatchParam setWatchParam = JSONObject.parseObject(arguments, SetWatchParam.class);
-                int action = (int) map.get("type");
+                int action = (int) map.get("dataType");
                 EABleDev eaBleDev = new EABleDev();
                 if (action == 0) {
                     eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
@@ -2239,7 +2239,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     private void setWatchData(Map<String, Object> setWatchParam) {
-        int type = (int) setWatchParam.get("type");
+        int type = (int) setWatchParam.get("dataType");
         String jsonString = (String) setWatchParam.get("jsonString");
         switch (type) {
             case (kEADataInfoTypeUser): {
@@ -2275,12 +2275,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setUserInfo(eaBlePersonInfo, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2316,14 +2316,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void result(boolean b) {
 
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
 
                     }
 
                     @Override
                     public void mutualFail(int i) {
 
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
 
                     }
                 });
@@ -2379,12 +2379,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void result(boolean b) {
 
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2402,13 +2402,13 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     @Override
                     public void result(boolean b) {
 
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
 
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2425,12 +2425,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setNotDisturb(eaBleNotDisturb, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
 
@@ -2477,12 +2477,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setDailyGoal(eaBleDailyData, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2493,12 +2493,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setHeartRateIntervalTime(intervalTime, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2516,12 +2516,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setSitCheck(eaBleSedentariness, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
 
@@ -2649,12 +2649,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setWeather(eaBleWeather, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2680,12 +2680,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setAncsSwitch(eaBleAncsSw, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2776,12 +2776,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setReminderOrder(eaBleReminder, new EditAttentionCallback() {
                     @Override
                     public void editResult(final EABleRemindRespond eaBleRemindRespond) {
-                        setWatchDataResponse(eaBleRemindRespond.remindRespondResult.getValue(), (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(eaBleRemindRespond.remindRespondResult.getValue(), (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2796,12 +2796,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setHeartRateLimit(eaBleHr, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2919,12 +2919,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setHabit(eaBleHabit, new HabitResultCallback() {
                     @Override
                     public void editResult(EABleHabitRespond eaBleHabitRespond) {
-                        setWatchDataResponse(eaBleHabitRespond.result.getValue(), (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(eaBleHabitRespond.result.getValue(), (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -2947,12 +2947,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setGesturesSwitch(eaBleGesturesBrightScreen, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
 
@@ -2996,12 +2996,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setMenuPage(homePage, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -3037,12 +3037,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setWatchFace(eaBleWatchFace, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }
@@ -3068,12 +3068,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().setAppPushSwitch(eaBleInfoPush, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
 
@@ -3094,12 +3094,12 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        setWatchDataResponse(0, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
                     }
 
                     @Override
                     public void mutualFail(int i) {
-                        setWatchDataResponse(1, (Integer) setWatchParam.get("type"));
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
             }

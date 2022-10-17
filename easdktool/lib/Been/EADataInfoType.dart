@@ -76,10 +76,6 @@ const int EADataInfoTypeBlePairState = 41;
 /// Monitor reminder event
 const int EADataInfoTypeMonitorReminder = 45;
 
-/// 提醒事件监测（读取）
-/// read monitor reminder event
-const int EADataInfoTypeMonitorReminderRead = 46;
-
 /* 操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
 /* MTU */
@@ -113,11 +109,13 @@ const int kEADataInfoTypeOTARespond = 9000;
 
 class EAGetData {
   int type = 0;
-  Map<String, dynamic> toJson() => {'type': type};
+  int dataType = 0;
+  Map<String, dynamic> toJson() => {'type': type, 'dataType': dataType};
 }
 
 class EASetData {
-  int type = 0;
+  int dataType = 0;
   String jsonString = "";
-  Map<String, dynamic> toJson() => {'type': type, 'jsonString': jsonString};
+  Map<String, dynamic> toJson() =>
+      {'dataType': dataType, 'jsonString': jsonString};
 }

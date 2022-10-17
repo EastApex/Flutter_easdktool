@@ -133,7 +133,19 @@ class EASDKTool {
   void getWatchData(int dataType, EAGetDataCallback getDataCallback) {
     mGetDataCallback = getDataCallback;
     EAGetData dataInfoType = EAGetData();
-    dataInfoType.type = dataType;
+    dataInfoType.dataType = dataType;
+    String param = convert.jsonEncode(dataInfoType);
+    _channel.invokeMethod(kEAGetWatchInfo, param);
+  }
+
+  /// 获取手表信息
+  /// Obtaining watch Information
+  void getWatchData2(
+      int dataType, int type, EAGetDataCallback getDataCallback) {
+    mGetDataCallback = getDataCallback;
+    EAGetData dataInfoType = EAGetData();
+    dataInfoType.type = type;
+    dataInfoType.dataType = dataType;
     String param = convert.jsonEncode(dataInfoType);
     _channel.invokeMethod(kEAGetWatchInfo, param);
   }
@@ -144,7 +156,7 @@ class EASDKTool {
       int dataType, Map value, EASetDataCallback setDataCallback) {
     mSetDataCallback = setDataCallback;
     EASetData dataInfoType = EASetData();
-    dataInfoType.type = dataType;
+    dataInfoType.dataType = dataType;
     dataInfoType.jsonString = convert.jsonEncode(value);
     String param = convert.jsonEncode(dataInfoType);
     _channel.invokeMethod(kEASetWatchInfo, param);
@@ -163,7 +175,7 @@ class EASDKTool {
       OperationWatchCallback operationCallback) {
     mOperationCallback = operationCallback;
     EASetData dataInfoType = EASetData();
-    dataInfoType.type = operationType.index;
+    dataInfoType.dataType = operationType.index;
     String param = convert.jsonEncode(dataInfoType);
     _channel.invokeMethod(kEAOperationWatch, param);
   }

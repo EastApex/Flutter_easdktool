@@ -78,6 +78,7 @@ class EASocialSwitch {
     if (map["sSchedule"] != null) {
       sEmail = EASocialOps.fromMap(map["sSchedule"]);
     }
+    
   }
 
   Map<String, dynamic> toMap() {
