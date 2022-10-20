@@ -61,15 +61,17 @@ NS_ASSUME_NONNULL_BEGIN
                                              endHour:(NSInteger)endHour
                                            endMinute:(NSInteger)endMinute;
 
-+ (EAMonitorReminder *)initSedentaryMonitorWithOnOff:(BOOL)sw
-                                            interval:(NSInteger)interval
-                                        weekCycleBit:(NSInteger)weekCycleBit
-                                           beginHour:(NSInteger)beginHour
-                                         beginMinute:(NSInteger)beginMinute
-                                             endHour:(NSInteger)endHour
-                                           endMinute:(NSInteger)endMinute
-                                       stepThreshold:(NSInteger)stepThreshold;
+//+ (EAMonitorReminder *)initSedentaryMonitorWithOnOff:(BOOL)sw
+//                                            interval:(NSInteger)interval
+//                                        weekCycleBit:(NSInteger)weekCycleBit
+//                                           beginHour:(NSInteger)beginHour
+//                                         beginMinute:(NSInteger)beginMinute
+//                                             endHour:(NSInteger)endHour
+//                                           endMinute:(NSInteger)endMinute
+//                                       stepThreshold:(NSInteger)stepThreshold;
 
+
++ (EAMonitorReminder *)getModelByData:(NSData *)data;
 @end
 
 

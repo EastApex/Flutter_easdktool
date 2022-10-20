@@ -1402,9 +1402,9 @@ typedef NS_ENUM(NSUInteger,EASportType) {
     /// 板球
     EASportTypeBallCricket = 73,
 
-    /// Football or rugby
+    /// Rugby
     /// 橄榄球
-    EASportTypeBallFootball = 74,
+    EASportTypeBallRugby = 74,
 
     /// Racquetball
     /// 墙球
@@ -2082,7 +2082,7 @@ typedef NS_ENUM(NSUInteger, EAMonitorReminderType) {
     EAMonitorReminderTypeWashHands = 1,
 
     /** 久坐【未实现】 */
-    EAMonitorReminderTypeSedentary = 2,
+//    EAMonitorReminderTypeSedentary = 2,
 };
 
 

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 //自定义打印
 #define EALog(format, ...) {\
 if ([EABleConfig logEnable]) {\
-NSLog(@"[EALog]:%s:%d " format, __func__, __LINE__, ##__VA_ARGS__);\
+NSLog(@"[EALog]:%s 👻 " format, __func__, ##__VA_ARGS__);\
 }\
 }\
 

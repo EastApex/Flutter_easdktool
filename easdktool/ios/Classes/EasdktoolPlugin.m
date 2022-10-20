@@ -359,14 +359,14 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 return;
             }
             EADataInfoType dataInfoType = [arguments[@"dataType"] integerValue];
-            if (dataInfoType == EADataInfoTypeMonitorReminder) {
+//            if (dataInfoType == EADataInfoTypeMonitorReminder) {
                 
                 NSInteger type = [arguments[@"type"] integerValue];
                 [self getWatchInfo:dataInfoType type:type];
-            }else {
-                
-                [self getWatchInfo:dataInfoType];
-            }
+//            }else {
+//
+//                [self getWatchInfo:dataInfoType];
+//            }
         }
     }
     else if ([call.method isEqualToString:kEASetWatchInfo]) { // FIXME: - 设置手表信息

@@ -581,5 +581,5 @@ enum EAPushMessageType {
 enum EAMonitorReminderType {
   drink,
   washHands,
-  sedentary,
+  // sedentary,
 }

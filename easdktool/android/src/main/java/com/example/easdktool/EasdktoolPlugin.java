@@ -33,6 +33,7 @@ import com.apex.bluetooth.callback.HeartLimitCallback;
 import com.apex.bluetooth.callback.InfoPushCallback;
 import com.apex.bluetooth.callback.LanguageCallback;
 import com.apex.bluetooth.callback.MenuCallback;
+import com.apex.bluetooth.callback.MonitorReminderCallback;
 import com.apex.bluetooth.callback.MotionDataReportCallback;
 import com.apex.bluetooth.callback.MotionDataResponseCallback;
 import com.apex.bluetooth.callback.OtaCallback;
@@ -85,6 +86,7 @@ import com.apex.bluetooth.model.EABleHeartData;
 import com.apex.bluetooth.model.EABleHr;
 import com.apex.bluetooth.model.EABleInfoPush;
 import com.apex.bluetooth.model.EABleMenuPage;
+import com.apex.bluetooth.model.EABleMonitorReminder;
 import com.apex.bluetooth.model.EABleMtu;
 import com.apex.bluetooth.model.EABleMultiData;
 import com.apex.bluetooth.model.EABleMusicControl;
@@ -108,6 +110,7 @@ import com.apex.bluetooth.model.EABleWatchFace;
 import com.apex.bluetooth.model.EABleWatchInfo;
 import com.apex.bluetooth.model.EABleWeather;
 import com.apex.bluetooth.model.EABleWeightFormat;
+import com.apex.bluetooth.model.QueryInfo;
 import com.apex.bluetooth.model.TodayTotalData;
 import com.apex.bluetooth.utils.LogUtils;
 import com.example.easdktool.been.BindInfo;
@@ -292,6 +295,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     /*习惯追踪回应 */
     final int kEADataInfoTypeHabitTrackerRespond = 39;
 
+    /*提醒 */
+    final int kEADataInfoTypeMonitorReminder = 45;
 
     /* 操作手机命令 */
     final int kEADataInfoTypePhoneOps = 2001;
@@ -1090,8 +1095,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             String arguments = (String) call.arguments;
             if (checkArgumentName("dataType", arguments)) {
                 Map<String, Integer> map = JSONObject.parseObject(arguments, Map.class);
-                int type = map.get("dataType");
-                getWatchData(type);
+                int dataType = map.get("dataType");
+                if (dataType != 45) {
+                    getWatchData(dataType);
+                }else  {
+
+                    int type = map.get("type");
+                    getWatchData(dataType,type);
+                }
             }
         } else if (call.method.equals(kEASetWatchInfo)) { // 设置手表
 
@@ -2120,6 +2131,49 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
+    private void getWatchData(int dataType,int type){
+
+        QueryWatchInfoType infoType = QueryWatchInfoType.watch_info;
+        switch (dataType){
+            case 45:
+                infoType = QueryWatchInfoType.monitor_reminder;
+                break;
+            default:
+                break;
+        }
+        QueryInfo queryInfo = new QueryInfo();
+        queryInfo.setQueryWatchInfoType(infoType);
+        queryInfo.setDataType(type);
+        EABleManager.getInstance().queryInfo(queryInfo, new MonitorReminderCallback() {
+            @Override
+            public void mutualFail(int i) {
+
+            }
+
+            @Override
+            public void monitorReminder(EABleMonitorReminder eaBleMonitorReminder) {
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Map<String, Integer> map = new HashMap();
+                        map.put("eReminderType", eaBleMonitorReminder.getEaBleMonitorType().getValue());
+                        map.put("sw", eaBleMonitorReminder.getReminderSwitch());
+                        map.put("interval", eaBleMonitorReminder.getInterval());
+                        map.put("weekCycleBit", eaBleMonitorReminder.getWeek_cycle_bit());
+                        map.put("beginHour", eaBleMonitorReminder.getBegin_hour());
+                        map.put("beginMinute", eaBleMonitorReminder.getBegin_minute());
+                        map.put("endHour", eaBleMonitorReminder.getEnd_hour());
+                        map.put("endMinute", eaBleMonitorReminder.getEnd_minute());
+                        map.put("stepThreshold", eaBleMonitorReminder.getStep_threshold());
+                        map.put("cup", eaBleMonitorReminder.getCup());
+                        sendWatchDataWithMap(map, dataType);
+                    }
+                });
+            }
+        });
+    }
     private EABleSocialContact.SocialContactType getPushInfoType(int type) {
         if (type == 0) {
             return EABleSocialContact.SocialContactType.incomingcall;
@@ -3104,6 +3158,45 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
+            case (kEADataInfoTypeMonitorReminder):{
+
+                Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
+
+                EABleMonitorReminder monitorReminder = new EABleMonitorReminder();
+                int eReminderType = (int) map.get("eReminderType");;
+                switch (eReminderType){
+                    case 0:
+                        monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.drink);
+                        break;
+                    case 1: monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.washHands);
+                        break;
+                    case 2: monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.sedentary);
+                        break;
+                    default:
+                        break;
+                }
+
+                monitorReminder.setReminderSwitch((int) map.get("sw"));
+                monitorReminder.setBegin_hour((int) map.get("beginHour"));
+                monitorReminder.setBegin_minute((int) map.get("beginMinute"));
+                monitorReminder.setEnd_hour((int) map.get("endHour"));
+                monitorReminder.setEnd_minute((int) map.get("endMinute"));
+                monitorReminder.setWeek_cycle_bit((int) map.get("weekCycleBit"));
+                monitorReminder.setInterval((int) map.get("interval"));
+                monitorReminder.setCup((int) map.get("cup"));
+                monitorReminder.setStep_threshold((int) map.get("stepThreshold"));
+                EABleManager.getInstance().addMonitorReminder(monitorReminder,new GeneralCallback() {
+                    @Override
+                    public void result(boolean b) {
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
+                    }
+                });
+            }
             default: {
                 // if (mHandler != null) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -3351,42 +3444,42 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     private void bigDataRespond(int request_id, int e_common_flag) {
 
-        EABleGeneralSportRespond eaBleGeneralSportRespond = new EABleGeneralSportRespond();
-        eaBleGeneralSportRespond.setRequest_id(request_id);
-        if (e_common_flag == 0) {
-            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin);
-        } else if (e_common_flag == 1) {
-            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.proceed);
-        } else if (e_common_flag == 2) {
-            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.end);
-        } else if (e_common_flag == 3) {
-            eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin_end);
-        }
-        EABleManager.getInstance().motionDataResponse(eaBleGeneralSportRespond, new MotionDataResponseCallback() {
-            @Override
-            public void mutualSuccess() {
-                // if (mHandler != null) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
+        // EABleGeneralSportRespond eaBleGeneralSportRespond = new EABleGeneralSportRespond();
+        // eaBleGeneralSportRespond.setRequest_id(request_id);
+        // if (e_common_flag == 0) {
+        //     eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin);
+        // } else if (e_common_flag == 1) {
+        //     eaBleGeneralSportRespond.setE_common_flag(CommonFlag.proceed);
+        // } else if (e_common_flag == 2) {
+        //     eaBleGeneralSportRespond.setE_common_flag(CommonFlag.end);
+        // } else if (e_common_flag == 3) {
+        //     eaBleGeneralSportRespond.setE_common_flag(CommonFlag.begin_end);
+        // }
+        // EABleManager.getInstance().motionDataResponse(eaBleGeneralSportRespond, new MotionDataResponseCallback() {
+        //     @Override
+        //     public void mutualSuccess() {
+        //         // if (mHandler != null) {
+        //         new Handler(Looper.getMainLooper()).post(new Runnable() {
+        //             @Override
+        //             public void run() {
 
-                    }
-                });
-                // }
-            }
+        //             }
+        //         });
+        //         // }
+        //     }
 
-            @Override
-            public void mutualFail(int i) {
-                //  if (mHandler != null) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
+        //     @Override
+        //     public void mutualFail(int i) {
+        //         //  if (mHandler != null) {
+        //         new Handler(Looper.getMainLooper()).post(new Runnable() {
+        //             @Override
+        //             public void run() {
 
-                    }
-                });
-                // }
-            }
-        });
+        //             }
+        //         });
+        //         // }
+        //     }
+        // });
     }
 }
 

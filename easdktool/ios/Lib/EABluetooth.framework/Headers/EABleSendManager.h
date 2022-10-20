@@ -27,7 +27,7 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 
 /// Get data [Queue Operation]获取数据【队列操作】
 - (void)operationGetInfoWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
-/// Get data [Queue Operation]获取数据【队列操作】
+/// Get data from class ’EARequestModel‘ 获取数据
 - (void)operationGetInfoWithRequestModel:(EARequestModel *)requestModel result:(ResultGetInfoBlock )result;
 /// Set data 修改数据【队列操作】
 - (void)operationChangeModel:(EABaseModel *)changeModel respond:(RespondBlock )respond;

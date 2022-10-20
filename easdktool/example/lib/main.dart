@@ -36,105 +36,6 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-/* class ConnectListener implements EABleConnectListener {
-  @override
-  void connectError() {
-    print("connectError");
-  }
-
-  @override
-  void connectTimeOut() {
-    print("connectTimeOut");
-  }
-
-  @override
-  void deviceConnected() {
-    print('Device connected');
-
-    EASDKTool().getWatchData(
-        kEADataInfoTypeWatch,
-        EAGetDataCallback(
-            onSuccess: ((info) async {
-              Map<String, dynamic> value = info["value"];
-              EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
-
-              if (eaBleWatchInfo.userId.isEmpty) {
-                // or use this judgment
-                // if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
-
-
-                /**
-                 1st. 
-               * get watch infomation,to determine 'isWaitForBinding' the value 【连接成功后，获取手表信息，判断'isWaitForBinding'的值】
-                 2nd.
-               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
-               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
-                  The watch displays a waiting for confirmation binding screen,
-                  Wait to click OK or cancel
-               */
-
-                EABindInfo bindInfo = EABindInfo();
-                bindInfo.user_id = "144766772845744125";
-                // Turn on the daily step interval for 30 minutes
-                bindInfo.bindMod = 1;
-                if (eaBleWatchInfo.isWaitForBinding == 0) {
-                  //Bind command type: End，not show pair view【绑定命令类型：结束，不显示手表确定绑定页面】
-                  bindInfo.bindingCommandType = 1;
-                } else {
-                  //Bind command type: Begin【绑定命令类型：开始】
-                  bindInfo.bindingCommandType = 0;
-                }
-                EASDKTool().bindingWatch(bindInfo,
-                    EABindingWatchCallback(onRespond: ((respond) {
-                  print(respond.respondCodeType);
-                })));
-              }
-            }),
-            onFail: ((info) {})));
-  }
-
-  @override
-  void deviceDisconnect() {
-    print("deviceDisconnect");
-  }
-
-  @override
-  void deviceNotFind() {
-    print("deviceNotFind");
-  }
-
-  @override
-  void notOpenLocation() {
-    print("notOpenLocation");
-  }
-
-  @override
-  void paramError() {
-    print("paramError");
-  }
-
-  @override
-  void unopenedBluetooth() {
-    print("unopenedBluetooth");
-  }
-
-  @override
-  void unsupportedBLE() {
-    print("unsupportedBLE");
-  }
-
-  @override
-  void iOSRelievePair() {
-    print("iOSRelievePair");
-  }
-
-  @override
-  void iOSUnAuthorized() {
-    print("iOSUnAuthorized");
-  }
-}
-*/
-
 class ConnectListener implements EABleConnectListener {
   EASDKTool easdkTool;
 
@@ -167,6 +68,7 @@ class ConnectListener implements EABleConnectListener {
                   Wait to click OK or cancel
                */
           if (eaBleWatchInfo.userId.isEmpty) {
+            // if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
             EABindInfo bindInfo = EABindInfo();
             bindInfo.user_id = "1008690";
             // Turn on the daily step interval for 30 minutes
@@ -186,22 +88,6 @@ class ConnectListener implements EABleConnectListener {
                 EABindingWatchCallback(onRespond: ((respond) {
               print('binding response  ${respond.respondCodeType}');
             })));
-            // if (Platform.isIOS) {
-            //   print('is iOS');
-            //   easdkTool.getWatchData(
-            //       kEADataInfoTypeBingWatch,
-            //       EAGetDataCallback(onFail: (Map<String, dynamic> info) {
-            //         print('====> error $info');
-            //         // XWatch.xWatchConnectionListener
-            //         // ?.deviceDisconnected();
-            //       }, onSuccess: (Map<String, dynamic> info) async {
-            //         print('====> $info');
-            //         // XWatch.xWatchConnectionListener?.deviceConnected();
-            //       }));
-            // } else {
-            //   // XWatch.xWatchConnectionListener?.deviceConnected();
-            // }
-            // XWatchHeartRate().setContinuousHeartRate(30);
           } else {
             // XWatch.xWatchConnectionListener?.deviceConnected();
           }
@@ -284,15 +170,17 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      EAConnectParam connectParam = EAConnectParam();
-      connectParam.connectAddress =
-          "45:41:46:03:F2:A2"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-      connectParam.snNumber = "002006000009999010";
-      //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+      EAConnectParam connectParam = EAConnectParam.testInit();
       EASDKTool().connectToPeripheral(connectParam);
     }
 
     /// 打开 SDKLog
+    EASDKTool().showLog(1);
+
+    // ///搜索手表
+    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+    //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
+    // }));
   }
 
   void operationPhoneListener(Map info) {
@@ -696,6 +584,14 @@ class _MyAppState extends State<MyApp> {
 
           EAShowAppMessage showAppMessage = EAShowAppMessage.fromMap(value);
           print(showAppMessage);
+        }
+        break;
+      case EADataInfoTypeMonitorReminder:
+        {
+          print(value);
+
+          EAMonitorReminder monitorReminder = EAMonitorReminder.fromMap(value);
+          print(monitorReminder);
         }
         break;
 
@@ -1335,15 +1231,15 @@ class _MyAppState extends State<MyApp> {
                   EAMonitorReminder monitorReminder = EAMonitorReminder();
                   monitorReminder.eReminderType = EAMonitorReminderType.drink;
                   monitorReminder.sw = 1;
-                  monitorReminder.weekCycleBit = 0;
-                  monitorReminder.interval = 60;
+                  monitorReminder.weekCycleBit = 127;
+                  monitorReminder.interval = 1;
                   monitorReminder.beginHour = 8;
                   monitorReminder.beginMinute = 0;
-                  monitorReminder.endHour = 20;
+                  monitorReminder.endHour = 22;
                   monitorReminder.endMinute = 0;
                   monitorReminder.cup = 2;
                   secondMethodSetWatchData(
-                      kEADataInfoTypeSocialSwitch, monitorReminder.toMap());
+                      EADataInfoTypeMonitorReminder, monitorReminder.toMap());
                 },
               ),
               TitleView(' Getting big data【获取大数据】'),

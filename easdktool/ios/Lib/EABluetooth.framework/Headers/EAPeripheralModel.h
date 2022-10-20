@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) NSNumber *RSSI;                     // 设备 RSSI
 @property(nonatomic,strong) NSDictionary *advertisementData;    //
 @property(nonatomic,strong) NSString *SN;                       //
+
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -15,6 +15,19 @@ class EAConnectParam {
   int rssi = 0;
   String uuid = "";
   EAConnectParam();
+
+  EAConnectParam.testInit() {
+    connectAddress =
+        "45:41:6C:37:84:C9"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+    snNumber = "002017210515555529";
+    //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+  }
+
+  EAConnectParam.init(String address, String sn) {
+    connectAddress = address;
+    snNumber = sn;
+  }
+
   Map<String, dynamic> toJson() =>
       {'connectAddress': connectAddress, 'snNumber': snNumber};
 

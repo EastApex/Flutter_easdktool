@@ -123,11 +123,7 @@ class ForegroundTaskHandler extends TaskHandler {
   }
 
   void connectBluetooth() {
-    EAConnectParam connectParam = EAConnectParam();
-    connectParam.connectAddress =
-        "45:41:80:A3:F5:BA"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
-    connectParam.snNumber = "002006000009999010";
-    //"001007220516000001","002006000009999009","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
+    EAConnectParam connectParam = EAConnectParam.testInit();
     easdkTool.connectToPeripheral(connectParam);
   }
 
