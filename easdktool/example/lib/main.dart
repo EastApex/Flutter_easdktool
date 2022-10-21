@@ -294,7 +294,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getBigWatchData() {
-    EASDKTool().getBigWatchData(EAGetBitDataCallback(((info) {
+
+    secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
       /// Determine what kind of big data "dataType" is
       ///【判断dataType是属于那种大数据】
 

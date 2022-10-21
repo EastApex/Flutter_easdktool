@@ -1067,6 +1067,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                         // }
                                     }
                                 });
+                            }else {
+
+                                setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
                             }
                         } else {
                             setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
@@ -1084,6 +1087,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
+                                channel.invokeMethod(kArgumentsError, "user_id error");
                             }
                         });
                         // }
