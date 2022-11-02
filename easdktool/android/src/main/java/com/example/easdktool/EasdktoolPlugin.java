@@ -1032,22 +1032,24 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             String arguments = (String) call.arguments;
             if (checkArgumentName("user_id", arguments)) {
+                Map<String, Object> param = JSONObject.parseObject(arguments, Map.class);
 
-
-                final BindInfo bindInfo = JSONObject.parseObject(arguments, BindInfo.class);
+                final int ops = (int) param.get("ops");
+                final String user_id = (String) param.get("user_id");
+                final int mod = (int) param.get("bindMod");
                 EABleBindInfo eaBleBindInfo = new EABleBindInfo();
-                eaBleBindInfo.setUser_id(bindInfo.user_id);
-                eaBleBindInfo.setE_ops(bindInfo.ops == 1 ? EABleBindInfo.BindingOps.end : EABleBindInfo.BindingOps.normal_begin);
-                eaBleBindInfo.setBind_mod(bindInfo.bindMod);
+                eaBleBindInfo.setUser_id(user_id);
+                eaBleBindInfo.setE_ops(ops == 1 ? EABleBindInfo.BindingOps.end : EABleBindInfo.BindingOps.normal_begin);
+                eaBleBindInfo.setBind_mod(mod);
                 EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
                         if (b) {
-                            if (bindInfo.ops == 0) {
+                            if (ops == 0) {
                                 EABleBindInfo eaBleBindInfo1 = new EABleBindInfo();
-                                eaBleBindInfo1.setUser_id(bindInfo.user_id);
+                                eaBleBindInfo1.setUser_id(user_id);
                                 eaBleBindInfo1.setE_ops(EABleBindInfo.BindingOps.end);
-                                eaBleBindInfo1.setBind_mod(bindInfo.bindMod);
+                                eaBleBindInfo1.setBind_mod(mod);
                                 EABleManager.getInstance().setOpsBinding(eaBleBindInfo1, new GeneralCallback() {
                                     @Override
                                     public void result(boolean b) {
@@ -1067,7 +1069,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                         // }
                                     }
                                 });
-                            }else {
+                            } else {
 
                                 setWatchDataResponse((b ? 0 : 1), kEADataInfoTypeBingWatch);
                             }
@@ -1082,7 +1084,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                     @Override
                     public void mutualFail(int i) {
-                        Log.e(TAG, "收到错误");
                         //  if (mHandler != null) {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -1094,6 +1095,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     }
                 });
             }
+           
         } else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
             String arguments = (String) call.arguments;
@@ -1182,34 +1184,92 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
         } else if (call.method.equals(kEAOTA)) {
-
             String arguments = (String) call.arguments;
             if (checkArgumentName("type", arguments) && checkArgumentName("otas", arguments)) {
                 Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
                 List<JSONObject> wArray = (List<JSONObject>) map.get("otas");
                 if (wArray != null && !wArray.isEmpty()) {
-                    List<TempOtaData> otaDataList = new ArrayList<>();
+                    List<EABleOta> otaDataList = new ArrayList<>();
                     for (int i = 0; i < wArray.size(); i++) {
                         JSONObject wMap = wArray.get(i);
-                        TempOtaData tempOtaData = new TempOtaData();
+                        EABleOta tempOtaData = new EABleOta();
                         tempOtaData.version = wMap.getString("version");
-                        tempOtaData.firmwareType = wMap.getInteger("firmwareType");
-                        tempOtaData.binPath = wMap.getString("binPath");
+                        int type = wMap.getInteger("firmwareType");
+                        if (type == 0) {
+                            tempOtaData.otaType = EABleOta.OtaType.apollo;
+                        } else if (type == 1) {
+                            tempOtaData.otaType = EABleOta.OtaType.res;
+                        } else if (type == 2) {
+                            tempOtaData.otaType = EABleOta.OtaType.hr;
+                        } else if (type == 3) {
+                            tempOtaData.otaType = EABleOta.OtaType.tp;
+                        }
+                        tempOtaData.setFilePath(wMap.getString("binPath"));
                         otaDataList.add(tempOtaData);
 
                     }
                     if (otaDataList != null && !otaDataList.isEmpty()) {
-                        new Thread() {
+                        EABleManager.getInstance().otaUpdate(otaDataList, new OtaCallback() {
+                            @Override
+                            public void success() {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        channel.invokeMethod(kProgress, 100);
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void progress(int i) {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.e(TAG, "当前进度:" + i);
+                                        channel.invokeMethod(kProgress, i);
+                                    }
+                                });
+
+                            }
+
+                            @Override
+                            public void mutualFail(int i) {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        channel.invokeMethod(kProgress, -1);
+                                    }
+                                });
+
+                            }
+                        });
+                        //  new Thread() {
+                        //      @Override
+                        //      public void run() {
+                        //          super.run();
+                        // otaAction(otaDataList);
+                        //      }
+                        //  }.start();
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                super.run();
-                                otaAction(otaDataList);
+                                channel.invokeMethod(kProgress, -1);
                             }
-                        }.start();
+                        });
                     }
+                } else {
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod(kProgress, -1);
+                        }
+                    });
                 }
 
             }
+            
         } else {
             result.notImplemented();
         }
@@ -3339,96 +3399,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         // }
     }
 
-    private void otaAction(List otas) {
-
-        // if (mHandler != null) {
-        //     mHandler.post(new Runnable() {
-        //         @Override
-        //         public void run() {
-
-        List<EABleOta> otaList = new ArrayList<>();
-        for (int i = 0; i < otas.size(); i++) {
-
-            TempOtaData tempOtaData = (TempOtaData) otas.get(i);
-            EABleOta eaBleOta = new EABleOta();
-            File file = new File(tempOtaData.binPath);
-            if (!file.exists() || file.isDirectory()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        channel.invokeMethod(kArgumentsError, "not find file in binPath");
-                    }
-                });
-                return;
-            }
-            try {
-                eaBleOta.fileByte = file2Byte(file);
-                eaBleOta.version = tempOtaData.version;
-                if (tempOtaData.firmwareType == 0) {
-                    eaBleOta.otaType = EABleOta.OtaType.apollo;
-                } else if (tempOtaData.firmwareType == 1) {
-                    eaBleOta.otaType = EABleOta.OtaType.res;
-                } else if (tempOtaData.firmwareType == 2) {
-                    eaBleOta.otaType = EABleOta.OtaType.hr;
-                } else if (tempOtaData.firmwareType == 3) {
-                    eaBleOta.otaType = EABleOta.OtaType.tp;
-                }
-                otaList.add(eaBleOta);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        channel.invokeMethod(kArgumentsError, "binpath file error");
-                    }
-                });
-                return;
-            }
-        }
-        if (otaList != null && !otaList.isEmpty()) {
-            EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
-                @Override
-                public void success() {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod(kProgress, 100);
-                        }
-                    });
-
-                }
-
-                @Override
-                public void progress(int i) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e(TAG, "当前进度:" + i);
-                            channel.invokeMethod(kProgress, i);
-                        }
-                    });
-
-                }
-
-                @Override
-                public void mutualFail(int i) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            channel.invokeMethod(kProgress, -1);
-                        }
-                    });
-
-                }
-            });
-        }
-        //  }
-
-        // });
-        //}
-
-    }
 
     private byte[] file2Byte(@NonNull File f) throws FileNotFoundException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
