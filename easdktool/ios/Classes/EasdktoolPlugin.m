@@ -659,10 +659,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         }
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
         // 判断设置类型
-        if (![self checkArgumentName:@"type" inArguments:arguments]) {
-            
-            return;
-        }
         if (![self checkArgumentName:@"otas" inArguments:arguments]) {
             
             return;
@@ -672,6 +668,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         if ([otas isKindOfClass:[NSArray class]] && otas.count > 0) {
             
             [self otaAction:otas];
+            
         }else {
             
             [_channel invokeMethod:kArgumentsError arguments:@"otas not null"];
@@ -783,6 +780,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     // OTA
     NSMutableArray *models = [NSMutableArray new];
     
+    BOOL isWatchFace = NO;
+    
     for (NSDictionary *item in otas) {
         
         NSString *binPath = item[@"binPath"];
@@ -809,6 +808,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         else if (otaType == 3) {
             
             otaType = EAOtaRequestTypeHr;
+            
+        }else if (otaType == 4) {
+            
+            otaType = EAOtaRequestTypeUserWf;
+            isWatchFace = YES;
         }
         
         EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
@@ -818,12 +822,27 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     if (models.count > 0) {
         
-        [[EABleSendManager defaultManager] upgradeFiles:models];
-        
+        if(!isWatchFace) {
+            
+            [[EABleSendManager defaultManager] upgradeFiles:models];
+        }
+        else if(isWatchFace && models.count == 1)
+        {
+            [[EABleSendManager defaultManager] upgradeWatchFaceFile:[models firstObject]];
+        }
+        else {
+            
+            [_channel invokeMethod:kArgumentsError arguments:@"otas type error"];
+        }
         _timerSec = kTimerSec;
         [self startTimer];
     }
     
+}
+
+- (void)watchfaceAction:(EAFileModel *)fileModel {
+    
+    [[EABleSendManager defaultManager] upgradeWatchFaceFile:fileModel];
 }
 
 

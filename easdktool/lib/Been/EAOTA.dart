@@ -8,6 +8,11 @@ class EAOTA {
   String version = ""; // 【版本号】
 
   EAOTA(this.binPath, this.firmwareType, this.version);
+
+  EAOTA.watchface(String filePath) {
+    binPath = filePath;
+    firmwareType = EAFirmwareType.wf;
+  }
   Map toJson() {
     return {
       "binPath": binPath,
@@ -18,7 +23,7 @@ class EAOTA {
 }
 
 class EAOTAList {
-  int type = 0;
+  int type = 0; // 0:ota 1:watch face
   List<EAOTA> otas = [];
 
   EAOTAList(this.type, this.otas);

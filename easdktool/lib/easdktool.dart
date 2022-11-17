@@ -189,6 +189,12 @@ class EASDKTool {
     _channel.invokeMethod(kEAOTA, param);
   }
 
+  void watchface(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback) {
+    mOTAProgressCallback = otaProgressCallback;
+    String param = convert.jsonEncode(otaList);
+    _channel.invokeMethod(kEAOTA, param);
+  }
+
   //
   Future<dynamic> platformCallHandler(MethodCall methodCall) async {
     /* methodName

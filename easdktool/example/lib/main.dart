@@ -67,8 +67,8 @@ class ConnectListener implements EABleConnectListener {
                   The watch displays a waiting for confirmation binding screen,
                   Wait to click OK or cancel
                */
-          if (eaBleWatchInfo.userId.isEmpty) {
-            // if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
+          // if (eaBleWatchInfo.userId.isEmpty) {
+          if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
             EABindInfo bindInfo = EABindInfo();
             bindInfo.user_id = "1008690";
             // Turn on the daily step interval for 30 minutes
@@ -90,6 +90,7 @@ class ConnectListener implements EABleConnectListener {
             })));
           } else {
             // XWatch.xWatchConnectionListener?.deviceConnected();
+            // easdkTool.disConnectWatch();
           }
         }), onFail: ((info) {
           // XWatch.xWatchConnectionListener?.deviceDisconnected();
@@ -1455,6 +1456,35 @@ class _MyAppState extends State<MyApp> {
                   secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress) {
                     print("OTA进度:" + progress.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+
+                    } else if (progress == 100) {
+                      // transmit data succ;
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: TextView('2.watch face【表盘】'),
+                onTap: () async {
+                  var bytes =
+                      await rootBundle.load("assets/bin/watchface_U38.bin");
+                  String path = (await getApplicationSupportDirectory()).path;
+                  String filePath =
+                      '$path/' + DateTime.now().toString() + '.bin';
+                  final buffer = bytes.buffer;
+                  await File(filePath).writeAsBytes(buffer.asUint8List(
+                      bytes.offsetInBytes, bytes.lengthInBytes));
+
+                  EAOTA watchfaceOTA = EAOTA.watchface(filePath);
+
+                  EAOTAList eaList = EAOTAList(1, [watchfaceOTA]);
+                  secondEasdkTool.otaUpgrade(eaList,
+                      EAOTAProgressCallback((progress) {
+                    print("表盘进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
 
