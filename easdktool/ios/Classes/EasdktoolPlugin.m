@@ -162,7 +162,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     EAPhoneOpsModel *phoneOpsModel = (EAPhoneOpsModel *)noti.object;
     
-    [_channel invokeMethod:kBluetoothState arguments:@(phoneOpsModel.eOps)];
+    [_channel invokeMethod:kOperationPhone arguments:@(phoneOpsModel.eOps)];
     
     if(phoneOpsModel.eOps == EAPhoneOpsBig8803DataUpdateFinish) {
         

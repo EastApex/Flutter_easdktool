@@ -76,8 +76,13 @@ const int EADataInfoTypeBlePairState = 41;
 /// Monitor reminder event
 const int EADataInfoTypeMonitorReminder = 45;
 
-/* 操作手机命令 */
+
+
+/* 手表操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
+
+const int kEADataInfoTypeMusic = 2004;
+
 /* MTU */
 const int kEADataInfoTypeMTU = 2006;
 /* 大数据步数 */

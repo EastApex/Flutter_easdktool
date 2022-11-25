@@ -288,6 +288,48 @@ class ForegroundTaskHandler extends TaskHandler {
   void operationPhoneListener(Map info) {
     ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
     /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
+    /**
+     * type   0  Find your phone
+     *        1  End Phone Search
+     *        2  Ready to take a picture
+     *        3  photograph
+     *        4  End taking pictures
+     *        5  Weather      Can synchronize weather to watch
+     *        6  AGPS file update      AGPS of watches can be updated through OTA, only for watches that support GPS
+     *        7  female physiological cycle       The physiological cycle data of women can be synchronized to the watch
+     *        8  Motion data synchronization completed
+     *        9  Stop looking for a watch
+     *        11 playing music information        Music information can be synchronized to the watch
+     *        12 Music operation      Pause playback, increase and decrease the volume of the previous song and the next song.
+     *                                After the app completes the corresponding action,it needs to synchronize the music information
+     *                                to the watch to keep consistent
+     */
+    if (info.isNotEmpty) {
+      int type = info["opePhoneType"];
+      if (type == 0) {
+      } else if (type == 1) {
+      } else if (type == 2) {
+      } else if (type == 3) {
+      } else if (type == 4) {
+      } else if (type == 5) {
+      } else if (type == 6) {
+      } else if (type == 7) {
+      } else if (type == 8) {
+      } else if (type == 9) {
+      } else if (type == 11) {
+      } else if (type == 12) {
+        int action = info["action"];
+        /**
+         * action   0    Start playing
+         *          1    stop playing
+         *          2    Previous song
+         *          3    next song
+         *          4    Volume up
+         *          5    Volume decrease
+         */
+        print(action.toString());
+      }
+    }
   }
 }
 

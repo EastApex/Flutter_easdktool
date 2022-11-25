@@ -21,6 +21,7 @@ import com.apex.bluetooth.callback.BatterInfoCallback;
 import com.apex.bluetooth.callback.CalorieSwitchCallback;
 import com.apex.bluetooth.callback.CombinationCallback;
 import com.apex.bluetooth.callback.DataReportCallback;
+import com.apex.bluetooth.callback.DataResponseCallback;
 import com.apex.bluetooth.callback.DistanceUnitCallback;
 import com.apex.bluetooth.callback.DonDisturbCallback;
 import com.apex.bluetooth.callback.EditAttentionCallback;
@@ -76,6 +77,7 @@ import com.apex.bluetooth.model.EABleDevUnit;
 import com.apex.bluetooth.model.EABleDevice;
 import com.apex.bluetooth.model.EABleDeviceLanguage;
 import com.apex.bluetooth.model.EABleDistanceFormat;
+import com.apex.bluetooth.model.EABleExecutiveResponse;
 import com.apex.bluetooth.model.EABleGeneralSportRespond;
 import com.apex.bluetooth.model.EABleGesturesBrightScreen;
 import com.apex.bluetooth.model.EABleGpsData;
@@ -90,11 +92,13 @@ import com.apex.bluetooth.model.EABleMonitorReminder;
 import com.apex.bluetooth.model.EABleMtu;
 import com.apex.bluetooth.model.EABleMultiData;
 import com.apex.bluetooth.model.EABleMusicControl;
+import com.apex.bluetooth.model.EABleMusicRespond;
 import com.apex.bluetooth.model.EABleNotDisturb;
 import com.apex.bluetooth.model.EABleOta;
 import com.apex.bluetooth.model.EABlePaceData;
 import com.apex.bluetooth.model.EABlePeriod;
 import com.apex.bluetooth.model.EABlePersonInfo;
+import com.apex.bluetooth.model.EABlePhoneResponse;
 import com.apex.bluetooth.model.EABlePressureData;
 import com.apex.bluetooth.model.EABleQueryMusic;
 import com.apex.bluetooth.model.EABleRemindRespond;
@@ -282,6 +286,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeHomePage = 31;
     /* 经期命令 */
     final int kEADataInfoTypeMenstrual = 32;
+    
     /* 表盘命令 */
     final int kEADataInfoTypeWatchFace = 33;
     /* 消息推送开关 */
@@ -300,6 +305,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     /* 操作手机命令 */
     final int kEADataInfoTypePhoneOps = 2001;
+
+    final int kEADataInfoTypeMusic = 2004;
+    
     /* MTU */
     final int kEADataInfoTypeMTU = 2006;
     /* 大数据步数 */
@@ -342,12 +350,35 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         //  destroySmsListener();
     }
 
+    private void responseSeekPhone(boolean success, int operationId) {
+        EABlePhoneResponse eaBlePhoneSeek = new EABlePhoneResponse();
+        if (!success) {
+            eaBlePhoneSeek.setEaBleExecutiveResponse(EABleExecutiveResponse.fail);
+        } else {
+            eaBlePhoneSeek.setEaBleExecutiveResponse(EABleExecutiveResponse.success);
+        }
+        eaBlePhoneSeek.setId(operationId);
+        EABleManager.getInstance().mobileOperationResponse(eaBlePhoneSeek, new DataResponseCallback() {
+            @Override
+            public void mutualSuccess() {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+
+    }
+
     class DeviceOperationListener implements DataReportCallback {
         @Override
         public void searchPhone() {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 0);
             sendOpePhone(jsonObject);
+
         }
 
         @Override
@@ -362,6 +393,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 2);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 2);
         }
 
         @Override
@@ -369,6 +401,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 3);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 3);
         }
 
         @Override
@@ -376,6 +409,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 4);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 4);
         }
 
         @Override
@@ -383,6 +417,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 5);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 5);
         }
 
         @Override
@@ -390,6 +425,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 7);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 7);
         }
 
         @Override
@@ -397,6 +433,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("opePhoneType", 6);
             sendOpePhone(jsonObject);
+            responseSeekPhone(true, 6);
         }
 
         @Override
@@ -409,70 +446,98 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         @Override
         public void stopSearchWatch() {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("opePhoneType", 8);
+            jsonObject.put("opePhoneType", 9);
             sendOpePhone(jsonObject);
         }
 
         @Override
         public void queryMusic(final EABleQueryMusic eaBleQueryMusic) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("opePhoneType", 0x0B);
+            sendOpePhone(jsonObject);
             //  if (mHandler != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", 0x0B);
-                    if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.default_type) {
-                        jsonObject.put("appType", 0);
-                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.apple_music) {
-                        jsonObject.put("appType", 1);
-                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
-                        jsonObject.put("appType", 2);
-                    } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
-                        jsonObject.put("appType", 3);
-                    }
-                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                    if (methodChannel != null) {
-                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                    }
-                }
+            /**
+             new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dataType", 0x0B);
+            if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.default_type) {
+            jsonObject.put("appType", 0);
+            } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.apple_music) {
+            jsonObject.put("appType", 1);
+            } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
+            jsonObject.put("appType", 2);
+            } else if (eaBleQueryMusic.getE_app() == EABleQueryMusic.PlayerType.deeze) {
+            jsonObject.put("appType", 3);
+            }
+            MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+            if (methodChannel != null) {
+            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+            }
+            }
             });
+             */
         }
         // }
 
         @Override
         public void musicControl(final EABleMusicControl eaBleMusicControl) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("opePhoneType", 0x0C);
+            jsonObject.put("volume", eaBleMusicControl.volume);
+            jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
+                jsonObject.put("action", 0);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
+                jsonObject.put("action", 1);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
+                jsonObject.put("action", 2);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
+                jsonObject.put("action", 3);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
+                jsonObject.put("action", 4);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
+                jsonObject.put("action", 5);
+            }
+            sendOpePhone(jsonObject);
             // if (mHandler != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", 0x0C);
-                    jsonObject.put("volume", eaBleMusicControl.volume);
-                    jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
-                        jsonObject.put("action", 0);
-                    }
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
-                        jsonObject.put("action", 1);
-                    }
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
-                        jsonObject.put("action", 2);
-                    }
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
-                        jsonObject.put("action", 3);
-                    }
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
-                        jsonObject.put("action", 4);
-                    }
-                    if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
-                        jsonObject.put("action", 5);
-                    }
-                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                    if (methodChannel != null) {
-                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                    }
-                }
+            /**
+             new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dataType", 0x0C);
+            jsonObject.put("volume", eaBleMusicControl.volume);
+            jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
+            jsonObject.put("action", 0);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
+            jsonObject.put("action", 1);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
+            jsonObject.put("action", 2);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
+            jsonObject.put("action", 3);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
+            jsonObject.put("action", 4);
+            }
+            if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
+            jsonObject.put("action", 5);
+            }
+            MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+            if (methodChannel != null) {
+            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+            }
+            }
             });
+             */
 
         }
 
@@ -480,20 +545,26 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void socialResponse(final EABleSocialResponse eaBleSocialResponse) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("opePhoneType", 0x0D);
+            jsonObject.put("socialId", eaBleSocialResponse.id);
+            jsonObject.put("content", eaBleSocialResponse.content);
+            sendOpePhone(jsonObject);
             //  if (mHandler != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", 0x0D);
-                    jsonObject.put("socialId", eaBleSocialResponse.id);
-                    jsonObject.put("content", eaBleSocialResponse.content);
-                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                    if (methodChannel != null) {
-                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                    }
-                }
+            /**
+             new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dataType", 0x0D);
+            jsonObject.put("socialId", eaBleSocialResponse.id);
+            jsonObject.put("content", eaBleSocialResponse.content);
+            MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+            if (methodChannel != null) {
+            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+            }
+            }
             });
+             */
             // }
 
 
@@ -501,19 +572,24 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void mtu(final EABleMtu eaBleMtu) {
+         //   JSONObject jsonObject = new JSONObject();
+         //   jsonObject.put("opePhoneType", 0x0E);
+         //   jsonObject.put("mtu", eaBleMtu.getMtu_value());
+         //   sendOpePhone(jsonObject);
             //if (mHandler != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", 0x0E);
-                    jsonObject.put("mtu", eaBleMtu.getMtu_value());
-                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                    if (methodChannel != null) {
-                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                    }
-                }
+            /**
+             new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dataType", 0x0E);
+            jsonObject.put("mtu", eaBleMtu.getMtu_value());
+            MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+            if (methodChannel != null) {
+            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+            }
+            }
             });
+             */
             // }
 
 
@@ -521,19 +597,24 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
         @Override
         public void mutualFail(final int i) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("opePhoneType", 0x0F);
+            jsonObject.put("errorCode", i);
+            sendOpePhone(jsonObject);
             // if (mHandler != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("dataType", 0x0F);
-                    jsonObject.put("errorCode", i);
-                    MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
-                    if (methodChannel != null) {
-                        methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
-                    }
-                }
+            /**
+             new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("dataType", 0x0F);
+            jsonObject.put("errorCode", i);
+            MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor(), "sdk");
+            if (methodChannel != null) {
+            methodChannel.invokeMethod("REPORT", jsonObject.toJSONString());
+            }
+            }
             });
+             */
             // }
 
         }
@@ -1095,7 +1176,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     }
                 });
             }
-           
+
         } else if (call.method.equals(kEAGetWatchInfo)) { // 获取手表数据
 
             String arguments = (String) call.arguments;
@@ -1104,10 +1185,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 int dataType = map.get("dataType");
                 if (dataType != 45) {
                     getWatchData(dataType);
-                }else  {
+                } else {
 
                     int type = map.get("type");
-                    getWatchData(dataType,type);
+                    getWatchData(dataType, type);
                 }
             }
         } else if (call.method.equals(kEASetWatchInfo)) { // 设置手表
@@ -1203,6 +1284,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                             tempOtaData.otaType = EABleOta.OtaType.hr;
                         } else if (type == 3) {
                             tempOtaData.otaType = EABleOta.OtaType.tp;
+                        }else if(type==4){
+                            tempOtaData.otaType = EABleOta.OtaType.user_wf;
                         }
                         tempOtaData.setFilePath(wMap.getString("binPath"));
                         otaDataList.add(tempOtaData);
@@ -1269,7 +1352,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 }
 
             }
-            
+
         } else {
             result.notImplemented();
         }
@@ -2195,10 +2278,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         }
     }
 
-    private void getWatchData(int dataType,int type){
+    private void getWatchData(int dataType, int type) {
 
         QueryWatchInfoType infoType = QueryWatchInfoType.watch_info;
-        switch (dataType){
+        switch (dataType) {
             case 45:
                 infoType = QueryWatchInfoType.monitor_reminder;
                 break;
@@ -2238,6 +2321,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
         });
     }
+
     private EABleSocialContact.SocialContactType getPushInfoType(int type) {
         if (type == 0) {
             return EABleSocialContact.SocialContactType.incomingcall;
@@ -3147,6 +3231,37 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             }
             break;
+            case (kEADataInfoTypeMusic): {
+                Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+                EABleMusicRespond eaBleMusicRespond = new EABleMusicRespond();
+                eaBleMusicRespond.setArtist((String) map.get("artist"));
+                eaBleMusicRespond.setContent((String) map.get("content"));
+                eaBleMusicRespond.setDuration((Integer) map.get("duration"));
+                eaBleMusicRespond.setElapsedtime((Integer) map.get("elapsedtime"));
+                eaBleMusicRespond.setVolume((Integer) map.get("volume"));
+                int state = (int) map.get("playState");
+                if (state == 0) {
+                    eaBleMusicRespond.setE_status(EABleMusicRespond.MusicStatus.not_play);
+                } else if (state == 1) {
+                    eaBleMusicRespond.setE_status(EABleMusicRespond.MusicStatus.playing);
+                } else {
+                    eaBleMusicRespond.setE_status(EABleMusicRespond.MusicStatus.stop_play);
+                }
+
+                EABleManager.getInstance().musicQueryResponse(eaBleMusicRespond, new DataResponseCallback() {
+                    @Override
+                    public void mutualSuccess() {
+                        setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
+                    }
+                });
+
+            }
+            break;
             case (kEADataInfoTypeWatchFace): {
                 Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
                 int builtInId = (int) map.get("id_p");
@@ -3222,19 +3337,22 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 });
             }
             break;
-            case (kEADataInfoTypeMonitorReminder):{
+            case (kEADataInfoTypeMonitorReminder): {
 
                 Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
 
                 EABleMonitorReminder monitorReminder = new EABleMonitorReminder();
-                int eReminderType = (int) map.get("eReminderType");;
-                switch (eReminderType){
+                int eReminderType = (int) map.get("eReminderType");
+                ;
+                switch (eReminderType) {
                     case 0:
                         monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.drink);
                         break;
-                    case 1: monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.washHands);
+                    case 1:
+                        monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.washHands);
                         break;
-                    case 2: monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.sedentary);
+                    case 2:
+                        monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.sedentary);
                         break;
                     default:
                         break;
@@ -3249,7 +3367,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 monitorReminder.setInterval((int) map.get("interval"));
                 monitorReminder.setCup((int) map.get("cup"));
                 monitorReminder.setStep_threshold((int) map.get("stepThreshold"));
-                EABleManager.getInstance().addMonitorReminder(monitorReminder,new GeneralCallback() {
+                EABleManager.getInstance().addMonitorReminder(monitorReminder, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
                         setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
@@ -3283,9 +3401,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dataType", type);
                 jsonObject.put("respondCodeType", respondCodeType);
-                if(type == 6){
+                if (type == 6) {
                     channel.invokeMethod(kBingdingWatchResponse, jsonObject.toJSONString());
-                }else {
+                } else {
                     channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
                 }
             }

@@ -40,6 +40,7 @@ class ConnectListener implements EABleConnectListener {
   EASDKTool easdkTool;
 
   ConnectListener(this.easdkTool);
+
   @override
   void connectError() {
     print('XWatch Package: connection Listener - connect Error');
@@ -62,11 +63,11 @@ class ConnectListener implements EABleConnectListener {
           print('info $value');
 
           /** 2nd.
-               * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
-               * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
-                  The watch displays a waiting for confirmation binding screen,
-                  Wait to click OK or cancel
-               */
+           * 1.if isWaitForBinding = 0，bindInfo.bindingCommandType need equal 1
+           * 2.if isWaitForBinding = 1，bindInfo.bindingCommandType need equal 0 ,
+              The watch displays a waiting for confirmation binding screen,
+              Wait to click OK or cancel
+           */
           // if (eaBleWatchInfo.userId.isEmpty) {
           if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
             EABindInfo bindInfo = EABindInfo();
@@ -188,6 +189,7 @@ class _MyAppState extends State<MyApp> {
     ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
     /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
   }
+
   void initGetIsolate() {
     IsolateNameServer.removePortNameMapping("_ui_get_isolate");
     bool success = IsolateNameServer.registerPortWithName(
@@ -1241,6 +1243,20 @@ class _MyAppState extends State<MyApp> {
                   monitorReminder.cup = 2;
                   secondMethodSetWatchData(
                       EADataInfoTypeMonitorReminder, monitorReminder.toMap());
+                },
+              ),
+              GestureDetector(
+                child: TextView('21.Set music info【同步当前音乐信息】'),
+                onTap: () {
+                  EABleMusicInfo eableMusicInfo = EABleMusicInfo();
+                  eableMusicInfo.content="Baby One More Time";
+                  eableMusicInfo.artist="Backstreet Boys";
+                  eableMusicInfo.duration=60*4;
+                  eableMusicInfo.elapsedtime=60;
+                  eableMusicInfo.playState=1;
+                  eableMusicInfo.volume=30;
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeMusic, eableMusicInfo.toMap());
                 },
               ),
               TitleView(' Getting big data【获取大数据】'),

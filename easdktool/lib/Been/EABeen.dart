@@ -47,3 +47,4 @@ part 'EABigDataStrideFrequency.dart';
 part 'EABigDataStridePace.dart';
 part 'EAPushMessage.dart';
 part 'EAMonitorReminder.dart';
+part 'EABleMusicInfo.dart';
