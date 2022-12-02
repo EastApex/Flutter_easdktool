@@ -933,11 +933,11 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Set the watch time【设置手表时间】'), // 同步手机时间到手表
                 onTap: () {
                   EASyncTime syncTime = EASyncTime();
-                  syncTime.day = 20;
-                  syncTime.month = 7;
+                  syncTime.day = 2;
+                  syncTime.month = 12;
                   syncTime.year = 2022;
-                  syncTime.hour = 14;
-                  syncTime.minute = 48;
+                  syncTime.hour = 10;
+                  syncTime.minute = 45;
                   syncTime.second = 0;
                   syncTime.timeHourType = EATimeHourType.hour24;
                   syncTime.timeZone = EATimeZone.east;
@@ -1019,7 +1019,9 @@ class _MyAppState extends State<MyApp> {
                   autoCheckSedentariness.beginHour = 8;
                   autoCheckSedentariness.endHour = 22;
                   autoCheckSedentariness.stepThreshold = 100;
-                  autoCheckSedentariness.interval = 45;
+                  autoCheckSedentariness.interval = 1;
+                  autoCheckSedentariness.weekCycleBit = 127;
+                  autoCheckSedentariness.sw = 11;
                   secondMethodSetWatchData(
                       kEADataInfoTypeAutoCheckSedentariness,
                       autoCheckSedentariness.toMap());
@@ -1234,7 +1236,7 @@ class _MyAppState extends State<MyApp> {
                   EAMonitorReminder monitorReminder = EAMonitorReminder();
                   monitorReminder.eReminderType = EAMonitorReminderType.drink;
                   monitorReminder.sw = 1;
-                  monitorReminder.weekCycleBit = 127;
+                  monitorReminder.weekCycleBit = 127; // 127:all day
                   monitorReminder.interval = 1;
                   monitorReminder.beginHour = 8;
                   monitorReminder.beginMinute = 0;
@@ -1249,12 +1251,12 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('21.Set music info【同步当前音乐信息】'),
                 onTap: () {
                   EABleMusicInfo eableMusicInfo = EABleMusicInfo();
-                  eableMusicInfo.content="Baby One More Time";
-                  eableMusicInfo.artist="Backstreet Boys";
-                  eableMusicInfo.duration=60*4;
-                  eableMusicInfo.elapsedtime=60;
-                  eableMusicInfo.playState=1;
-                  eableMusicInfo.volume=30;
+                  eableMusicInfo.content = "Baby One More Time";
+                  eableMusicInfo.artist = "Backstreet Boys";
+                  eableMusicInfo.duration = 60 * 4;
+                  eableMusicInfo.elapsedtime = 60;
+                  eableMusicInfo.playState = 1;
+                  eableMusicInfo.volume = 30;
                   secondMethodSetWatchData(
                       kEADataInfoTypeMusic, eableMusicInfo.toMap());
                 },

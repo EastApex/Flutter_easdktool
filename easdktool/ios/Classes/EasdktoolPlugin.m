@@ -459,7 +459,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeAutoCheckSedentariness: {
                     
-                    NSInteger weekCycleBit = [EADataValue getWeekCycleByWeekCycleBitString:value[@"cycles"]];
+                    NSInteger weekCycleBit = [value[@"weekCycleBit"] integerValue];
                     EAAutoCheckSedentarinessModel *sedentariness = [EAAutoCheckSedentarinessModel yy_modelWithJSON:value];
                     sedentariness.weekCycleBit = weekCycleBit;
                     [[EABleSendManager defaultManager] operationChangeModel:sedentariness respond:^(EARespondModel * _Nonnull respondModel) {

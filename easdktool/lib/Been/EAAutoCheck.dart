@@ -94,6 +94,7 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
   /// 间隔时长：单位分钟，0为关闭监测功能
   int interval = 60;
 
+  int sw = 11; // 开关：10off 11on
   EAAutoCheckSedentariness();
   EAAutoCheckSedentariness.fromMap(Map<String, dynamic> map)
       : super.fromMap(map) {
@@ -103,6 +104,9 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
     if (map["interval"] != null) {
       interval = map["interval"];
     }
+    if (map["sw"] != null) {
+      sw = map["sw"];
+    }
   }
 
   @override
@@ -110,6 +114,7 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
     Map<String, dynamic> map = super.toMap();
     map["interval"] = interval;
     map["stepThreshold"] = stepThreshold;
+    map["sw"] = sw;
     return map;
   }
 }

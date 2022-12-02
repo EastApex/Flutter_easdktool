@@ -13,17 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-//@protocol EAFastGetSnNumberManagerDelegate <NSObject>
-//
-//
-//- (void)getSnNumberManager:(CBPeripheral *)peripheral snNumber:(NSString *)snNumber;
-//
-//@end
+
 
 @interface EAFastGetSnNumberManager : NSObject
 
 
-//@property(nonatomic,weak) id<EAFastGetSnNumberManagerDelegate> delegate;
 
 
 + (instancetype)defaultManager;

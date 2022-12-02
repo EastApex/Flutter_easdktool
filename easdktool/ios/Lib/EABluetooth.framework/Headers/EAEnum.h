@@ -1024,6 +1024,9 @@ typedef NS_ENUM(NSUInteger,EAPhoneOps) {
     /// Stop Looking for a Watch
     /// 停止寻找手表(固件需求)
     EAPhoneOpsStopSearchWatch = 11,
+    
+    /// 蓝牙一键连接请求(android)
+    EAPhoneOpsRequestBtOneKeyConnect = 12,
 };
 
 /// Operating mobile phone status

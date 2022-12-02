@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 //自定义打印
 #define EALog(format, ...) {\
 if ([EABleConfig logEnable]) {\
-NSLog(@"[EALog]:%s 👻 " format, __func__, ##__VA_ARGS__);\
+NSLog(@"[EALog]:%s:%d 👻 " format, __func__,__LINE__, ##__VA_ARGS__);\
 }\
 }\
 
@@ -44,7 +44,7 @@ NSLog(@"[EALog]:%s 👻 " format, __func__, ##__VA_ARGS__);\
 
 /// ignore：
 /// 显示信号量 ，默认关闭
-@property (nonatomic, assign) BOOL showRSSI;
+//@property (nonatomic, assign) BOOL showRSSI;
 
 
 /// The singleton
