@@ -573,10 +573,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EASocialSwitchModel *model = [EASocialSwitchModel yy_modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                        if ([respondModel isKindOfClass:[EAHabitTrackerRespondModel class]]) {
-                            
-                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
-                        }
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeMonitorReminder:{
@@ -584,10 +581,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAMonitorReminder *model = [EAMonitorReminder yy_modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                        if ([respondModel isKindOfClass:[EAHabitTrackerRespondModel class]]) {
-                            
-                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
-                        }
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 default:
