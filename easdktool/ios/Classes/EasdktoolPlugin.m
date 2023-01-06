@@ -888,16 +888,19 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 }
 
 #pragma mark - EABleManagerDelegate
-
+#define kData @"kCBAdvDataManufacturerData"
 /// 扫描发现的设备 （实时）
 /// @param peripheralModel 设备
 - (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel {
+    
+    NSMutableDictionary *advertisementData = [NSMutableDictionary dictionaryWithDictionary:peripheralModel.advertisementData];
+    advertisementData[kData] = [EADataValue eaConvertToHexStringByData:peripheralModel.advertisementData[kData]];
     
     NSMutableDictionary *item = [[NSMutableDictionary alloc] init];
     [item setValue:peripheralModel.SN forKey:@"snNumber"];
     [item setValue:peripheralModel.peripheral.name forKey:@"name"];
     [item setValue:@(peripheralModel.RSSI.integerValue) forKey:@"rssi"];
-    [item setValue:peripheralModel.advertisementData forKey:@"advertisementData"];
+    [item setValue:advertisementData forKey:@"advertisementData"];
     [item setValue:peripheralModel.peripheral.identifier.UUIDString forKey:@"uuid"];
     
     [self.channel invokeMethod:kScanWacthResponse arguments:[item yy_modelToJSONString]];
