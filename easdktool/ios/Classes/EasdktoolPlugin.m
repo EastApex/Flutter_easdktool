@@ -175,9 +175,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 NSDictionary *info = @{
                     @"dataType":@(dataType),
                     @"flag":@(2),
-                    @"value":[list yy_modelToJSONObject],
+                    @"value":[list modelToJSONObject],
                 };
-                [_channel invokeMethod:kGetBigWatchData arguments:[info yy_modelToJSONString]];
+                [_channel invokeMethod:kGetBigWatchData arguments:[info modelToJSONString]];
             }
         }
     }
@@ -220,7 +220,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             @"connectState":@(connectStateType),
         };
         
-        result([info yy_modelToJSONString]);
+        result([info modelToJSONString]);
     }
     else if ([call.method isEqualToString:kEAScanWacth]) { // FIXME: - 搜索
         
@@ -398,7 +398,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             switch (dataInfoType) {
                 case EADataInfoTypeUser:{
                     
-                    EAUserModel *userModel = [EAUserModel yy_modelWithJSON:value];
+                    EAUserModel *userModel = [EAUserModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:userModel respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -407,7 +407,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 case EADataInfoTypeSyncTime: {
                     
                     // EASyncTime *syncTime = [EASyncTime getCurrentTime];
-                    EASyncTime *syncTime = [EASyncTime yy_modelWithJSON:value];
+                    EASyncTime *syncTime = [EASyncTime modelWithJSON:value];
                     syncTime.timeHourType = [value[@"timeHourType"] intValue];
                     syncTime.timeZone = [value[@"timeZone"] intValue];
                     [[EABleSendManager defaultManager] operationChangeModel:syncTime respond:^(EARespondModel * _Nonnull respondModel) {
@@ -418,7 +418,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeLanguage: {
                     
-                    EALanguageModel *language = [EALanguageModel yy_modelWithJSON:value];
+                    EALanguageModel *language = [EALanguageModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:language respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -426,7 +426,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeUnifiedUnit: {
                     
-                    EAUnifiedUnitModel *unit = [EAUnifiedUnitModel yy_modelWithJSON:value];
+                    EAUnifiedUnitModel *unit = [EAUnifiedUnitModel modelWithJSON:value];
                     unit.unit = [[value objectForKey:@"unit"] integerValue];
                     [[EABleSendManager defaultManager] operationChangeModel:unit respond:^(EARespondModel * _Nonnull respondModel) {
                         
@@ -435,7 +435,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeNotDisturb: {
                     
-                    EANotDisturbModel *notDisturbModel = [EANotDisturbModel yy_modelWithJSON:value];
+                    EANotDisturbModel *notDisturbModel = [EANotDisturbModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:notDisturbModel respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -443,7 +443,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeDailyGoal: {
                     
-                    EADailyGoalModel *dailyGoal = [EADailyGoalModel yy_modelWithJSON:value];
+                    EADailyGoalModel *dailyGoal = [EADailyGoalModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:dailyGoal respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -451,7 +451,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeAutoCheckHeartRate: {
                     
-                    EAAutoCheckHeartRateModel *dailyGoal = [EAAutoCheckHeartRateModel yy_modelWithJSON:value];
+                    EAAutoCheckHeartRateModel *dailyGoal = [EAAutoCheckHeartRateModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:dailyGoal respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -460,7 +460,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 case EADataInfoTypeAutoCheckSedentariness: {
                     
                     NSInteger weekCycleBit = [value[@"weekCycleBit"] integerValue];
-                    EAAutoCheckSedentarinessModel *sedentariness = [EAAutoCheckSedentarinessModel yy_modelWithJSON:value];
+                    EAAutoCheckSedentarinessModel *sedentariness = [EAAutoCheckSedentarinessModel modelWithJSON:value];
                     sedentariness.weekCycleBit = weekCycleBit;
                     [[EABleSendManager defaultManager] operationChangeModel:sedentariness respond:^(EARespondModel * _Nonnull respondModel) {
                         
@@ -469,7 +469,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeWeather: {
                     
-                    EAWeatherModel *model = [EAWeatherModel yy_modelWithJSON:value];
+                    EAWeatherModel *model = [EAWeatherModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -477,7 +477,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeReminder: {
                     
-                    EAReminderOps *model = [EAReminderOps yy_modelWithJSON:value];
+                    EAReminderOps *model = [EAReminderOps modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         if ([respondModel isKindOfClass:[EAReminderRespondModel class]]) {
@@ -490,7 +490,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeHeartRateWaringSetting: {
                     
-                    EAHeartRateWaringSettingModel *model = [EAHeartRateWaringSettingModel yy_modelWithJSON:value];
+                    EAHeartRateWaringSettingModel *model = [EAHeartRateWaringSettingModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -499,7 +499,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeGesturesSetting: {
                     
-                    EAGesturesSettingModel *model = [EAGesturesSettingModel yy_modelWithJSON:value];
+                    EAGesturesSettingModel *model = [EAGesturesSettingModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -508,7 +508,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeHomePage: {
                     
-                    EAHomePageModel *model = [EAHomePageModel yy_modelWithJSON:value];
+                    EAHomePageModel *model = [EAHomePageModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -537,7 +537,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeDialPlate: {
                     
-                    EADialPlateModel *model = [EADialPlateModel yy_modelWithJSON:value];
+                    EADialPlateModel *model = [EADialPlateModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -546,7 +546,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeAppMessage: {
                     
-                    EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel yy_modelWithJSON:value];
+                    EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel modelWithJSON:value];
                     EAAppMessageSwitchData *model = [showAppMessageModel getEAAppMessageSwitchData];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
@@ -556,7 +556,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case EADataInfoTypeHabitTracker: {
                     
-                    EAHabitTrackers *model = [EAHabitTrackers yy_modelWithJSON:value];
+                    EAHabitTrackers *model = [EAHabitTrackers modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         if ([respondModel isKindOfClass:[EAHabitTrackerRespondModel class]]) {
@@ -570,7 +570,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                 case  EADataInfoTypeSocialSwitch:{
                     
-                    EASocialSwitchModel *model = [EASocialSwitchModel yy_modelWithJSON:value];
+                    EASocialSwitchModel *model = [EASocialSwitchModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -578,7 +578,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }break;
                 case  EADataInfoTypeMonitorReminder:{
                     
-                    EAMonitorReminder *model = [EAMonitorReminder yy_modelWithJSON:value];
+                    EAMonitorReminder *model = [EAMonitorReminder modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -638,7 +638,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     @"respondCodeType":@(respondModel.eErrorCode),
                     @"operationType":@([[arguments valueForKey:@"dataType"] integerValue]),
                 };
-                [self.channel invokeMethod:kOperationWacthResponse arguments:[info yy_modelToJSONString]];
+                [self.channel invokeMethod:kOperationWacthResponse arguments:[info modelToJSONString]];
             }];
             
         }
@@ -698,12 +698,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     WeakSelf
     [[EABleSendManager defaultManager] operationGetInfoWithType:(dataInfoType) result:^(EABaseModel * _Nonnull baseModel) {
         
-        NSDictionary *value = [baseModel yy_modelToJSONObject];
+        NSDictionary *value = [baseModel modelToJSONObject];
         
         if (dataInfoType == EADataInfoTypeAppMessage) {
             
-            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel allocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
-            value = [showAppMessageModel yy_modelToJSONObject];
+            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
+            value = [showAppMessageModel modelToJSONObject];
         }
         if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
             
@@ -717,7 +717,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             @"dataType":@(dataInfoType),
             @"value":value,
         };
-        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info yy_modelToJSONString]];
+        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
     }];
 }
 
@@ -728,12 +728,12 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     WeakSelf
     [[EABleSendManager defaultManager] operationGetInfoWithRequestModel:requestModel result:^(EABaseModel * _Nonnull baseModel) {
         
-        NSDictionary *value = [baseModel yy_modelToJSONObject];
+        NSDictionary *value = [baseModel modelToJSONObject];
         
         if (dataInfoType == EADataInfoTypeAppMessage) {
             
-            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel allocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
-            value = [showAppMessageModel yy_modelToJSONObject];
+            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
+            value = [showAppMessageModel modelToJSONObject];
         }
         if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
             
@@ -748,7 +748,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             @"type":@(type),
             @"value":value,
         };
-        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info yy_modelToJSONString]];
+        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
     }];
 }
 
@@ -760,10 +760,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         @"dataType":@(dataType),
     };
     if (dataType == EADataInfoTypeBinding) {
-        [self.channel invokeMethod:kBingdingWatchResponse arguments:[info yy_modelToJSONString]];
+        [self.channel invokeMethod:kBingdingWatchResponse arguments:[info modelToJSONString]];
         
     }else {
-        [self.channel invokeMethod:kSetWatchResponse arguments:[info yy_modelToJSONString]];
+        [self.channel invokeMethod:kSetWatchResponse arguments:[info modelToJSONString]];
         
     }
 }
@@ -893,6 +893,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 /// @param peripheralModel 设备
 - (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel {
     
+    
+    
+    
+    
     NSMutableDictionary *advertisementData = [NSMutableDictionary dictionaryWithDictionary:peripheralModel.advertisementData];
     advertisementData[kData] = [EADataValue eaConvertToHexStringByData:peripheralModel.advertisementData[kData]];
     
@@ -903,7 +907,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     [item setValue:advertisementData forKey:@"advertisementData"];
     [item setValue:peripheralModel.peripheral.identifier.UUIDString forKey:@"uuid"];
     
-    [self.channel invokeMethod:kScanWacthResponse arguments:[item yy_modelToJSONString]];
+    [self.channel invokeMethod:kScanWacthResponse arguments:[item modelToJSONString]];
 }
 
 

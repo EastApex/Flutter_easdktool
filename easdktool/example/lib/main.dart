@@ -18,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'FirstMethodPackageData.dart';
 import 'ForegroundTaskHandler.dart';
 
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:dio/dio.dart';
 // import 'dart:io';
 
@@ -182,6 +183,9 @@ class _MyAppState extends State<MyApp> {
     // ///搜索手表
     // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
     //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
+    //   print("");
+    //   print(connectParam.uuid);
+    //   print("");
     // }));
   }
 
@@ -241,7 +245,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initForegroundTask() async {
-    await FlutterForegroundTask.init(
+    FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'notification_channel_id',
         channelName: 'Foreground Notification',
@@ -265,7 +269,7 @@ class _MyAppState extends State<MyApp> {
         autoRunOnBoot: true,
         allowWifiLock: true,
       ),
-      printDevLog: true,
+      //printDevLog: true,
     );
   }
 

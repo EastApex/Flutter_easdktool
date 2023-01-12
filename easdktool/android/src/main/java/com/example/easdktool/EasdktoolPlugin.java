@@ -1,12 +1,11 @@
 package com.example.easdktool;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+
+
 import android.os.Handler;
 import android.os.Looper;
-import android.telephony.TelephonyManager;
+
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -99,6 +98,7 @@ import com.apex.bluetooth.model.EABlePaceData;
 import com.apex.bluetooth.model.EABlePeriod;
 import com.apex.bluetooth.model.EABlePersonInfo;
 import com.apex.bluetooth.model.EABlePhoneResponse;
+import com.apex.bluetooth.model.EABlePhysiologyData;
 import com.apex.bluetooth.model.EABlePressureData;
 import com.apex.bluetooth.model.EABleQueryMusic;
 import com.apex.bluetooth.model.EABleRemindRespond;
@@ -133,6 +133,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -3211,21 +3213,43 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             case (kEADataInfoTypeMenstrual): {
 
                 Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
-                Period period = new Period();
-                period.startDate = (String) map.get("startDate");
-                period.cycleDay = (int) map.get("cycleDay");
-                period.keepDay = (int) map.get("keepDay");
-                EABlePeriod eaBlePeriod = period.getPeriodDate();
-                EABleManager.getInstance().setMenstrualCycle(eaBlePeriod, new GeneralCallback() {
+//                Period period = new Period();
+//                period.startDate = (String) map.get("startDate");
+//                period.cycleDay = (int) map.get("cycleDay");
+//                period.keepDay = (int) map.get("keepDay");
+//                EABlePeriod eaBlePeriod = period.getPeriodDate();
+
+                long startTime = 0;
+                String startDate = (String) map.get("startDate");
+                SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    startTime = simpleDateFormat.parse(startDate).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
+                    return;
+                }
+
+
+                EABlePhysiologyData eaBlePhysiologyData =  new EABlePhysiologyData();
+                eaBlePhysiologyData.startTime = startTime;
+                eaBlePhysiologyData.cycleTime = (int) map.get("cycleDay");
+                eaBlePhysiologyData.keepTime = (int) map.get("keepDay");
+                EABleManager.getInstance().setMenstrualCycle(eaBlePhysiologyData, new GeneralCallback() {
                     @Override
                     public void result(boolean b) {
-                        // setWatchDataResponse(0,setWatchParam.type);
+                        if (b) {
+                            setWatchDataResponse(0, (Integer) setWatchParam.get("dataType"));
+                        }else  {
+                            setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
+                        }
                     }
 
                     @Override
                     public void mutualFail(int i) {
                         Log.e(TAG, "cuowuma:" + i);
                         // setWatchDataResponse(1,setWatchParam.type);
+                        setWatchDataResponse(1, (Integer) setWatchParam.get("dataType"));
                     }
                 });
 

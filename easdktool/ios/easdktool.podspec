@@ -18,7 +18,7 @@ A new flutter plugin project.
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
   s.dependency "Protobuf", "~> 3.14.0"
-  s.dependency "YYModel"
+  s.dependency "YYKit"
   s.dependency "SAMKeychain"
   s.dependency "Realm"
 

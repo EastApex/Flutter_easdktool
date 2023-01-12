@@ -3,7 +3,7 @@
 //  Template
 //
 //  Created by Aye on 2021/3/15.
-//
+//  version: 2022.12.06 
 
 /**
  
@@ -73,6 +73,8 @@ typedef NS_ENUM(NSUInteger, EAConnectStatus) {
 /// 尝试连接成功（未获取服务）
 #define kNTF_EAConnectStatusSucceedUnGetServer  @"EAConnectStatusSucceedUnGetServer"
 
+/// ANCS
+#define kNTF_EAEADidUpdateANCSAuthorization     @"EADidUpdateANCSAuthorization"
 
 /// Notification Name: Bluetooth on
 /// 蓝牙开启
@@ -93,9 +95,14 @@ typedef NS_ENUM(NSUInteger, EAConnectStatus) {
 /// OTA进度
 #define kNTF_EAOTAAGPSDataing               @"EAOTAAGPSDataing"
 
-///
-#define kNTF_EABackgroundTask               @"EABackgroundTask"
+/////
+//#define kNTF_EABackgroundTask               @"EABackgroundTask"
 
+/// 实时数据
+#define kNTF_EARealTimeData                 @"EARealTimeData"
+
+/// App运动实时数据
+#define kNTF_EAAppSportRealTime             @"EAAppSportRealTime"
 
 
 #define kKeychainService        @"com.eastapex.bluetooth"

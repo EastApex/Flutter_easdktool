@@ -18,14 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 ///ota类型
 @property(nonatomic,assign) EAOtaRequestType otaType;
 
-/// Bin Indicates the path where the package is stored
-/// bin包所在路径
+/// Bin Indicates the path where the package is stored(binPath or binData just pass one of these values.)
+/// bin包所在路径（binPath 或者 binData 2传一即可）
 @property(nonatomic,strong) NSString *binPath;
 
 /// The version number
 /// 版本号
 @property(nonatomic,copy) NSString *version;
 
+/// Data flow of the bin file(binPath or binData just pass one of these values.)
+/// bin文件的数据流（binPath 或者 binData 2传一即可）
+@property(nonatomic,strong) NSData *binData;
 
 /// init
 + (EAFileModel *)allocInitWithPath:(NSString *)binPath otaType:(EAOtaRequestType )otaType version:(NSString *)version;

@@ -148,6 +148,21 @@ enum EAWeatherType {
 
   /// 大雪
   heavySnow,
+
+  /// 台风
+  typhoon,
+
+  /// 灰尘
+  dust,
+
+  /// 沙暴
+  sandstorm,
+
+  /// 雾
+  fog,
+
+  /// 霾
+  haze,
 }
 
 ///Air quality type 【空气质量类型】
