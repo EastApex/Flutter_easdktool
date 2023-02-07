@@ -50,7 +50,7 @@ public class CallReceiveBroadcast extends BroadcastReceiver {
                             EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
                                 @Override
                                 public void mutualFail(int i) {
-                                    Log.i(TAG, context.getString(R.string.information_push_fail));
+                                    LogUtils.i(TAG, context.getString(R.string.information_push_fail));
                                 }
 
                                 @Override

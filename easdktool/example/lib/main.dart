@@ -18,7 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'FirstMethodPackageData.dart';
 import 'ForegroundTaskHandler.dart';
 
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+//import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 // import 'package:dio/dio.dart';
 // import 'dart:io';
 
@@ -75,7 +75,7 @@ class ConnectListener implements EABleConnectListener {
             bindInfo.user_id = "1008690";
             // Turn on the daily step interval for 30 minutes
 
-            bindInfo.bindMod = 1;
+            bindInfo.bindMod = 0;
             if (eaBleWatchInfo.isWaitForBinding == 0) {
               //Bind command type: End【绑定命令类型：结束】
               bindInfo.bindingCommandType = 1;
@@ -296,101 +296,116 @@ class _MyAppState extends State<MyApp> {
   void secondMethodSetWatchData(int dataType, Map map) {
     secondEasdkTool.setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-      print(respond.respondCodeType);
+      print(respond.respondCodeType.toString() +
+          '设置的数据类型:' +
+          respond.dataType.toString());
     })));
   }
 
   void getBigWatchData() {
-    secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
-      /// Determine what kind of big data "dataType" is
-      ///【判断dataType是属于那种大数据】
+    firstMethodSetWatchData(29, Map(), EASetDataCallback(onRespond: (onRespond) {
+      print("get Big data,The first method is to get the callback" +
+          onRespond.respondCodeType.toString());
+    }),4);
+    /**
+        if (secondEasdkTool != null) {
+        secondEasdkTool.getNewBigWatchData();
+        } else {
+        debugPrint("easdktool对象不存在");
+        }
+     */
+    /**
+        secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
+        /// Determine what kind of big data "dataType" is
+        ///【判断dataType是属于那种大数据】
 
-      int dataType = info['dataType'];
-      List<dynamic> list = info['value'];
-      print(dataType);
+        int dataType = info['dataType'];
+        List<dynamic> list = info['value'];
+        print(dataType);
 
-      if (list.isEmpty) {
+        if (list.isEmpty) {
         return;
-      }
-      switch (dataType) {
+        }
+        switch (dataType) {
         case kEADataInfoTypeStepData: //Daily steps【日常步数】
 
-          for (Map<String, dynamic> item in list) {
-            EABigDataStep model = EABigDataStep.fromMap(item);
-            print(model.timeStamp);
-            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataStep model = EABigDataStep.fromMap(item);
+        print(model.timeStamp);
+        print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+        }
+        break;
         case kEADataInfoTypeSleepData: // sleep
-          for (Map<String, dynamic> item in list) {
-            EABigDataSleep model = EABigDataSleep.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataSleep model = EABigDataSleep.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeHeartRateData: // heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
-            print(model.timeStamp);
-            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
-          }
+        for (Map<String, dynamic> item in list) {
+        EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+        print(model.timeStamp);
+        print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+        }
 
-          break;
+        break;
         case kEADataInfoTypeGPSData: // gps
-          for (Map<String, dynamic> item in list) {
-            EABigDataGPS model = EABigDataGPS.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataGPS model = EABigDataGPS.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeSportsData: // sports
-          for (Map<String, dynamic> item in list) {
-            EABigDataSport model = EABigDataSport.fromMap(item);
-            print(model.beginTimeStamp);
-            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataSport model = EABigDataSport.fromMap(item);
+        print(model.beginTimeStamp);
+        print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+        }
+        break;
         case kEADataInfoTypeBloodOxygenData: // Blood oxygen
-          for (Map<String, dynamic> item in list) {
-            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeStressData: // Stress
-          for (Map<String, dynamic> item in list) {
-            EABigDataStress model = EABigDataStress.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataStress model = EABigDataStress.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeStepFreqData: // stride frequency
-          for (Map<String, dynamic> item in list) {
-            EABigDataStrideFrequency model =
-                EABigDataStrideFrequency.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataStrideFrequency model =
+        EABigDataStrideFrequency.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeStepPaceData: // stride Pace
-          for (Map<String, dynamic> item in list) {
-            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case kEADataInfoTypeRestingHeartRateData: //resting heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataRestingHeartRate model =
-                EABigDataRestingHeartRate.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataRestingHeartRate model =
+        EABigDataRestingHeartRate.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
         case EADataInfoTypeHabitTrackerData: // habit tracker
-          for (Map<String, dynamic> item in list) {
-            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
+        for (Map<String, dynamic> item in list) {
+        EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+        print(model.timeStamp);
+        }
+        break;
 
         default:
-          break;
-      }
-    })));
+        break;
+        }
+        })));
+     */
   }
 
   /// Timestamp to date 【时间戳转日期】
@@ -641,7 +656,9 @@ class _MyAppState extends State<MyApp> {
   void setWatchData(int dataType, Map map) {
     EASDKTool().setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-      print(respond.respondCodeType);
+      print(respond.respondCodeType.toString() +
+          "设置的数据类型:" +
+          respond.dataType.toString());
     })));
   }
 
@@ -661,11 +678,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   void firstMethodSetWatchData(
-      int dataType, Map map, EASetDataCallback setDataCallback) {
+      int dataType, Map map, EASetDataCallback setDataCallback,int action) {
     if (Platform.isAndroid) {
       eaSetDataCallback = setDataCallback;
       PackageData packageData = PackageData();
-      packageData.action = 2;
+      packageData.action = action;
       packageData.dataType = dataType;
       packageData.param = map;
       final SendPort? send =
@@ -930,7 +947,7 @@ class _MyAppState extends State<MyApp> {
                       EASetDataCallback(onRespond: (onRespond) {
                     print("set data,The first method is to get the callback" +
                         onRespond.respondCodeType.toString());
-                  }));
+                  }),2);
                 },
               ),
               GestureDetector(
@@ -955,7 +972,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('3.Setting the Watch Language【设置手表语言】'),
                 onTap: () {
                   EALanguage language = EALanguage();
-                  language.type = EALanguageType.english;
+                  language.type = EALanguageType.francais;
                   secondMethodSetWatchData(
                       kEADataInfoTypeLanguage, language.toMap());
                 },
@@ -1194,35 +1211,32 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Push message【推送信息到手表】'),
                 onTap: () {
-                  Timer.periodic(Duration(seconds: 5), (timer) {
-                    EAPushMessage eapushMessage = EAPushMessage();
-                    eapushMessage.messageType = EAPushMessageType.facebook;
-                    eapushMessage.messageActionType =
-                        EAPushMessageActionType.add;
-                    eapushMessage.title = "test";
-                    DateTime dateTime = DateTime.now();
-                    eapushMessage.date = "2022" +
-                        (dateTime.month < 10
-                            ? "0" + dateTime.month.toString()
-                            : dateTime.month.toString()) +
-                        (dateTime.day < 10
-                            ? "0" + dateTime.day.toString()
-                            : dateTime.day.toString()) +
-                        "T" +
-                        (dateTime.hour < 10
-                            ? "0" + dateTime.hour.toString()
-                            : dateTime.hour.toString()) +
-                        (dateTime.minute < 10
-                            ? "0" + dateTime.minute.toString()
-                            : dateTime.minute.toString()) +
-                        (dateTime.second < 10
-                            ? "0" + dateTime.second.toString()
-                            : dateTime.second.toString());
-                    eapushMessage.content =
-                        "Test push information" + dateTime.second.toString();
-                    secondMethodSetWatchData(
-                        kEADataInfoTypePushInfo, eapushMessage.toMap());
-                  });
+                  EAPushMessage eapushMessage = EAPushMessage();
+                  eapushMessage.messageType = EAPushMessageType.facebook;
+                  eapushMessage.messageActionType = EAPushMessageActionType.add;
+                  eapushMessage.title = "test";
+                  DateTime dateTime = DateTime.now();
+                  eapushMessage.date = "2022" +
+                      (dateTime.month < 10
+                          ? "0" + dateTime.month.toString()
+                          : dateTime.month.toString()) +
+                      (dateTime.day < 10
+                          ? "0" + dateTime.day.toString()
+                          : dateTime.day.toString()) +
+                      "T" +
+                      (dateTime.hour < 10
+                          ? "0" + dateTime.hour.toString()
+                          : dateTime.hour.toString()) +
+                      (dateTime.minute < 10
+                          ? "0" + dateTime.minute.toString()
+                          : dateTime.minute.toString()) +
+                      (dateTime.second < 10
+                          ? "0" + dateTime.second.toString()
+                          : dateTime.second.toString());
+                  eapushMessage.content =
+                      "Test push information" + dateTime.second.toString();
+                  secondMethodSetWatchData(
+                      kEADataInfoTypePushInfo, eapushMessage.toMap());
                 },
               ),
               GestureDetector(
@@ -1276,6 +1290,7 @@ class _MyAppState extends State<MyApp> {
                    * Return all big data, the watch will automatically clear the returned big data
                    * Notice after listener _dataChannel returns 8, you can obtain all types of big data
                    */
+                  print("获取大数据");
                   getBigWatchData();
                 },
               ),

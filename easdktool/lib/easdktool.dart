@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
@@ -63,6 +64,10 @@ class EASDKTool {
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
     mOperationPhoneCallback = operationPhoneCallback;
+  }
+
+  static void addMotionDataCallback(EAGetBitDataCallback eaGetBitDataCallback) {
+    mGetBitDataCallback = eaGetBitDataCallback;
   }
 
   static void addBleConnectListener(EABleConnectListener eaBleConnectListener) {
@@ -169,6 +174,15 @@ class EASDKTool {
     _channel.invokeMethod(kEAGetBigWatchData);
   }
 
+  void getNewBigWatchData(EASetDataCallback eaSetDataCallback) {
+    mSetDataCallback=eaSetDataCallback;
+    if (_channel != null) {
+      _channel.invokeMethod(kEAGetBigWatchData);
+    } else {
+      debugPrint("_channel不存在");
+    }
+  }
+
   /// 【操作手表】
   ///  operation watch  operationType see EAEnum.dart => EAOperationWatchType
   void operationWatch(EAOperationWatchType operationType,
@@ -226,6 +240,7 @@ class EASDKTool {
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         print("^^^^^^^^ info = " + methodCall.arguments);
         EARespond respond = EARespond.fromMap(info);
+        print("绑定的回调");
         if (mBindingWatchCallback != null) {
           mBindingWatchCallback!.onRespond(respond);
           print("^^^^^^^^ respond");
@@ -246,9 +261,12 @@ class EASDKTool {
         }
         break;
       case kGetBigWatchData:
+        debugPrint("Big data has been pulled back to Flutter");
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         if (mGetBitDataCallback != null) {
           mGetBitDataCallback!.callback(info);
+        } else {
+          debugPrint("Flutter doesn't set up big data callbacks");
         }
         break;
       case kOperationPhone:

@@ -37,11 +37,19 @@ android {
     defaultConfig {
         minSdkVersion 23
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
-    api(name: 'apex_sdk_3.9.6', ext: 'aar')
+    api(name: 'apex_sdk_3.9.7', ext: 'aar')
     implementation 'com.google.protobuf:protobuf-java:3.15.8'
+    implementation 'com.google.protobuf:protoc:3.15.8'
     //fastjson解析
     api 'com.alibaba:fastjson:1.2.59'
 }

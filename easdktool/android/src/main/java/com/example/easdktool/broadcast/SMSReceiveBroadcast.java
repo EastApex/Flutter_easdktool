@@ -18,6 +18,7 @@ import com.apex.bluetooth.callback.GeneralCallback;
 import com.apex.bluetooth.core.EABleManager;
 import com.apex.bluetooth.enumeration.EABleConnectState;
 import com.apex.bluetooth.model.EABleSocialContact;
+import com.apex.bluetooth.utils.LogUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +30,7 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(TAG, "收到短信-----");
+        LogUtils.e(TAG, "Receive a text message-----");
         if (intent.getAction().equals(SMS_RECEIVED_ACTION)) {
             Object[] pdus = (Object[]) intent.getExtras().get("pdus");
             String currentName = "";
@@ -70,7 +71,7 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
         eaBleSocialContact.setContent(smsContent);
         eaBleSocialContact.setTitle(getSenderName(mContent,sender));
         eaBleSocialContact.setDate(hintTime);
-        Log.e(TAG, "短信发送者:" + sender);
+        LogUtils.e(TAG, "SMS sender:" + sender);
         if (EABleManager.getInstance().getDeviceConnectState() == EABleConnectState.STATE_CONNECTED) {
             // Log.e(TAG, "推送信息:" + packageName);
             if (EABleManager.getInstance().getCurrentOtaState()) {
@@ -80,12 +81,12 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
 
                 @Override
                 public void mutualFail(int i) {
-                    Log.e(TAG, "Sms push failed");
+                    LogUtils.e(TAG, "Sms push failed");
                 }
 
                 @Override
                 public void result(boolean b) {
-                    Log.e(TAG, "Sms push successful");
+                    LogUtils.e(TAG, "Sms push successful");
                 }
             });
         }

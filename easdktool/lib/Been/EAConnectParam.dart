@@ -14,11 +14,12 @@ class EAConnectParam {
   Map advertisementData = {};
   int rssi = 0;
   String uuid = "";
+
   EAConnectParam();
 
   EAConnectParam.testInit() {
-    connectAddress =
-        "45:41:05:B2:40:BC"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
+    connectAddress = "45:41:E3:A2:A8:8D";
+    // "45:41:15:82:52:84"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     snNumber = "001011220901180625";
     //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
   }

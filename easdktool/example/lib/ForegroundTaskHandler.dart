@@ -44,6 +44,12 @@ class ForegroundTaskHandler extends TaskHandler {
         } else if (packageData.action == 2) {
           int dataType = packageData.dataType;
           setWatchData(dataType, param);
+        } else if (packageData.action == 4) {
+          easdkTool.getNewBigWatchData(EASetDataCallback(onRespond: ((respond) {
+            print(respond.respondCodeType.toString() +
+                ",获取到大数据的回调:" +
+                respond.dataType.toString());
+          })));
         }
       });
     }
@@ -182,105 +188,15 @@ class ForegroundTaskHandler extends TaskHandler {
     return dateTime;
   }
 
-  void getBigWatchData() {
-    easdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
-      /// Determine what kind of big data "dataType" is
-      ///【判断dataType是属于那种大数据】
-
-      int dataType = info['dataType'];
-      List<dynamic> list = info['value'];
-      print(dataType);
-
-      if (list.isEmpty) {
-        return;
-      }
-      switch (dataType) {
-        case kEADataInfoTypeStepData: //Daily steps【日常步数】
-
-          for (Map<String, dynamic> item in list) {
-            EABigDataStep model = EABigDataStep.fromMap(item);
-            print(model.timeStamp);
-            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
-          }
-          break;
-        case kEADataInfoTypeSleepData: // sleep
-          for (Map<String, dynamic> item in list) {
-            EABigDataSleep model = EABigDataSleep.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeHeartRateData: // heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
-            print(model.timeStamp);
-            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
-          }
-
-          break;
-        case kEADataInfoTypeGPSData: // gps
-          for (Map<String, dynamic> item in list) {
-            EABigDataGPS model = EABigDataGPS.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeSportsData: // sports
-          for (Map<String, dynamic> item in list) {
-            EABigDataSport model = EABigDataSport.fromMap(item);
-            print(model.beginTimeStamp);
-            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
-          }
-          break;
-        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
-          for (Map<String, dynamic> item in list) {
-            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStressData: // Stress
-          for (Map<String, dynamic> item in list) {
-            EABigDataStress model = EABigDataStress.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStepFreqData: // stride frequency
-          for (Map<String, dynamic> item in list) {
-            EABigDataStrideFrequency model =
-                EABigDataStrideFrequency.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeStepPaceData: // stride Pace
-          for (Map<String, dynamic> item in list) {
-            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
-          for (Map<String, dynamic> item in list) {
-            EABigDataRestingHeartRate model =
-                EABigDataRestingHeartRate.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-        case EADataInfoTypeHabitTrackerData: // habit tracker
-          for (Map<String, dynamic> item in list) {
-            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
-            print(model.timeStamp);
-          }
-          break;
-
-        default:
-          break;
-      }
-    })));
-  }
-
   void initEASDK() async {
     easdkTool.showLog(1);
     EASDKTool.addBleConnectListener(ConnectListener(easdkTool));
     EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
       operationPhoneListener(info);
     }));
+    EASDKTool.addMotionDataCallback(EAGetBitDataCallback(((info) {
+      showMotionData(info);
+    })));
     easdkTool.initChannel();
     connectBluetooth();
   }
@@ -331,6 +247,94 @@ class ForegroundTaskHandler extends TaskHandler {
       }
     }
   }
+
+  void showMotionData(Map info) {
+    int dataType = info['dataType'];
+    List<dynamic> list = info['value'];
+    print(dataType);
+
+    if (list.isEmpty) {
+      return;
+    }
+    switch (dataType) {
+      case kEADataInfoTypeStepData: //Daily steps【日常步数】
+
+        for (Map<String, dynamic> item in list) {
+          EABigDataStep model = EABigDataStep.fromMap(item);
+          print(model.timeStamp);
+          print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+        }
+        break;
+      case kEADataInfoTypeSleepData: // sleep
+        for (Map<String, dynamic> item in list) {
+          EABigDataSleep model = EABigDataSleep.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeHeartRateData: // heart rate
+        for (Map<String, dynamic> item in list) {
+          EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+          print(model.timeStamp);
+          print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+        }
+
+        break;
+      case kEADataInfoTypeGPSData: // gps
+        for (Map<String, dynamic> item in list) {
+          EABigDataGPS model = EABigDataGPS.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeSportsData: // sports
+        for (Map<String, dynamic> item in list) {
+          EABigDataSport model = EABigDataSport.fromMap(item);
+          print(model.beginTimeStamp);
+          print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+        }
+        break;
+      case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+        for (Map<String, dynamic> item in list) {
+          EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStressData: // Stress
+        for (Map<String, dynamic> item in list) {
+          EABigDataStress model = EABigDataStress.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStepFreqData: // stride frequency
+        for (Map<String, dynamic> item in list) {
+          EABigDataStrideFrequency model =
+              EABigDataStrideFrequency.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStepPaceData: // stride Pace
+        for (Map<String, dynamic> item in list) {
+          EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+        for (Map<String, dynamic> item in list) {
+          EABigDataRestingHeartRate model =
+              EABigDataRestingHeartRate.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case EADataInfoTypeHabitTrackerData: // habit tracker
+        for (Map<String, dynamic> item in list) {
+          EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
 }
 
 class ConnectListener implements EABleConnectListener {
@@ -372,7 +376,7 @@ class ConnectListener implements EABleConnectListener {
                 EABindInfo bindInfo = EABindInfo();
                 bindInfo.user_id = "1008690";
                 // Turn on the daily step interval for 30 minutes
-                bindInfo.bindMod = 1;
+                bindInfo.bindMod = 0;
                 if (eaBleWatchInfo.isWaitForBinding == 0) {
                   //Bind command type: End【绑定命令类型：结束】
                   bindInfo.bindingCommandType = 1;
