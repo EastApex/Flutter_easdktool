@@ -161,8 +161,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 - (void)getDeviceOpsPhoneMessage:(NSNotification *)noti  {
     
     EAPhoneOpsModel *phoneOpsModel = (EAPhoneOpsModel *)noti.object;
-    
-    [_channel invokeMethod:kOperationPhone arguments:@(phoneOpsModel.eOps)];
+    NSDictionary *info = @{
+                    @"opePhoneType":@(phoneOpsModel.eOps)
+                };
+    [_channel invokeMethod:kOperationPhone arguments:[info modelToJSONString]];
     
     if(phoneOpsModel.eOps == EAPhoneOpsBig8803DataUpdateFinish) {
         
@@ -485,9 +487,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             EAReminderRespondModel *model = (EAReminderRespondModel*)respondModel;
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
                             
-                        }else if ([respondModel isKindOfClass:[EARespondModel class]]) {
-                            
-                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                         }
                     }];
                 }break;
@@ -567,9 +566,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             EAHabitTrackerRespondModel *model = (EAHabitTrackerRespondModel*)respondModel;
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:model.eOpsStatus];
                             
-                        }else if ([respondModel isKindOfClass:[EARespondModel class]]) {
-                            
-                            [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                         }
                     }];
                 }break;
