@@ -180,6 +180,8 @@ class _MyAppState extends State<MyApp> {
     /// 打开 SDKLog
     EASDKTool().showLog(1);
 
+    EASDKTool().showTest(1);
+
     // ///搜索手表
     // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
     //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
@@ -192,6 +194,8 @@ class _MyAppState extends State<MyApp> {
   void operationPhoneListener(Map info) {
     ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
     /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
+    print("🍀🍀🍀");
+    print(info);
   }
 
   void initGetIsolate() {
@@ -303,19 +307,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getBigWatchData() {
-    firstMethodSetWatchData(29, Map(), EASetDataCallback(onRespond: (onRespond) {
-      print("get Big data,The first method is to get the callback" +
-          onRespond.respondCodeType.toString());
-    }),4);
-    /**
-        if (secondEasdkTool != null) {
-        secondEasdkTool.getNewBigWatchData();
-        } else {
-        debugPrint("easdktool对象不存在");
-        }
-     */
-    /**
-        secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
+    if (Platform.isAndroid) {
+      firstMethodSetWatchData(29, Map(),
+          EASetDataCallback(onRespond: (onRespond) {
+        print("get Big data,The first method is to get the callback" +
+            onRespond.respondCodeType.toString());
+      }), 4);
+    } else {
+      secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
         /// Determine what kind of big data "dataType" is
         ///【判断dataType是属于那种大数据】
 
@@ -324,88 +323,88 @@ class _MyAppState extends State<MyApp> {
         print(dataType);
 
         if (list.isEmpty) {
-        return;
+          return;
         }
         switch (dataType) {
-        case kEADataInfoTypeStepData: //Daily steps【日常步数】
+          case kEADataInfoTypeStepData: //Daily steps【日常步数】
 
-        for (Map<String, dynamic> item in list) {
-        EABigDataStep model = EABigDataStep.fromMap(item);
-        print(model.timeStamp);
-        print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
-        }
-        break;
-        case kEADataInfoTypeSleepData: // sleep
-        for (Map<String, dynamic> item in list) {
-        EABigDataSleep model = EABigDataSleep.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeHeartRateData: // heart rate
-        for (Map<String, dynamic> item in list) {
-        EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
-        print(model.timeStamp);
-        print('heart rate date: ' + timestampToDateStr(model.timeStamp));
-        }
+            for (Map<String, dynamic> item in list) {
+              EABigDataStep model = EABigDataStep.fromMap(item);
+              print(model.timeStamp);
+              print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+            }
+            break;
+          case kEADataInfoTypeSleepData: // sleep
+            for (Map<String, dynamic> item in list) {
+              EABigDataSleep model = EABigDataSleep.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeHeartRateData: // heart rate
+            for (Map<String, dynamic> item in list) {
+              EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+              print(model.timeStamp);
+              print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+            }
 
-        break;
-        case kEADataInfoTypeGPSData: // gps
-        for (Map<String, dynamic> item in list) {
-        EABigDataGPS model = EABigDataGPS.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeSportsData: // sports
-        for (Map<String, dynamic> item in list) {
-        EABigDataSport model = EABigDataSport.fromMap(item);
-        print(model.beginTimeStamp);
-        print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
-        }
-        break;
-        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
-        for (Map<String, dynamic> item in list) {
-        EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeStressData: // Stress
-        for (Map<String, dynamic> item in list) {
-        EABigDataStress model = EABigDataStress.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeStepFreqData: // stride frequency
-        for (Map<String, dynamic> item in list) {
-        EABigDataStrideFrequency model =
-        EABigDataStrideFrequency.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeStepPaceData: // stride Pace
-        for (Map<String, dynamic> item in list) {
-        EABigDataStridePace model = EABigDataStridePace.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
-        for (Map<String, dynamic> item in list) {
-        EABigDataRestingHeartRate model =
-        EABigDataRestingHeartRate.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
-        case EADataInfoTypeHabitTrackerData: // habit tracker
-        for (Map<String, dynamic> item in list) {
-        EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
-        print(model.timeStamp);
-        }
-        break;
+            break;
+          case kEADataInfoTypeGPSData: // gps
+            for (Map<String, dynamic> item in list) {
+              EABigDataGPS model = EABigDataGPS.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeSportsData: // sports
+            for (Map<String, dynamic> item in list) {
+              EABigDataSport model = EABigDataSport.fromMap(item);
+              print(model.beginTimeStamp);
+              print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+            }
+            break;
+          case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+            for (Map<String, dynamic> item in list) {
+              EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeStressData: // Stress
+            for (Map<String, dynamic> item in list) {
+              EABigDataStress model = EABigDataStress.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeStepFreqData: // stride frequency
+            for (Map<String, dynamic> item in list) {
+              EABigDataStrideFrequency model =
+                  EABigDataStrideFrequency.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeStepPaceData: // stride Pace
+            for (Map<String, dynamic> item in list) {
+              EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+            for (Map<String, dynamic> item in list) {
+              EABigDataRestingHeartRate model =
+                  EABigDataRestingHeartRate.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
+          case EADataInfoTypeHabitTrackerData: // habit tracker
+            for (Map<String, dynamic> item in list) {
+              EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+              print(model.timeStamp);
+            }
+            break;
 
-        default:
-        break;
+          default:
+            break;
         }
-        })));
-     */
+      })));
+    }
   }
 
   /// Timestamp to date 【时间戳转日期】
@@ -678,7 +677,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void firstMethodSetWatchData(
-      int dataType, Map map, EASetDataCallback setDataCallback,int action) {
+      int dataType, Map map, EASetDataCallback setDataCallback, int action) {
     if (Platform.isAndroid) {
       eaSetDataCallback = setDataCallback;
       PackageData packageData = PackageData();
@@ -947,7 +946,7 @@ class _MyAppState extends State<MyApp> {
                       EASetDataCallback(onRespond: (onRespond) {
                     print("set data,The first method is to get the callback" +
                         onRespond.respondCodeType.toString());
-                  }),2);
+                  }), 2);
                 },
               ),
               GestureDetector(

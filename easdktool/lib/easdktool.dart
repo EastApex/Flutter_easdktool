@@ -26,6 +26,7 @@ const String kEALog = "EAShowLog"; // log
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
+const String kEATest = "EATest"; // Test mode
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -95,6 +96,15 @@ class EASDKTool {
   /// Open SDK Log
   void showLog(int isShow) {
     _channel.invokeMethod(kEALog, convert.jsonEncode({"showLog": isShow}));
+  }
+
+  /// 打开SDK 测试模式
+  /// Open SDK Test Mode
+  /// 1.Big data is not deleted after this function is enabled.
+  /// 2.For debugging of big data.
+  /// 3.The package item must be set to 0.
+  void showTest(int test) {
+    _channel.invokeMethod(kEATest, convert.jsonEncode({"test": test}));
   }
 
   /// 连接手表
@@ -175,7 +185,7 @@ class EASDKTool {
   }
 
   void getNewBigWatchData(EASetDataCallback eaSetDataCallback) {
-    mSetDataCallback=eaSetDataCallback;
+    mSetDataCallback = eaSetDataCallback;
     if (_channel != null) {
       _channel.invokeMethod(kEAGetBigWatchData);
     } else {
