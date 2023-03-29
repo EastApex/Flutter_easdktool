@@ -102,7 +102,7 @@ class EASDKTool {
   /// Open SDK Test Mode
   /// 1.Big data is not deleted after this function is enabled.
   /// 2.For debugging of big data.
-  /// 3.The package item must be set to 0.
+  /// 3.The package item must be set to 0 or delete this method.
   void showTest(int test) {
     _channel.invokeMethod(kEATest, convert.jsonEncode({"test": test}));
   }

@@ -71,5 +71,8 @@ class EASyncTime {
     if (map["timeHourType"] != null) {
       timeHourType = EATimeHourType.values[map["timeHourType"]];
     }
+    if (map["eHourSystem"] != null) {
+      timeHourType = EATimeHourType.values[map["eHourSystem"]];
+    }
   }
 }
