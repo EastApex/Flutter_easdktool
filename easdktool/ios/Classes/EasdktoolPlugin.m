@@ -37,7 +37,7 @@
 #define kEAScanWacth                @"EAScanWacth"          // 搜索手表
 #define kEAStopScanWacth            @"EAStopScanWacth"          //停止搜索手表
 #define kEAGetWacthStateInfo        @"EAGetWacthStateInfo"  //获取手表连接状态信息
-
+#define kEATest                     @"EATest"               // 测试状态
 
 
 /// MARK: - invoke method Name
@@ -161,8 +161,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 - (void)getDeviceOpsPhoneMessage:(NSNotification *)noti  {
     
     EAPhoneOpsModel *phoneOpsModel = (EAPhoneOpsModel *)noti.object;
-    
-    [_channel invokeMethod:kOperationPhone arguments:@(phoneOpsModel.eOps)];
+    NSDictionary *info = @{
+                    @"opePhoneType":@(phoneOpsModel.eOps)
+                };
+    [_channel invokeMethod:kOperationPhone arguments:[info modelToJSONString]];
     
     if(phoneOpsModel.eOps == EAPhoneOpsBig8803DataUpdateFinish) {
         
@@ -212,7 +214,15 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [[EABleManager defaultManager] setBleConfig:_config];
         }
     }
-    
+    if ([call.method isEqualToString:kEATest]) { // FIXME: - 测试
+        
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        if ([self checkArgumentName:@"test" inArguments:arguments]) {
+            
+            _config.isTest = [arguments[@"test"] integerValue];
+            [[EABleManager defaultManager] setBleConfig:_config];
+        }
+    }
     else if ([call.method isEqualToString:kEAGetWacthStateInfo]) { // FIXME: - 获取手表连接状态信息
         
         EAConnectStateType connectStateType = [EABleManager defaultManager].connectState;

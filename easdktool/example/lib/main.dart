@@ -3,6 +3,7 @@
 // import 'dart:typed_data';
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
@@ -157,6 +158,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+
     if (Platform.isAndroid) {
       initGetIsolate();
       initSetIsolate();
@@ -189,33 +191,6 @@ class _MyAppState extends State<MyApp> {
     //   print(connectParam.uuid);
     //   print("");
     // }));
-  }
-
-  List randomList() {
-    // 获取数组（随机）总数
-    var count = getListCount(1, 14); // 1~13
-    print("⚠️⚠️⚠️⚠️");
-    print(count);
-
-    var rng = Random();
-    // 记录数据
-    Set smm = {};
-
-    // 随机添加元素
-    while (smm.length < count) {
-      smm.add(rng.nextInt(12) + 1);
-    }
-    print("⚠️⚠️⚠️⚠️");
-    print(smm.toList());
-    return smm.toList();
-  }
-
-  int getListCount(int min, int max) {
-    final _random = Random();
-//将 参数min + 取随机数（最大值范围：参数max -  参数min）的结果 赋值给变量 result;
-    var result = min + _random.nextInt(max - min);
-//返回变量 result 的值;
-    return result;
   }
 
   void operationPhoneListener(Map info) {
@@ -623,7 +598,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeSyncTime:
         {
           EASyncTime syncTime = EASyncTime.fromMap(value);
-          print(syncTime.timeHourType.index);
+          print(syncTime.day);
         }
         break;
       case kEADataInfoTypeAppMessage:
@@ -983,7 +958,7 @@ class _MyAppState extends State<MyApp> {
                   syncTime.day = 2;
                   syncTime.month = 12;
                   syncTime.year = 2022;
-                  syncTime.hour = 13;
+                  syncTime.hour = 10;
                   syncTime.minute = 45;
                   syncTime.second = 0;
                   syncTime.timeHourType = EATimeHourType.hour24;
