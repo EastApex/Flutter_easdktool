@@ -720,7 +720,7 @@ typedef NS_ENUM(NSUInteger,EAWeatherType) {
     EAWeatherTypeGloomy = 2,
     
     /// A shower or Drizzle
-    /// 阵雨（300 305 309 350）
+    /// 阵雨（小雨）（300 305 309 350）
     EAWeatherTypeDrizzle = 3,
     
     /// Strong rain shower or Moderate rain
@@ -736,7 +736,7 @@ typedef NS_ENUM(NSUInteger,EAWeatherType) {
     EAWeatherTypeHeavyRain = 6,
     
     /// Sleet or Freezing rain
-    /// 冻雨（313 404 405 406 456）
+    /// 冻雨（雨夹雪）（313 404 405 406 456）
     EAWeatherTypeSleet = 7,
     
     /// Light snow
