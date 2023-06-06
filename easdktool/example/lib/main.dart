@@ -158,7 +158,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-
     if (Platform.isAndroid) {
       initGetIsolate();
       initSetIsolate();
@@ -175,8 +174,8 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      EAConnectParam connectParam = EAConnectParam.testInit();
-      EASDKTool().connectToPeripheral(connectParam);
+      // EAConnectParam connectParam = EAConnectParam.testInit();
+      // EASDKTool().connectToPeripheral(connectParam);
     }
 
     /// 打开 SDKLog
@@ -184,13 +183,13 @@ class _MyAppState extends State<MyApp> {
 
     EASDKTool().showTest(1);
 
-    // ///搜索手表
-    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-    //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
-    //   print("");
-    //   print(connectParam.uuid);
-    //   print("");
-    // }));
+    ///搜索手表
+    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+      // print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
+      // print("");
+      // print(connectParam.uuid);
+      // print("");
+    }));
   }
 
   void operationPhoneListener(Map info) {
