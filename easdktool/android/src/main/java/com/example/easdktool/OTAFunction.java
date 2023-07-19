@@ -44,6 +44,7 @@ public class OTAFunction {
                     tempOtaData.otaType = EABleOta.OtaType.tp;
                 } else if (type == 4) {
                     tempOtaData.otaType = EABleOta.OtaType.user_wf;
+                    tempOtaData.setPop(true);
                 }
                 tempOtaData.setFilePath(wMap.getString("binPath"));
                 otaDataList.add(tempOtaData);

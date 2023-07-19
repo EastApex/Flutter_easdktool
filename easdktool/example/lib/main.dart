@@ -1027,7 +1027,7 @@ class _MyAppState extends State<MyApp> {
                     '7.Set up automatic heart rate monitoring【设置自动心率监测】'),
                 onTap: () {
                   EAAutoCheckHeartRate autoCheckHeartRate =
-                      EAAutoCheckHeartRate(60);
+                      EAAutoCheckHeartRate(15);
                   secondMethodSetWatchData(kEADataInfoTypeAutoCheckHeartRate,
                       autoCheckHeartRate.toMap());
                 },
@@ -1477,7 +1477,15 @@ class _MyAppState extends State<MyApp> {
                   final buffer3 = bytes3.buffer;
                   await File(filePath3).writeAsBytes(buffer3.asUint8List(
                       bytes3.offsetInBytes, bytes3.lengthInBytes));
-
+                  var bytes9 =
+                      await rootBundle.load("assets/bin/watchface_U38.bin");
+                  String path9 = (await getApplicationSupportDirectory()).path;
+                  String filePath9 =
+                      '$path9/' + DateTime.now().toString() + '.bin';
+                  final buffer9 = bytes9.buffer;
+                  await File(filePath9).writeAsBytes(buffer9.asUint8List(
+                      bytes9.offsetInBytes, bytes9.lengthInBytes));
+                  EAOTA dialOTA = EAOTA(filePath9, EAFirmwareType.wf, "");
                   EAOTA appoloOTA =
                       EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B0.4");
                   EAOTA appoloOTA1 =
@@ -1489,7 +1497,7 @@ class _MyAppState extends State<MyApp> {
                   EAOTA appoloOTA3 =
                       EAOTA(filePath5, EAFirmwareType.Apollo, "AP0.1B0.7");
 
-                  EAOTAList eaList = EAOTAList(0, [appoloOTA2, appoloOTA3]);
+                  EAOTAList eaList = EAOTAList(0, [dialOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress) {
                     print("OTA进度:" + progress.toString());

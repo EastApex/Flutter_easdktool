@@ -86,6 +86,7 @@ public class SetWatchData {
 
     public void setHeartAutoCheck(String jsonString) {
         int intervalTime = new String2Object().string2HeartSwitch(jsonString);
+        Log.e(TAG, "自动心率检测间隔时间:" + intervalTime);
         EABleManager.getInstance().setHeartRateIntervalTime(intervalTime, new SetCallback(17, channel));
     }
 
@@ -118,7 +119,7 @@ public class SetWatchData {
 
     public void setHabitInfo(String jsonString) {
         EABleHabit eaBleHabit = new String2Object().string2Habit(jsonString);
-        LogUtils.i(TAG,"开始添加习惯");
+        LogUtils.i(TAG, "开始添加习惯");
         EABleManager.getInstance().setHabit(eaBleHabit, new HabitResultCall(channel));
     }
 
@@ -164,7 +165,7 @@ public class SetWatchData {
 
     public void setMonitorReminder(String jsonString) {
         EABleMonitorReminder eaBleMonitorReminder = new String2Object().string2MonitorReminder(jsonString);
-        LogUtils.i(TAG,"添加日常提醒");
+        LogUtils.i(TAG, "添加日常提醒");
         EABleManager.getInstance().addMonitorReminder(eaBleMonitorReminder, new SetCallback(45, channel));
     }
 
