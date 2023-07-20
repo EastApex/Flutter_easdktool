@@ -23,6 +23,7 @@ const String kEAGetBigWatchData = "EAGetBigWatchData"; // 获取手表大数据
 const String kEAOperationWatch = "EAOperationWatch"; // 操作手表
 const String kEAOTA = "EAOTA"; // ota
 const String kEALog = "EAShowLog"; // log
+const String saveData = "saveData";
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
@@ -40,6 +41,9 @@ const String kOperationPhone = "OperationPhone";
 const String kProgress = "Progress";
 const String kScanWacthResponse = "ScanWacthResponse";
 const String kOperationWacthResponse = "OperationWacthResponse";
+const String queryData = "queryData";
+final String deleteData = "deleteData";
+const String kQueryBigWatchData = "QueryBigWatchData";
 
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
@@ -61,6 +65,7 @@ class EASDKTool {
   OperationWatchCallback? mOperationCallback;
   EAOTAProgressCallback? mOTAProgressCallback;
   EAScanWatchCallback? mScanWatchCallback;
+  QueryMotionDataCallback? mQueryMotionDataCallback;
 
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
@@ -96,6 +101,26 @@ class EASDKTool {
   /// Open SDK Log
   void showLog(int isShow) {
     _channel.invokeMethod(kEALog, convert.jsonEncode({"showLog": isShow}));
+  }
+
+  void saveData2DB(int isSave) {
+    _channel.invokeMethod(saveData, convert.jsonEncode({"saveData": isSave}));
+  }
+
+  void queryMotionData(
+      QueryType queryType, QueryMotionDataCallback queryCallback) {
+    mQueryMotionDataCallback = queryCallback;
+    EAQueryMotionData eaQueryMotionData = new EAQueryMotionData();
+    eaQueryMotionData.dataType = queryType.index;
+    String queryString = convert.jsonEncode(eaQueryMotionData);
+    _channel.invokeMethod(queryData, queryString);
+  }
+
+  void deleteSaveData(QueryType queryType) {
+    EADeleteMotion eaDeleteMotion = new EADeleteMotion();
+    eaDeleteMotion.dataType = queryType.index;
+    String deleteString = convert.jsonEncode(eaDeleteMotion);
+    _channel.invokeMethod(deleteData, deleteString);
   }
 
   /// 打开SDK 测试模式
@@ -279,6 +304,15 @@ class EASDKTool {
           debugPrint("Flutter doesn't set up big data callbacks");
         }
         break;
+      case kQueryBigWatchData:
+        debugPrint("query big data has been pulled back to Flutter");
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        if (mQueryMotionDataCallback != null) {
+          mQueryMotionDataCallback!.callback(info);
+        } else {
+          debugPrint("Flutter doesn't set up big data callbacks");
+        }
+        break;
       case kOperationPhone:
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         if (mOperationPhoneCallback != null) {
@@ -302,6 +336,15 @@ class EASDKTool {
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         if (mOperationCallback != null) {
           mOperationCallback!.callback(info);
+        }
+        break;
+      case queryData:
+        debugPrint("query Big data has been pulled back to Flutter");
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        if (mQueryMotionDataCallback != null) {
+          mQueryMotionDataCallback!.callback(info);
+        } else {
+          debugPrint("Flutter doesn't set up big data callbacks");
         }
         break;
     }

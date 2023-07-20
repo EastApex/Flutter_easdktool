@@ -20,6 +20,7 @@ public class OTAFunction {
     private MethodChannel channel;
     final String kProgress = "Progress";
     private final String TAG = this.getClass().getSimpleName();
+    Handler mHandler;
 
     public OTAFunction(MethodChannel channel) {
         this.channel = channel;
@@ -61,12 +62,16 @@ public class OTAFunction {
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
                 @Override
                 public void success() {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    if (mHandler==null){
+                        mHandler=new Handler(Looper.getMainLooper());
+                    }
+                    mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (channel != null) {
                                 channel.invokeMethod(kProgress, 100);
                             }
+                            mHandler=null;
                         }
                     });
 
@@ -74,7 +79,10 @@ public class OTAFunction {
 
                 @Override
                 public void progress(int i) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    if (mHandler==null){
+                        mHandler=new Handler(Looper.getMainLooper());
+                    }
+                    mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             LogUtils.i(TAG, "当前进度:" + i);
@@ -88,12 +96,16 @@ public class OTAFunction {
 
                 @Override
                 public void mutualFail(int i) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    if (mHandler==null){
+                        mHandler=new Handler(Looper.getMainLooper());
+                    }
+                    mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (channel != null) {
                                 channel.invokeMethod(kProgress, -1);
                             }
+                            mHandler=null;
                         }
                     });
 

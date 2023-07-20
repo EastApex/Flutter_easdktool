@@ -931,6 +931,29 @@ class _MyAppState extends State<MyApp> {
                       EAMonitorReminderType.drink.index);
                 },
               ),
+              GestureDetector(
+                child: TextView('30.Save motion data to database【保存运动数据到数据库】'),
+                onTap: () {
+                  //1 为保存,0为步保存
+                  secondEasdkTool.saveData2DB(1);
+                },
+              ),
+              GestureDetector(
+                child: TextView('31.Query saved data【查询保存的运动数据】'),
+                onTap: () {
+                  //1 为保存,0为步保存
+                  secondEasdkTool.queryMotionData(QueryType.heart_data,
+                      QueryMotionDataCallback(((info) {
+                    showMotionData(info);
+                  })));
+                },
+              ),
+              GestureDetector(
+                child: TextView('32.Delete saved data【删除保存的数据】'),
+                onTap: () {
+                  secondEasdkTool.deleteSaveData(QueryType.multi_data);
+                },
+              ),
               TitleView('  Setting【设置信息】'),
               GestureDetector(
                 child: TextView('1.Set up information【设置用户信息】'),
@@ -1559,5 +1582,93 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void showMotionData(Map info) {
+    int dataType = info['dataType'];
+    List<dynamic> list = info['value'];
+    print(dataType);
+
+    if (list.isEmpty) {
+      return;
+    }
+    switch (dataType) {
+      case kEADataInfoTypeStepData: //Daily steps【日常步数】
+
+        for (Map<String, dynamic> item in list) {
+          EABigDataStep model = EABigDataStep.fromMap(item);
+          print(model.timeStamp);
+          print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+        }
+        break;
+      case kEADataInfoTypeSleepData: // sleep
+        for (Map<String, dynamic> item in list) {
+          EABigDataSleep model = EABigDataSleep.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeHeartRateData: // heart rate
+        for (Map<String, dynamic> item in list) {
+          EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+          print(model.timeStamp);
+          print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+        }
+
+        break;
+      case kEADataInfoTypeGPSData: // gps
+        for (Map<String, dynamic> item in list) {
+          EABigDataGPS model = EABigDataGPS.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeSportsData: // sports
+        for (Map<String, dynamic> item in list) {
+          EABigDataSport model = EABigDataSport.fromMap(item);
+          print(model.beginTimeStamp);
+          print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+        }
+        break;
+      case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+        for (Map<String, dynamic> item in list) {
+          EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStressData: // Stress
+        for (Map<String, dynamic> item in list) {
+          EABigDataStress model = EABigDataStress.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStepFreqData: // stride frequency
+        for (Map<String, dynamic> item in list) {
+          EABigDataStrideFrequency model =
+              EABigDataStrideFrequency.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeStepPaceData: // stride Pace
+        for (Map<String, dynamic> item in list) {
+          EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+        for (Map<String, dynamic> item in list) {
+          EABigDataRestingHeartRate model =
+              EABigDataRestingHeartRate.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+      case EADataInfoTypeHabitTrackerData: // habit tracker
+        for (Map<String, dynamic> item in list) {
+          EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+          print(model.timeStamp);
+        }
+        break;
+
+      default:
+        break;
+    }
   }
 }

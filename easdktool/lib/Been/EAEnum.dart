@@ -598,3 +598,16 @@ enum EAMonitorReminderType {
   washHands,
   // sedentary,
 }
+enum QueryType {
+  daily_data,
+  sleep_data,
+  heart_data,
+  gps_data,
+  multi_data,
+  blood_oxygen,
+  stress_data,
+  step_freq,
+  step_pace,
+  resting_heart,
+  habit_data
+}

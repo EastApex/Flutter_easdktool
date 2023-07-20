@@ -36,6 +36,7 @@ import com.example.easdktool.callback.DataResponseCall;
 import com.example.easdktool.callback.EditAttentionCall;
 import com.example.easdktool.callback.HabitResultCall;
 import com.example.easdktool.callback.SetCallback;
+import com.example.easdktool.db.DataManager;
 
 
 import java.util.Map;
@@ -48,6 +49,8 @@ public class SetWatchData {
     final String TAG = this.getClass().getSimpleName();
     final String kArgumentsError = "ArgumentsError";
     EABleBindInfo eaBleBindInfo;
+    final String kOperationWacthResponse = "OperationWacthResponse";
+    Handler mHandler;
 
 
     public SetWatchData(MethodChannel channel) {
@@ -175,6 +178,9 @@ public class SetWatchData {
         EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
             @Override
             public void result(boolean b) {
+                if (b) {
+                    DataManager.getInstance().clearDb();
+                }
 
             }
 
@@ -207,10 +213,14 @@ public class SetWatchData {
 
                             @Override
                             public void mutualFail(int i) {
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                if (mHandler == null) {
+                                    mHandler = new Handler(Looper.getMainLooper());
+                                }
+                                mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         channel.invokeMethod(kArgumentsError, "user_id error");
+                                        mHandler = null;
                                     }
                                 });
                             }
@@ -230,14 +240,67 @@ public class SetWatchData {
 
             @Override
             public void mutualFail(int i) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         channel.invokeMethod(kArgumentsError, "user_id error");
+                        mHandler = null;
                     }
                 });
             }
         });
+    }
+
+    public void operateDevice(final int action) {
+        EABleDev eaBleDev = new EABleDev();
+        if (action == 0) {
+            eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
+        } else if (action == 1) {
+            eaBleDev.e_ops = EABleDev.DevOps.reset;
+        } else if (action == 2) {
+            eaBleDev.e_ops = EABleDev.DevOps.power_off;
+        } else if (action == 3) {
+            eaBleDev.e_ops = EABleDev.DevOps.disconnect_ble;
+        } else if (action == 4) {
+            eaBleDev.e_ops = EABleDev.DevOps.entering_flight_mode;
+        } else if (action == 5) {
+            eaBleDev.e_ops = EABleDev.DevOps.light_up_the_screen;
+        } else if (action == 6) {
+            eaBleDev.e_ops = EABleDev.DevOps.turn_off_the_screen;
+        } else if (action == 7) {
+            eaBleDev.e_ops = EABleDev.DevOps.stop_search_phone;
+        } else if (action == 8) {
+            eaBleDev.e_ops = EABleDev.DevOps.start_search_watch;
+        } else if (action == 9) {
+            eaBleDev.e_ops = EABleDev.DevOps.stop_search_watch;
+        }
+        EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
+            @Override
+            public void result(final boolean b) {
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("operationType", action);
+                        jsonObject.put("respondCodeType", b);
+                        channel.invokeMethod(kOperationWacthResponse, jsonObject.toJSONString());
+                        mHandler = null;
+                    }
+                });
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+
     }
 
 }

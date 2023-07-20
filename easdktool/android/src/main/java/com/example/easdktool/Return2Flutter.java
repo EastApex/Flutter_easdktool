@@ -17,13 +17,18 @@ public class Return2Flutter {
     final String kSetWatchResponse = "SetWatchResponse";
     final String kGetWatchResponse = "GetWatchResponse";
     final String TAG = this.getClass().getSimpleName();
+    Handler mHandler;
 
     public Return2Flutter(MethodChannel channel) {
         this.channel = channel;
     }
 
     public void setWatchDataResponse(int respondCodeType, int type) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        if (mHandler != null) {
+            mHandler = null;
+        }
+        mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 JSONObject jsonObject = new JSONObject();
@@ -38,12 +43,17 @@ public class Return2Flutter {
                         channel.invokeMethod(kSetWatchResponse, jsonObject.toJSONString());
                     }
                 }
+                mHandler = null;
             }
         });
     }
 
     public void sendWatchDataWithMap(Map mapValue, int type) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        if (mHandler != null) {
+            mHandler = null;
+        }
+        mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 JSONObject jsonObject = new JSONObject();
@@ -55,12 +65,17 @@ public class Return2Flutter {
                     LogUtils.i(TAG, "Pass the results to flutter");
                     channel.invokeMethod(kGetWatchResponse, jsonString);
                 }
+                mHandler = null;
             }
         });
     }
 
     public void sendWatchDataWithOtherKeyValue(String key, int value, int type) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        if (mHandler != null) {
+            mHandler = null;
+        }
+        mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 JSONObject jsonObject1 = new JSONObject();
@@ -74,6 +89,7 @@ public class Return2Flutter {
                     LogUtils.i(TAG, "Pass the results to flutter");
                     channel.invokeMethod(kGetWatchResponse, jsonObject.toJSONString());
                 }
+                mHandler = null;
             }
         });
     }

@@ -36,14 +36,18 @@ import com.apex.bluetooth.model.EABleOta;
 
 import com.apex.bluetooth.utils.LogUtils;
 
+import com.example.easdktool.been.DBParam;
+import com.example.easdktool.been.DeleteData;
 import com.example.easdktool.been.LogParam;
 
+import com.example.easdktool.been.QueryDb;
 import com.example.easdktool.broadcast.CallReceiveBroadcast;
 import com.example.easdktool.broadcast.SMSReceiveBroadcast;
 
 import com.example.easdktool.callback.ConnectStateListener;
 import com.example.easdktool.callback.DeviceOperationListener;
 import com.example.easdktool.callback.MotionDataListener;
+import com.example.easdktool.db.DataManager;
 import com.example.easdktool.enumerate.ConnectState;
 
 
@@ -98,6 +102,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kEAScanWacth = "EAScanWacth"; // 搜索手表
     final String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
     final String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
+    final String saveData = "saveData";
 
     /// MARK: - invoke method Name
     final String kConnectState = "ConnectState";
@@ -111,6 +116,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kProgress = "Progress";
     final String kScanWacthResponse = "ScanWacthResponse";
     final String kOperationWacthResponse = "OperationWacthResponse";
+    final String queryData = "queryData";
+    final String deleteData = "deleteData";
 
     /// 数据类型
     /* 手表 */
@@ -205,6 +212,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     private final String CID_KEY = "CID_KEY_CACHE";
     private final String DISPATCHER_HANDLE_KEY = "dispatch_handler";
 
+    public EasdktoolPlugin() {
+        Log.e(TAG, "创建plugin");
+    }
+
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
@@ -223,6 +234,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         if (mContext == null) {
             mContext = flutterPluginBinding.getApplicationContext();
         }
+        DataManager.getInstance().initDB(mContext);
 
 
     }
@@ -295,8 +307,45 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
 
             EABleManager.getInstance().stopScanPeripherals(mContext);
+        } else if (call.method.equals(saveData)) {
+            String arguments = (String) call.arguments;
+            if (checkArgumentName("saveData", arguments)) {
+                DBParam dbParam = JSONObject.parseObject(arguments, DBParam.class);
+                Log.e(TAG, "保存数据传过来的参数:" + dbParam.saveData);
+                DataManager.getInstance().setIsSaveData(dbParam.saveData);
+            }
+        } else if (call.method.equals(queryData)) {
+            String arguments = (String) call.arguments;
+            QueryDb queryDb = JSONObject.parseObject(arguments, QueryDb.class);
+            Log.e(TAG, "查询传过来的参数:" + queryDb.dataType);
+            new QueryMotionData(channel, queryDb.dataType).queryData();
+        } else if (call.method.equals(deleteData)) {
+            String arguments = (String) call.arguments;
+            DeleteData deleteData = JSONObject.parseObject(arguments, DeleteData.class);
+            if (deleteData.dataType == 0) {
+                DataManager.getInstance().deleteDailyData(null);
+            } else if (deleteData.dataType == 1) {
+                DataManager.getInstance().deleteSleepData(null);
+            } else if (deleteData.dataType == 2) {
+                DataManager.getInstance().deleteHeartData(null);
+            } else if (deleteData.dataType == 3) {
+                DataManager.getInstance().deleteGpsData(null);
+            } else if (deleteData.dataType == 4) {
+                DataManager.getInstance().deleteMultiData(null);
+            } else if (deleteData.dataType == 5) {
+                DataManager.getInstance().deleteBloodData(null);
+            } else if (deleteData.dataType == 6) {
+                DataManager.getInstance().deleteStressData(null);
+            } else if (deleteData.dataType == 7) {
+                DataManager.getInstance().deleteStepFreqData(null);
+            } else if (deleteData.dataType == 8) {
+                DataManager.getInstance().deleteStepPaceData(null);
+            } else if (deleteData.dataType == 9) {
+                DataManager.getInstance().deleteRestingHeartData(null);
+            } else if (deleteData.dataType == 10) {
+                DataManager.getInstance().deleteHabitData(null);
+            }
         } else if (call.method.equals(kEAConnectWatch)) {
-
             String arguments = (String) call.arguments;
             Map<String, String> map = JSONObject.parseObject(arguments, Map.class);
             String address = map.get("connectAddress");
@@ -358,50 +407,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
                 //  SetWatchParam setWatchParam = JSONObject.parseObject(arguments, SetWatchParam.class);
                 final int action = (int) map.get("dataType");
-                EABleDev eaBleDev = new EABleDev();
-                if (action == 0) {
-                    eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
-                } else if (action == 1) {
-                    eaBleDev.e_ops = EABleDev.DevOps.reset;
-                } else if (action == 2) {
-                    eaBleDev.e_ops = EABleDev.DevOps.power_off;
-                } else if (action == 3) {
-                    eaBleDev.e_ops = EABleDev.DevOps.disconnect_ble;
-                } else if (action == 4) {
-                    eaBleDev.e_ops = EABleDev.DevOps.entering_flight_mode;
-                } else if (action == 5) {
-                    eaBleDev.e_ops = EABleDev.DevOps.light_up_the_screen;
-                } else if (action == 6) {
-                    eaBleDev.e_ops = EABleDev.DevOps.turn_off_the_screen;
-                } else if (action == 7) {
-                    eaBleDev.e_ops = EABleDev.DevOps.stop_search_phone;
-                } else if (action == 8) {
-                    eaBleDev.e_ops = EABleDev.DevOps.start_search_watch;
-                } else if (action == 9) {
-                    eaBleDev.e_ops = EABleDev.DevOps.stop_search_watch;
-                }
-                EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
-                    @Override
-                    public void result(boolean b) {
+                new SetWatchData(channel).operateDevice(action);
 
-                        //  if (mHandler != null) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("operationType", action);
-                                jsonObject.put("respondCodeType", b);
-                                channel.invokeMethod(kOperationWacthResponse, jsonObject.toJSONString());
-                            }
-                        });
-                        //  }
-                    }
-
-                    @Override
-                    public void mutualFail(int i) {
-
-                    }
-                });
             }
         } else if (call.method.equals(kEAOTA)) {
             String arguments = (String) call.arguments;
