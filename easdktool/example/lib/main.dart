@@ -174,8 +174,8 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      // EAConnectParam connectParam = EAConnectParam.testInit();
-      // EASDKTool().connectToPeripheral(connectParam);
+      EAConnectParam connectParam = EAConnectParam.testInit();
+      EASDKTool().connectToPeripheral(connectParam);
     }
 
     /// 打开 SDKLog

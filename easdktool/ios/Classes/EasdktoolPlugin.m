@@ -369,14 +369,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 return;
             }
             EADataInfoType dataInfoType = [arguments[@"dataType"] integerValue];
-//            if (dataInfoType == EADataInfoTypeMonitorReminder) {
-                
-                NSInteger type = [arguments[@"type"] integerValue];
-                [self getWatchInfo:dataInfoType type:type];
-//            }else {
-//
-//                [self getWatchInfo:dataInfoType];
-//            }
+            NSInteger type = [arguments[@"type"] integerValue];
+            [self getWatchInfo:dataInfoType type:type];
+
         }
     }
     else if ([call.method isEqualToString:kEASetWatchInfo]) { // FIXME: - 设置手表信息
@@ -703,33 +698,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     }];
 }
 
-- (void)getWatchInfo:(EADataInfoType )dataInfoType {
-    
-    WeakSelf
-    [[EABleSendManager defaultManager] operationGetInfoWithType:(dataInfoType) result:^(EABaseModel * _Nonnull baseModel) {
-        
-        NSDictionary *value = [baseModel modelToJSONObject];
-        
-        if (dataInfoType == EADataInfoTypeAppMessage) {
-            
-            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
-            value = [showAppMessageModel modelToJSONObject];
-        }
-        if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
-            
-            NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
-            newValue[@"type"] = @"iTouch Flex";
-            
-            value = [newValue copy];
-        }
-        
-        NSDictionary *info = @{
-            @"dataType":@(dataInfoType),
-            @"value":value,
-        };
-        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
-    }];
-}
 
 - (void)getWatchInfo:(EADataInfoType )dataInfoType type:(NSInteger )type {
     
@@ -738,27 +706,44 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     WeakSelf
     [[EABleSendManager defaultManager] operationGetInfoWithRequestModel:requestModel result:^(EABaseModel * _Nonnull baseModel) {
         
-        NSDictionary *value = [baseModel modelToJSONObject];
         
-        if (dataInfoType == EADataInfoTypeAppMessage) {
+        EADataInfoModel *model = [baseModel getDataInfoModel];
+        if (model.requestId == dataInfoType) {
             
-            EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
-            value = [showAppMessageModel modelToJSONObject];
+            NSDictionary *value = [baseModel modelToJSONObject];
+            
+            if (dataInfoType == EADataInfoTypeAppMessage) {
+                
+                EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
+                value = [showAppMessageModel modelToJSONObject];
+            }
+            if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
+                
+                NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
+                newValue[@"type"] = @"iTouch Flex";
+                
+                value = [newValue copy];
+            }
+            
+            NSDictionary *info = @{
+                @"dataType":@(dataInfoType),
+                @"type":@(type),
+                @"value":value,
+            };
+            [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
         }
-        if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
+        else
+        {
+            EARespondModel *eaRespondModel = [EARespondModel eaInitErrorWithRequestId:dataInfoType];
+            NSDictionary *value = [eaRespondModel modelToJSONObject];
+            NSDictionary *info = @{
+                @"dataType":@(dataInfoType),
+                @"type":@(type),
+                @"value":value,
+            };
+            [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
             
-            NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
-            newValue[@"type"] = @"iTouch Flex";
-            
-            value = [newValue copy];
         }
-        
-        NSDictionary *info = @{
-            @"dataType":@(dataInfoType),
-            @"type":@(type),
-            @"value":value,
-        };
-        [selfWeak.channel invokeMethod:kGetWatchResponse arguments:[info modelToJSONString]];
     }];
 }
 
