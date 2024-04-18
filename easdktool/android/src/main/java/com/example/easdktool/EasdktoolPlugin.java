@@ -268,17 +268,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             EABleScanListener bleScanListener = new EABleScanListener() {
                 @Override
-                public void scanDevice(EABleDevice eaBleDevice) {
+                public void scanDevice(final EABleDevice eaBleDevice) {
 
                     //  if (mHandler != null) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("name", eaBleDevice.deviceName);
-                            jsonObject.put("connectAddress", eaBleDevice.deviceAddress);
-                            jsonObject.put("rssi", eaBleDevice.rssi);
-                            jsonObject.put("snNumber", eaBleDevice.deviceSign);
+                            jsonObject.put("name", eaBleDevice.getDeviceName());
+                            jsonObject.put("connectAddress", eaBleDevice.getDeviceAddress());
+                            jsonObject.put("rssi", eaBleDevice.getRssi());
+                            jsonObject.put("snNumber", eaBleDevice.getDeviceSign());
                             channel.invokeMethod(kScanWacthResponse, jsonObject.toJSONString());
                         }
                     });
@@ -354,7 +354,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 return;
             }
 
-            EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel));
+            EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
         } else if (call.method.equals(kEADisConnectWatch)) { // 手动断开设备
 
             EABleConnectState connectState = EABleManager.getInstance().getDeviceConnectState();

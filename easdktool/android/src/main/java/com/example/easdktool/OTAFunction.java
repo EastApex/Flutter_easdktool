@@ -33,18 +33,18 @@ public class OTAFunction {
             for (int i = 0; i < wArray.size(); i++) {
                 JSONObject wMap = wArray.get(i);
                 EABleOta tempOtaData = new EABleOta();
-                tempOtaData.version = wMap.getString("version");
+                tempOtaData.setVersion(wMap.getString("version"));
                 int type = wMap.getInteger("firmwareType");
                 if (type == 0) {
-                    tempOtaData.otaType = EABleOta.OtaType.apollo;
+                    tempOtaData.setOtaType(EABleOta.OtaType.apollo);
                 } else if (type == 1) {
-                    tempOtaData.otaType = EABleOta.OtaType.res;
+                    tempOtaData.setOtaType(EABleOta.OtaType.res);
                 } else if (type == 2) {
-                    tempOtaData.otaType = EABleOta.OtaType.hr;
+                    tempOtaData.setOtaType(EABleOta.OtaType.hr);
                 } else if (type == 3) {
-                    tempOtaData.otaType = EABleOta.OtaType.tp;
+                    tempOtaData.setOtaType(EABleOta.OtaType.tp);
                 } else if (type == 4) {
-                    tempOtaData.otaType = EABleOta.OtaType.user_wf;
+                    tempOtaData.setOtaType(EABleOta.OtaType.user_wf);
                     tempOtaData.setPop(true);
                 }
                 tempOtaData.setFilePath(wMap.getString("binPath"));

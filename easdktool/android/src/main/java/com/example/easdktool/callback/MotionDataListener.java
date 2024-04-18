@@ -113,7 +113,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         for (int i = 0; i < list.size(); i++) {
             SleepData sleepData = new SleepData();
             sleepData.setSleepMode(list.get(i).getE_sleep_node().getValue());
-            sleepData.setTime_stamp(list.get(i).time_stamp);
+            sleepData.setTime_stamp(list.get(i).getTime_stamp());
             sleepDataList.add(sleepData);
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
@@ -136,7 +136,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<HeartData> heartDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             HeartData heartData = new HeartData();
-            heartData.setTime_stamp(list.get(i).time_stamp);
+            heartData.setTime_stamp(list.get(i).getTime_stamp());
             heartData.setHr_value(list.get(i).getHr_value());
             heartDataList.add(heartData);
             Map<String, Object> map = new HashMap<>();
@@ -160,7 +160,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<GpsData> gpsDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             GpsData gpsData = new GpsData();
-            gpsData.setTime_stamp(list.get(i).time_stamp);
+            gpsData.setTime_stamp(list.get(i).getTime_stamp());
             gpsData.setLatitude(list.get(i).getLatitude());
             gpsData.setLongitude(list.get(i).getLongitude());
             gpsDataList.add(gpsData);
@@ -194,35 +194,35 @@ public class MotionDataListener implements MotionDataReportCallback {
             map.put("end_time_stamp", list.get(i).getEnd_time_stamp());
             multiData.setEnd_time_stamp(list.get(i).getEnd_time_stamp());
             map.put("steps", list.get(i).getSteps());
-            multiData.setSteps(list.get(i).steps);
+            multiData.setSteps(list.get(i).getSteps());
             map.put("calorie", list.get(i).getCalorie());
             multiData.setCalorie(list.get(i).getCalorie());
             map.put("distance", list.get(i).getDistance());
-            multiData.setDistance(list.get(i).distance);
+            multiData.setDistance(list.get(i).getDistance());
             map.put("duration", list.get(i).getDuration());
-            multiData.setDuration(list.get(i).duration);
+            multiData.setDuration(list.get(i).getDuration());
             map.put("training_effect_normal", list.get(i).getTraining_effect_normal());
-            multiData.setTraining_effect_normal(list.get(i).training_effect_normal);
+            multiData.setTraining_effect_normal(list.get(i).getTraining_effect_normal());
             map.put("training_effect_warmUp", list.get(i).getTraining_effect_warmUp());
-            multiData.setTraining_effect_warmUp(list.get(i).training_effect_warmUp);
+            multiData.setTraining_effect_warmUp(list.get(i).getTraining_effect_warmUp());
             map.put("training_effect_fatconsumption", list.get(i).getTraining_effect_fatconsumption());
-            multiData.setTraining_effect_fatconsumption(list.get(i).training_effect_fatconsumption);
+            multiData.setTraining_effect_fatconsumption(list.get(i).getTraining_effect_fatconsumption());
             map.put("training_effect_aerobic", list.get(i).getTraining_effect_aerobic());
-            multiData.setTraining_effect_aerobic(list.get(i).training_effect_aerobic);
+            multiData.setTraining_effect_aerobic(list.get(i).getTraining_effect_aerobic());
             map.put("training_effect_anaerobic", list.get(i).getTraining_effect_anaerobic());
             multiData.setTraining_effect_anaerobic(list.get(i).getTraining_effect_anaerobic());
             map.put("training_effect_limit", list.get(i).getTraining_effect_limit());
-            multiData.setTraining_effect_limit(list.get(i).training_effect_limit);
+            multiData.setTraining_effect_limit(list.get(i).getTraining_effect_limit());
             map.put("average_heart_rate", list.get(i).getAverage_heart_rate());
             multiData.setAverage_heart_rate(list.get(i).getAverage_heart_rate());
             map.put("average_temperature", list.get(i).getAverage_temperature());
             multiData.setAverage_temperature(list.get(i).getAverage_temperature());
             map.put("average_speed", list.get(i).getAverage_speed());
-            multiData.setAverage_speed(list.get(i).average_speed);
+            multiData.setAverage_speed(list.get(i).getAverage_speed());
             map.put("average_pace", list.get(i).getAverage_pace());
-            multiData.setAverage_pace(list.get(i).average_pace);
+            multiData.setAverage_pace(list.get(i).getAverage_pace());
             map.put("average_step_freq", list.get(i).getAverage_step_freq());
-            multiData.setAverage_step_freq(list.get(i).average_step_freq);
+            multiData.setAverage_step_freq(list.get(i).getAverage_step_freq());
             map.put("average_stride", list.get(i).getAverage_stride());
             multiData.setAverage_stride(list.get(i).getAverage_stride());
             map.put("average_altitude", list.get(i).getAverage_altitude());
@@ -251,8 +251,8 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<BloodData> bloodDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             BloodData bloodData = new BloodData();
-            bloodData.setBlood_oxygen_value(list.get(i).blood_oxygen_value);
-            bloodData.setTime_stamp(list.get(i).time_stamp);
+            bloodData.setBlood_oxygen_value(list.get(i).getBlood_oxygen_value());
+            bloodData.setTime_stamp(list.get(i).getTime_stamp());
             bloodDataList.add(bloodData);
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
@@ -276,7 +276,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         for (int i = 0; i < list.size(); i++) {
             StressData stressData = new StressData();
             stressData.setPressureLevel(list.get(i).getE_type().getValue());
-            stressData.setTime_stamp(list.get(i).time_stamp);
+            stressData.setTime_stamp(list.get(i).getTime_stamp());
             stressData.setStess_value(list.get(i).getStess_value());
             stressDataList.add(stressData);
             Map<String, Object> map = new HashMap<>();
@@ -301,8 +301,8 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<StepFreqData> stepFreqDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             StepFreqData stepFreqData = new StepFreqData();
-            stepFreqData.setStep_freq_value(list.get(i).step_freq_value);
-            stepFreqData.setTime_stamp(list.get(i).time_stamp);
+            stepFreqData.setStep_freq_value(list.get(i).getStep_freq_value());
+            stepFreqData.setTime_stamp(list.get(i).getTime_stamp());
             stepFreqDataList.add(stepFreqData);
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
@@ -325,8 +325,8 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<StepPaceData> stepPaceDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             StepPaceData stepPaceData = new StepPaceData();
-            stepPaceData.setStep_pace_value(list.get(i).step_pace_value);
-            stepPaceData.setTime_stamp(list.get(i).time_stamp);
+            stepPaceData.setStep_pace_value(list.get(i).getStep_pace_value());
+            stepPaceData.setTime_stamp(list.get(i).getTime_stamp());
             stepPaceDataList.add(stepPaceData);
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
@@ -349,8 +349,8 @@ public class MotionDataListener implements MotionDataReportCallback {
         List<RestingHeartData> restingHeartDataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             RestingHeartData restingHeartData = new RestingHeartData();
-            restingHeartData.setTime_stamp(list.get(i).time_stamp);
-            restingHeartData.setHr_value(list.get(i).hr_value);
+            restingHeartData.setTime_stamp(list.get(i).getTime_stamp());
+            restingHeartData.setHr_value(list.get(i).getHr_value());
             restingHeartDataList.add(restingHeartData);
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
@@ -375,21 +375,21 @@ public class MotionDataListener implements MotionDataReportCallback {
             HabitData habitData = new HabitData();
             Map<String, Object> map = new HashMap<>();
             map.put("time_stamp", list.get(i).getTime_stamp());
-            habitData.setTime_stamp(list.get(i).time_stamp);
+            habitData.setTime_stamp(list.get(i).getTime_stamp());
             map.put("begin_hour", list.get(i).getBegin_hour());
-            habitData.setBegin_hour(list.get(i).begin_hour);
+            habitData.setBegin_hour(list.get(i).getBegin_hour());
             map.put("begin_minute", list.get(i).getBegin_minute());
-            habitData.setBegin_minute(list.get(i).begin_minute);
+            habitData.setBegin_minute(list.get(i).getBegin_minute());
             map.put("end_hour", list.get(i).getEnd_hour());
-            habitData.setEnd_hour(list.get(i).end_hour);
+            habitData.setEnd_hour(list.get(i).getEnd_hour());
             map.put("end_minute", list.get(i).getEnd_minute());
-            habitData.setEnd_minute(list.get(i).end_minute);
+            habitData.setEnd_minute(list.get(i).getEnd_minute());
             map.put("redColor", list.get(i).getRedColor());
-            habitData.setRedColor(list.get(i).redColor);
+            habitData.setRedColor(list.get(i).getRedColor());
             map.put("greenColor", list.get(i).getGreenColor());
-            habitData.setGreenColor(list.get(i).greenColor);
+            habitData.setGreenColor(list.get(i).getGreenColor());
             map.put("blueColor", list.get(i).getBlueColor());
-            habitData.setBlueColor(list.get(i).blueColor);
+            habitData.setBlueColor(list.get(i).getBlueColor());
             map.put("habitState", list.get(i).getHabitState().getValue());
             habitData.setHabitState(list.get(i).getHabitState().getValue());
             map.put("habitIcon", list.get(i).getHabitIcon().getValue());

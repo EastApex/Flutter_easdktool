@@ -30,7 +30,7 @@ import java.util.Map;
 public class Object2Map {
     public Map watchInfo2Map(EABleWatchInfo eaBleWatchInfo) {
         Map map = new HashMap();
-        map.put("eBindingInfo", eaBleWatchInfo.bindingInfo.getValue());
+        map.put("eBindingInfo", eaBleWatchInfo.getBindingInfo().getValue());
         map.put("agpsUpdateTimestamp", eaBleWatchInfo.getAgps_update_timestamp());
         map.put("firmwareVersion", eaBleWatchInfo.getFirmwareVersion());
         map.put("userId", eaBleWatchInfo.getUserId());
@@ -48,9 +48,9 @@ public class Object2Map {
 
     public Map userInfo2Map(EABlePersonInfo eaBlePersonInfo) {
         Map<String, Integer> map = new HashMap();
-        map.put("eSexInfo", eaBlePersonInfo.e_sex_info.getValue());
-        map.put("eHandInfo", eaBlePersonInfo.e_hand_info.getValue());
-        map.put("eSkinColor", eaBlePersonInfo.e_skin_color.getValue());
+        map.put("eSexInfo", eaBlePersonInfo.getE_sex_info().getValue());
+        map.put("eHandInfo", eaBlePersonInfo.getE_hand_info().getValue());
+        map.put("eSkinColor", eaBlePersonInfo.getE_skin_color().getValue());
         map.put("age", eaBlePersonInfo.getAge());
         map.put("height", eaBlePersonInfo.getHeight());
         map.put("weight", eaBlePersonInfo.getWeight());
@@ -59,8 +59,8 @@ public class Object2Map {
 
     public Map time2Map(EABleSyncTime eaBleSyncTime) {
         Map<String, Integer> map = new HashMap();
-        map.put("timeHourType", eaBleSyncTime.e_hour_system.getValue());
-        map.put("timeZone", eaBleSyncTime.e_time_zone.getValue());
+        map.put("timeHourType", eaBleSyncTime.getE_hour_system().getValue());
+        map.put("timeZone", eaBleSyncTime.getE_time_zone().getValue());
         map.put("timeZoneHour", eaBleSyncTime.getTime_zone_hour());
         map.put("timeZoneMinute", eaBleSyncTime.getTime_zone_minute());
         map.put("year", eaBleSyncTime.getYear());
@@ -75,7 +75,7 @@ public class Object2Map {
 
     public Map battery2Map(EABleBatInfo eaBleBatInfo) {
         Map<String, Integer> map = new HashMap();
-        map.put("eStatus", eaBleBatInfo.e_status.getValue());
+        map.put("eStatus", eaBleBatInfo.getE_status().getValue());
         map.put("level", eaBleBatInfo.getLevel());
         return map;
     }
@@ -139,7 +139,7 @@ public class Object2Map {
 
     public Map reminder2Map(EABleReminder eaBleReminder) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", eaBleReminder.id);
+        jsonObject.put("id", eaBleReminder.getId());
         jsonObject.put("e_ops", eaBleReminder.getE_ops().getValue());
         List<ReminderItem> items = new ArrayList<>();
         if (eaBleReminder.getS_index() != null && !eaBleReminder.getS_index().isEmpty()) {
@@ -348,7 +348,7 @@ public class Object2Map {
 
     public Map habit2Map(EABleHabit eaBleHabit) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", eaBleHabit.id);
+        jsonObject.put("id", eaBleHabit.getId());
         jsonObject.put("eOps", eaBleHabit.getE_ops().getValue());
         List<JSONObject> items = new ArrayList<>();
         if (eaBleHabit.getItemList() != null && !eaBleHabit.getItemList().isEmpty()) {

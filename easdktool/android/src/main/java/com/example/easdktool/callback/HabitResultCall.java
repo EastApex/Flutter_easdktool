@@ -18,7 +18,7 @@ public class HabitResultCall implements HabitResultCallback {
     @Override
     public void editResult(EABleHabitRespond eaBleHabitRespond) {
         Log.e("HabitResultCall", "获取习惯回调的结果:" + eaBleHabitRespond.getResult().getValue());
-        new Return2Flutter(channel).setWatchDataResponse(eaBleHabitRespond.result.getValue(), 38);
+        new Return2Flutter(channel).setWatchDataResponse(eaBleHabitRespond.getResult().getValue(), 38);
 
     }
 

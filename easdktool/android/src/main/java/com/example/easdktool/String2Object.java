@@ -386,12 +386,12 @@ public class String2Object {
         Map<String, Object> sEmail = (Map<String, Object>) map.get("sEmail");
         Map<String, Object> sSchedule = (Map<String, Object>) map.get("sSchedule");
 
-        eaBleAncsSw.s_incomingcall = getAncsSwItem(sIncomingcall);
-        eaBleAncsSw.s_missedcall = getAncsSwItem(sMissedcall);
-        eaBleAncsSw.s_sms = getAncsSwItem(sSms);
-        eaBleAncsSw.s_social = getAncsSwItem(sSocial);
-        eaBleAncsSw.s_email = getAncsSwItem(sEmail);
-        eaBleAncsSw.s_schedule = getAncsSwItem(sSchedule);
+        eaBleAncsSw.setS_incomingcall(getAncsSwItem(sIncomingcall));
+        eaBleAncsSw.setS_missedcall(getAncsSwItem(sMissedcall));
+        eaBleAncsSw.setS_sms(getAncsSwItem(sSms));
+        eaBleAncsSw.setS_social(getAncsSwItem(sSocial));
+        eaBleAncsSw.setS_email(getAncsSwItem(sEmail));
+        eaBleAncsSw.setS_schedule(getAncsSwItem(sSchedule));
         return eaBleAncsSw;
     }
 
@@ -706,7 +706,7 @@ public class String2Object {
         Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
         int builtInId = (int) map.get("id_p");
         EABleWatchFace eaBleWatchFace = new EABleWatchFace();
-        eaBleWatchFace.id = builtInId;
+        eaBleWatchFace.setId(builtInId);
         return eaBleWatchFace;
     }
 
@@ -897,8 +897,8 @@ public class String2Object {
 
     private EABleAncsSw.EABleAncsSwItem getAncsSwItem(Map<String, Object> map) {
         EABleAncsSw.EABleAncsSwItem ancsSwItem = new EABleAncsSw.EABleAncsSwItem();
-        ancsSwItem.sw = (int) map.get("sw");
-        ancsSwItem.e_action = getCommonAction((int) map.get("remindActionType"));
+        ancsSwItem.setSw((int) map.get("sw"));
+        ancsSwItem.setE_action(getCommonAction((int) map.get("remindActionType")));
         return ancsSwItem;
     }
 

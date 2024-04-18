@@ -174,7 +174,7 @@ public class SetWatchData {
 
     public void unbindDevice() {
         EABleDev eaBleDev = new EABleDev();
-        eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
+        eaBleDev.setE_ops(EABleDev.DevOps.restore_factory);
         EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
             @Override
             public void result(boolean b) {
@@ -203,7 +203,7 @@ public class SetWatchData {
                 if (b) {
                     if (eaBleBindInfo.getE_ops().getValue() == 0) {
                         eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
-                        LogUtils.i(TAG, "daily data sync time:" + eaBleBindInfo.bind_mod);
+                        LogUtils.i(TAG, "daily data sync time:" + eaBleBindInfo.getBind_mod());
                         EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                             @Override
                             public void result(boolean b) {
@@ -257,25 +257,25 @@ public class SetWatchData {
     public void operateDevice(final int action) {
         EABleDev eaBleDev = new EABleDev();
         if (action == 0) {
-            eaBleDev.e_ops = EABleDev.DevOps.restore_factory;
+            eaBleDev.setE_ops(EABleDev.DevOps.restore_factory);
         } else if (action == 1) {
-            eaBleDev.e_ops = EABleDev.DevOps.reset;
+            eaBleDev.setE_ops(EABleDev.DevOps.reset);
         } else if (action == 2) {
-            eaBleDev.e_ops = EABleDev.DevOps.power_off;
+            eaBleDev.setE_ops(EABleDev.DevOps.power_off);
         } else if (action == 3) {
-            eaBleDev.e_ops = EABleDev.DevOps.disconnect_ble;
+            eaBleDev.setE_ops(EABleDev.DevOps.disconnect_ble);
         } else if (action == 4) {
-            eaBleDev.e_ops = EABleDev.DevOps.entering_flight_mode;
+            eaBleDev.setE_ops(EABleDev.DevOps.entering_flight_mode);
         } else if (action == 5) {
-            eaBleDev.e_ops = EABleDev.DevOps.light_up_the_screen;
+            eaBleDev.setE_ops(EABleDev.DevOps.light_up_the_screen);
         } else if (action == 6) {
-            eaBleDev.e_ops = EABleDev.DevOps.turn_off_the_screen;
+            eaBleDev.setE_ops(EABleDev.DevOps.turn_off_the_screen);
         } else if (action == 7) {
-            eaBleDev.e_ops = EABleDev.DevOps.stop_search_phone;
+            eaBleDev.setE_ops(EABleDev.DevOps.stop_search_phone);
         } else if (action == 8) {
-            eaBleDev.e_ops = EABleDev.DevOps.start_search_watch;
+            eaBleDev.setE_ops(EABleDev.DevOps.start_search_watch);
         } else if (action == 9) {
-            eaBleDev.e_ops = EABleDev.DevOps.stop_search_watch;
+            eaBleDev.setE_ops(EABleDev.DevOps.stop_search_watch);
         }
         EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
             @Override

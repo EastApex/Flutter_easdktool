@@ -3,13 +3,20 @@ version '1.0'
 
 buildscript {
     repositories {
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/releases' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         jcenter()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.2.0'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
     }
@@ -17,6 +24,13 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/releases' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         jcenter()
         mavenCentral()
@@ -32,15 +46,15 @@ apply plugin: 'com.google.protobuf'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 31
+    compileSdk 34
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     defaultConfig {
-        minSdkVersion 23
+        minSdk 23
     }
     buildTypes {
         release {
@@ -60,7 +74,7 @@ greendao {
 }
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
-    api(name: 'apex_sdk_4.0.3', ext: 'aar')
+    api(name: 'apex_sdk_4.0.4', ext: 'aar')
     implementation 'com.google.protobuf:protobuf-java:3.19.3'
     implementation 'com.google.protobuf:protoc:3.19.3'
     //fastjson解析

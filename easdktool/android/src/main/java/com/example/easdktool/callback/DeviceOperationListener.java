@@ -114,24 +114,24 @@ public class DeviceOperationListener implements DataReportCallback {
     public void musicControl(final EABleMusicControl eaBleMusicControl) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("opePhoneType", 0x0C);
-        jsonObject.put("volume", eaBleMusicControl.volume);
-        jsonObject.put("elapsedtime", eaBleMusicControl.elapsedtime);
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_start) {
+        jsonObject.put("volume", eaBleMusicControl.getVolume());
+        jsonObject.put("elapsedtime", eaBleMusicControl.getElapsedtime());
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.play_start) {
             jsonObject.put("action", 0);
         }
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.play_stop) {
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.play_stop) {
             jsonObject.put("action", 1);
         }
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.previous_song) {
+        if (eaBleMusicControl.getE_ops()== EABleMusicControl.MusicControl.previous_song) {
             jsonObject.put("action", 2);
         }
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.next_song) {
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.next_song) {
             jsonObject.put("action", 3);
         }
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_up) {
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.volume_up) {
             jsonObject.put("action", 4);
         }
-        if (eaBleMusicControl.e_ops == EABleMusicControl.MusicControl.volume_reduction) {
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.volume_reduction) {
             jsonObject.put("action", 5);
         }
         sendOpePhone(jsonObject);
@@ -144,8 +144,8 @@ public class DeviceOperationListener implements DataReportCallback {
     public void socialResponse(final EABleSocialResponse eaBleSocialResponse) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("opePhoneType", 0x0D);
-        jsonObject.put("socialId", eaBleSocialResponse.id);
-        jsonObject.put("content", eaBleSocialResponse.content);
+        jsonObject.put("socialId", eaBleSocialResponse.getId());
+        jsonObject.put("content", eaBleSocialResponse.getContent());
         sendOpePhone(jsonObject);
 
     }

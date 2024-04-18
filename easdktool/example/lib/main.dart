@@ -9,6 +9,7 @@ import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:flutter/material.dart';
 import 'package:easdktool/EACallback.dart';
@@ -16,6 +17,8 @@ import 'package:easdktool/Been/EABeen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:platform/platform.dart';
 import 'FirstMethodPackageData.dart';
 import 'ForegroundTaskHandler.dart';
 
@@ -158,12 +161,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    if (Platform.isAndroid) {
-      initGetIsolate();
-      initSetIsolate();
-      foregroundTask();
+    if (LocalPlatform().isAndroid) {
+      checkLocationPermission();
+
       //The second method is to initialize the channel
-      secondEasdkTool.initChannel();
+
     } else {
       secondEasdkTool.showLog(1);
       secondEasdkTool.initChannel();
@@ -308,7 +310,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getBigWatchData() {
-    if (Platform.isAndroid) {
+    if (LocalPlatform().isAndroid) {
       firstMethodSetWatchData(29, Map(),
           EASetDataCallback(onRespond: (onRespond) {
         print("get Big data,The first method is to get the callback" +
@@ -664,7 +666,7 @@ class _MyAppState extends State<MyApp> {
 
   void firstMethodGetWatchData(
       int dataType, EAGetDataCallback getetDataCallback) {
-    if (Platform.isAndroid) {
+    if (LocalPlatform().isAndroid) {
       eaGetDataCallback = getetDataCallback;
       PackageData packageData = PackageData();
       packageData.action = 1;
@@ -679,7 +681,7 @@ class _MyAppState extends State<MyApp> {
 
   void firstMethodSetWatchData(
       int dataType, Map map, EASetDataCallback setDataCallback, int action) {
-    if (Platform.isAndroid) {
+    if (LocalPlatform().isAndroid) {
       eaSetDataCallback = setDataCallback;
       PackageData packageData = PackageData();
       packageData.action = action;
@@ -755,6 +757,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Obtaining User information【获取用户信息】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeUser);
+                  
                 },
               ),
               GestureDetector(
@@ -974,7 +977,8 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView('2.Set the watch time【设置手表时间】'), // 同步手机时间到手表
+                child: TextView('2.Set the watch time【设置手表时间】'),
+                // 同步手机时间到手表
                 onTap: () {
                   EASyncTime syncTime = EASyncTime();
                   syncTime.day = 2;
@@ -1669,6 +1673,55 @@ class _MyAppState extends State<MyApp> {
 
       default:
         break;
+    }
+  }
+
+  Future<bool> getLocationPermission() async {
+    PermissionStatus myPermission = await Permission.location.request();
+    if (myPermission == PermissionStatus.granted) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> getBluethScanPermission() async {
+    PermissionStatus myPermission = await Permission.bluetoothScan.request();
+    if (myPermission == PermissionStatus.granted) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> getBluethConnectPermission() async {
+    PermissionStatus myPermission = await Permission.bluetoothConnect.request();
+    if (myPermission == PermissionStatus.granted) {
+      return true;
+    }
+    return false;
+  }
+
+  void checkLocationPermission() async {
+    bool locationPermission = await getLocationPermission();
+    if (locationPermission) {
+      DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      if (androidDeviceInfo != null) {
+        if (androidDeviceInfo.version != null) {
+          var sdkInt = androidDeviceInfo.version.sdkInt;
+          if (sdkInt! > 11) {
+            bool scanPermission = await getBluethScanPermission();
+            if (scanPermission) {
+              bool connectPermission = await getBluethConnectPermission();
+              if (connectPermission) {
+                initGetIsolate();
+                initSetIsolate();
+                foregroundTask();
+                secondEasdkTool.initChannel();
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

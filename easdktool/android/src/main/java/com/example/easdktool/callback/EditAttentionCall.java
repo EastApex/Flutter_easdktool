@@ -15,7 +15,7 @@ public class EditAttentionCall implements EditAttentionCallback {
 
     @Override
     public void editResult(EABleRemindRespond eaBleRemindRespond) {
-        new Return2Flutter(channel).setWatchDataResponse(eaBleRemindRespond.remindRespondResult.getValue(), 22);
+        new Return2Flutter(channel).setWatchDataResponse(eaBleRemindRespond.getRemindRespondOps().getValue(), 22);
     }
 
     @Override

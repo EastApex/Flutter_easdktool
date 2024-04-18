@@ -167,7 +167,7 @@ public class GetWatchData {
             @Override
             public void languageInfo(final EABleDeviceLanguage eaBleDeviceLanguage) {
                 Map<String, Integer> map = new HashMap();
-                map.put("eType", eaBleDeviceLanguage.e_type.getValue());
+                map.put("eType", eaBleDeviceLanguage.getE_type().getValue());
                 new Return2Flutter(channel).sendWatchDataWithMap(map, 10);
             }
 
@@ -182,7 +182,7 @@ public class GetWatchData {
             @Override
             public void unitInfo(final EABleDevUnit eaBleDevUnit) {
                 Map<String, Integer> map = new HashMap();
-                map.put("eFormat", eaBleDevUnit.e_format.getValue());
+                map.put("eFormat", eaBleDevUnit.getE_format().getValue());
                 new Return2Flutter(channel).sendWatchDataWithMap(map, 11);
 
             }
@@ -305,7 +305,7 @@ public class GetWatchData {
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.distance_unit, new DistanceUnitCallback() {
             @Override
             public void distanceUnitInfo(final EABleDistanceFormat eaBleDistanceFormat) {
-                new Return2Flutter(channel).sendWatchDataWithOtherKeyValue("eFormat", eaBleDistanceFormat.e_format.getValue(), 24);
+                new Return2Flutter(channel).sendWatchDataWithOtherKeyValue("eFormat", eaBleDistanceFormat.getE_format().getValue(), 24);
 
             }
 
@@ -320,7 +320,7 @@ public class GetWatchData {
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.weight_unit, new WeightUnitCallback() {
             @Override
             public void weightUnitInfo(final EABleWeightFormat eaBleWeightFormat) {
-                new Return2Flutter(channel).sendWatchDataWithOtherKeyValue("eFormat", eaBleWeightFormat.e_format.getValue(), 25);
+                new Return2Flutter(channel).sendWatchDataWithOtherKeyValue("eFormat", eaBleWeightFormat.getE_format().getValue(), 25);
 
 
             }
