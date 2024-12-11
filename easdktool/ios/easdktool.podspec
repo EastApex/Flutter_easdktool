@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easdktool'
-  s.version          = '0.0.1'
+  s.version          = '1.1.07.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -16,12 +16,17 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
-  s.dependency "Protobuf", "~> 3.14.0"
-  s.dependency "YYKit"
-  s.dependency "SAMKeychain"
-  s.dependency "Realm"
+  s.platform = :ios, '12.0'
+  
+  s.dependency 'ZipArchive'
+  s.dependency 'Protobuf'
+  s.dependency 'YYKit'
+  s.dependency 'BGFMDB'
+  s.dependency 'SAMKeychain'
+  s.dependency 'SVGKit'
+#  s.dependency "Realm"
 
+  s.resource_bundles = {'EAWatchFace' => ['Lib/EAWatchFace.bundle/*']} #工程需要引入的bundle
   s.ios.vendored_frameworks = 'Lib/EABluetooth.framework'
   s.vendored_frameworks = 'EABluetooth.framework'
   # Flutter.framework does not contain a i386 slice.

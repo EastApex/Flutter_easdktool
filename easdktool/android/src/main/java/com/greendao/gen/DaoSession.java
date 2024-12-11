@@ -13,9 +13,11 @@ import com.example.easdktool.db.DailyData;
 import com.example.easdktool.db.GpsData;
 import com.example.easdktool.db.HabitData;
 import com.example.easdktool.db.HeartData;
+import com.example.easdktool.db.MotionHeart;
 import com.example.easdktool.db.MultiData;
 import com.example.easdktool.db.RestingHeartData;
 import com.example.easdktool.db.SleepData;
+import com.example.easdktool.db.SleepScore;
 import com.example.easdktool.db.StepFreqData;
 import com.example.easdktool.db.StepPaceData;
 import com.example.easdktool.db.StressData;
@@ -25,9 +27,11 @@ import com.greendao.gen.DailyDataDao;
 import com.greendao.gen.GpsDataDao;
 import com.greendao.gen.HabitDataDao;
 import com.greendao.gen.HeartDataDao;
+import com.greendao.gen.MotionHeartDao;
 import com.greendao.gen.MultiDataDao;
 import com.greendao.gen.RestingHeartDataDao;
 import com.greendao.gen.SleepDataDao;
+import com.greendao.gen.SleepScoreDao;
 import com.greendao.gen.StepFreqDataDao;
 import com.greendao.gen.StepPaceDataDao;
 import com.greendao.gen.StressDataDao;
@@ -46,9 +50,11 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig gpsDataDaoConfig;
     private final DaoConfig habitDataDaoConfig;
     private final DaoConfig heartDataDaoConfig;
+    private final DaoConfig motionHeartDaoConfig;
     private final DaoConfig multiDataDaoConfig;
     private final DaoConfig restingHeartDataDaoConfig;
     private final DaoConfig sleepDataDaoConfig;
+    private final DaoConfig sleepScoreDaoConfig;
     private final DaoConfig stepFreqDataDaoConfig;
     private final DaoConfig stepPaceDataDaoConfig;
     private final DaoConfig stressDataDaoConfig;
@@ -58,9 +64,11 @@ public class DaoSession extends AbstractDaoSession {
     private final GpsDataDao gpsDataDao;
     private final HabitDataDao habitDataDao;
     private final HeartDataDao heartDataDao;
+    private final MotionHeartDao motionHeartDao;
     private final MultiDataDao multiDataDao;
     private final RestingHeartDataDao restingHeartDataDao;
     private final SleepDataDao sleepDataDao;
+    private final SleepScoreDao sleepScoreDao;
     private final StepFreqDataDao stepFreqDataDao;
     private final StepPaceDataDao stepPaceDataDao;
     private final StressDataDao stressDataDao;
@@ -84,6 +92,9 @@ public class DaoSession extends AbstractDaoSession {
         heartDataDaoConfig = daoConfigMap.get(HeartDataDao.class).clone();
         heartDataDaoConfig.initIdentityScope(type);
 
+        motionHeartDaoConfig = daoConfigMap.get(MotionHeartDao.class).clone();
+        motionHeartDaoConfig.initIdentityScope(type);
+
         multiDataDaoConfig = daoConfigMap.get(MultiDataDao.class).clone();
         multiDataDaoConfig.initIdentityScope(type);
 
@@ -92,6 +103,9 @@ public class DaoSession extends AbstractDaoSession {
 
         sleepDataDaoConfig = daoConfigMap.get(SleepDataDao.class).clone();
         sleepDataDaoConfig.initIdentityScope(type);
+
+        sleepScoreDaoConfig = daoConfigMap.get(SleepScoreDao.class).clone();
+        sleepScoreDaoConfig.initIdentityScope(type);
 
         stepFreqDataDaoConfig = daoConfigMap.get(StepFreqDataDao.class).clone();
         stepFreqDataDaoConfig.initIdentityScope(type);
@@ -107,9 +121,11 @@ public class DaoSession extends AbstractDaoSession {
         gpsDataDao = new GpsDataDao(gpsDataDaoConfig, this);
         habitDataDao = new HabitDataDao(habitDataDaoConfig, this);
         heartDataDao = new HeartDataDao(heartDataDaoConfig, this);
+        motionHeartDao = new MotionHeartDao(motionHeartDaoConfig, this);
         multiDataDao = new MultiDataDao(multiDataDaoConfig, this);
         restingHeartDataDao = new RestingHeartDataDao(restingHeartDataDaoConfig, this);
         sleepDataDao = new SleepDataDao(sleepDataDaoConfig, this);
+        sleepScoreDao = new SleepScoreDao(sleepScoreDaoConfig, this);
         stepFreqDataDao = new StepFreqDataDao(stepFreqDataDaoConfig, this);
         stepPaceDataDao = new StepPaceDataDao(stepPaceDataDaoConfig, this);
         stressDataDao = new StressDataDao(stressDataDaoConfig, this);
@@ -119,9 +135,11 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(GpsData.class, gpsDataDao);
         registerDao(HabitData.class, habitDataDao);
         registerDao(HeartData.class, heartDataDao);
+        registerDao(MotionHeart.class, motionHeartDao);
         registerDao(MultiData.class, multiDataDao);
         registerDao(RestingHeartData.class, restingHeartDataDao);
         registerDao(SleepData.class, sleepDataDao);
+        registerDao(SleepScore.class, sleepScoreDao);
         registerDao(StepFreqData.class, stepFreqDataDao);
         registerDao(StepPaceData.class, stepPaceDataDao);
         registerDao(StressData.class, stressDataDao);
@@ -133,9 +151,11 @@ public class DaoSession extends AbstractDaoSession {
         gpsDataDaoConfig.clearIdentityScope();
         habitDataDaoConfig.clearIdentityScope();
         heartDataDaoConfig.clearIdentityScope();
+        motionHeartDaoConfig.clearIdentityScope();
         multiDataDaoConfig.clearIdentityScope();
         restingHeartDataDaoConfig.clearIdentityScope();
         sleepDataDaoConfig.clearIdentityScope();
+        sleepScoreDaoConfig.clearIdentityScope();
         stepFreqDataDaoConfig.clearIdentityScope();
         stepPaceDataDaoConfig.clearIdentityScope();
         stressDataDaoConfig.clearIdentityScope();
@@ -161,6 +181,10 @@ public class DaoSession extends AbstractDaoSession {
         return heartDataDao;
     }
 
+    public MotionHeartDao getMotionHeartDao() {
+        return motionHeartDao;
+    }
+
     public MultiDataDao getMultiDataDao() {
         return multiDataDao;
     }
@@ -171,6 +195,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public SleepDataDao getSleepDataDao() {
         return sleepDataDao;
+    }
+
+    public SleepScoreDao getSleepScoreDao() {
+        return sleepScoreDao;
     }
 
     public StepFreqDataDao getStepFreqDataDao() {

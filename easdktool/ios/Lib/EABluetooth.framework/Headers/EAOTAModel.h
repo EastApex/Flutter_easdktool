@@ -67,16 +67,60 @@ NS_ASSUME_NONNULL_BEGIN
 /// bin文件的数据流（binPath 或者 binData 2传一即可）
 @property(nonatomic,strong) NSData *binData;
 
-/// init
-+ (EAFileModel *)allocInitWithPath:(NSString *)binPath otaType:(EAOtaRequestType )otaType version:(NSString *)version;
 
+/// set watch face id,max 32.   ==> watchFaceId.lenght <= 32
+/// 设置表盘id，最长32
+@property(nonatomic,strong) NSString *watchFaceId;
+
+/// 海思ResId
+@property(nonatomic,assign,readonly) NSInteger hisResId;
+
+- (instancetype )initWithHisResId:(NSInteger)hisResId ;
+
+
+/// init
++ (EAFileModel *)eaInitWithPath:(NSString *)binPath otaType:(EAOtaRequestType )otaType version:(NSString *)version;
++ (EAFileModel *)eaInitWithData:(NSData *)binData otaType:(EAOtaRequestType )otaType version:(NSString *)version;
+
+
+/// init watch face file
+/// watchFaceId can nil 
++ (EAFileModel *)eaInitWatchFaceFileWithPath:(NSString *)binPath version:(NSString *)version watchFaceId:(NSString *)watchFaceId;
++ (EAFileModel *)eaInitWatchFaceFileWithData:(NSData *)binData version:(NSString *)version watchFaceId:(NSString *)watchFaceId;
+
+
+/// init His watch face file
++ (EAFileModel *)eaInitHisWatchFaceFileWithPath:(NSString *)binPath;
++ (EAFileModel *)eaInitHisWatchFaceFileWithData:(NSData *)binData;
+
+
+/// init
++ (EAFileModel *)eaInitHisResWithPath:(NSString *)zipPath;
+
+
+
+/// Deprecated
+/// 弃用
++ (EAFileModel *)allocInitWithPath:(NSString *)binPath otaType:(EAOtaRequestType )otaType version:(NSString *)version DEPRECATED_MSG_ATTRIBUTE("Please use \"eaInitWithPath: otaType: version:\"");
+
+- (BOOL)checkCanOTAWatchFace;
 @end
 
 
 
 
-@interface EAOTAModel : EAFileModel
+@interface EAOTAModel : EABaseModel
 
+
+@property(nonatomic,assign) EAOtaRequestType otaType;
+
+@property(nonatomic,strong) NSString *binPath;
+
+@property(nonatomic,copy) NSString *version;
+
+@property(nonatomic,strong) NSData *binData;
+
+@property(nonatomic,strong) NSString *watchFaceId;
 
  ///当前ota Bin 包大小 单位 bytes）
 @property(nonatomic,assign) NSInteger currentSize;
@@ -90,6 +134,8 @@ NS_ASSUME_NONNULL_BEGIN
  ///序号
 @property(nonatomic,assign) NSInteger number;
 
+/// 海思ResId
+@property(nonatomic,assign) NSInteger hisResId;
 
 
 - (NSData *)getOtaData;
@@ -98,6 +144,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (uint16_t)getCrcValue:(BOOL)isRes andBinPath:(NSString *)binPath;
 
+- (uint16_t )getHisWfCrcValueWithBinPath:(NSString *)binPath;
 /// 初始化OTA更新
 /// @param binPath binPath
 /// @param otaType EAOtaRequestType

@@ -9,8 +9,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// Do not disturb Settings
-/// 免打扰设置
+
 /**
  目前的免打扰模式是这样的：有2种模式设置共同作用的结果
        1是 【手表免打扰】 ===》优先级高，它的任何操作都会 关闭 【App免打扰时间段】的开关。如果需要响应【App免打扰时间段】，那必须设置【App免打扰时间段】的开关为开启状态，同时关闭 手表免打扰。
@@ -34,30 +33,36 @@ NS_ASSUME_NONNULL_BEGIN
             3. Assuming that [Watch Do Not Disturb] is set to off, and [App Do Not Disturb Time Period] is off, no matter whether the time is within the time period set by [App Do Not Disturb Time Period], the Do Not Disturb icon status of the watch is off. There will be a message reminder.
          If you click the Do Not Disturb icon of the watch at this time, the Do Not Disturb status of the watch will turn on, [Watch Do Not Disturb] will turn on, [App Do Not Disturb Time Period] will turn off, and there will be no message reminders
   */
+
+/// id = 13: Do not disturb Settings
+/// id = 13: 免打扰设置
 @interface EANotDisturbModel : EABaseModel
 
-/// EADeviceOpsType
-/// 开关： 0关闭 1打开
+/// App set DND time range switch: 0 off 1 On
+/// App设置免打扰时间段开关： 0关闭 1打开
 @property(nonatomic, assign) NSInteger sw;
 
 /// begin hour
-///  开始时间 ：小时
+/// 开始时间 ：小时
 @property(nonatomic, assign) NSInteger beginHour;
 
 /// begin minute
-///  开始时间 ：分钟
+/// 开始时间 ：分钟
 @property(nonatomic, assign) NSInteger beginMinute;
 
 /// end hour
-///  结束时间 ：小时
+/// 结束时间 ：小时
 @property(nonatomic, assign) NSInteger endHour;
 
 /// end minute
-///  结束时间 ：分钟
+/// 结束时间 ：分钟
 @property(nonatomic, assign) NSInteger endMinute;
 
+/// 手表免打扰开关： 0关闭 1打开
+/// Watch do not disturb switch: 0 off 1 On
+@property(nonatomic, assign) NSInteger watchSw;
 
-+ (EANotDisturbModel *)getModelByData:(NSData *)data;
+
 
 
 @end

@@ -14,9 +14,11 @@ import com.example.easdktool.db.DataManager;
 import com.example.easdktool.db.GpsData;
 import com.example.easdktool.db.HabitData;
 import com.example.easdktool.db.HeartData;
+import com.example.easdktool.db.MotionHeart;
 import com.example.easdktool.db.MultiData;
 import com.example.easdktool.db.RestingHeartData;
 import com.example.easdktool.db.SleepData;
+import com.example.easdktool.db.SleepScore;
 import com.example.easdktool.db.StepFreqData;
 import com.example.easdktool.db.StepPaceData;
 import com.example.easdktool.db.StressData;
@@ -53,6 +55,8 @@ public class QueryMotionData {
     final int kEADataInfoTypeRestingHeartRateData = 3010;
     /* 习惯数据 */
     final int EADataInfoTypeHabitTrackerData = 3011;
+    final int kEADataInfoTypeSleepScoreData = 3012;
+    final int kEADataInfoTypeMotionHeartData = 3013;
     final String kQueryBigWatchData = "QueryBigWatchData";
     int type;
     Handler mHandler;
@@ -265,6 +269,37 @@ public class QueryMotionData {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("value", dataList);
                 jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
+                sendBigWatchData(jsonObject);
+            }
+        }else if (type==11){
+            List<SleepScore> sleepScoreList = DataManager.getInstance().querySleepScoreData();
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            if (sleepScoreList != null && !sleepScoreList.isEmpty()) {
+                for (int i = 0; i < sleepScoreList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("startTime", sleepScoreList.get(i).getStartTime());
+                    map.put("endTime", sleepScoreList.get(i).getEndTime());
+                    map.put("score", sleepScoreList.get(i).getSleep_score());
+                    dataList.add(map);
+                }
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("value", dataList);
+                jsonObject.put("dataType", kEADataInfoTypeSleepScoreData);
+                sendBigWatchData(jsonObject);
+            }
+        }else if (type==12){
+            List<MotionHeart> motionHeartList = DataManager.getInstance().queryMotionHeartData();
+            List<Map<String, Object>> dataList = new ArrayList<>();
+            if (motionHeartList != null && !motionHeartList.isEmpty()) {
+                for (int i = 0; i < motionHeartList.size(); i++) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("stampTime", motionHeartList.get(i).getStampTime());
+                    map.put("motionHr", motionHeartList.get(i).getMotionHr());
+                    dataList.add(map);
+                }
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("value", dataList);
+                jsonObject.put("dataType", kEADataInfoTypeMotionHeartData);
                 sendBigWatchData(jsonObject);
             }
         }

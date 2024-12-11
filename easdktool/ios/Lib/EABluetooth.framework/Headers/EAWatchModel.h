@@ -6,13 +6,14 @@
 //
 
 #import <EABluetooth/EABaseModel.h>
-
+#import <EABluetooth/EARespondModel.h>
+#import <EABluetooth/EARequestModel.h>
 NS_ASSUME_NONNULL_BEGIN
 
 
 
-/// Watch the information
-/// 手表信息
+/// id = 3: Watch the information
+/// id = 3: 手表信息
 @interface EAWatchModel : EABaseModel
 
 /// Watch SN no.
@@ -26,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// firmware version
 /// 固件版本：
 @property(nonatomic, copy) NSString *firmwareVersion;
+
+/** 客户版本号(如果有值，则用于显示给客户)：最多支持32字节的utf8，字符串（大小详见对应OPTIONS文件） */
+@property(nonatomic,  copy) NSString *customFirmwareVersion;
 
 /// Whether the binding
 /// 是否绑定
@@ -78,17 +82,37 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) EAScreenType screenType;
 
 /// 不支持sn号绑定手表: 0:支持 1:不支持
+/// Binding a watch sn is not supported: 0: The watch SN is supported. 1: The watch SN is not supported
 @property(nonatomic, assign) NSInteger notSupportSn;
 
 /// 最大支持表盘内存大小（存储空间,单位KB）
+/// Maximum supported dial memory size (storage space, unit KB)
 @property(nonatomic, assign) NSInteger maxWatchSize;
 
-/// 获取手表相关信息
-/// @param data 数据流
-+ (EAWatchModel *)getModelByData:(NSData *)data;
+/// LCD像素类型: 0: RGB565 1: GXGPU_RGB888
+/// LCD pixel type: 0: RGB565 1: GXGPU_RGB888 2: ARGB8565(杰理) 
+@property(nonatomic, assign) NSInteger lcdPixelType;
+
+
+/// 支持闹钟数量：0:默认支持10个  n:支持n个
+/// Number of alarms supported: 0: 10 alarms are supported by default. n: n alarms are supported
+@property(nonatomic, assign) NSInteger numOfAlarmSupported;
+
+/// 支持日程数量：0:默认支持10个  n:支持n个
+/// Number of supported schedules: 0: 10 by default n: n supported
+@property(nonatomic, assign) NSInteger numOfScheduleSupported;
 
 
 
+
+/// apollo
+@property(nonatomic,readonly) NSString *apbVerion;
+
+/// res
+@property(nonatomic,readonly) NSString *resVerion;
+
+/// number version  -> x.x.x
+@property(nonatomic,readonly) NSString *numberVersion;
 
 @end
 

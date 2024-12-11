@@ -32,6 +32,8 @@
 #define kEAGetBigWatchData          @"EAGetBigWatchData"    // 获取手表大数据
 #define kEAOperationWatch           @"EAOperationWatch"     // 操作手表
 #define kEAOTA                      @"EAOTA"                // ota
+#define kEACustomWatchface          @"EACustomWatchface"    // 自定义表盘
+#define kEAOTACustomWatchface       @"EAOTACustomWatchface" // 自定义表盘
 #define kEALog                      @"EAShowLog"            // log
 #define kEASyncPhoneInfoToWacth     @"EASyncPhoneInfoToWacth"// 设置手表信息
 #define kEAScanWacth                @"EAScanWacth"          // 搜索手表
@@ -52,7 +54,7 @@
 #define kProgress                   @"Progress"
 #define kScanWacthResponse          @"ScanWacthResponse"
 #define kOperationWacthResponse     @"OperationWacthResponse"
-
+#define kCustomWatchFaceResponse    @"CustomWatchFaceResponse"
 
 /// MARK: - 枚举
 //绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对
@@ -529,7 +531,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                     if ([startDate containsString:@"-"] && startDate.length == 10 && (keepDay >=4 || keepDay<=10) && (cycleDay >=20 || cycleDay <=45)) {
                         
-                        EAMenstruals *model = [EAMenstruals allocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay];
+//                        EAMenstruals *model = [EAMenstruals allocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay];
+                        EAMenstruals *model = [EAMenstruals eaAllocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay judgeCurrentTime:NO];
                         [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                             
                             [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -584,6 +587,46 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 case  EADataInfoTypeMonitorReminder:{
                     
                     EAMonitorReminder *model = [EAMonitorReminder modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
+                case  EADataInfoTypeTelephoneBook:{
+                    
+                    EATelephoneBookModel *model = [EATelephoneBookModel modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
+                case  EADataInfoTypeSleepBloodOxygenMonitor:{
+                    
+                    EASleepBloodOxygenMonitor *model = [EASleepBloodOxygenMonitor modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
+                case  EADataInfoTypeStressMonitor:{
+                    
+                    EAStressMonitor *model = [EAStressMonitor modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
+                case  EADataInfoTypeVibrateIntensity:{
+                    
+                    EAVibrateIntensity *model = [EAVibrateIntensity modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
+                case  EADataInfoTypeMenstrualReminder:{
+                    
+                    EAMenstrualReminder *model = [EAMenstrualReminder modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
@@ -660,6 +703,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         // 判断设置类型
         if (![self checkArgumentName:@"otas" inArguments:arguments]) {
             
+            [_channel invokeMethod:kArgumentsError arguments:@"otas not null"];
             return;
         }
         
@@ -672,6 +716,92 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             
             [_channel invokeMethod:kArgumentsError arguments:@"otas not null"];
         }
+    }
+    else if ([call.method isEqualToString:kEACustomWatchface]) {
+        
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        
+        NSString *bgImagePath = arguments[@"bgImagePath"];
+        UIImage *bgImage = [UIImage imageWithContentsOfFile:bgImagePath];
+        if (!bgImage) {
+            [_channel invokeMethod:kArgumentsError arguments:@"bgImagePath not null"];
+            return;
+        }
+       
+        BOOL isNumberWf = [arguments[@"isNumberWf"] boolValue];
+        BOOL getPreviewImage = [arguments[@"getPreviewImage"] boolValue];
+        NSInteger pointerColorType = [arguments[@"pointerColorType"] integerValue];
+        
+        if (isNumberWf) {
+            
+            NSString *colorHex = arguments[@"numbeColorHex"];
+            UIColor *color = [UIColor colorWithHexString:colorHex];
+            if (!color) {
+                [_channel invokeMethod:kArgumentsError arguments:@"numbeColorHex is error"];
+                return;
+            }
+            
+            if (getPreviewImage) {
+                
+                UIImage *thumbnail = [EAMakeWatchFaceManager eaGetDefaultNumberThumbnailWithImage:bgImage color:color];
+                [_channel invokeMethod:kCustomWatchFaceResponse arguments:UIImageJPEGRepresentation(thumbnail, 1)];
+            }
+            else
+            {
+                [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color];
+//                [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color watchFaceId:@"" progress:^(CGFloat progress) {
+//                    
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(progress)];
+//                    
+//                } complete:^(BOOL succ, NSError * _Nullable error) {
+//                    
+//                    if (succ) {
+//                        
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(1)];
+//                    }
+//                    else
+//                    {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(-1)];
+//                    }
+//                }];
+            }
+     
+        }
+        else
+        {
+            if (getPreviewImage) {
+                UIImage *thumbnail = [EAMakeWatchFaceManager eaGetDefaultPointerThumbnailWithImage:bgImage colorType:(pointerColorType == 0 ? EACWFTimerColorTypeBlack : EACWFTimerColorTypeWhite)];
+                [_channel invokeMethod:kCustomWatchFaceResponse arguments:UIImageJPEGRepresentation(thumbnail, 1)];
+            }
+            else
+            {
+                [EAMakeWatchFaceManager eaOtaDefaultPointerWatchFaceWithImage:bgImage colorType:(pointerColorType == 0 ? EACWFTimerColorTypeBlack : EACWFTimerColorTypeWhite)];
+//                [EAMakeWatchFaceManager eaOtaDefaultPointerWatchFaceWithImage:bgImage colorType:(pointerColorType == 0 ? EACWFTimerColorTypeBlack : EACWFTimerColorTypeWhite) watchFaceId:@"" progress:^(CGFloat progress) {
+//                    
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(progress)];
+//                    
+//                } complete:^(BOOL succ, NSError * _Nullable error) {
+//                    
+//                    if (succ) {
+//                        
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(1)];
+//                    }
+//                    else
+//                    {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:@(-1)];
+//                    }
+//                }];
+            }
+        }
+        
+      
+        
     }
     else{
         
@@ -948,3 +1078,30 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 
 @end
+
+/**
+ 
+ import 'package:flutter/services.dart';
+ import 'package:path_provider/path_provider.dart';
+  
+ // 假设这是你的iOS插件通道
+ const platform = MethodChannel('plugins.flutter.io/my_plugin');
+  
+ Future<void> getImageAndPassToPlugin(String imageName) async {
+   // 获取图片目录
+   final directory = await getApplicationDocumentsDirectory();
+   final imagePath = '${directory.path}/$imageName';
+  
+   // 传递图片路径给iOS插件
+   try {
+     final Map<String, dynamic> params = <String, dynamic>{
+       'imagePath': imagePath,
+     };
+     await platform.invokeMethod('passImagePath', params);
+   } on PlatformException catch (e) {
+     print("Failed to pass image path: '${e.message}'.");
+   }
+ }
+
+ 
+ */

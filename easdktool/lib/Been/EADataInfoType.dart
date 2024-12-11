@@ -70,13 +70,21 @@ const int kEADataInfoTypeHabitTrackerRespond = 39;
 /*运动显示值 */
 const int kEADataInfoTypeSportShowData = 40;
 /*获取蓝牙配对状态 */
-const int EADataInfoTypeBlePairState = 41;
+const int kEADataInfoTypeBlePairState = 41;
+
+// TelephoneBook
+const int kEADataInfoTypeTelephoneBook = 42;
+const int kEADataInfoTypeReadTelephoneBook = 43;
 
 /// 提醒事件监测
 /// Monitor reminder event
-const int EADataInfoTypeMonitorReminder = 45;
+const int kEADataInfoTypeMonitorReminder = 45;
 
-
+const int kEADataInfoTypeBloodOxygenMonitor = 50;
+const int kEADataInfoTypeStressMonitor = 51;
+const int kEADataInfoTypeVibrateIntensity = 53;
+const int kEADataInfoTypeMenstrualReminder = 55;
+// const int kEADataInfoTypeSportHrWarning = 57;
 
 /* 手表操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;
@@ -107,6 +115,10 @@ const int kEADataInfoTypeStepPaceData = 3009;
 const int kEADataInfoTypeRestingHeartRateData = 3010;
 /* 习惯数据 */
 const int EADataInfoTypeHabitTrackerData = 3011;
+
+const int EADataInfoTypeSleepScoreData = 3012;
+const int EADataInfoTypeSportHrData = 3013;
+
 /* OTA命令 */
 const int kEADataInfoTypeOTARequest = 9001;
 /* OTA命令回应 */

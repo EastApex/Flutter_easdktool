@@ -1,5 +1,7 @@
 package com.example.easdktool;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.apex.bluetooth.enumeration.CommonAction;
 import com.apex.bluetooth.enumeration.HabitIcon;
@@ -7,8 +9,11 @@ import com.apex.bluetooth.enumeration.HabitState;
 import com.apex.bluetooth.enumeration.PersonHand;
 import com.apex.bluetooth.enumeration.TimeZone;
 import com.apex.bluetooth.enumeration.UnitFormat;
+import com.apex.bluetooth.enumeration.VibrationIntensity;
 import com.apex.bluetooth.model.EABleAncsSw;
+import com.apex.bluetooth.model.EABleAutoStressMonitor;
 import com.apex.bluetooth.model.EABleBindInfo;
+import com.apex.bluetooth.model.EABleContact;
 import com.apex.bluetooth.model.EABleDailyGoal;
 import com.apex.bluetooth.model.EABleDevUnit;
 import com.apex.bluetooth.model.EABleDeviceLanguage;
@@ -20,10 +25,12 @@ import com.apex.bluetooth.model.EABleMenuPage;
 import com.apex.bluetooth.model.EABleMonitorReminder;
 import com.apex.bluetooth.model.EABleMusicRespond;
 import com.apex.bluetooth.model.EABleNotDisturb;
+import com.apex.bluetooth.model.EABlePeriodReminder;
 import com.apex.bluetooth.model.EABlePersonInfo;
 import com.apex.bluetooth.model.EABlePhysiologyData;
 import com.apex.bluetooth.model.EABleReminder;
 import com.apex.bluetooth.model.EABleSedentariness;
+import com.apex.bluetooth.model.EABleSleepBloodSwitch;
 import com.apex.bluetooth.model.EABleSocialContact;
 import com.apex.bluetooth.model.EABleSyncTime;
 import com.apex.bluetooth.model.EABleWatchFace;
@@ -146,6 +153,40 @@ public class String2Object {
         } else if (language == 18) {
             eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.swedish);
         } else if (language == 19) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.osmanli);
+        } else if (language == 20) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.czech);
+        } else if (language == 21) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.indonesia);
+        } else if (language == 22) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.melayu);
+        } else if (language == 23) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.farsi);
+        } else if (language == 24) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.vietnamese);
+        } else if (language == 25) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.belarusian);
+        } else if (language == 26) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.hungarian);
+        } else if (language == 27) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.hindi);
+        } else if (language == 28) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.ukrainian);
+        } else if (language == 29) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.romanian);
+        } else if (language == 30) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.moldovan);
+        } else if (language == 31) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.bengali);
+        } else if (language == 32) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.slovak);
+        } else if (language == 33) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.danish);
+        } else if (language == 34) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.norwegian);
+        } else if (language == 35) {
+            eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.finnish);
+        } else if (language == 36) {
             eaBleDeviceLanguage.setE_type(EABleDeviceLanguage.LanguageType.unknown);
         }
         return eaBleDeviceLanguage;
@@ -171,6 +212,7 @@ public class String2Object {
         eaBleNotDisturb.setBegin_minute(map.get("beginMinute"));
         eaBleNotDisturb.setEnd_hour(map.get("endHour"));
         eaBleNotDisturb.setEnd_minute(map.get("endMinute"));
+        eaBleNotDisturb.setWatch_sw(map.get("watchNotDisturbSw"));
         return eaBleNotDisturb;
     }
 
@@ -231,6 +273,12 @@ public class String2Object {
         eaBleSedentariness.setInterval(map.get("interval"));
         eaBleSedentariness.setStep_threshold(map.get("stepThreshold"));
         eaBleSedentariness.setWeek_cycle_bit(map.get("weekCycleBit"));
+        eaBleSedentariness.setNoon_begin_hour(map.get("noonBeginHour"));
+        eaBleSedentariness.setNoon_begin_minute(map.get("noonBeginMinute"));
+        eaBleSedentariness.setNoon_end_hour(map.get("noonEndHour"));
+        eaBleSedentariness.setNoon_begin_minute(map.get("noonEndMinute"));
+        eaBleSedentariness.setNoon_sw(map.get("noonSw"));
+        eaBleSedentariness.setSw(map.get("sw"));
         return eaBleSedentariness;
     }
 
@@ -645,6 +693,10 @@ public class String2Object {
                     typeList.add(EABleMenuPage.MenuType.page_sleep);
                 } else if (menu == 7) {
                     typeList.add(EABleMenuPage.MenuType.page_menstrual_cycle);
+                } else if (menu == 8) {
+                    typeList.add(EABleMenuPage.MenuType.page_camera);
+                } else if (menu == 9) {
+                    typeList.add(EABleMenuPage.MenuType.page_workout);
                 }
             }
         }
@@ -677,9 +729,9 @@ public class String2Object {
 
 
         EABlePhysiologyData eaBlePhysiologyData = new EABlePhysiologyData();
-        eaBlePhysiologyData.startTime = startTime;
-        eaBlePhysiologyData.cycleTime = (int) map.get("cycleDay");
-        eaBlePhysiologyData.keepTime = (int) map.get("keepDay");
+        eaBlePhysiologyData.setStartTime(startTime);
+        eaBlePhysiologyData.setCycleTime((int) map.get("cycleDay"));
+        eaBlePhysiologyData.setKeepTime((int) map.get("keepDay"));
         return eaBlePhysiologyData;
     }
 
@@ -745,7 +797,7 @@ public class String2Object {
                 monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.washHands);
                 break;
             case 2:
-                monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.sedentary);
+                monitorReminder.setEaBleMonitorType(EABleMonitorReminder.EABleMonitorType.takeMedicine);
                 break;
             default:
                 break;
@@ -761,6 +813,79 @@ public class String2Object {
         monitorReminder.setCup((int) map.get("cup"));
         monitorReminder.setStep_threshold((int) map.get("stepThreshold"));
         return monitorReminder;
+    }
+
+    public List<EABleContact> string2Contacts(String jsonString) {
+        List<EABleContact> contacts = new ArrayList<>();
+        if (!TextUtils.isEmpty(jsonString)) {
+            Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+            if (map != null) {
+                List<JSONObject> wArray = (List<JSONObject>) map.get("sIndexArray");
+                if (wArray != null && !wArray.isEmpty()) {
+                    for (int i = 0; i < wArray.size(); i++) {
+                        JSONObject jsonObject = wArray.get(i);
+                        if (jsonObject != null) {
+                            EABleContact eaBleContact = new EABleContact();
+                            eaBleContact.setContactName(jsonObject.getString("name"));
+                            eaBleContact.setContactNum(jsonObject.getString("num"));
+                            contacts.add(eaBleContact);
+                        }
+                    }
+                }
+
+            }
+        }
+        return contacts;
+
+    }
+
+    public EABleSleepBloodSwitch string2SleepSpo2(String jsonString) {
+        Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
+        EABleSleepBloodSwitch eaBleSleepBloodSwitch = new EABleSleepBloodSwitch();
+        eaBleSleepBloodSwitch.setInterval(map.get("interval"));
+        eaBleSleepBloodSwitch.setSw(map.get("sw"));
+        return eaBleSleepBloodSwitch;
+    }
+
+    public EABleAutoStressMonitor string2Stress(String jsonString) {
+        Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
+        EABleAutoStressMonitor autoStressMonitor = new EABleAutoStressMonitor();
+        autoStressMonitor.setIntervalTime(map.get("interval"));
+        autoStressMonitor.setSw(map.get("sw"));
+        return autoStressMonitor;
+    }
+
+    public VibrationIntensity string2Vibrate(String jsonString) {
+        Map<String, Integer> map = JSONObject.parseObject(jsonString, Map.class);
+        int type = map.get("eVibrateIntensity");
+        if (type == 0) {
+            return VibrationIntensity.light;
+        } else if (type == 1) {
+            return VibrationIntensity.medium;
+        } else if (type == 2) {
+            return VibrationIntensity.strong;
+        } else {
+            return VibrationIntensity.not_vibrate;
+        }
+    }
+
+    public EABlePeriodReminder string2PeriodReminder(String jsonString) {
+        Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
+        boolean pStart = (boolean) map.get("menstrualBeginSw");
+        boolean pEnd = (boolean) map.get("menstrualEndSw");
+        boolean eStart = (boolean) map.get("easyPregnancyBeginSw");
+        boolean eEnd = (boolean) map.get("easyPregnancyEndSw");
+        boolean oStart = (boolean) map.get("ovulationDaySw");
+        EABlePeriodReminder eaBlePeriodReminder = new EABlePeriodReminder();
+        eaBlePeriodReminder.setPeriodStart(pStart ? 1 : 0);
+        eaBlePeriodReminder.setPeriodEnd(pEnd ? 1 : 0);
+        eaBlePeriodReminder.setPregnancyStart(eStart ? 1 : 0);
+        eaBlePeriodReminder.setPregnancyEnd(eEnd ? 1 : 0);
+        eaBlePeriodReminder.setOvulation_day_sw(oStart ? 1 : 0);
+        eaBlePeriodReminder.setReminderDay((Integer) map.get("menstrualReminderDaysBefore"));
+        eaBlePeriodReminder.setReminderHour((Integer) map.get("menstrualReminderHours"));
+        eaBlePeriodReminder.setReminderMinute((Integer) map.get("menstrualReminderMinutes"));
+        return eaBlePeriodReminder;
     }
 
     public EABleBindInfo string2BindInfo(String jsonString) {
@@ -889,7 +1014,78 @@ public class String2Object {
             return EABleSocialContact.SocialContactType.twitch;
         } else if (type == 48) {
             return EABleSocialContact.SocialContactType.uber_eats;
-        } else {
+        }/**
+        else if (type == 49) {
+            return EABleSocialContact.SocialContactType.doordash;
+        } else if (type == 50) {
+            return EABleSocialContact.SocialContactType.grubhub;
+        } else if (type == 51) {
+            return EABleSocialContact.SocialContactType.instacart;
+        } else if (type == 52) {
+            return EABleSocialContact.SocialContactType.postmates;
+        } else if (type == 53) {
+            return EABleSocialContact.SocialContactType.zoom;
+        } else if (type == 54) {
+            return EABleSocialContact.SocialContactType.uber;
+        } else if (type == 55) {
+            return EABleSocialContact.SocialContactType.apple_email;
+        } else if (type == 56) {
+            return EABleSocialContact.SocialContactType.ding_talk;
+        } else if (type == 57) {
+            return EABleSocialContact.SocialContactType.alipay;
+        } else if (type == 58) {
+            return EABleSocialContact.SocialContactType.true_caller;
+        } else if (type == 59) {
+            return EABleSocialContact.SocialContactType.hotstar;
+        } else if (type == 60) {
+            return EABleSocialContact.SocialContactType.phone_pe;
+        } else if (type == 61) {
+            return EABleSocialContact.SocialContactType.zomato;
+        } else if (type == 62) {
+            return EABleSocialContact.SocialContactType.dailyhunt;
+        } else if (type == 63) {
+            return EABleSocialContact.SocialContactType.inshorts;
+        } else if (type == 64) {
+            return EABleSocialContact.SocialContactType.jio_tv;
+        } else if (type == 65) {
+            return EABleSocialContact.SocialContactType.yahoo;
+        } else if (type == 66) {
+            return EABleSocialContact.SocialContactType.paytm;
+        } else if (type == 67) {
+            return EABleSocialContact.SocialContactType.swiggy;
+        } else if (type == 68) {
+            return EABleSocialContact.SocialContactType.calendar;
+        } else if (type == 69) {
+            return EABleSocialContact.SocialContactType.wynk_music;
+        } else if (type == 70) {
+            return EABleSocialContact.SocialContactType.gaana;
+        } else if (type == 71) {
+            return EABleSocialContact.SocialContactType.flipkart;
+        } else if (type == 72) {
+            return EABleSocialContact.SocialContactType.netflix;
+        } else if (type == 73) {
+            return EABleSocialContact.SocialContactType.amazon_prime;
+        } else if (type == 74) {
+            return EABleSocialContact.SocialContactType.google_pay;
+        } else if (type == 75) {
+            return EABleSocialContact.SocialContactType.ola;
+        } else if (type == 76) {
+            return EABleSocialContact.SocialContactType.zalo;
+        } else if (type == 77) {
+            return EABleSocialContact.SocialContactType.book_my_show;
+        } else if (type == 78) {
+            return EABleSocialContact.SocialContactType.make_my_trip;
+        } else if (type == 79) {
+            return EABleSocialContact.SocialContactType.fastrack_reflex_word;
+        } else if (type == 80) {
+            return EABleSocialContact.SocialContactType.yt_music;
+        } else if (type == 81) {
+            return EABleSocialContact.SocialContactType.dunzo;
+        } else if (type == 82) {
+            return EABleSocialContact.SocialContactType.google_drive;
+        } else if (type == 83) {
+            return EABleSocialContact.SocialContactType.titan_smart_word;
+        }*/ else {
             return EABleSocialContact.SocialContactType.unknow;
         }
     }

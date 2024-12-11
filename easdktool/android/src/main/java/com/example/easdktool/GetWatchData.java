@@ -6,11 +6,15 @@ import android.os.Looper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.apex.bluetooth.callback.AttentionCallback;
+import com.apex.bluetooth.callback.BTMacCallback;
 import com.apex.bluetooth.callback.BatterInfoCallback;
+import com.apex.bluetooth.callback.BtStatusCallback;
 import com.apex.bluetooth.callback.CalorieSwitchCallback;
 import com.apex.bluetooth.callback.CombinationCallback;
+import com.apex.bluetooth.callback.DevicePwdCallback;
 import com.apex.bluetooth.callback.DistanceUnitCallback;
 import com.apex.bluetooth.callback.DonDisturbCallback;
+import com.apex.bluetooth.callback.FeaturesCallback;
 import com.apex.bluetooth.callback.GoalCallback;
 import com.apex.bluetooth.callback.HabitCallback;
 import com.apex.bluetooth.callback.HeartCheckCallback;
@@ -19,46 +23,68 @@ import com.apex.bluetooth.callback.InfoPushCallback;
 import com.apex.bluetooth.callback.LanguageCallback;
 import com.apex.bluetooth.callback.MenuCallback;
 import com.apex.bluetooth.callback.MonitorReminderCallback;
+import com.apex.bluetooth.callback.MotionAlarmHrCallback;
+import com.apex.bluetooth.callback.MsgContentCallback;
+import com.apex.bluetooth.callback.PeriodReminderCallback;
 import com.apex.bluetooth.callback.PersonInfoCallback;
 import com.apex.bluetooth.callback.RaiseHandBrightScreenCallback;
+import com.apex.bluetooth.callback.ReadBookListCallback;
 import com.apex.bluetooth.callback.RemindCallback;
 import com.apex.bluetooth.callback.RestScreenCallback;
 import com.apex.bluetooth.callback.ScreenBrightnessCallback;
 import com.apex.bluetooth.callback.SedentaryCheckCallback;
+import com.apex.bluetooth.callback.SleepBloodMonitorCallback;
 import com.apex.bluetooth.callback.SleepCheckCallback;
+import com.apex.bluetooth.callback.SosContactCallback;
+import com.apex.bluetooth.callback.StocksCallback;
+import com.apex.bluetooth.callback.StressMonitorCallback;
 import com.apex.bluetooth.callback.TimeCallback;
 import com.apex.bluetooth.callback.TodayTotalDataCallback;
 import com.apex.bluetooth.callback.UnitCallback;
+import com.apex.bluetooth.callback.VibrateCallback;
 import com.apex.bluetooth.callback.WatchFaceCallback;
 import com.apex.bluetooth.callback.WatchInfoCallback;
 import com.apex.bluetooth.callback.WeightUnitCallback;
 import com.apex.bluetooth.core.EABleManager;
 import com.apex.bluetooth.enumeration.QueryWatchInfoType;
+import com.apex.bluetooth.enumeration.VibrationIntensity;
 import com.apex.bluetooth.model.EABleAncsSw;
 import com.apex.bluetooth.model.EABleAutoCheckSleep;
+import com.apex.bluetooth.model.EABleAutoStressMonitor;
 import com.apex.bluetooth.model.EABleBatInfo;
 import com.apex.bluetooth.model.EABleCombination;
+import com.apex.bluetooth.model.EABleContact;
 import com.apex.bluetooth.model.EABleDailyGoal;
 import com.apex.bluetooth.model.EABleDevUnit;
 import com.apex.bluetooth.model.EABleDeviceLanguage;
+import com.apex.bluetooth.model.EABleDevicePwd;
 import com.apex.bluetooth.model.EABleDistanceFormat;
+import com.apex.bluetooth.model.EABleFeatures;
 import com.apex.bluetooth.model.EABleGesturesBrightScreen;
 import com.apex.bluetooth.model.EABleHabit;
 import com.apex.bluetooth.model.EABleHr;
 import com.apex.bluetooth.model.EABleInfoPush;
 import com.apex.bluetooth.model.EABleMenuPage;
 import com.apex.bluetooth.model.EABleMonitorReminder;
+import com.apex.bluetooth.model.EABleMotionAlarmHr;
 import com.apex.bluetooth.model.EABleNotDisturb;
+import com.apex.bluetooth.model.EABlePeriodReminder;
 import com.apex.bluetooth.model.EABlePersonInfo;
 import com.apex.bluetooth.model.EABleReminder;
 import com.apex.bluetooth.model.EABleSedentariness;
+import com.apex.bluetooth.model.EABleSleepBloodSwitch;
+import com.apex.bluetooth.model.EABleSoSContact;
+import com.apex.bluetooth.model.EABleStocks;
 import com.apex.bluetooth.model.EABleSyncTime;
 import com.apex.bluetooth.model.EABleWatchFace;
 import com.apex.bluetooth.model.EABleWatchInfo;
 import com.apex.bluetooth.model.EABleWeightFormat;
 import com.apex.bluetooth.model.QueryInfo;
 import com.apex.bluetooth.model.TodayTotalData;
+import com.apex.bluetooth.utils.LogUtils;
 import com.example.easdktool.been.ReminderItem;
+
+import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +94,7 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 
 public class GetWatchData {
+    final String TAG=this.getClass().getSimpleName();
     private MethodChannel channel;
     final String kGetWatchResponse = "GetWatchResponse";
 
@@ -75,7 +102,7 @@ public class GetWatchData {
         this.channel = channel;
     }
 
-    public void getWatchInfo() {
+    public void getWatchInfo() {//获取手表信息
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
             @Override
             public void watchInfo(final EABleWatchInfo eaBleWatchInfo) {
@@ -91,7 +118,7 @@ public class GetWatchData {
         });
     }
 
-    public void getUserInfo() {
+    public void getUserInfo() {//获取用户信息
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.user_info, new PersonInfoCallback() {
             @Override
             public void personInfo(final EABlePersonInfo eaBlePersonInfo) {
@@ -106,7 +133,7 @@ public class GetWatchData {
         });
     }
 
-    public void getSyncTime() {
+    public void getSyncTime() {//获取手表时间
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sync_time, new TimeCallback() {
             @Override
             public void syncTime(final EABleSyncTime eaBleSyncTime) {
@@ -121,7 +148,7 @@ public class GetWatchData {
         });
     }
 
-    public void getOffTime() {
+    public void getOffTime() {//获取息屏时间
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.black_screen_time, new RestScreenCallback() {
             @Override
             public void restScreen(int i) {
@@ -135,7 +162,7 @@ public class GetWatchData {
         });
     }
 
-    public void getScreenLight() {
+    public void getScreenLight() {//获取手表屏幕亮度
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.screen_light, new ScreenBrightnessCallback() {
             @Override
             public void screenBrightness(int i) {
@@ -148,7 +175,7 @@ public class GetWatchData {
         });
     }
 
-    public void getBatteryInfo() {
+    public void getBatteryInfo() {//获取手表电量信息
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.battery_info, new BatterInfoCallback() {
             @Override
             public void batterInfo(final EABleBatInfo eaBleBatInfo) {
@@ -162,12 +189,13 @@ public class GetWatchData {
         });
     }
 
-    public void getLanguageInfo() {
+    public void getLanguageInfo() {//获取设备语言信息
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.language, new LanguageCallback() {
             @Override
             public void languageInfo(final EABleDeviceLanguage eaBleDeviceLanguage) {
-                Map<String, Integer> map = new HashMap();
-                map.put("eType", eaBleDeviceLanguage.getE_type().getValue());
+                //   Map<String, Integer> map = new HashMap();
+                //  map.put("eType", eaBleDeviceLanguage.getE_type().getValue());
+                Map map = new Object2Map().language2Map(eaBleDeviceLanguage);
                 new Return2Flutter(channel).sendWatchDataWithMap(map, 10);
             }
 
@@ -462,6 +490,203 @@ public class GetWatchData {
             public void todayData(final TodayTotalData todayTotalData) {
                 Map map = new Object2Map().today2Map(todayTotalData);
                 new Return2Flutter(channel).sendWatchDataWithMap(map, 40);
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getContact() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.bookList, new ReadBookListCallback() {
+            @Override
+            public void bookList(List<EABleContact> list) {
+                Map map = new Object2Map().contact(list);
+                new Return2Flutter(channel).sendWatchDataWithMap(map, 43);
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getFunctionList() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.features, new FeaturesCallback() {
+            @Override
+            public void featuresList(EABleFeatures eaBleFeatures) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getSleepSpo2Check() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sleep_blood_monitor, new SleepBloodMonitorCallback() {
+            @Override
+            public void sleepBloodMonitor(EABleSleepBloodSwitch eaBleSleepBloodSwitch) {
+                LogUtils.i(TAG,"查询出来的eaBleSleepBloodSwitch:"+JSONObject.toJSONString(eaBleSleepBloodSwitch));
+                Map map = new Object2Map().sleepSpo2Check(eaBleSleepBloodSwitch);
+                new Return2Flutter(channel).sendWatchDataWithMap(map, 50);
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getStressCheck() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.stress_monitor, new StressMonitorCallback() {
+            @Override
+            public void stressSwitch(EABleAutoStressMonitor eaBleAutoStressMonitor) {
+                LogUtils.i(TAG,"查询出来的eaBleAutoStressMonitor:"+JSONObject.toJSONString(eaBleAutoStressMonitor));
+                Map map = new Object2Map().stressCheck(eaBleAutoStressMonitor);
+                new Return2Flutter(channel).sendWatchDataWithMap(map, 51);
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getVibrateMode() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.vibrate_mode, new VibrateCallback() {
+            @Override
+            public void vibrateMode(VibrationIntensity vibrationIntensity) {
+                LogUtils.i(TAG,"查询出来的vibrationIntensity:"+JSONObject.toJSONString(vibrationIntensity.getValue()));
+                Map<String, Integer> map = new HashMap();
+                map.put("eVibrateIntensity", vibrationIntensity.getValue());
+                new Return2Flutter(channel).sendWatchDataWithMap(map, 53);
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getPeriodReminder() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.period_reminder, new PeriodReminderCallback() {
+            @Override
+            public void periodReminderInfo(EABlePeriodReminder eaBlePeriodReminder) {
+                LogUtils.i(TAG,"查询出来的eaBlePeriodReminder:"+JSONObject.toJSONString(eaBlePeriodReminder));
+                Map map = new Object2Map().periodReminder(eaBlePeriodReminder);
+                new Return2Flutter(channel).sendWatchDataWithMap(map,55);
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getMotionHeartAlert() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.motion_heart_alarm, new MotionAlarmHrCallback() {
+            @Override
+            public void alarmHr(EABleMotionAlarmHr eaBleMotionAlarmHr) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getSosContact() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.sos_contact, new SosContactCallback() {
+            @Override
+            public void sosContact(EABleSoSContact eaBleSoSContact) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getBtStatus() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.bt_status, new BtStatusCallback() {
+            @Override
+            public void btStatus(int i) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getCustomReplayInfo() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.msgContent, new MsgContentCallback() {
+            @Override
+            public void msgInfo(List<String> list) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+
+    }
+
+    public void getBtAddress() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.bk_mac, new BTMacCallback() {
+            @Override
+            public void macData(String s) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getStockInfo() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.stocks, new StocksCallback() {
+            @Override
+            public void stocksInfo(EABleStocks eaBleStocks) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+    }
+
+    public void getLockScreenPassword() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.device_pwd, new DevicePwdCallback() {
+            @Override
+            public void devicePwd(EABleDevicePwd eaBleDevicePwd) {
 
             }
 

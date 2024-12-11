@@ -9,6 +9,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// disuse
+// 弃用
+/// id = 35: 血压值校准
 @interface EABloodPressureModel : EABaseModel
 
 
@@ -19,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger lowBloodVal;
 
 
-+ (EABloodPressureModel *)getModelByData:(NSData *)data;
 
 @end
 

@@ -116,14 +116,16 @@ public class SmsObserver extends ContentObserver {
                     EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
 
                         @Override
-                        public void mutualFail(int i) {
+                        public void result(boolean b, int i) {
 
                         }
 
                         @Override
-                        public void result(boolean b) {
+                        public void mutualFail(int i) {
 
                         }
+
+
                     });
                 }
 

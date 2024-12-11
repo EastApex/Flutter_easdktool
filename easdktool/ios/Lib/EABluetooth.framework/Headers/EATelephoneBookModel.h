@@ -26,12 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameters:
 ///   - name: Contact name【名字】
 ///   - num: Telephone number【电话号码】
-+ (instancetype)eaAllocInitWithName:(NSString *)name eelephoneNumber:(NSString *)num;
++ (instancetype)eaAllocInitWithName:(NSString *)name telephoneNumber:(NSString *)num;
 
 @end
 
-/// Transfers the contact data model to the watch
-///【向手表传输联系人数据模型】
+/// id = 42: Mobile phone directory[Transfers the contact data model to the watch]
+/// id = 42: 手机通信录【向手表传输联系人数据模型】
 @interface EATelephoneBookModel : EABaseModel
 
 /// ignore
@@ -48,8 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter list: Contact number group【联系人数组】
 + (instancetype)eaAllocInitWithList:(NSArray <EAContactModel *>*)list;
 
-/// ignore
-+ (EATelephoneBookModel *)getModelByData:(NSData *)data;
++ (instancetype)eaAllocInitReverseWithList:(NSArray <EAContactModel *>*)list;
 
 @end
 
@@ -76,8 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// ignore
 @property(nonatomic, readonly) NSUInteger sIndexArray_Count;
 
-/// ignore
-+ (EATelephoneBookModel *)getModelByData:(NSData *)data;
+
 
 @end
 

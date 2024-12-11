@@ -11,13 +11,17 @@
 #import <EABluetooth/EADataValue.h>
 #import <EABluetooth/EAModelCustomPropertyMapperConfig.h>
 #import <EABluetooth/EADataInfoModel.h>
+
 @class GPBMessage;
+@class EABaseModel;
+@class EARespondModel;
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EABaseModel : NSObject
+typedef void(^ResultGetInfoBlock)(EABaseModel *baseModel);
+typedef void(^RespondBlock)(EARespondModel *respondModel);
 
 
-
+@interface EABaseModel : NSObject<NSCopying>
 
 
 /// MARK: - 通用转换方法
@@ -41,8 +45,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获取数据类型 -- 子类必须要重写此方法
 - (EADataInfoModel *)getDataInfoModel;
 
++ (instancetype )getModelByData:(NSData *)data;
+
+- (void)eaSend:(void (^)(EARespondCodeType respondCodeType ))completion;
+@end
 
 
+@interface EABigDataModel : EABaseModel
+
+/// The time stamp
+/// 时间戳
+@property(nonatomic, assign) NSInteger timeStamp;
 
 @end
 

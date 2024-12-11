@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ const String kEASyncPhoneInfoToWacth = "EASyncPhoneInfoToWacth"; // 同步手机
 const String kEAGetBigWatchData = "EAGetBigWatchData"; // 获取手表大数据
 const String kEAOperationWatch = "EAOperationWatch"; // 操作手表
 const String kEAOTA = "EAOTA"; // ota
+const String kEACustomWatchface = "EACustomWatchface"; // ota
 const String kEALog = "EAShowLog"; // log
 const String saveData = "saveData";
 const String kEAScanWacth = "EAScanWacth"; // 搜索手表
@@ -41,6 +43,7 @@ const String kOperationPhone = "OperationPhone";
 const String kProgress = "Progress";
 const String kScanWacthResponse = "ScanWacthResponse";
 const String kOperationWacthResponse = "OperationWacthResponse";
+const String kCustomWatchFaceResponse = "CustomWatchFaceResponse";
 const String queryData = "queryData";
 final String deleteData = "deleteData";
 const String kQueryBigWatchData = "QueryBigWatchData";
@@ -66,7 +69,7 @@ class EASDKTool {
   EAOTAProgressCallback? mOTAProgressCallback;
   EAScanWatchCallback? mScanWatchCallback;
   QueryMotionDataCallback? mQueryMotionDataCallback;
-
+  EACustomWatchfacePreviewImageCallback? mCustomWatchfacePreviewImageCallback;
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
     mOperationPhoneCallback = operationPhoneCallback;
@@ -244,6 +247,22 @@ class EASDKTool {
     _channel.invokeMethod(kEAOTA, param);
   }
 
+  void getCustomWatchfacePreviewImage(
+      EACustomWatchFace customWatchFace,
+      EACustomWatchfacePreviewImageCallback
+          customWatchfacePreviewImageCallback) {
+    mCustomWatchfacePreviewImageCallback = customWatchfacePreviewImageCallback;
+    String param = convert.jsonEncode(customWatchFace);
+    _channel.invokeMethod(kEACustomWatchface, param);
+  }
+
+  void otaCustomWatchface(EACustomWatchFace customWatchFace,
+      EAOTAProgressCallback otaProgressCallback) {
+    mOTAProgressCallback = otaProgressCallback;
+    String param = convert.jsonEncode(customWatchFace);
+    _channel.invokeMethod(kEACustomWatchface, param);
+  }
+
   //
   Future<dynamic> platformCallHandler(MethodCall methodCall) async {
     /* methodName
@@ -262,6 +281,7 @@ class EASDKTool {
     switch (methodName) {
       case kArgumentsError:
         String error = methodCall.arguments;
+        print("error");
         break;
       case kConnectState:
         int state = methodCall.arguments;
@@ -343,6 +363,16 @@ class EASDKTool {
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         if (mQueryMotionDataCallback != null) {
           mQueryMotionDataCallback!.callback(info);
+        } else {
+          debugPrint("Flutter doesn't set up big data callbacks");
+        }
+        break;
+      case kCustomWatchFaceResponse:
+        final Uint8List imageData = methodCall.arguments as Uint8List;
+        // 将图片数据转换为Image对象
+        final Image previewImage = Image.memory(imageData);
+        if (mCustomWatchfacePreviewImageCallback != null) {
+          mCustomWatchfacePreviewImageCallback!.previewImage(previewImage);
         } else {
           debugPrint("Flutter doesn't set up big data callbacks");
         }

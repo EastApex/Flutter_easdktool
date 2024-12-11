@@ -10,13 +10,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+/// id = 11 : 手表单位（公制、英制）
+/// id = 11 : 手表单位（公制、英制）
 @interface EAUnifiedUnitModel : EABaseModel
 
 
 @property(nonatomic, assign) EAUnifiedUnit unit;
 
 
-+ (EAUnifiedUnitModel *)getModelByData:(NSData *)data;
+
 
 
 

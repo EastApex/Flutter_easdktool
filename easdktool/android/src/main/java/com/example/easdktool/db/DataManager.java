@@ -2,14 +2,11 @@ package com.example.easdktool.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.apex.bluetooth.utils.LogData2File;
 import com.apex.bluetooth.utils.LogUtils;
 import com.greendao.gen.BloodDataDao;
 import com.greendao.gen.DailyDataDao;
@@ -18,26 +15,25 @@ import com.greendao.gen.DaoSession;
 import com.greendao.gen.GpsDataDao;
 import com.greendao.gen.HabitDataDao;
 import com.greendao.gen.HeartDataDao;
+import com.greendao.gen.MotionHeartDao;
 import com.greendao.gen.MultiDataDao;
 import com.greendao.gen.RestingHeartDataDao;
 import com.greendao.gen.SleepDataDao;
+import com.greendao.gen.SleepScoreDao;
 import com.greendao.gen.StepFreqDataDao;
 import com.greendao.gen.StepPaceDataDao;
 import com.greendao.gen.StressDataDao;
 
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataManager {
     private static final String TAG = DataManager.class.getSimpleName();
     private static DataManager manager;
     private static DaoSession mSession;
     private static volatile boolean isSaveData;
+    public static final String DBNAME="sport.db";
 
     public static DataManager getInstance() {
         if (manager == null) {
@@ -66,7 +62,8 @@ public class DataManager {
     }
 
     private void initDataBase(@NonNull Context mContext) {
-        GreenDaoUpgradeHelper mHelper = new GreenDaoUpgradeHelper(mContext.getApplicationContext(), "sport.db", null);
+
+        UpgradeHelper mHelper = new UpgradeHelper(mContext.getApplicationContext(), DBNAME, null);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         mSession = daoMaster.newSession(IdentityScopeType.None);
@@ -208,6 +205,38 @@ public class DataManager {
             RestingHeartDataDao restingRateCacheDao = mSession.getRestingHeartDataDao();
             restingRateCacheDao.insertOrReplaceInTx(cacheList);
             restingRateCacheDao.detachAll();
+        }
+    }
+
+    /**
+     * 保存运动心率
+     *
+     * @param cacheList
+     */
+    public void insertBatchMotionHeartData(List<MotionHeart> cacheList) {
+        if (cacheList == null || cacheList.isEmpty() || !isSaveData) {
+            return;
+        }
+        if (mSession != null) {
+            MotionHeartDao motionHeartDao = mSession.getMotionHeartDao();
+            motionHeartDao.insertOrReplaceInTx(cacheList);
+            motionHeartDao.detachAll();
+        }
+    }
+
+    /**
+     * 保存睡眠得分数据
+     *
+     * @param cacheList
+     */
+    public void insertBatchSleepScoreData(List<SleepScore> cacheList) {
+        if (cacheList == null || cacheList.isEmpty() || !isSaveData) {
+            return;
+        }
+        if (mSession != null) {
+            SleepScoreDao sleepScoreDao = mSession.getSleepScoreDao();
+            sleepScoreDao.insertOrReplaceInTx(cacheList);
+            sleepScoreDao.detachAll();
         }
     }
 
@@ -442,8 +471,35 @@ public class DataManager {
             HabitDataDao habitDataDao = mSession.getHabitDataDao();
             if (cacheList == null || cacheList.isEmpty()) {
                 habitDataDao.deleteAll();
-            }else {
+            } else {
                 habitDataDao.deleteInTx(cacheList);
+            }
+        }
+    }
+
+    /**
+     * 删除指定的睡眠得分数据
+     *
+     * @param cacheList
+     */
+    public void deleteSleepScoreData(List<SleepScore> cacheList) {
+        if (mSession != null) {
+            SleepScoreDao sleepScoreDao = mSession.getSleepScoreDao();
+            if (cacheList == null || cacheList.isEmpty()) {
+                sleepScoreDao.deleteAll();
+            } else {
+                sleepScoreDao.deleteInTx(cacheList);
+            }
+        }
+    }
+
+    public void deleteMotionHeartData(List<MotionHeart> cacheList) {
+        if (mSession != null) {
+            MotionHeartDao motionHeartDao = mSession.getMotionHeartDao();
+            if (cacheList == null || cacheList.isEmpty()) {
+                motionHeartDao.deleteAll();
+            } else {
+                motionHeartDao.deleteInTx(cacheList);
             }
         }
     }
@@ -587,6 +643,32 @@ public class DataManager {
         if (mSession != null) {
             HabitDataDao habitDataDao = mSession.getHabitDataDao();
             return habitDataDao.queryBuilder().orderAsc(HabitDataDao.Properties.Time_stamp).list();
+        }
+        return null;
+    }
+
+    /**
+     * 查询睡眠得分数据
+     *
+     * @return
+     */
+    public List<SleepScore> querySleepScoreData() {
+        if (mSession != null) {
+            SleepScoreDao sleepScoreDao = mSession.getSleepScoreDao();
+            return sleepScoreDao.queryBuilder().orderAsc(SleepScoreDao.Properties.StartTime).list();
+        }
+        return null;
+    }
+
+    /**
+     * 查询运动心率数据
+     *
+     * @return
+     */
+    public List<MotionHeart> queryMotionHeartData() {
+        if (mSession != null) {
+            MotionHeartDao motionHeartDao = mSession.getMotionHeartDao();
+            return motionHeartDao.queryBuilder().orderAsc(MotionHeartDao.Properties.StampTime).list();
         }
         return null;
     }

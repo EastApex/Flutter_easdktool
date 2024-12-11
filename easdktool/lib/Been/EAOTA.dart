@@ -32,3 +32,23 @@ class EAOTAList {
     return {"type": type, "otas": otas};
   }
 }
+
+class EACustomWatchFace {
+  bool isNumberWf = true;
+  String bgImagePath = "";
+  String numbeColorHex = "";
+  int pointerColorType = 0; // 0 black  1 wehite
+  bool getPreviewImage =
+      true; // true:get Preview Image  false: Ota Custom Watch Face
+
+  EACustomWatchFace();
+  Map toJson() {
+    return {
+      "isNumberWf": isNumberWf,
+      "bgImagePath": bgImagePath,
+      "numbeColorHex": numbeColorHex,
+      "pointerColorType": pointerColorType,
+      "getPreviewImage": getPreviewImage,
+    };
+  }
+}

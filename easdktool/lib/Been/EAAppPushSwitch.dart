@@ -313,6 +313,7 @@ class EAAppPushSwitch {
  tumblr =29;
  vk =30;
  youtube=31;
+ 
  */
   /// list的元素全部为以上32种，
   List<EAApp> list = [];

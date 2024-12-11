@@ -1,10 +1,12 @@
 import 'package:easdktool/Been/EABeen.dart';
+import 'package:flutter/material.dart';
 
 typedef OnSuccess = void Function(Map<String, dynamic> info);
 typedef OnFail = void Function(Map<String, dynamic> info);
 typedef OnRespond = void Function(EARespond respond);
 typedef Progress = void Function(int progress);
 typedef ScanRespond = void Function(EAConnectParam connectParam);
+typedef PreviewImage = void Function(Image previewImage);
 
 /// Get the watch data callback【获取手表数据回调】
 class EAGetDataCallback {
@@ -60,6 +62,12 @@ class EAOTAProgressCallback {
   Progress callback;
 
   EAOTAProgressCallback(this.callback);
+}
+
+/// Custom Watch Face Preview Image callback【预览图回调】
+class EACustomWatchfacePreviewImageCallback {
+  PreviewImage previewImage;
+  EACustomWatchfacePreviewImageCallback(this.previewImage);
 }
 
 class EAScanWatchCallback {

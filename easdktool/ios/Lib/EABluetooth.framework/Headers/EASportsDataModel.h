@@ -8,14 +8,42 @@
 #import <EABluetooth/EABaseBigDataModel.h>
 
 NS_ASSUME_NONNULL_BEGIN
+/*
+ How are the following integers calculated?
+ 
+ int hr_training_effect_normal = 0;
+ int hr_training_effect_warmUp = 0;
+ int hr_training_effect_fatConsumption = 0;
+ int hr_training_effect_aerobic = 0;
+ int hr_training_effect_anaerobic = 0;
+ int hr_training_effect_limit = 0;
+ 
+ if(body_sex == man)
+    {m_body_hr_max = 205 -body_age;}
+ else if(body_sex == women)
+    {m_body_hr_max = 220 -body_age;}
+ 
+ hr_training_effect_normal,            //     <50%      *m_body_hr_max
+ hr_training_effect_warmUp,            //     50%~60%   *m_body_hr_max
+ hr_training_effect_fatConsumption,    //     60%~70%   *m_body_hr_max
+ hr_training_effect_aerobic,           //     70%~80%   *m_body_hr_max
+ hr_training_effect_anaerobic,         //     80%~90%   *m_body_hr_max
+ hr_training_effect_limit,             //     90%~100%  *m_body_hr_ma
+
+*/
 
 
 /// 多运动数据
-@interface EASportsDataModel : EABaseModel
+/// Sport Data
+@interface EASportsDataModel : EABigDataModel
 
 /// Sport type
 /// 运动类型
-@property(nonatomic, assign) EASportType eType;
+@property(nonatomic, assign) EASportType eType __attribute__((deprecated));
+
+/// Sport type
+/// 运动类型
+@property(nonatomic, assign) EAWatchSportType watchSportType;
 
 /// begin timestamp
 /// 起始时间戳
@@ -106,9 +134,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 次数【跳绳】
 @property(nonatomic, assign) NSInteger count;
 
-/// ignore：
-/// 有效时长【UTE设备特有】
-@property (nonatomic,assign) NSInteger validTime;
 
 @end
 

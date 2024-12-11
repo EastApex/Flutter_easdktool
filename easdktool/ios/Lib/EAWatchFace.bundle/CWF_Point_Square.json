@@ -14,7 +14,7 @@
             "weekTextFont":5,
             "dayTextWidth":50,
             "dayTextAlign":0,
-            "dayTextFont":5,
+            "dayTextFont":5
         },
         "point":{
             "hour":"170,121",
@@ -22,17 +22,17 @@
             "minute":"167,75",
             "arcMinute":"11,125",
             "second":"172,49",
-            "arcSecond":"6,151",
+            "arcSecond":"6,151"
         }
     },
     "368,448":{
         "number":{
             "background":"0,0",
-            "hourHigh":"69,35",
-            "hourLow":"120,35",
-            "minuteHigh":"199,35",
-            "minuteLow":"255,35",
-            "maohao":"179,35",
+            "hourHigh":"69,40",
+            "hourLow":"120,40",
+            "minuteHigh":"199,40",
+            "minuteLow":"255,40",
+            "maohao":"179,40",
             "weekText":"95,125",
             "dayText":"215,125",
             "weekTextWidth":100,
@@ -40,15 +40,15 @@
             "weekTextFont":5,
             "dayTextWidth":50,
             "dayTextAlign":0,
-            "dayTextFont":5,
+            "dayTextFont":5
         },
         "point":{
-            "hour":"175,145",
-            "arcHour":"8,79",
-            "minute":"172,99",
-            "arcMinute":"11,125",
-            "second":"177,73",
-            "arcSecond":"6,151",
+            "hour":"168,128",
+            "arcHour":"16,96",
+            "minute":"168,88",
+            "arcMinute":"16,135",
+            "second":"174,60",
+            "arcSecond":"10,163"
         }
     },
     "240,240":{
@@ -66,16 +66,16 @@
             "weekTextFont":4,
             "dayTextWidth":50,
             "dayTextAlign":0,
-            "dayTextFont":4,
+            "dayTextFont":4
                        
         },
         "point":{
-            "hour":"108,56",
-            "arcHour":"12,64",
-            "minute":"108,30",
-            "arcMinute":"12,90",
-            "second":"112,12",
-            "arcSecond":"8,108",
+            "hour":"115,65",
+            "arcHour":"5,55",
+            "minute":"115,23",
+            "arcMinute":"5,97",
+            "second":"116,9",
+            "arcSecond":"4,111"
         }
     },
     "240,280":{
@@ -86,22 +86,48 @@
             "minuteHigh":"140,27",
             "minuteLow":"180,27",
             "maohao":"117,27",
-            "weekText":"58,75",
-            "dayText":"130,75",
+            "weekText":"50,75",
+            "dayText":"140,75",
             "weekTextWidth":100,
             "weekTextAlign":2,
             "weekTextFont":4,
             "dayTextWidth":50,
             "dayTextAlign":0,
-            "dayTextFont":4,
+            "dayTextFont":4
         },
         "point":{
-            "hour":"108,76",
-            "arcHour":"12,64",
-            "minute":"108,50",
-            "arcMinute":"12,90",
-            "second":"112,32",
-            "arcSecond":"8,108",
+            "hour":"112,83",
+            "arcHour":"8,57",
+            "minute":"112,40",
+            "arcMinute":"8,100",
+            "second":"114,27",
+            "arcSecond":"6,113"
+        }
+    },
+    "240,296":{
+        "number":{
+            "background":"0,0",
+            "hourHigh":"28,27",
+            "hourLow":"68,27",
+            "minuteHigh":"140,27",
+            "minuteLow":"180,27",
+            "maohao":"117,27",
+            "weekText":"50,75",
+            "dayText":"140,75",
+            "weekTextWidth":100,
+            "weekTextAlign":2,
+            "weekTextFont":4,
+            "dayTextWidth":50,
+            "dayTextAlign":0,
+            "dayTextFont":4
+        },
+        "point":{
+            "hour":"112,89",
+            "arcHour":"8,57",
+            "minute":"112,49",
+            "arcMinute":"8,100",
+            "second":"114,36",
+            "arcSecond":"6,113"
         }
     },
 }

@@ -18,6 +18,9 @@ class EANotDisturb {
 // 结束时间 ：分钟(0~59)
   int endMinute = 0;
 
+// 手表免打扰开关： 0关闭 1打开
+  int watchNotDisturbSw = 0;
+
 /*
  *  目前的免打扰模式是这样的：有2种模式设置共同作用的结果
       1是 【手表免打扰】 ===》优先级高，它的任何操作都会 关闭 【App免打扰时间段】的开关。如果需要响应【App免打扰时间段】，那必须设置【App免打扰时间段】的开关为开启状态，同时关闭 手表免打扰。
@@ -59,6 +62,9 @@ class EANotDisturb {
     if (map["endMinute"] != null) {
       endMinute = map["endMinute"];
     }
+    if (map["watchNotDisturbSw"] != null) {
+      endMinute = map["watchNotDisturbSw"];
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -68,6 +74,7 @@ class EANotDisturb {
       "beginMinute": beginMinute,
       "endHour": endHour,
       "endMinute": endMinute,
+      "watchNotDisturbSw": watchNotDisturbSw,
     };
   }
 }

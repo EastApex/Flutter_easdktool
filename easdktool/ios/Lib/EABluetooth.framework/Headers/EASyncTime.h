@@ -9,7 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// 同步时间
+/// id = 5: 同步时间
+/// id = 5: indicates the synchronization time
 @interface EASyncTime : EABaseModel
 
 /// year
@@ -56,11 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 同步模式：
 @property(nonatomic, assign) EASyncType syncType;
 
+/// time zone city name
+/// 时区城市名称
+@property(nonatomic, strong) NSString *place;
 
 
-/// 获取同步时间相关信息
-/// @param data 数据流
-+ (EASyncTime *)getModelByData:(NSData *)data;
 
 
 

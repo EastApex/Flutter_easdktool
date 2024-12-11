@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+/// 手表debug数据
 @interface EAWatchDebug : EABaseModel
 
 /** 操作 0设备的死机信息 1设备的内存信息*/
@@ -23,9 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 设备返回值，当ops=error_log时string显示此项，当ops=mem_log时16进制显示此项 */
 @property(nonatomic,strong) NSString *log;
 
-
-/// MARK: - 获取设备表盘信息
-+ (EAWatchDebug *)getModelByData:(NSData *)data;
 
 
 @end

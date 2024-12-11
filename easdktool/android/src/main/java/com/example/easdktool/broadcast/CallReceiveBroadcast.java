@@ -49,13 +49,13 @@ public class CallReceiveBroadcast extends BroadcastReceiver {
                             eaBleSocialContact.setE_ops(EABleSocialContact.SocialContactOps.del);
                             EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
                                 @Override
-                                public void mutualFail(int i) {
-                                    LogUtils.i(TAG, context.getString(R.string.information_push_fail));
+                                public void result(boolean b, int i) {
+                                    LogUtils.i(TAG, context.getString(R.string.information_success));
                                 }
 
                                 @Override
-                                public void result(boolean b) {
-                                    LogUtils.i(TAG, context.getString(R.string.information_success));
+                                public void mutualFail(int i) {
+                                    LogUtils.i(TAG, context.getString(R.string.information_push_fail));
                                 }
 
 
@@ -66,14 +66,15 @@ public class CallReceiveBroadcast extends BroadcastReceiver {
                                 if (EABleManager.getInstance().getDeviceConnectState() == EABleConnectState.STATE_CONNECTED && eaBleSocialContact1 != null) {
                                     EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact1, new GeneralCallback() {
                                         @Override
-                                        public void mutualFail(int i) {
+                                        public void result(boolean b, int i) {
 
                                         }
 
                                         @Override
-                                        public void result(boolean b) {
+                                        public void mutualFail(int i) {
 
                                         }
+
                                     });
 
                                 }
@@ -91,9 +92,10 @@ public class CallReceiveBroadcast extends BroadcastReceiver {
                             }
                             EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact2, new GeneralCallback() {
                                 @Override
-                                public void result(boolean b) {
+                                public void result(boolean b, int i) {
 
                                 }
+
 
                                 @Override
                                 public void mutualFail(int i) {
@@ -114,14 +116,15 @@ public class CallReceiveBroadcast extends BroadcastReceiver {
                             }
                             EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact3, new GeneralCallback() {
                                 @Override
-                                public void mutualFail(int i) {
+                                public void result(boolean b, int i) {
 
                                 }
 
                                 @Override
-                                public void result(boolean b) {
+                                public void mutualFail(int i) {
 
                                 }
+
                             });
 
 

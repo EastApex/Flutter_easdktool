@@ -73,6 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+/// id = 20 : 天气
+/// id = 20 : Weather
 @interface EAWeatherModel : EABaseModel
 
 
@@ -93,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *place;
 
 
-+ (EAWeatherModel *)getModelByData:(NSData *)data;
+
 
 
 

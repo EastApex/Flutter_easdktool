@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-/// Watch language information
-/// 设备语言
+/// id = 10 : Watch language information
+/// id = 10 : 设备语言
 @interface EALanguageModel : EABaseModel
 
 
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// support language
 @property(nonatomic, copy) NSArray<EALanguageItemModel*> *sLanguageArray;
 
-+ (EALanguageModel *)getModelByData:(NSData *)data;
+
 
 
 

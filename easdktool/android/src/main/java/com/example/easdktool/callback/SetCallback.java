@@ -23,12 +23,6 @@ public class SetCallback implements GeneralCallback {
         this.channel = channel;
     }
 
-    @Override
-    public void result(boolean b) {
-        LogUtils.i("SetCallback", "指令操作结果:" + (b ? "成功" : "失败"));
-        new Return2Flutter(channel).setWatchDataResponse(0, commandType);
-
-    }
 
     @Override
     public void mutualFail(int i) {
@@ -38,4 +32,9 @@ public class SetCallback implements GeneralCallback {
     }
 
 
+    @Override
+    public void result(boolean b, int i) {
+        LogUtils.i("SetCallback", "指令操作结果:" + (b ? "成功" : "失败"));
+        new Return2Flutter(channel).setWatchDataResponse(0, commandType);
+    }
 }

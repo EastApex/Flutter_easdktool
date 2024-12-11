@@ -22,11 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 提醒方式
 @property(nonatomic, assign) EARemindActionType remindActionType;
 
++ (instancetype)eaInitWithOnOff:(NSInteger)onOff remindActionType:(EARemindActionType)remindActionType;
+
 @end
 
 
-/// Social alert switch
-/// 社交提醒开关
+/// id = 21 : Social alert switch
+/// id = 21 : 社交提醒开关
 @interface EASocialSwitchModel : EABaseModel
 
 /// incoming call
@@ -40,6 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// Sms
 /// 短信
 @property(nonatomic, strong) EASocialOps *sSms;
+
+
+ /**
+  Note a few things about testing your push:
+  1. The watch must be paired with the phone to allow for notifications.
+  2. The watch needs to disable DND
+  3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
+  */
 
 /// Social
 /// 社交（第三方App推送提醒 ）
@@ -56,11 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-+ (EASocialSwitchModel *)getModelByData:(NSData *)data ;
 
 
-- (NSData *)getModelData ;
 
++ (instancetype)eaInitWithRemindActionType:(EARemindActionType)remindActionType incomingcall:(NSInteger)incomingcall missedcall:(NSInteger)missedcall sms:(NSInteger)sms social:(NSInteger)social email:(NSInteger)email schedule:(NSInteger)schedule;
 
 @end
 

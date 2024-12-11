@@ -80,14 +80,15 @@ public class SMSReceiveBroadcast extends BroadcastReceiver {
             EABleManager.getInstance().pushInfo2Watch(eaBleSocialContact, new GeneralCallback() {
 
                 @Override
+                public void result(boolean b, int i) {
+                    LogUtils.e(TAG, "Sms push successful");
+                }
+
+                @Override
                 public void mutualFail(int i) {
                     LogUtils.e(TAG, "Sms push failed");
                 }
 
-                @Override
-                public void result(boolean b) {
-                    LogUtils.e(TAG, "Sms push successful");
-                }
             });
         }
     }

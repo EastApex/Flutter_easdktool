@@ -8,9 +8,10 @@
 #ifndef EAModelHeader_h
 #define EAModelHeader_h
 
+
+
+
 // model
-
-
 #import <EABluetooth/EAPeripheralModel.h>
 #import <EABluetooth/EAWatchModel.h>
 #import <EABluetooth/EAUserModel.h>
@@ -69,16 +70,45 @@
 #import <EABluetooth/EAMonitorReminder.h>
 #import <EABluetooth/EARealTimeModel.h>
 #import <EABluetooth/EAAppSportRealTimeModel.h>
-#import <EABluetooth/EAAppLaunchSport.h>
-#import <EABluetooth/EAAppSendSportDetails.h>
+#import <EABluetooth/EAAppLaunchMapSport.h>
+#import <EABluetooth/EAAppSendMapSportDetails.h>
 #import <EABluetooth/EAOnlyGetBigData.h>
+#import <EABluetooth/EASleepBloodOxygenMonitor.h>
+#import <EABluetooth/EAStressMonitor.h>
+#import <EABluetooth/EASendRealTimeDataOnOff.h>
+#import <EABluetooth/EAVibrateIntensity.h>
+#import <EABluetooth/EAAppLaunchScreenSport.h>
+#import <EABluetooth/EAMenstrualReminder.h>
+#import <EABluetooth/EAWatchFaceDelete.h>
+#import <EABluetooth/EASos.h>
+#import <EABluetooth/EASportHrWarning.h>
+#import <EABluetooth/EASleepScoreData.h>
+#import <EABluetooth/EASportHrData.h>
+#import <EABluetooth/EAReplayUserMessage.h>
+#import <EABluetooth/EAReplayMessage.h>
+#import <EABluetooth/EAMtuModel.h>
+#import <EABluetooth/EAWatchLog.h>
+#import <EABluetooth/EAWriteDevDebug.h>
+#import <EABluetooth/EADebugGpsNmeaData.h>
+#import <EABluetooth/EADebugLogData.h>
+#import <EABluetooth/EAStocks.h>
+#import <EABluetooth/EAPwd.h>
+#import <EABluetooth/EATemplateBody.h>
+#import <EABluetooth/EATemplateEnvironment.h>
+#import <EABluetooth/EATemplateBodyData.h>
+#import <EABluetooth/EATemplateEnvironmentData.h>
+#import <EABluetooth/EASportSupport.h>
+#import <EABluetooth/EAHrMaxMinShow.h>
+#import <EABluetooth/EAMuslimDirectionTime.h>
+#import <EABluetooth/EAMuslimCalendar.h>
 
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>
 #import <EABluetooth/EAPhoneOpsModel.h>
-#import <EABluetooth/EAMtuModel.h>
 #import <EABluetooth/EAAppOps.h>
+#import <EABluetooth/EAAppOpsDataModel.h>
+#import <EABluetooth/EAOpsBt.h>
 
 // ota
 #import <EABluetooth/EAOtaRequest.h>
@@ -89,6 +119,7 @@
 // func
 #import <EABluetooth/EAFastGetSnNumberManager.h>
 #import <EABluetooth/EADataValue.h>
+#import <EABluetooth/EACustomNumberWatchFaceModel.h>
 
 
 #endif /* EAModelHeader_h */

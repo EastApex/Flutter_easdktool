@@ -9,8 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// Automatic sleep monitoring
-/// 自动睡眠监测设置
+/// id = 16 : Automatic sleep monitoring
+/// id = 16 : 自动睡眠监测设置
 @interface EAAutoCheckSleepModel : EABaseModel
 
 /*
@@ -65,8 +65,13 @@ weekCycleBit 为127 即 开启每天监测功能
 @property(nonatomic, assign) NSInteger endMinute;
 
 
-+ (EAAutoCheckSleepModel *)getModelByData:(NSData *)data;
 
+
++ (instancetype)eaInitWithWeekCycleBit:(NSInteger )weekCycleBit
+                             beginHour:(NSInteger )beginHour
+                           beginMinute:(NSInteger )beginMinute
+                               endHour:(NSInteger )endHour
+                             endMinute:(NSInteger )endMinute;
 
 
 

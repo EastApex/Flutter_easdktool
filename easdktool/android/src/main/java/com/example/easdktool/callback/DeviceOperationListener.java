@@ -7,12 +7,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.apex.bluetooth.callback.DataReportCallback;
 import com.apex.bluetooth.callback.DataResponseCallback;
 import com.apex.bluetooth.core.EABleManager;
+import com.apex.bluetooth.enumeration.EABleSportStatus;
+import com.apex.bluetooth.model.EABleBTSwitch;
 import com.apex.bluetooth.model.EABleExecutiveResponse;
 import com.apex.bluetooth.model.EABleMtu;
 import com.apex.bluetooth.model.EABleMusicControl;
 import com.apex.bluetooth.model.EABlePhoneResponse;
 import com.apex.bluetooth.model.EABleQueryMusic;
+import com.apex.bluetooth.model.EABleReportMonitorData;
+import com.apex.bluetooth.model.EABleReportSportData;
 import com.apex.bluetooth.model.EABleSocialResponse;
+import com.apex.bluetooth.model.EABleSwitch;
+import com.apex.bluetooth.model.EABleTimelyData;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -156,12 +162,59 @@ public class DeviceOperationListener implements DataReportCallback {
     }
 
     @Override
+    public void appSportStatus(EABleSportStatus eaBleSportStatus) {
+
+    }
+
+    @Override
+    public void timelyData(EABleTimelyData eaBleTimelyData) {
+
+    }
+
+    @Override
+    public void appSportData(EABleReportSportData eaBleReportSportData) {
+
+    }
+
+    @Override
     public void answerIncoming() {
 
     }
 
     @Override
     public void hangUpIncoming() {
+
+    }
+
+    @Override
+    public void disturbStatus(EABleSwitch eaBleSwitch) {
+
+    }
+
+    @Override
+    public void brightScreenStatus(EABleSwitch eaBleSwitch) {
+
+    }
+
+    @Override
+    public void reportMonitorData(EABleReportMonitorData eaBleReportMonitorData) {
+
+    }
+
+    @Override
+    public void startBTConnect() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("opePhoneType", 0x18);
+        sendOpePhone(jsonObject);
+    }
+
+    @Override
+    public void btStatus(EABleBTSwitch eaBleBTSwitch) {
+
+    }
+
+    @Override
+    public void otaFail() {
 
     }
 

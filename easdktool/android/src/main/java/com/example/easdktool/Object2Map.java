@@ -3,9 +3,12 @@ package com.example.easdktool;
 import com.alibaba.fastjson.JSONObject;
 import com.apex.bluetooth.model.EABleAncsSw;
 import com.apex.bluetooth.model.EABleAutoCheckSleep;
+import com.apex.bluetooth.model.EABleAutoStressMonitor;
 import com.apex.bluetooth.model.EABleBatInfo;
 import com.apex.bluetooth.model.EABleCombination;
+import com.apex.bluetooth.model.EABleContact;
 import com.apex.bluetooth.model.EABleDailyGoal;
+import com.apex.bluetooth.model.EABleDeviceLanguage;
 import com.apex.bluetooth.model.EABleGesturesBrightScreen;
 import com.apex.bluetooth.model.EABleHabit;
 import com.apex.bluetooth.model.EABleHr;
@@ -13,9 +16,11 @@ import com.apex.bluetooth.model.EABleInfoPush;
 import com.apex.bluetooth.model.EABleMenuPage;
 import com.apex.bluetooth.model.EABleMonitorReminder;
 import com.apex.bluetooth.model.EABleNotDisturb;
+import com.apex.bluetooth.model.EABlePeriodReminder;
 import com.apex.bluetooth.model.EABlePersonInfo;
 import com.apex.bluetooth.model.EABleReminder;
 import com.apex.bluetooth.model.EABleSedentariness;
+import com.apex.bluetooth.model.EABleSleepBloodSwitch;
 import com.apex.bluetooth.model.EABleSyncTime;
 import com.apex.bluetooth.model.EABleWatchFace;
 import com.apex.bluetooth.model.EABleWatchInfo;
@@ -37,6 +42,19 @@ public class Object2Map {
         map.put("id_p", eaBleWatchInfo.getWatchId());
         map.put("bleMacAddr", eaBleWatchInfo.getBle_mac_addr());
         map.put("isWaitForBinding", eaBleWatchInfo.getIs_wait_for_binding());
+        map.put("lcd_full_w", eaBleWatchInfo.getLcd_full_w());
+        map.put("lcd_full_h", eaBleWatchInfo.getLcd_full_h());
+        map.put("proj_settings", eaBleWatchInfo.getProj_settings());
+        map.put("lcd_full_type", eaBleWatchInfo.getLcd_full_type());
+        map.put("lcd_preview_w", eaBleWatchInfo.getLcd_preview_w());
+        map.put("lcd_preview_h", eaBleWatchInfo.getLcd_preview_h());
+        map.put("lcd_preview_radius", eaBleWatchInfo.getLcd_preview_radius());
+        map.put("not_support_sn", eaBleWatchInfo.getNot_support_sn());
+        map.put("max_watch_size", eaBleWatchInfo.getMax_watch_size());
+        map.put("lcd_pixel_type", eaBleWatchInfo.getLcd_pixel_type());
+        map.put("num_of_alarm_supported", eaBleWatchInfo.getNum_of_alarm_supported());
+        map.put("num_of_schedule_supported", eaBleWatchInfo.getNum_of_schedule_supported());
+        map.put("custom_firmware_version", eaBleWatchInfo.getCustom_firmware_version());
         String watchType = eaBleWatchInfo.getWatchType();
         if (watchType.equals("G01")) {
             map.put("type", "iTouch Flex");
@@ -87,6 +105,7 @@ public class Object2Map {
         map.put("endHour", eaBleNotDisturb.getEnd_hour());
         map.put("endMinute", eaBleNotDisturb.getBegin_minute());
         map.put("sw", eaBleNotDisturb.getSw());
+        map.put("watchNotDisturbSw", eaBleNotDisturb.getWatch_sw());
         return map;
     }
 
@@ -133,6 +152,12 @@ public class Object2Map {
         jsonObject.put("endHour", eaBleSedentariness.getEnd_hour());
         jsonObject.put("endMinute", eaBleSedentariness.getEnd_minute());
         jsonObject.put("stepThreshold", eaBleSedentariness.getStep_threshold());
+        jsonObject.put("noonSw", eaBleSedentariness.getNoon_sw());
+        jsonObject.put("sw", eaBleSedentariness.getSw());
+        jsonObject.put("noonBeginHour", eaBleSedentariness.getNoon_begin_hour());
+        jsonObject.put("noonBeginMinute", eaBleSedentariness.getNoon_begin_minute());
+        jsonObject.put("noonEndHour", eaBleSedentariness.getNoon_end_hour());
+        jsonObject.put("noonEndMinute", eaBleSedentariness.getNoon_end_minute());
         Map map = jsonObject.getInnerMap();
         return map;
     }
@@ -210,6 +235,29 @@ public class Object2Map {
         return map;
     }
 
+    public Map language2Map(EABleDeviceLanguage eaBleDeviceLanguage) {
+        int currentLanguage = eaBleDeviceLanguage.getE_type().getValue();
+        List<EABleDeviceLanguage.LanguageType> languageType = eaBleDeviceLanguage.getSupportList();
+        List<Map> aList = null;
+        if (languageType != null && !languageType.isEmpty()) {
+            aList = new ArrayList<>();
+            for (int i = 0; i < languageType.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("languageType", languageType.get(i).getValue());
+                aList.add(jsonObject);
+            }
+
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("eType", currentLanguage);
+        if (!aList.isEmpty()) {
+            jsonObject.put("supportAllLanguage", aList);
+
+        }
+        return jsonObject.getInnerMap();
+
+    }
+
     public Map alertHeart2Map(EABleHr eaBleHr) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sw", eaBleHr.getSw());
@@ -239,6 +287,8 @@ public class Object2Map {
             types.add(EABleMenuPage.MenuType.page_music);
             types.add(EABleMenuPage.MenuType.page_sleep);
             types.add(EABleMenuPage.MenuType.page_weather);
+            types.add(EABleMenuPage.MenuType.page_camera);
+            types.add(EABleMenuPage.MenuType.page_workout);
             eaBleMenuPage.setAllSupportList(types);
         }
         List<Map> aList = new ArrayList<>();
@@ -290,6 +340,12 @@ public class Object2Map {
         map.put("user_wf_id_1", eaBleWatchFace.getUser_wf_id_1());
         map.put("user_wf_id_2", eaBleWatchFace.getUser_wf_id_2());
         map.put("user_wf_id_3", eaBleWatchFace.getUser_wf_id_3());
+        map.put("user_wf_id_4", eaBleWatchFace.getUser_wf_id_4());
+        map.put("user_wf_id_5", eaBleWatchFace.getUser_wf_id_5());
+        map.put("user_wf_id_6", eaBleWatchFace.getUser_wf_id_6());
+        map.put("user_wf_id_7", eaBleWatchFace.getUser_wf_id_7());
+        map.put("user_wf_id_8", eaBleWatchFace.getUser_wf_id_8());
+        map.put("user_wf_id_9", eaBleWatchFace.getUser_wf_id_9());
         return map;
     }
 
@@ -328,8 +384,8 @@ public class Object2Map {
             map.put("tumblr", eaBleInfoPush.getS_app_sw().get(29).getSw() == 1 ? true : false);
             map.put("vk", eaBleInfoPush.getS_app_sw().get(30).getSw() == 1 ? true : false);
             map.put("youtube", eaBleInfoPush.getS_app_sw().get(31).getSw() == 1 ? true : false);
-            if (eaBleInfoPush.getS_app_sw().size() > 32) {
-                map.put("amazon", eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+            map.put("amazon", eaBleInfoPush.getS_app_sw().get(32).getSw() == 1 ? true : false);
+            if (eaBleInfoPush.getS_app_sw().size() > 33) {
                 map.put("discord", eaBleInfoPush.getS_app_sw().get(33).getSw() == 1 ? true : false);
                 map.put("github", eaBleInfoPush.getS_app_sw().get(34).getSw() == 1 ? true : false);
                 map.put("googleMaps", eaBleInfoPush.getS_app_sw().get(35).getSw() == 1 ? true : false);
@@ -339,7 +395,60 @@ public class Object2Map {
                 map.put("tiktok", eaBleInfoPush.getS_app_sw().get(39).getSw() == 1 ? true : false);
                 map.put("twitch", eaBleInfoPush.getS_app_sw().get(40).getSw() == 1 ? true : false);
                 map.put("uberEats", eaBleInfoPush.getS_app_sw().get(41).getSw() == 1 ? true : false);
+                map.put("", eaBleInfoPush.getS_app_sw().get(42).getSw() == 1 ? true : false);
             }
+            /**
+             if (eaBleInfoPush.getS_app_sw().size() > 43) {
+             map.put("", eaBleInfoPush.getS_app_sw().get(43).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(44).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(45).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(46).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(47).getSw() == 1 ? true : false);
+
+             }
+             if (eaBleInfoPush.getS_app_sw().size() > 48) {
+             map.put("", eaBleInfoPush.getS_app_sw().get(48).getSw() == 1 ? true : false);
+
+
+             }
+             if (eaBleInfoPush.getS_app_sw().size() > 49) {
+             map.put("", eaBleInfoPush.getS_app_sw().get(49).getSw() == 1 ? true : false);
+             }
+             if (eaBleInfoPush.getS_app_sw().size() > 50) {
+             map.put("", eaBleInfoPush.getS_app_sw().get(50).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(51).getSw() == 1 ? true : false);
+             }
+
+
+             if (eaBleInfoPush.getS_app_sw().size() > 52) {
+             map.put("", eaBleInfoPush.getS_app_sw().get(52).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(53).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(54).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(55).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(56).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(57).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(58).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(59).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(60).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(61).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(62).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(63).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(64).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(65).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(66).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(67).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(68).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(69).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(70).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(71).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(72).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(73).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(74).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(75).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(76).getSw() == 1 ? true : false);
+             map.put("", eaBleInfoPush.getS_app_sw().get(77).getSw() == 1 ? true : false);
+             }
+             */
 
 
         }
@@ -384,6 +493,50 @@ public class Object2Map {
         map.put("distance", todayTotalData.getDistance());
         map.put("duration", todayTotalData.getDuration());
         return map;
+    }
+
+    public Map contact(List<EABleContact> contacts) {
+        List<JSONObject> items = new ArrayList<>();
+        if (contacts != null && !contacts.isEmpty()) {
+            for (int i = 0; i < contacts.size(); i++) {
+                JSONObject item = new JSONObject();
+                item.put("num", contacts.get(i).getContactNum());
+                items.add(item);
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("sIndexArray", items);
+        Map map = jsonObject.getInnerMap();
+        return map;
+
+    }
+
+    public Map sleepSpo2Check(EABleSleepBloodSwitch eaBleSleepBloodSwitch) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("sw", eaBleSleepBloodSwitch.getSw());
+        map.put("interval", eaBleSleepBloodSwitch.getInterval());
+        return map;
+    }
+
+    public Map stressCheck(EABleAutoStressMonitor eaBleAutoStressMonitor) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("sw", eaBleAutoStressMonitor.getSw());
+        map.put("interval", eaBleAutoStressMonitor.getIntervalTime());
+        return map;
+    }
+
+    public Map periodReminder(EABlePeriodReminder eaBlePeriodReminder) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("menstrualBeginSw", eaBlePeriodReminder.getPeriodStart() > 0 ? true : false);
+        map.put("menstrualEndSw", eaBlePeriodReminder.getPeriodEnd() > 0 ? true : false);
+        map.put("easyPregnancyBeginSw", eaBlePeriodReminder.getPregnancyStart() > 0 ? true : false);
+        map.put("easyPregnancyEndSw", eaBlePeriodReminder.getPregnancyEnd() > 0 ? true : false);
+        map.put("ovulationDaySw", eaBlePeriodReminder.getOvulation_day_sw() > 0 ? true : false);
+        map.put("menstrualReminderDaysBefore", eaBlePeriodReminder.getReminderDay());
+        map.put("menstrualReminderHours", eaBlePeriodReminder.getReminderHour());
+        map.put("menstrualReminderMinutes", eaBlePeriodReminder.getReminderMinute());
+        return map;
+
     }
 
     public Map monitorReminder2Map(EABleMonitorReminder eaBleMonitorReminder) {

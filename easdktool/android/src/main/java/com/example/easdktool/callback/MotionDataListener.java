@@ -3,7 +3,6 @@ package com.example.easdktool.callback;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,13 +14,17 @@ import com.apex.bluetooth.model.EABleDailyData;
 import com.apex.bluetooth.model.EABleGpsData;
 import com.apex.bluetooth.model.EABleHabitRecord;
 import com.apex.bluetooth.model.EABleHeartData;
+import com.apex.bluetooth.model.EABleMotionHr;
 import com.apex.bluetooth.model.EABleMultiData;
 import com.apex.bluetooth.model.EABlePaceData;
 import com.apex.bluetooth.model.EABlePressureData;
 import com.apex.bluetooth.model.EABleRestingRateData;
 import com.apex.bluetooth.model.EABleSleepData;
+import com.apex.bluetooth.model.EABleSleepScore;
 import com.apex.bluetooth.model.EABleStepFrequencyData;
 import com.apex.bluetooth.utils.LogUtils;
+import com.example.easdktool.db.MotionHeart;
+import com.example.easdktool.db.SleepScore;
 import com.example.easdktool.db.BloodData;
 import com.example.easdktool.db.DailyData;
 import com.example.easdktool.db.DataManager;
@@ -66,6 +69,8 @@ public class MotionDataListener implements MotionDataReportCallback {
     final int kEADataInfoTypeRestingHeartRateData = 3010;
     /* 习惯数据 */
     final int EADataInfoTypeHabitTrackerData = 3011;
+    final int kEADataInfoTypeSleepScoreData = 3012;
+    final int kEADataInfoTypeMotionHeartData = 3013;
     final String kGetBigWatchData = "GetBigWatchData";
     final String TAG = this.getClass().getSimpleName();
 
@@ -410,6 +415,57 @@ public class MotionDataListener implements MotionDataReportCallback {
         jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
         sendBigWatchData(jsonObject);
 
+    }
+
+    @Override
+    public void sleepScore(List<EABleSleepScore> list, CommonFlag commonFlag) {
+        LogUtils.i(TAG, "Prepare to pass the sleep score data to the flutter");
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        List<SleepScore> scoresDataList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            SleepScore sleepScore = new SleepScore();
+            sleepScore.setSleep_score(list.get(i).getSleep_score());
+            sleepScore.setStartTime(list.get(i).getStartTime());
+            sleepScore.setEndTime(list.get(i).getEndTime());
+            scoresDataList.add(sleepScore);
+            Map<String, Object> map = new HashMap<>();
+            map.put("startTime", list.get(i).getStartTime());
+            map.put("score", list.get(i).getSleep_score());
+            map.put("endTime", list.get(i).getEndTime());
+            dataList.add(map);
+        }
+        if (scoresDataList != null && !scoresDataList.isEmpty()) {
+            DataManager.getInstance().insertBatchSleepScoreData(scoresDataList);
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("value", dataList);
+        jsonObject.put("dataType", kEADataInfoTypeSleepScoreData);
+        sendBigWatchData(jsonObject);
+    }
+
+    @Override
+    public void motionHr(List<EABleMotionHr> list, CommonFlag commonFlag) {
+        LogUtils.i(TAG, "Prepare to pass the motion heart data to the flutter");
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        List<MotionHeart> motionHeartDataList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            MotionHeart motionHeart = new MotionHeart();
+            motionHeart.setMotionHr(list.get(i).getMotionHr());
+            motionHeart.setStampTime(list.get(i).getStampTime());
+            motionHeartDataList.add(motionHeart);
+            Map<String, Object> map = new HashMap<>();
+            map.put("stampTime", list.get(i).getStampTime());
+            map.put("motionHr", list.get(i).getMotionHr());
+            dataList.add(map);
+        }
+        if (motionHeartDataList != null && !motionHeartDataList.isEmpty()) {
+            DataManager.getInstance().insertBatchMotionHeartData(motionHeartDataList);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("value", dataList);
+        jsonObject.put("dataType", kEADataInfoTypeMotionHeartData);
+        sendBigWatchData(jsonObject);
     }
 
     @Override

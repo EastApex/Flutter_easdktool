@@ -9,8 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// Operating the watch
-/// 操作设备
+/// id = 12 : Operating the watch
+/// id = 12 : 操作设备
 @interface EADeviceOps : EABaseModel
 
 
@@ -21,7 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) EADeviceOpsStatus deviceOpsStatus;
 
 
-+ (EADeviceOps *)getModelByData:(NSData *)data;
++ (instancetype)eaInitDeviceOpsType:(EADeviceOpsType )deviceOpsType;
+
 
 
 @end

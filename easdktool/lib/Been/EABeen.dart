@@ -4,6 +4,8 @@ library easdktool.been;
 
 import 'dart:ffi';
 
+import 'package:flutter/material.dart';
+
 part 'EAEnum.dart';
 
 part 'EAPersonInfo.dart';
@@ -95,3 +97,15 @@ part 'EABleMusicInfo.dart';
 part 'EAQueryMotionData.dart';
 
 part 'EADeleteMotion.dart';
+
+part 'EATelephoneBook.dart';
+
+part 'EABloodOxygenMonitor.dart';
+
+part 'EAVibrateIntensity.dart';
+
+part 'EAStressMonitor.dart';
+
+part 'EAMenstrualReminder.dart';
+
+part 'EASportHrWarning.dart';

@@ -23,16 +23,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 - (instancetype)initWithRequestId:(NSInteger )requestId type:(NSInteger )type;
++ (instancetype)eaInitWithRequestId:(NSInteger )requestId type:(NSInteger )type;
 
 
 
-+ (NSData *)getModelDataByRequestId:(NSInteger )requestId;
+//+ (NSData *)getModelDataByRequestId:(NSInteger )requestId;
 
 - (NSData *)getRequestModelData;
 
-/// 获取回应数据
-/// @param data 数据流
-+ (EARequestModel *)getModelByData:(NSData *)data;
+
 @end
 
 

@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <CoreBluetooth/CoreBluetooth.h>
 NS_ASSUME_NONNULL_BEGIN
 
 @class CBPeripheral;
@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+#define kWatchServices @[[CBUUID UUIDWithString:@"8800"],[CBUUID UUIDWithString:@"9900"],[CBUUID UUIDWithString:@"0012"],[CBUUID UUIDWithString:@"0011"]]
 
 @interface EAFastGetSnNumberManager : NSObject
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary *)getSnNumbers;
 
+- (NSArray *)getPairedWatches;
 
 - (void)clear;
 

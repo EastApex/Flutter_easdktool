@@ -442,6 +442,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void returnClassValue(int dataType, Map<String, dynamic> value) {
+    print(dataType);
+    print(value);
     switch (dataType) {
       case kEADataInfoTypeWatch:
         {
@@ -589,7 +591,7 @@ class _MyAppState extends State<MyApp> {
           print(sportShowData.calorie);
         }
         break;
-      case EADataInfoTypeBlePairState:
+      case kEADataInfoTypeBlePairState:
         {
           EAWatchPairStateModel sportShowData =
               EAWatchPairStateModel.fromMap(value);
@@ -610,7 +612,7 @@ class _MyAppState extends State<MyApp> {
           print(showAppMessage);
         }
         break;
-      case EADataInfoTypeMonitorReminder:
+      case kEADataInfoTypeMonitorReminder:
         {
           print(value);
 
@@ -618,8 +620,48 @@ class _MyAppState extends State<MyApp> {
           print(monitorReminder);
         }
         break;
-
+      case kEADataInfoTypeReadTelephoneBook:
+        {
+          EAReadTelephoneBook readTelephoneBook =
+              EAReadTelephoneBook.formMap(value);
+          print(readTelephoneBook);
+        }
+        break;
+      case kEADataInfoTypeBloodOxygenMonitor:
+        {
+          EABloodOxygenMonitor bloodOxygenMonitor =
+              EABloodOxygenMonitor.fromMap(value);
+          print(bloodOxygenMonitor.interval);
+        }
+        break;
+      case kEADataInfoTypeStressMonitor:
+        {
+          EAStressMonitor stressMonitor = EAStressMonitor.fromMap(value);
+          print(stressMonitor);
+        }
+        break;
+      case kEADataInfoTypeVibrateIntensity:
+        {
+          EAVibrateIntensity vibrateIntensity =
+              EAVibrateIntensity.fromMap(value);
+          print(vibrateIntensity);
+        }
+        break;
+      case kEADataInfoTypeMenstrualReminder:
+        {
+          EAMenstrualReminder menstrualReminder =
+              EAMenstrualReminder.fromMap(value);
+          print(menstrualReminder);
+        }
+        break;
+      // case kEADataInfoTypeSportHrWarning:
+      //   {
+      //     EASportHrWarning sportHrWarning = EASportHrWarning.fromMap(value);
+      //     print(sportHrWarning);
+      //   }
+      //   break;
       default:
+        break;
     }
   }
 
@@ -628,6 +670,19 @@ class _MyAppState extends State<MyApp> {
     return Container(
       child: Text(text,
           style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+      height: 60,
+      color: Colors.white,
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Widget NewTextView(String text) {
+    return Container(
+      child: Text(text,
+          style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: Color.fromARGB(255, 248, 113, 113))),
       height: 60,
       color: Colors.white,
     );
@@ -757,7 +812,6 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Obtaining User information【获取用户信息】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeUser);
-                  
                 },
               ),
               GestureDetector(
@@ -910,9 +964,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('26.get paired watche state【获取手表配对状态】'),
                 onTap: () {
-                  // getWatchData(EADataInfoTypeBlePairState);
-
-                  secondMethodGetWatchData(EADataInfoTypeBlePairState);
+                  secondMethodGetWatchData(kEADataInfoTypeBlePairState);
                 },
               ),
               GestureDetector(
@@ -930,7 +982,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
                 onTap: () {
-                  secondMethodGetWatchData2(EADataInfoTypeMonitorReminder,
+                  secondMethodGetWatchData2(kEADataInfoTypeMonitorReminder,
                       EAMonitorReminderType.drink.index);
                 },
               ),
@@ -957,6 +1009,42 @@ class _MyAppState extends State<MyApp> {
                   secondEasdkTool.deleteSaveData(QueryType.multi_data);
                 },
               ),
+              GestureDetector(
+                child: NewTextView('33.Get Watch Address Book 【获取手表通讯录】'),
+                onTap: () {
+                  secondMethodGetWatchData(kEADataInfoTypeReadTelephoneBook);
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('34.Blood oxygen monitoring data【血氧监测数据】'),
+                onTap: () {
+                  secondMethodGetWatchData(kEADataInfoTypeBloodOxygenMonitor);
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('35.Stress monitoring data【压力监测数据】'),
+                onTap: () {
+                  secondMethodGetWatchData(kEADataInfoTypeStressMonitor);
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('36.VibrateIntensity【震动】'),
+                onTap: () {
+                  secondMethodGetWatchData(kEADataInfoTypeVibrateIntensity);
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('37.Menstrual Reminder【经期提醒】'),
+                onTap: () {
+                  secondMethodGetWatchData(kEADataInfoTypeMenstrualReminder);
+                },
+              ),
+              // GestureDetector(
+              //   child: NewTextView('38.Sport Hr Warning【运动心率提醒】'),
+              //   onTap: () {
+              //     secondMethodGetWatchData(kEADataInfoTypeSportHrWarning);
+              //   },
+              // ),
               TitleView('  Setting【设置信息】'),
               GestureDetector(
                 child: TextView('1.Set up information【设置用户信息】'),
@@ -1289,7 +1377,7 @@ class _MyAppState extends State<MyApp> {
                   monitorReminder.endMinute = 0;
                   monitorReminder.cup = 2;
                   secondMethodSetWatchData(
-                      EADataInfoTypeMonitorReminder, monitorReminder.toMap());
+                      kEADataInfoTypeMonitorReminder, monitorReminder.toMap());
                 },
               ),
               GestureDetector(
@@ -1306,6 +1394,71 @@ class _MyAppState extends State<MyApp> {
                       kEADataInfoTypeMusic, eableMusicInfo.toMap());
                 },
               ),
+              GestureDetector(
+                child: NewTextView('22.Set telephone book【同步通讯录】'),
+                onTap: () {
+                  EAContactModel eaContactModel =
+                      EAContactModel("Tony", "+011125128");
+                  EAContactModel eaContactModel2 =
+                      EAContactModel("Lily", "+018461382");
+                  EATelephoneBook eaTelephoneBook = EATelephoneBook();
+                  eaTelephoneBook.contacts = [eaContactModel, eaContactModel2];
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeTelephoneBook, eaTelephoneBook.toMap());
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('23.Set Blood Oxygen Monitor【设置血氧监测】'),
+                onTap: () {
+                  EABloodOxygenMonitor eaBloodOxygenMonitor =
+                      EABloodOxygenMonitor(0, 60);
+
+                  secondMethodSetWatchData(kEADataInfoTypeBloodOxygenMonitor,
+                      eaBloodOxygenMonitor.toMap());
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('24.Set Stress Monitor【设置压力监测】'),
+                onTap: () {
+                  EAStressMonitor eaStressMonitor = EAStressMonitor(0, 60);
+
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeStressMonitor, eaStressMonitor.toMap());
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('25.Set VibrateIntensity【设置震动】'),
+                onTap: () {
+                  EAVibrateIntensity eaVibrateIntensity =
+                      EAVibrateIntensity(EAVibrateIntensityType.Medium);
+
+                  secondMethodSetWatchData(kEADataInfoTypeVibrateIntensity,
+                      eaVibrateIntensity.toMap());
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('25.Set Menstrual Reminder【经期提醒】'),
+                onTap: () {
+                  EAMenstrualReminder eaMenstrualReminder =
+                      EAMenstrualReminder();
+                  eaMenstrualReminder.menstrualBeginSw = true;
+                  eaMenstrualReminder.menstrualReminderDaysBefore = 1;
+                  eaMenstrualReminder.menstrualReminderHours = 9;
+                  eaMenstrualReminder.menstrualReminderMinutes = 0;
+                  secondMethodSetWatchData(kEADataInfoTypeMenstrualReminder,
+                      eaMenstrualReminder.toMap());
+                },
+              ),
+              // GestureDetector(
+              //   child: NewTextView('25.Set Sport Hr Warning【运动心率告警】'),
+              //   onTap: () {
+              //     EASportHrWarning eaSportHrWarning =
+              //         EASportHrWarning(0, 180, 60);
+
+              //     secondMethodSetWatchData(
+              //         kEADataInfoTypeSportHrWarning, eaSportHrWarning.toMap());
+              //   },
+              // ),
               TitleView(' Getting big data【获取大数据】'),
               GestureDetector(
                 child:
@@ -1568,6 +1721,92 @@ class _MyAppState extends State<MyApp> {
                   }));
                 },
               ),
+              TitleView('  Custom Watch Face【自定义表盘】'),
+              GestureDetector(
+                child: NewTextView('1.Nmuber Preview Image【数字表盘预览图】'),
+                onTap: () async {
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/360*360.png");
+
+                  EACustomWatchFace customWatchFace = EACustomWatchFace();
+                  customWatchFace.isNumberWf = true;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.numbeColorHex = "#0000FF";
+                  customWatchFace.getPreviewImage = true;
+                  secondEasdkTool
+                      .getCustomWatchfacePreviewImage(customWatchFace,
+                          EACustomWatchfacePreviewImageCallback((previewImage) {
+                    print(previewImage);
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('2.OTA Nmuber Watch Face【OTA数字表盘】'),
+                onTap: () async {
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/360*360.png");
+
+                  EACustomWatchFace customWatchFace = EACustomWatchFace();
+                  customWatchFace.isNumberWf = true;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.numbeColorHex = "#0000FF";
+                  customWatchFace.getPreviewImage = false;
+                  secondEasdkTool.otaCustomWatchface(customWatchFace,
+                      EAOTAProgressCallback((progress) {
+                    print("OTA进度:" + progress.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+
+                    } else if (progress == 100) {
+                      // transmit data succ;
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('3.Pointer Preview Image【指针表盘预览图】'),
+                onTap: () async {
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/360*360.png");
+
+                  EACustomWatchFace customWatchFace = EACustomWatchFace();
+                  customWatchFace.isNumberWf = false;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.pointerColorType = 1;
+                  customWatchFace.getPreviewImage = true;
+                  secondEasdkTool
+                      .getCustomWatchfacePreviewImage(customWatchFace,
+                          EACustomWatchfacePreviewImageCallback((previewImage) {
+                    print(previewImage);
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('4.OTA Pointer Watch Face【OTA指针表盘】'),
+                onTap: () async {
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/360*360.png");
+                  EACustomWatchFace customWatchFace = EACustomWatchFace();
+                  customWatchFace.isNumberWf = false;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.pointerColorType = 1;
+                  customWatchFace.getPreviewImage = false;
+                  secondEasdkTool.otaCustomWatchface(customWatchFace,
+                      EAOTAProgressCallback((progress) {
+                    print("OTA进度:" + progress.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+
+                    } else if (progress == 100) {
+                      // transmit data succ;
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
+                },
+              ),
               TitleView('  unbindWatch【解绑】'),
               GestureDetector(
                 child: TextView('1.Unbundling equipment【解绑设备】'),
@@ -1723,5 +1962,20 @@ class _MyAppState extends State<MyApp> {
         }
       }
     }
+  }
+
+  Future<String> getImageAndPassToPlugin(String imageName) async {
+    // 获取图片目录
+    // final directory = await getApplicationDocumentsDirectory();
+    // final imagePath = '${directory.path}/$imageName';
+    // return imagePath;
+
+    var bytes = await rootBundle.load(imageName);
+    String path = (await getApplicationSupportDirectory()).path;
+    String filePath = '$path/' + "bgImage" + '.png';
+    final buffer = bytes.buffer;
+    await File(filePath).writeAsBytes(
+        buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    return filePath;
   }
 }

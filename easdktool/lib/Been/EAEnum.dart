@@ -10,6 +10,12 @@ enum EARespondCodeType {
   /// 【失败】
   Fail,
 
+  Watch_in_motion, // （id=46）:手表正在运动，请结束后再开启。
+  Watch_end_motion, // （id=47）:APP运动已经结束。
+  Bt_on_fail_not_disturb, // (id=59): 设备进入了勿扰模式
+  Bt_on_fail_low_power, //  (id=59): 设备低电量
+  Bt_on_fail_chage, //    (id=59): 设备正在充电
+
   /// 【超过支持的最大数量】
   MemFull,
 
@@ -71,7 +77,23 @@ enum EALanguageType {
   greek, //Greek
   hebrew, //Hebrew
   swedish, //Swedish
-  unknown
+  osmanli,
+  czech,
+  indonesia,
+  melayu,
+  farsi,
+  vietnamese,
+  belarusian,
+  hungarian,
+  hindi,
+  ukrainian,
+  romanian,
+  moldovan,
+  bengali,
+  slovak,
+  danish,
+  norwegian,
+  finnish
 }
 
 ///System of units【单位制度】
@@ -348,6 +370,9 @@ enum EAVibrateIntensityType {
 
   /// 强
   Strong,
+
+  /// 不震动
+  NotVibrate,
 }
 
 /// Primary menu type【一级菜单类型】
@@ -466,6 +491,13 @@ enum EAOpePhoneType {
 
   /// 停止寻找手表(固件需求)
   StopSearchWatch,
+
+  StopCamera, //停止相机
+  BleSecEncStart, //使能设备操作IOS手机弹出配对框
+  BtMsgOff, //关闭bt信息回复功能
+  BtMsgOn, //打开bt信息回复功能
+  ClearUserdata, //清除用户数据（需要按2次按钮确认）
+  StartPhoneCamera, //开启手机拍照
 }
 
 /// MARK: - 操作设备类型
@@ -598,6 +630,7 @@ enum EAMonitorReminderType {
   washHands,
   // sedentary,
 }
+
 enum QueryType {
   daily_data,
   sleep_data,

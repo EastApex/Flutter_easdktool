@@ -22,7 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -49,6 +49,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+}
+dependencies {
+    implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
 }
 
 flutter {

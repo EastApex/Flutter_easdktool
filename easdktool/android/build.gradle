@@ -35,9 +35,11 @@ rootProject.allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+
         flatDir {
             dirs project(':easdktool').file('libs')
         }
+
     }
 }
 
@@ -55,10 +57,18 @@ android {
 
     defaultConfig {
         minSdk 23
+        multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            multiDexEnabled true
+            debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            multiDexEnabled true
             debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -66,7 +76,7 @@ android {
 }
 greendao {
     // 数据库版本号
-    schemaVersion 2
+    schemaVersion 4
     // 生成数据库文件的目录
     targetGenDir 'src/main/java'
     // 生成的数据库相关文件的包名
@@ -74,11 +84,14 @@ greendao {
 }
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
-    api(name: 'apex_sdk_4.0.4', ext: 'aar')
+    api(name: 'apex_sdk_4.3.2', ext: 'aar')
+    api(name: 'custom_dial_0.3.4', ext: 'aar')
     implementation 'com.google.protobuf:protobuf-java:3.19.3'
     implementation 'com.google.protobuf:protoc:3.19.3'
     //fastjson解析
     api 'com.alibaba:fastjson:1.2.59'
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
+    implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
+
 }

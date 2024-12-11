@@ -2,8 +2,6 @@
 EASDKTOOL
 
 
-
-
 ## Normal scanning can be started only when Bluetooth is enabled and the location permission is allowed. The scanning is time-consuming. The developer can set the scanning time through the timer. The recommended scanning duration is 8-10 seconds. Do not scan frequently. You can scan only five times within 30 seconds. Otherwise, the android system will prompt you that the device cannot be scanned "is scanning too frequently"
 
 

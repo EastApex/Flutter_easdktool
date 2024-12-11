@@ -78,6 +78,12 @@ flutter:
     - assets/bin/002019_AP0.1B0.6.bin
     - assets/bin/002019_AP0.1B0.7.bin
     - assets/bin/watchface_U38.bin
+    - assets/images/
+    # - assets/images/466*466.png
+    # - assets/images/368*448.png
+    # - assets/images/240*280.png
+    # - assets/images/240*240.png
+    # - assets/images/360*360.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

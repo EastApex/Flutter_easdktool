@@ -9,8 +9,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// User information
-/// 用户信息
+/// id = 4: User information
+/// id = 4: 用户信息
 @interface EAUserModel : EABaseModel
 
 /// sex
@@ -33,12 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// 穿戴方式
 @property(nonatomic, assign) EAWearWayType wearWayType;
 
-/// 肤色 
-@property(nonatomic, assign) EASkinColorType eSkinColor;
+/// Note：This parameter is optional. It is not required
+/// Skin Color
+/// 肤色
+@property(nonatomic, assign) EASkinColorType eSkinColor __attribute__((deprecated));
 
-/// 获取用户相关信息
-/// @param data 数据流
-+ (EAUserModel *)getModelByData:(NSData *)data;
+
 
 
 

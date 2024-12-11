@@ -22,6 +22,20 @@ class EABleWatchInfo {
   int isWaitForBinding =
       0; // Whether to wait for the device to confirm binding【是否需要等待设备确认绑定】
 
+  // int proj_settings = 0;				//项目功能列表: 0 不支持 1:支持 (固件端实现 id=44协议后才能写1)
+  // int lcd_full_w =0;				//LCD表盘宽度
+  // int lcd_full_h =01;				//LCD表盘高度
+  // int lcd_full_type =0;				//LCD表盘类型: 0:方屏 1:圆屏
+  // int lcd_preview_w =0;				//LCD表盘缩略图宽度
+  // int lcd_preview_h =0;				//LCD表盘缩略图高度
+  // int lcd_preview_radius =0;				//LCD表盘缩略图圆角半径
+  // int not_support_sn =0;				//不支持sn号绑定手表: 0:支持 1:不支持
+  // int max_watch_size = 0;				//最大支持表盘内存大小（存储空间,单位KB）
+  // int lcd_pixel_type = 0;				//LCD像素类型: 0: RGB565 1: GXGPU_RGB888 2: ARGB8565(杰理)  3: 海思平台
+  // int num_of_alarm_supported = 0;			//支持闹钟数量：0:默认支持10个  n:支持n个
+  // int num_of_schedule_supported = 20;			//支持日程数量：0:默认支持10个  n:支持n个
+  // int custom_firmware_version =0;			//客户版本号(如果有值，则用于显示给客户)：最多支持32字节的utf8，字符串（大小详见对应OPTIONS文件）
+
   EABleWatchInfo.fromMap(Map<String, dynamic> map) {
     if (map["agpsUpdateTimestamp"] != null) {
       agpsUpdateTimestamp = map["agpsUpdateTimestamp"];

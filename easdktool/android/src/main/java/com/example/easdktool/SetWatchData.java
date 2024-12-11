@@ -9,8 +9,11 @@ import com.apex.bluetooth.callback.GeneralCallback;
 import com.apex.bluetooth.core.EABleManager;
 
 import com.apex.bluetooth.enumeration.MotionReportType;
+import com.apex.bluetooth.enumeration.VibrationIntensity;
 import com.apex.bluetooth.model.EABleAncsSw;
+import com.apex.bluetooth.model.EABleAutoStressMonitor;
 import com.apex.bluetooth.model.EABleBindInfo;
+import com.apex.bluetooth.model.EABleContact;
 import com.apex.bluetooth.model.EABleDailyGoal;
 import com.apex.bluetooth.model.EABleDev;
 import com.apex.bluetooth.model.EABleDevUnit;
@@ -23,10 +26,12 @@ import com.apex.bluetooth.model.EABleMenuPage;
 import com.apex.bluetooth.model.EABleMonitorReminder;
 import com.apex.bluetooth.model.EABleMusicRespond;
 import com.apex.bluetooth.model.EABleNotDisturb;
+import com.apex.bluetooth.model.EABlePeriodReminder;
 import com.apex.bluetooth.model.EABlePersonInfo;
 import com.apex.bluetooth.model.EABlePhysiologyData;
 import com.apex.bluetooth.model.EABleReminder;
 import com.apex.bluetooth.model.EABleSedentariness;
+import com.apex.bluetooth.model.EABleSleepBloodSwitch;
 import com.apex.bluetooth.model.EABleSocialContact;
 import com.apex.bluetooth.model.EABleSyncTime;
 import com.apex.bluetooth.model.EABleWatchFace;
@@ -39,6 +44,8 @@ import com.example.easdktool.callback.SetCallback;
 import com.example.easdktool.db.DataManager;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -139,7 +146,7 @@ public class SetWatchData {
 
     public void setMenstrual(String jsonString) {
         EABlePhysiologyData eaBlePhysiologyData = new String2Object().string2Physiology(jsonString);
-        EABleManager.getInstance().setMenstrualCycle(eaBlePhysiologyData, new SetCallback(32, channel));
+        EABleManager.getInstance().setMenstrualCycle(eaBlePhysiologyData, false, new SetCallback(32, channel));
 
     }
 
@@ -172,17 +179,71 @@ public class SetWatchData {
         EABleManager.getInstance().addMonitorReminder(eaBleMonitorReminder, new SetCallback(45, channel));
     }
 
+    public void setContacts(String jsonString) {
+        final List<EABleContact> contactList = new String2Object().string2Contacts(jsonString);
+        if (contactList == null || contactList.size() <= 10) {
+            EABleManager.getInstance().addBookList(contactList, 0, new SetCallback(42, channel));
+        } else {
+            final List<EABleContact> firstList = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                firstList.add(contactList.get(i));
+            }
+            EABleManager.getInstance().addBookList(firstList, 0, new GeneralCallback() {
+                @Override
+                public void result(boolean b, int i) {
+                    if (b) {
+                        contactList.removeAll(firstList);
+                        EABleManager.getInstance().addBookList(contactList, 1, new SetCallback(42, channel));
+                    } else {
+                        new Return2Flutter(channel).setWatchDataResponse(1, 42);
+                    }
+
+                }
+
+                @Override
+                public void mutualFail(int i) {
+                    new Return2Flutter(channel).setWatchDataResponse(1, 42);
+                }
+            });
+        }
+
+    }
+
+    public void setSleepSpo2Check(String jsonString) {
+        EABleSleepBloodSwitch eaBleSleepBloodSwitch = new String2Object().string2SleepSpo2(jsonString);
+        LogUtils.i(TAG, "eaBleSleepBloodSwitch:" + JSONObject.toJSONString(eaBleSleepBloodSwitch));
+        EABleManager.getInstance().startSleepBloodMonitor(eaBleSleepBloodSwitch, new SetCallback(50, channel));
+    }
+
+    public void setStressCheck(String jsonString) {
+        EABleAutoStressMonitor autoStressMonitor = new String2Object().string2Stress(jsonString);
+        LogUtils.i(TAG, "autoStressMonitor:" + JSONObject.toJSONString(autoStressMonitor));
+        EABleManager.getInstance().startStressMonitor(autoStressMonitor, new SetCallback(51, channel));
+    }
+
+    public void setVibrate(String jsonString) {
+        VibrationIntensity vibrationIntensity = new String2Object().string2Vibrate(jsonString);
+        LogUtils.i(TAG, "vibrationIntensity:" + JSONObject.toJSONString(vibrationIntensity));
+        EABleManager.getInstance().setVibrateMode(vibrationIntensity, new SetCallback(53, channel));
+    }
+
+    public void setPeriodReminder(String jsonString) {
+        EABlePeriodReminder eaBlePeriodReminder = new String2Object().string2PeriodReminder(jsonString);
+        LogUtils.i(TAG, "eaBlePeriodReminder:" + JSONObject.toJSONString(eaBlePeriodReminder));
+        EABleManager.getInstance().setPeriodReminder(eaBlePeriodReminder, new SetCallback(55, channel));
+    }
+
     public void unbindDevice() {
         EABleDev eaBleDev = new EABleDev();
         eaBleDev.setE_ops(EABleDev.DevOps.restore_factory);
         EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
             @Override
-            public void result(boolean b) {
+            public void result(boolean b, int i) {
                 if (b) {
                     DataManager.getInstance().clearDb();
                 }
-
             }
+
 
             @Override
             public void mutualFail(int i) {
@@ -199,14 +260,14 @@ public class SetWatchData {
         eaBleBindInfo = new String2Object().string2BindInfo(jsonString);
         EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
             @Override
-            public void result(boolean b) {
+            public void result(boolean b, int i) {
                 if (b) {
                     if (eaBleBindInfo.getE_ops().getValue() == 0) {
                         eaBleBindInfo.setE_ops(EABleBindInfo.BindingOps.end);
                         LogUtils.i(TAG, "daily data sync time:" + eaBleBindInfo.getBind_mod());
                         EABleManager.getInstance().setOpsBinding(eaBleBindInfo, new GeneralCallback() {
                             @Override
-                            public void result(boolean b) {
+                            public void result(boolean b, int i) {
                                 new Return2Flutter(channel).setWatchDataResponse((b ? 0 : 1), 6);
                             }
 
@@ -237,6 +298,7 @@ public class SetWatchData {
                     EABleManager.getInstance().disconnectPeripheral();
                 }
             }
+
 
             @Override
             public void mutualFail(int i) {
@@ -279,7 +341,7 @@ public class SetWatchData {
         }
         EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
             @Override
-            public void result(final boolean b) {
+            public void result(final boolean b, int code) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }

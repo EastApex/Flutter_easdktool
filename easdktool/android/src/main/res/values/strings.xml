@@ -4,4 +4,5 @@
     <string name="information_fail">Bluetooth has been disconnected, unable to push information</string>
     <string name="information_success">Message delivered to watch successfully</string>
     <string name="information_push_fail">Message delivery to watch failed</string>
+    <string name="apex_watch">Apex Watch</string>
 </resources>
