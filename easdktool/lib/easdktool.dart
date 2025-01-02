@@ -47,6 +47,7 @@ const String kCustomWatchFaceResponse = "CustomWatchFaceResponse";
 const String queryData = "queryData";
 final String deleteData = "deleteData";
 const String kQueryBigWatchData = "QueryBigWatchData";
+final String ConnectBT = "connectClassicBluetooth";
 
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
@@ -140,6 +141,9 @@ class EASDKTool {
   void connectToPeripheral(EAConnectParam connectParam) {
     String param = convert.jsonEncode(connectParam);
     _channel.invokeMethod(kEAConnectWatch, param);
+  }
+  void pairBt(String btAddress){
+    _channel.invokeMethod(ConnectBT, btAddress);
   }
 
   /// 获取手表连接状态信息

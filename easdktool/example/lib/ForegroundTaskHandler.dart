@@ -123,9 +123,9 @@ class ForegroundTaskHandler extends TaskHandler {
     eapushMessage.content = event.message.toString();
     easdkTool.setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap(),
         EASetDataCallback(onRespond: ((respond) {
-      print('---> ${eapushMessage.messageType}');
-      print(respond.respondCodeType);
-    })));
+          print('---> ${eapushMessage.messageType}');
+          print(respond.respondCodeType);
+        })));
   }
 
   void connectBluetooth() {
@@ -139,7 +139,7 @@ class ForegroundTaskHandler extends TaskHandler {
         EAGetDataCallback(
             onSuccess: ((info) {
               final SendPort? sendPort =
-                  IsolateNameServer.lookupPortByName("_ui_get_isolate");
+              IsolateNameServer.lookupPortByName("_ui_get_isolate");
               print("将获取到的数据传到UI线程");
               sendPort?.send(info);
               //将数据回传到UI界面
@@ -153,23 +153,29 @@ class ForegroundTaskHandler extends TaskHandler {
   void setWatchData(int dataType, Map map) {
     easdkTool.setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-      final SendPort? sendPort =
+          final SendPort? sendPort =
           IsolateNameServer.lookupPortByName("_ui_set_isolate");
-      print("将设置的结果传到UI线程");
-      sendPort?.send(respond);
-    })));
+          print("将设置的结果传到UI线程");
+          sendPort?.send(respond);
+        })));
   }
 
   static DateTime timestampToDate(int timestamp) {
     DateTime dateTime = DateTime.now();
 
     ///如果是十三位时间戳返回这个
-    if (timestamp.toString().length == 13) {
+    if (timestamp
+        .toString()
+        .length == 13) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    } else if (timestamp.toString().length == 16) {
+    } else if (timestamp
+        .toString()
+        .length == 16) {
       ///如果是十六位时间戳
       dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
-    } else if (timestamp.toString().length == 10) {
+    } else if (timestamp
+        .toString()
+        .length == 10) {
       ///如果是十位时间戳
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     }
@@ -222,18 +228,10 @@ class ForegroundTaskHandler extends TaskHandler {
      */
     if (info.isNotEmpty) {
       int type = info["opePhoneType"];
-      if (type == 0) {
-      } else if (type == 1) {
-      } else if (type == 2) {
-      } else if (type == 3) {
-      } else if (type == 4) {
-      } else if (type == 5) {
-      } else if (type == 6) {
-      } else if (type == 7) {
-      } else if (type == 8) {
-      } else if (type == 9) {
-      } else if (type == 11) {
-      } else if (type == 12) {
+      if (type == 0) {} else if (type == 1) {} else if (type == 2) {} else
+      if (type == 3) {} else if (type == 4) {} else if (type == 5) {} else
+      if (type == 6) {} else if (type == 7) {} else if (type == 8) {} else
+      if (type == 9) {} else if (type == 11) {} else if (type == 12) {
         int action = info["action"];
         /**
          * action   0    Start playing
@@ -244,6 +242,9 @@ class ForegroundTaskHandler extends TaskHandler {
          *          5    Volume decrease
          */
         print(action.toString());
+      } else if (type == 0x18) {
+        print("开始连接BT");
+        easdkTool.pairBt("45:41:0B:BA:8F:5E");
       }
     }
   }
@@ -307,7 +308,7 @@ class ForegroundTaskHandler extends TaskHandler {
       case kEADataInfoTypeStepFreqData: // stride frequency
         for (Map<String, dynamic> item in list) {
           EABigDataStrideFrequency model =
-              EABigDataStrideFrequency.fromMap(item);
+          EABigDataStrideFrequency.fromMap(item);
           print(model.timeStamp);
         }
         break;
@@ -320,7 +321,7 @@ class ForegroundTaskHandler extends TaskHandler {
       case kEADataInfoTypeRestingHeartRateData: //resting heart rate
         for (Map<String, dynamic> item in list) {
           EABigDataRestingHeartRate model =
-              EABigDataRestingHeartRate.fromMap(item);
+          EABigDataRestingHeartRate.fromMap(item);
           print(model.timeStamp);
         }
         break;
@@ -386,8 +387,8 @@ class ConnectListener implements EABleConnectListener {
                 }
                 _easdkTool?.bindingWatch(bindInfo,
                     EABindingWatchCallback(onRespond: ((respond) {
-                  print(respond.respondCodeType);
-                })));
+                      print(respond.respondCodeType);
+                    })));
               }
             }),
             onFail: ((info) {})));

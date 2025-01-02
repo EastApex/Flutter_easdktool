@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.flutter.Log;
 import io.flutter.embedding.engine.FlutterEngine;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -256,6 +257,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             mContext = flutterPluginBinding.getApplicationContext();
         }
         eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "broadReceiver");
+        DataManager.getInstance().initDB(mContext);
 
         eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
             @Override
@@ -285,10 +287,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             }
         });
-        DataManager.getInstance().initDB(mContext);
-
-
-
 
 
     }
@@ -387,17 +385,17 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             new QueryMotionData(channel, queryDb.dataType).queryData();
         } else if (call.method.equals(pairBT)) {
             String arguments = (String) call.arguments;
-            if (checkArgumentName("btAddress", arguments)) {
-                BtConnect btConnect = JSONObject.parseObject(arguments, BtConnect.class);
-                if (!TextUtils.isEmpty(btConnect.btAddress) && BluetoothAdapter.checkBluetoothAddress(btConnect.btAddress)) {
+        //    if (checkArgumentName("btAddress", arguments)) {
+        //        BtConnect btConnect = JSONObject.parseObject(arguments, BtConnect.class);
+                if (!TextUtils.isEmpty(arguments) && BluetoothAdapter.checkBluetoothAddress(arguments.toUpperCase())) {
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(btConnect.btAddress);
+                    BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(arguments.toUpperCase());
                     if (bluetoothDevice != null) {
                         int states = bluetoothDevice.getBondState();
                         if (btConnectBroadcast != null) {
-                            btConnectBroadcast.setCurrentBlueAddress(btConnect.btAddress);
+                            btConnectBroadcast.setCurrentBlueAddress(arguments.toUpperCase());
                         }
-                        LogUtils.i(TAG, "开始连接BT");
+                        LogUtils.i(TAG, "开始连接BT:"+states);
                         if (states == BluetoothDevice.BOND_NONE) {
 
                             //配对
@@ -407,8 +405,8 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                 bluetoothDevice.createBond();
 
                             } else {
-
                                 try {
+                                    Log.e(TAG, "非直连配对");
                                     Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
                                     bondMethod.setAccessible(true);
                                     bondMethod.invoke(bluetoothDevice, 1);
@@ -456,7 +454,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     channel.invokeMethod(kArgumentsError, "param error");
                     return;
                 }
-            }
+      //      }
         } else if (call.method.equals(kEACustomWatchface)) {//自定义表盘
             String arguments = (String) call.arguments;
             final CustomWatchFace customWatchFace = JSONObject.parseObject(arguments, CustomWatchFace.class);

@@ -91,7 +91,7 @@ dependencies {
     //fastjson解析
     api 'com.alibaba:fastjson:1.2.59'
     implementation 'org.greenrobot:greendao:3.3.0'
-    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
+    implementation  'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
     implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
 
 }
