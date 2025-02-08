@@ -1,7 +1,7 @@
 package com.example.easdktool.callback;
 
-import com.apex.bluetooth.callback.EditAttentionCallback;
-import com.apex.bluetooth.model.EABleRemindRespond;
+import com.apex.ax_bluetooth.callback.EditAttentionCallback;
+import com.apex.ax_bluetooth.model.EABleRemindRespond;
 import com.example.easdktool.Return2Flutter;
 
 import io.flutter.plugin.common.MethodChannel;

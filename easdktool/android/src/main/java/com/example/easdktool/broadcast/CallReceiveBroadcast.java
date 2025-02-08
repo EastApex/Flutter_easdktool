@@ -8,11 +8,11 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.apex.bluetooth.callback.GeneralCallback;
-import com.apex.bluetooth.core.EABleManager;
-import com.apex.bluetooth.enumeration.EABleConnectState;
-import com.apex.bluetooth.model.EABleSocialContact;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.callback.GeneralCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.enumeration.EABleConnectState;
+import com.apex.ax_bluetooth.model.EABleSocialContact;
+import com.apex.ax_bluetooth.utils.LogUtils;
 
 import com.example.easdktool.R;
 import com.example.easdktool.service.MessageUtils;

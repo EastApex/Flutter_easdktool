@@ -1,6 +1,6 @@
 package com.example.easdktool.been;
 
-import com.apex.bluetooth.model.EABlePeriod;
+import com.apex.ax_bluetooth.model.EABlePeriod;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

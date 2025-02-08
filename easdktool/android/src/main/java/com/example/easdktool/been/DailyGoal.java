@@ -1,6 +1,6 @@
 package com.example.easdktool.been;
 
-import com.apex.bluetooth.model.EABleDailyGoal;
+import com.apex.ax_bluetooth.model.EABleDailyGoal;
 
 public class DailyGoal {
 //    public int s_step_sw = 0;

@@ -1,6 +1,6 @@
 package com.example.easdktool.db;
 
-import com.apex.bluetooth.model.EABlePressureData;
+import com.apex.ax_bluetooth.model.EABlePressureData;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

@@ -9,8 +9,8 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
-import com.apex.bluetooth.model.EABleWatchInfo;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.model.EABleWatchInfo;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.custom_dial.NewRGBAPlatformDiffTxtUtils;
 import com.example.custom_dial.NewRGBApointUtils;
 import com.example.easdktool.been.CustomWatchFace;

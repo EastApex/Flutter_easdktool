@@ -5,7 +5,7 @@ import android.os.Looper;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 
 import java.util.Map;
 

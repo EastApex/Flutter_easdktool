@@ -8,7 +8,7 @@ import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 
 import java.lang.reflect.Method;
 

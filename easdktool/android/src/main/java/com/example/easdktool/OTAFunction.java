@@ -5,10 +5,10 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.callback.OtaCallback;
-import com.apex.bluetooth.core.EABleManager;
-import com.apex.bluetooth.model.EABleOta;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.callback.OtaCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.model.EABleOta;
+import com.apex.ax_bluetooth.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;

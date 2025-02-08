@@ -10,8 +10,8 @@ import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.apex.bluetooth.model.EABleWatchInfo;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.model.EABleWatchInfo;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.custom_dial.CustomDialCallback;
 import com.example.custom_dial.CustomDiffTxtColorDialParam;
 import com.example.custom_dial.CustomPointDialParam;

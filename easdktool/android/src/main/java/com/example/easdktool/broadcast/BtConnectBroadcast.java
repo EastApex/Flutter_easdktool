@@ -13,7 +13,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.ConnectAudioUtils;
 
 import java.lang.reflect.Method;

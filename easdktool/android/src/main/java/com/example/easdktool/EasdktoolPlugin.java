@@ -20,21 +20,21 @@ import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.apex.bluetooth.callback.WatchInfoCallback;
-import com.apex.bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.callback.WatchInfoCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
 
-import com.apex.bluetooth.enumeration.EABleConnectState;
+import com.apex.ax_bluetooth.enumeration.EABleConnectState;
 
-import com.apex.bluetooth.enumeration.QueryWatchInfoType;
-import com.apex.bluetooth.listener.EABleScanListener;
+import com.apex.ax_bluetooth.enumeration.QueryWatchInfoType;
+import com.apex.ax_bluetooth.listener.EABleScanListener;
 
-import com.apex.bluetooth.model.EABleDevice;
+import com.apex.ax_bluetooth.model.EABleDevice;
 
-import com.apex.bluetooth.model.EABleOta;
+import com.apex.ax_bluetooth.model.EABleOta;
 
 
-import com.apex.bluetooth.model.EABleWatchInfo;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.model.EABleWatchInfo;
+import com.apex.ax_bluetooth.utils.LogUtils;
 
 import com.example.easdktool.been.BtConnect;
 import com.example.easdktool.been.CustomWatchFace;

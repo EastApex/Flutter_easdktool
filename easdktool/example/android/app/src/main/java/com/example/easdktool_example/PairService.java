@@ -16,7 +16,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.ConnectAudioUtils;
 import com.example.easdktool.broadcast.BtConnectBroadcast;
 import com.example.easdktool.service.Channel;

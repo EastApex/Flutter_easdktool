@@ -1,7 +1,7 @@
 package com.example.easdktool.been;
 
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.model.EABleInfoPush;
+import com.apex.ax_bluetooth.model.EABleInfoPush;
 
 import java.util.ArrayList;
 import java.util.List;

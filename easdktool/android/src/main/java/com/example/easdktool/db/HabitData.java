@@ -1,7 +1,7 @@
 package com.example.easdktool.db;
 
-import com.apex.bluetooth.enumeration.HabitIcon;
-import com.apex.bluetooth.enumeration.HabitState;
+import com.apex.ax_bluetooth.enumeration.HabitIcon;
+import com.apex.ax_bluetooth.enumeration.HabitState;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

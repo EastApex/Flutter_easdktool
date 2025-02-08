@@ -3,7 +3,7 @@ package com.example.easdktool.callback;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.apex.bluetooth.listener.EABleConnectListener;
+import com.apex.ax_bluetooth.listener.EABleConnectListener;
 import com.example.easdktool.enumerate.BluetoothState;
 import com.example.easdktool.enumerate.ConnectState;
 

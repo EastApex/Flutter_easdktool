@@ -84,7 +84,7 @@ greendao {
 }
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
-    api(name: 'apex_sdk_4.3.2', ext: 'aar')
+    api(name: 'ax_sdk_4.3.3', ext: 'aar')
     api(name: 'custom_dial_0.3.4', ext: 'aar')
     implementation 'com.google.protobuf:protobuf-java:3.19.3'
     implementation 'com.google.protobuf:protoc:3.19.3'

@@ -2,8 +2,8 @@ package com.example.easdktool.callback;
 
 import android.util.Log;
 
-import com.apex.bluetooth.callback.HabitResultCallback;
-import com.apex.bluetooth.model.EABleHabitRespond;
+import com.apex.ax_bluetooth.callback.HabitResultCallback;
+import com.apex.ax_bluetooth.model.EABleHabitRespond;
 import com.example.easdktool.Return2Flutter;
 
 import io.flutter.plugin.common.MethodChannel;

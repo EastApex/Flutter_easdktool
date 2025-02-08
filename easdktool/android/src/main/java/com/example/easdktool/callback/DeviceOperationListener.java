@@ -4,21 +4,21 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.callback.DataReportCallback;
-import com.apex.bluetooth.callback.DataResponseCallback;
-import com.apex.bluetooth.core.EABleManager;
-import com.apex.bluetooth.enumeration.EABleSportStatus;
-import com.apex.bluetooth.model.EABleBTSwitch;
-import com.apex.bluetooth.model.EABleExecutiveResponse;
-import com.apex.bluetooth.model.EABleMtu;
-import com.apex.bluetooth.model.EABleMusicControl;
-import com.apex.bluetooth.model.EABlePhoneResponse;
-import com.apex.bluetooth.model.EABleQueryMusic;
-import com.apex.bluetooth.model.EABleReportMonitorData;
-import com.apex.bluetooth.model.EABleReportSportData;
-import com.apex.bluetooth.model.EABleSocialResponse;
-import com.apex.bluetooth.model.EABleSwitch;
-import com.apex.bluetooth.model.EABleTimelyData;
+import com.apex.ax_bluetooth.callback.DataReportCallback;
+import com.apex.ax_bluetooth.callback.DataResponseCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.enumeration.EABleSportStatus;
+import com.apex.ax_bluetooth.model.EABleBTSwitch;
+import com.apex.ax_bluetooth.model.EABleExecutiveResponse;
+import com.apex.ax_bluetooth.model.EABleMtu;
+import com.apex.ax_bluetooth.model.EABleMusicControl;
+import com.apex.ax_bluetooth.model.EABlePhoneResponse;
+import com.apex.ax_bluetooth.model.EABleQueryMusic;
+import com.apex.ax_bluetooth.model.EABleReportMonitorData;
+import com.apex.ax_bluetooth.model.EABleReportSportData;
+import com.apex.ax_bluetooth.model.EABleSocialResponse;
+import com.apex.ax_bluetooth.model.EABleSwitch;
+import com.apex.ax_bluetooth.model.EABleTimelyData;
 
 import io.flutter.plugin.common.MethodChannel;
 

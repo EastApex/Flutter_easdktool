@@ -15,10 +15,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.apex.bluetooth.callback.GeneralCallback;
-import com.apex.bluetooth.core.EABleManager;
-import com.apex.bluetooth.enumeration.EABleConnectState;
-import com.apex.bluetooth.model.EABleSocialContact;
+import com.apex.ax_bluetooth.callback.GeneralCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.enumeration.EABleConnectState;
+import com.apex.ax_bluetooth.model.EABleSocialContact;
 
 
 import java.util.Calendar;

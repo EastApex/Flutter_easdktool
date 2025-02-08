@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.greendao.gen.BloodDataDao;
 import com.greendao.gen.DailyDataDao;
 import com.greendao.gen.DaoMaster;

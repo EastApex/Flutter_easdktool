@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.db.BloodData;
 import com.example.easdktool.db.DailyData;
 import com.example.easdktool.db.DataManager;

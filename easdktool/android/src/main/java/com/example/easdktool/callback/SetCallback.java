@@ -4,8 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.alibaba.fastjson.JSONObject;
-import com.apex.bluetooth.callback.GeneralCallback;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.callback.GeneralCallback;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.Return2Flutter;
 
 import io.flutter.plugin.common.MethodChannel;

@@ -17,8 +17,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.apex.bluetooth.model.EABleSocialContact;
-import com.apex.bluetooth.utils.LogUtils;
+import com.apex.ax_bluetooth.model.EABleSocialContact;
+import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.R;
 
 import java.io.File;
