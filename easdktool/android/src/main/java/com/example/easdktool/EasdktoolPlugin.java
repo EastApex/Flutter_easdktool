@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import com.alibaba.fastjson.JSONObject;
 
 import com.apex.ax_bluetooth.callback.WatchInfoCallback;
+import com.apex.ax_bluetooth.core.EABleBluetoothOption;
 import com.apex.ax_bluetooth.core.EABleManager;
 
 import com.apex.ax_bluetooth.enumeration.EABleConnectState;
@@ -576,6 +577,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
 
             try {
+                EABleBluetoothOption.autoReply=true;
                 EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
             } catch (Exception e) {
                 throw new RuntimeException(e);

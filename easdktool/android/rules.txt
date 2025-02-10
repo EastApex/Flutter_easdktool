@@ -1,0 +1,59 @@
+# 使用java中的关键字作字典：避免混淆后与其他包重名，而且混淆之后的代码更加不利于阅读
+#
+# This obfuscation dictionary contains reserved Java keywords. They can't
+# be used in Java source files, but they can be used in compiled class files.
+# Note that this hardly improves the obfuscation. Decent decompilers can
+# automatically replace reserved keywords, and the effect can fairly simply be
+# undone by obfuscating again with simpler names.
+# Usage:
+#     java -jar proguard.jar ..... -obfuscationdictionary filename.txt
+#
+
+eastDo
+eastIf
+eastFor
+eastInt
+eastNew
+eastTry
+eastByte
+eastCase
+eastChar
+eastElse
+eastGoto
+eastLong
+eastThis
+eastVoid
+eastBreak
+eastCatch
+eastClass
+eastConst
+eastFinal
+eastFloat
+eastShort
+eastSuper
+eastThrow
+eastWhile
+eastDouble
+eastImport
+eastNative
+eastPublic
+eastReturn
+eastStatic
+eastSwitch
+eastThrows
+eastBoolean
+eastDefault
+eastExtends
+eastFinally
+eastPackage
+eastPrivate
+eastAbstract
+eastContinue
+eastStrictfp
+eastVolatile
+eastInterface
+eastProtected
+eastTransient
+eastImplements
+eastInstanceof
+eastSynchronized
