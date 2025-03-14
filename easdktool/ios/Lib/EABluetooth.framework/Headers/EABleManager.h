@@ -13,12 +13,10 @@
  SDK access documentation
  https://www.showdoc.com.cn/2042713679210858/0
  
- 
- 
 */
 
-#define kEASDKVERSION   @"1.1.07"
-#define kEASDKBUILD     @"1"
+#define kEASDKVERSION   @"1.1.09"
+#define kEASDKBUILD     @"5"
 
 
 

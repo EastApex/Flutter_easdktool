@@ -10,6 +10,7 @@
 #import <EABluetooth/EABleManager.h>
 #import <EABluetooth/EAEnum.h>
 #import <EABluetooth/EABleConfig.h>
+#import <EABluetooth/EAWatchSupportModel.h>
 #import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
 
@@ -99,6 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setBleQueueNil;
 - (void)setIsConnected:(BOOL)isConnected;
 - (EAWatchModel *)getConnectWatchModel;
+- (EAWatchSupportModel *)getConnectWatchSupportModel;
 - (void)openCommunicationTimer;
 - (void)closeCommunicationTimer;
 - (BOOL)getOTAState;

@@ -34,6 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,assign) NSInteger textWidth;
 
+///
+///
+@property(nonatomic,assign) CGSize size;
+
+
 ///  Initialization method【初始化方法】
 /// - Parameters:
 ///   - eaTimeType: Time type【时间类型】
@@ -41,6 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 ///   - color: Color【颜色】
 ///   - point: Origin position【原点位置】
 + (instancetype)eaAllocInitWithTimeType:(EATimeType )eaTimeType font:(UIFont *)font color:(UIColor *)color point:(CGPoint )point;
+
+//+ (instancetype)eaAllocInitWithTimeType:(EATimeType )eaTimeType color:(UIColor *)color point:(CGPoint )point size:(CGSize)size;
+
+
 
 - (NSArray *)getRGB;
 

@@ -5,8 +5,9 @@
 //  Created by Aye on 2022/9/1.
 //
 
-#import <EABluetooth/EABluetooth.h>
-
+#import <EABluetooth/EABaseModel.h>
+#import <EABluetooth/EARespondModel.h>
+#import <EABluetooth/EARequestModel.h>
 NS_ASSUME_NONNULL_BEGIN
 
 

@@ -63,6 +63,12 @@ typedef void(^CheckJsonProgressBlock)(CGFloat progress);
 - (void)eaCheckHisJsonPath:(NSString *)jsonPath checkProgress:(void (^)(CGFloat progress))checkProgress complete:(CheckHisResCompleteBlock)complete fail:(CheckHisResErrorBlock)fail;
 
 
+
+/// Upgrade AGPS
+/// - Parameters:
+- (BOOL)eaUpgradeAGPSProgress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

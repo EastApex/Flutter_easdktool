@@ -65,12 +65,18 @@ android {
             multiDexEnabled true
             debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField('String', "GPS_LLE", '"http://apexwear-dev.oss-cn-shenzhen.aliyuncs.com/AGPS/f1e1G7.pgl"')
+            buildConfigField('String', "QZSS_LLE", '"http://apexwear-dev.oss-cn-shenzhen.aliyuncs.com/AGPS/f1e1J7.pgl"')
+            buildConfigField('String', "BD_LLE", '"http://apexwear-dev.oss-cn-shenzhen.aliyuncs.com/AGPS/f1e1C7.pgl"')
         }
         debug {
             minifyEnabled true
             multiDexEnabled true
             debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField('String', "GPS_LLE", '"https://apexwear-xinjiapo.oss-ap-southeast-1.aliyuncs.com/AGPS/f1e1G7.pgl"')
+            buildConfigField('String', "QZSS_LLE", '"https://apexwear-xinjiapo.oss-ap-southeast-1.aliyuncs.com/AGPS/f1e1J7.pgl"')
+            buildConfigField('String', "BD_LLE", '"https://apexwear-xinjiapo.oss-ap-southeast-1.aliyuncs.com/AGPS/f1e1C7.pgl"')
         }
     }
 }
@@ -91,7 +97,8 @@ dependencies {
     //fastjson解析
     api 'com.alibaba:fastjson:1.2.59'
     implementation 'org.greenrobot:greendao:3.3.0'
-    implementation  'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
+    implementation 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
     implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
 }

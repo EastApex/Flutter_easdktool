@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 
+import com.apex.ax_bluetooth.callback.FeaturesCallback;
 import com.apex.ax_bluetooth.callback.WatchInfoCallback;
 import com.apex.ax_bluetooth.core.EABleBluetoothOption;
 import com.apex.ax_bluetooth.core.EABleManager;
@@ -31,6 +32,7 @@ import com.apex.ax_bluetooth.listener.EABleScanListener;
 
 import com.apex.ax_bluetooth.model.EABleDevice;
 
+import com.apex.ax_bluetooth.model.EABleFeatures;
 import com.apex.ax_bluetooth.model.EABleOta;
 
 
@@ -92,7 +94,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
     private MethodChannel channel;
     private Context mContext;
-    // private Handler mHandler;
     private FlutterEngine flutterEngine;
 
     /// MARK: -call method Name
@@ -105,6 +106,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kEAGetBigWatchData = "EAGetBigWatchData";    // 获取手表大数据
     final String kEAOperationWatch = "EAOperationWatch";     // 操作手表
     final String kEAOTA = "EAOTA";                // ota
+    final String kEAAGPS = "EAAGPS"; // AGPS
     final String kEALog = "EAShowLog";                // log
     final String kEAScanWacth = "EAScanWacth"; // 搜索手表
     final String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
@@ -386,46 +388,46 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             new QueryMotionData(channel, queryDb.dataType).queryData();
         } else if (call.method.equals(pairBT)) {
             String arguments = (String) call.arguments;
-        //    if (checkArgumentName("btAddress", arguments)) {
-        //        BtConnect btConnect = JSONObject.parseObject(arguments, BtConnect.class);
-                if (!TextUtils.isEmpty(arguments) && BluetoothAdapter.checkBluetoothAddress(arguments.toUpperCase())) {
-                    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(arguments.toUpperCase());
-                    if (bluetoothDevice != null) {
-                        int states = bluetoothDevice.getBondState();
-                        if (btConnectBroadcast != null) {
-                            btConnectBroadcast.setCurrentBlueAddress(arguments.toUpperCase());
-                        }
-                        LogUtils.i(TAG, "开始连接BT:"+states);
-                        if (states == BluetoothDevice.BOND_NONE) {
-
-                            //配对
-
-                            if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
-                                LogUtils.e(TAG, "走直连配对");
-                                bluetoothDevice.createBond();
-
-                            } else {
-                                try {
-                                    Log.e(TAG, "非直连配对");
-                                    Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
-                                    bondMethod.setAccessible(true);
-                                    bondMethod.invoke(bluetoothDevice, 1);
-                                } catch (NoSuchMethodException e) {
-                                    LogUtils.e(TAG, "找不到反射的方法");
-                                } catch (InvocationTargetException e) {
-                                    LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
-                                } catch (IllegalAccessException e) {
-                                    LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
-                                }
-                            }
-                        } else if (states == BluetoothDevice.BOND_BONDING) {
-                            LogUtils.i(TAG, "正在配对");
-                        } else if (states == BluetoothDevice.BOND_BONDED) {
-                            LogUtils.i(TAG, "已经配对");
-                            new ConnectAudioUtils().connectAudio(mContext, bluetoothDevice);
-                        }
+            //    if (checkArgumentName("btAddress", arguments)) {
+            //        BtConnect btConnect = JSONObject.parseObject(arguments, BtConnect.class);
+            if (!TextUtils.isEmpty(arguments) && BluetoothAdapter.checkBluetoothAddress(arguments.toUpperCase())) {
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(arguments.toUpperCase());
+                if (bluetoothDevice != null) {
+                    int states = bluetoothDevice.getBondState();
+                    if (btConnectBroadcast != null) {
+                        btConnectBroadcast.setCurrentBlueAddress(arguments.toUpperCase());
                     }
+                    LogUtils.i(TAG, "开始连接BT:" + states);
+                    if (states == BluetoothDevice.BOND_NONE) {
+
+                        //配对
+
+                        if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
+                            LogUtils.e(TAG, "走直连配对");
+                            bluetoothDevice.createBond();
+
+                        } else {
+                            try {
+                                Log.e(TAG, "非直连配对");
+                                Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
+                                bondMethod.setAccessible(true);
+                                bondMethod.invoke(bluetoothDevice, 1);
+                            } catch (NoSuchMethodException e) {
+                                LogUtils.e(TAG, "找不到反射的方法");
+                            } catch (InvocationTargetException e) {
+                                LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
+                            } catch (IllegalAccessException e) {
+                                LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
+                            }
+                        }
+                    } else if (states == BluetoothDevice.BOND_BONDING) {
+                        LogUtils.i(TAG, "正在配对");
+                    } else if (states == BluetoothDevice.BOND_BONDED) {
+                        LogUtils.i(TAG, "已经配对");
+                        new ConnectAudioUtils().connectAudio(mContext, bluetoothDevice);
+                    }
+                }
 
 /**
  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
@@ -451,11 +453,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
  }
  */
 
-                } else {
-                    channel.invokeMethod(kArgumentsError, "param error");
-                    return;
-                }
-      //      }
+            } else {
+                channel.invokeMethod(kArgumentsError, "param error");
+                return;
+            }
+            //      }
         } else if (call.method.equals(kEACustomWatchface)) {//自定义表盘
             String arguments = (String) call.arguments;
             final CustomWatchFace customWatchFace = JSONObject.parseObject(arguments, CustomWatchFace.class);
@@ -577,7 +579,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
 
             try {
-                EABleBluetoothOption.autoReply=true;
+                EABleBluetoothOption.autoReply = true;
                 EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -645,6 +647,16 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 new OTAFunction(channel).startOta(map);
             }
 
+        } else if (call.method.equals(kEAAGPS)) {//更新AGPS
+            if (EABleManager.getInstance().getDeviceConnectState() != EABleConnectState.STATE_CONNECTED) {
+                LogUtils.i(TAG, "设备未连接");
+                if (channel != null) {
+                    channel.invokeMethod(kProgress, -1);
+                }
+                return;
+            }
+            LogUtils.i(TAG,"开始更新AGPS");
+            new AGPSUpdate(channel).startUpdate(mContext);
         } else {
             result.notImplemented();
         }

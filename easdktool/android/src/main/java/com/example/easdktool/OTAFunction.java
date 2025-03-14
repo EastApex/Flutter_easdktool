@@ -178,4 +178,60 @@ public class OTAFunction {
             }
         });
     }
+    public void startAgps2Watch(List<EABleOta> otaList){
+        EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
+            @Override
+            public void success() {
+                if (mHandler==null){
+                    mHandler=new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (channel != null) {
+                            channel.invokeMethod(kProgress, 100);
+                        }
+                        mHandler=null;
+                    }
+                });
+            }
+
+            @Override
+            public void progress(int i) {
+                if (mHandler==null){
+                    mHandler=new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        LogUtils.i(TAG, "当前进度:" + i);
+                        if (channel != null) {
+                            channel.invokeMethod(kProgress, i);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void hisUpdateId(int[] ints) {
+
+            }
+
+            @Override
+            public void mutualFail(int i) {
+                if (mHandler==null){
+                    mHandler=new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (channel != null) {
+                            channel.invokeMethod(kProgress, -1);
+                        }
+                        mHandler=null;
+                    }
+                });
+            }
+        });
+    }
 }

@@ -109,3 +109,5 @@ part 'EAStressMonitor.dart';
 part 'EAMenstrualReminder.dart';
 
 part 'EASportHrWarning.dart';
+
+part 'EABigDataSleepScore.dart';

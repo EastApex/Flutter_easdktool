@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -30,6 +31,7 @@ const String kEAScanWacth = "EAScanWacth"; // 搜索手表
 const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
 const String kEATest = "EATest"; // Test mode
+const String kEAAGPS = "EAAGPS"; // AGPS
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -142,7 +144,8 @@ class EASDKTool {
     String param = convert.jsonEncode(connectParam);
     _channel.invokeMethod(kEAConnectWatch, param);
   }
-  void pairBt(String btAddress){
+
+  void pairBt(String btAddress) {
     _channel.invokeMethod(ConnectBT, btAddress);
   }
 
@@ -249,6 +252,11 @@ class EASDKTool {
     mOTAProgressCallback = otaProgressCallback;
     String param = convert.jsonEncode(otaList);
     _channel.invokeMethod(kEAOTA, param);
+  }
+
+  void syncAGPS(EAOTAProgressCallback otaProgressCallback) {
+    mOTAProgressCallback = otaProgressCallback;
+    _channel.invokeMethod(kEAAGPS, null);
   }
 
   void getCustomWatchfacePreviewImage(

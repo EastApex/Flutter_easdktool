@@ -3307,8 +3307,10 @@ typedef NS_ENUM(NSUInteger, EACWFPointerScaleStyle) {
     EACWFPointerScaleStyleNone          = 0,    // None【无刻度】
     EACWFPointerScaleStyleBar           = 1,    // Bar scale【条形刻度】
     EACWFPointerScaleStyleDigitalBar    = 2,    // Digital bar scale【数字条形刻度】
-//    EACWFPointerScaleStyleRoman         = 3,    // Roman number【罗马数字】
-//    EACWFPointerScaleStyleDiamond       = 4,    // Diamond【钻石】
+    EACWFPointerScaleStyleBarExtend     = 3,    // Bar extend scale【条形刻度的延伸】
+
+//    EACWFPointerScaleStyleRoman         = 4,    // Roman number【罗马数字】
+//    EACWFPointerScaleStyleDiamond       = 5,    // Diamond【钻石】
 };
 
 #pragma mark - 手表形状

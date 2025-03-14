@@ -185,13 +185,13 @@ class _MyAppState extends State<MyApp> {
 
     EASDKTool().showTest(1);
 
-    ///搜索手表
-    EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-      // print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
-      // print("");
-      // print(connectParam.uuid);
-      // print("");
-    }));
+    // ///搜索手表
+    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+    //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
+    //   print("");
+    //   print(connectParam.uuid);
+    //   print("");
+    // }));
   }
 
   void operationPhoneListener(Map info) {
@@ -402,7 +402,19 @@ class _MyAppState extends State<MyApp> {
               print(model.timeStamp);
             }
             break;
-
+          case EADataInfoTypeSleepScoreData: //  Sleep Score
+            for (Map<String, dynamic> item in list) {
+              EABigDataSleepScore model = EABigDataSleepScore.fromMap(item);
+              print(model.sleepScore);
+            }
+            break;
+          case EADataInfoTypeSportHrData: //  Sport heart rate
+            for (Map<String, dynamic> item in list) {
+              EABigDataSportHeartRate model =
+                  EABigDataSportHeartRate.fromMap(item);
+              print(model.hrValue);
+            }
+            break;
           default:
             break;
         }
@@ -1710,6 +1722,22 @@ class _MyAppState extends State<MyApp> {
                   secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress) {
                     print("表盘进度:" + progress.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+
+                    } else if (progress == 100) {
+                      // transmit data succ;
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('3.AGPS'),
+                onTap: () async {
+                  secondEasdkTool.syncAGPS(EAOTAProgressCallback((progress) {
+                    print("进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
 

@@ -642,5 +642,7 @@ enum QueryType {
   step_freq,
   step_pace,
   resting_heart,
-  habit_data
+  habit_data,
+  sleepScore,
+  motionHeart
 }
