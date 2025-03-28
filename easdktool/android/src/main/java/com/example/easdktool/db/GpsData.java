@@ -40,4 +40,6 @@ public class GpsData {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+
 }

@@ -31,4 +31,5 @@ public class StepFreqData {
     public void setStep_freq_value(int step_freq_value) {
         this.step_freq_value = step_freq_value;
     }
+
 }

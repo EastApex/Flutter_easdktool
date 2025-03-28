@@ -3,6 +3,7 @@ package com.example.easdktool.callback;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -151,6 +152,8 @@ public class MotionDataListener implements MotionDataReportCallback {
         }
         if (heartDataList != null && !heartDataList.isEmpty()) {
             DataManager.getInstance().insertBatchHeartData(heartDataList);
+        }else{
+            Log.i(TAG,"数据不存在");
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);

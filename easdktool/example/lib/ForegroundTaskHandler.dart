@@ -246,7 +246,7 @@ class ForegroundTaskHandler extends TaskHandler {
         print(action.toString());
       } else if (type == 0x18) {
         print("开始连接BT");
-        easdkTool.pairBt("45:41:0B:BA:8F:5E");
+        easdkTool.pairBt("45:41:5B:8D:66:AF");
       }
     }
   }

@@ -31,4 +31,5 @@ public class StepPaceData {
     public void setStep_pace_value(int step_pace_value) {
         this.step_pace_value = step_pace_value;
     }
+
 }

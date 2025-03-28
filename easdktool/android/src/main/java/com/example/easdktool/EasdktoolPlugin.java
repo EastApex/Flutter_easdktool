@@ -260,7 +260,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             mContext = flutterPluginBinding.getApplicationContext();
         }
         eventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "broadReceiver");
-        DataManager.getInstance().initDB(mContext);
 
         eventChannel.setStreamHandler(new EventChannel.StreamHandler() {
             @Override
@@ -276,6 +275,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     } else {
                         mContext.registerReceiver(btConnectBroadcast, intentFilter);
                     }
+                    LogUtils.i(TAG,"开始蓝牙广播监听");
 
 
                 }
@@ -302,10 +302,14 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             String arguments = (String) call.arguments;
             if (checkArgumentName("showLog", arguments)) {
+                JSONObject jsonObject = JSONObject.parseObject(arguments);
+                if (jsonObject != null) {
+                    int value = jsonObject.getIntValue("showLog");
+                    boolean showLog = value > 0 ? true : false;
+                    android.util.Log.i(TAG, "showLog:" + showLog);
+                    LogUtils.setShowLog(showLog);
+                }
 
-                LogParam logParam = JSONObject.parseObject(arguments, LogParam.class);
-
-                LogUtils.setShowLog(logParam.showLog);
             }
         } else if (call.method.equals(kEAGetWacthStateInfo)) {//设备连接状态
 
@@ -376,16 +380,30 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals(saveData)) {//是否将数据保存到数据库
             String arguments = (String) call.arguments;
             if (checkArgumentName("saveData", arguments)) {
-                DBParam dbParam = JSONObject.parseObject(arguments, DBParam.class);
-                LogUtils.e(TAG, "保存数据传过来的参数:" + dbParam.saveData);
-                DataManager.getInstance().setIsSaveData(dbParam.saveData);
+                JSONObject jsonObject = JSONObject.parseObject(arguments);
+                if (jsonObject != null) {
+                    int value = jsonObject.getIntValue("saveData");
+                    boolean saveData = (value > 0 ? true : false);
+                    DataManager.getInstance().initDB(mContext.getApplicationContext());
+                    android.util.Log.i(TAG, "传过来的数据参数:" + arguments + ",数据保存状态:" + saveData + ",转换后的对象:" + value);
+                    LogUtils.e(TAG, "保存数据传过来的参数:" + value + ",数据保存状态:" + saveData);
+                    DataManager.setIsSaveData(saveData);
+                }
+
+                //   DataManager.getInstance().setIsSaveData(saveData);
 
             }
         } else if (call.method.equals(queryData)) {//查询数据库保存的数据
             String arguments = (String) call.arguments;
-            QueryDb queryDb = JSONObject.parseObject(arguments, QueryDb.class);
-            LogUtils.e(TAG, "查询传过来的参数:" + queryDb.dataType);
-            new QueryMotionData(channel, queryDb.dataType).queryData();
+            if (checkArgumentName("dataType",arguments)){
+              JSONObject jsonObject=  JSONObject.parseObject(arguments);
+              if (jsonObject!=null){
+                  int value=jsonObject.getIntValue("dataType");
+                  LogUtils.e(TAG, "查询传过来的参数:" + arguments);
+                  new QueryMotionData(channel, value).queryData();
+              }
+            }
+
         } else if (call.method.equals(pairBT)) {
             String arguments = (String) call.arguments;
             //    if (checkArgumentName("btAddress", arguments)) {
@@ -541,34 +559,41 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
         } else if (call.method.equals(deleteData)) {//删除数据库里面的运动数据
             String arguments = (String) call.arguments;
-            DeleteData deleteData = JSONObject.parseObject(arguments, DeleteData.class);
-            if (deleteData.dataType == 0) {
-                DataManager.getInstance().deleteDailyData(null);
-            } else if (deleteData.dataType == 1) {
-                DataManager.getInstance().deleteSleepData(null);
-            } else if (deleteData.dataType == 2) {
-                DataManager.getInstance().deleteHeartData(null);
-            } else if (deleteData.dataType == 3) {
-                DataManager.getInstance().deleteGpsData(null);
-            } else if (deleteData.dataType == 4) {
-                DataManager.getInstance().deleteMultiData(null);
-            } else if (deleteData.dataType == 5) {
-                DataManager.getInstance().deleteBloodData(null);
-            } else if (deleteData.dataType == 6) {
-                DataManager.getInstance().deleteStressData(null);
-            } else if (deleteData.dataType == 7) {
-                DataManager.getInstance().deleteStepFreqData(null);
-            } else if (deleteData.dataType == 8) {
-                DataManager.getInstance().deleteStepPaceData(null);
-            } else if (deleteData.dataType == 9) {
-                DataManager.getInstance().deleteRestingHeartData(null);
-            } else if (deleteData.dataType == 10) {
-                DataManager.getInstance().deleteHabitData(null);
-            } else if (deleteData.dataType == 11) {
-                DataManager.getInstance().deleteSleepScoreData(null);
-            } else if (deleteData.dataType == 12) {
-                DataManager.getInstance().deleteMotionHeartData(null);
+            if (checkArgumentName("dataType",arguments)){
+                JSONObject jsonObject = JSONObject.parseObject(arguments);
+                if (jsonObject!=null){
+                  int value=  jsonObject.getIntValue("dataType");
+                    if (value== 0) {
+                        DataManager.getInstance().deleteDailyData(null);
+                    } else if (value == 1) {
+                        DataManager.getInstance().deleteSleepData(null);
+                    } else if (value == 2) {
+                        DataManager.getInstance().deleteHeartData(null);
+                    } else if (value == 3) {
+                        DataManager.getInstance().deleteGpsData(null);
+                    } else if (value == 4) {
+                        DataManager.getInstance().deleteMultiData(null);
+                    } else if (value == 5) {
+                        DataManager.getInstance().deleteBloodData(null);
+                    } else if (value == 6) {
+                        DataManager.getInstance().deleteStressData(null);
+                    } else if (value == 7) {
+                        DataManager.getInstance().deleteStepFreqData(null);
+                    } else if (value == 8) {
+                        DataManager.getInstance().deleteStepPaceData(null);
+                    } else if (value == 9) {
+                        DataManager.getInstance().deleteRestingHeartData(null);
+                    } else if (value == 10) {
+                        DataManager.getInstance().deleteHabitData(null);
+                    } else if (value == 11) {
+                        DataManager.getInstance().deleteSleepScoreData(null);
+                    } else if (value == 12) {
+                        DataManager.getInstance().deleteMotionHeartData(null);
+                    }
+                }
+
             }
+
         } else if (call.method.equals(kEAConnectWatch)) {//连接设备
             String arguments = (String) call.arguments;
             Map<String, String> map = JSONObject.parseObject(arguments, Map.class);
@@ -655,7 +680,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 }
                 return;
             }
-            LogUtils.i(TAG,"开始更新AGPS");
+            LogUtils.i(TAG, "开始更新AGPS");
             new AGPSUpdate(channel).startUpdate(mContext);
         } else {
             result.notImplemented();

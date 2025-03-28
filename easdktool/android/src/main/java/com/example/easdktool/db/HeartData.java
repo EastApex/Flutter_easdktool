@@ -31,4 +31,6 @@ public class HeartData {
     public void setHr_value(int hr_value) {
         this.hr_value = hr_value;
     }
+
+
 }

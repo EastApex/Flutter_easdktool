@@ -42,4 +42,6 @@ public class StressData {
     public void setPressureLevel(int pressureLevel) {
         this.pressureLevel = pressureLevel;
     }
+
+
 }

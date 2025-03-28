@@ -31,4 +31,5 @@ public class BloodData {
     public void setBlood_oxygen_value(int blood_oxygen_value) {
         this.blood_oxygen_value = blood_oxygen_value;
     }
+
 }

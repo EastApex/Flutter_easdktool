@@ -40,4 +40,6 @@ public class SleepScore {
     public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
+
+
 }

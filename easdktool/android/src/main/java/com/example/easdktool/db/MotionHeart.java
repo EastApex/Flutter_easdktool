@@ -31,4 +31,5 @@ public class MotionHeart {
     public void setMotionHr(int motionHr) {
         this.motionHr = motionHr;
     }
+
 }

@@ -69,4 +69,5 @@ public class DailyData {
         this.average_heart_rate = average_heart_rate;
     }
 
+
 }

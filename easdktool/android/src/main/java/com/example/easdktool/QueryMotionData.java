@@ -313,7 +313,7 @@ public class QueryMotionData {
 
     private void sendBigWatchData(@NonNull JSONObject jsonObject) {
         if (channel != null) {
-            LogUtils.i(TAG, "Deliver query big data to flutter");
+            LogUtils.i(TAG, "Deliver query big data to flutter:"+jsonObject.toJSONString());
             channel.invokeMethod(kQueryBigWatchData, jsonObject.toJSONString());
         }
         mHandler = null;

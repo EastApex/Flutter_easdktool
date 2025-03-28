@@ -32,4 +32,6 @@ public class SleepData {
         this.SleepMode = SleepMode;
     }
 
+
+
 }

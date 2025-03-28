@@ -2,6 +2,7 @@ package com.example.easdktool.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,12 +29,13 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
 import java.util.List;
 
+
 public class DataManager {
     private static final String TAG = DataManager.class.getSimpleName();
     private static DataManager manager;
     private static DaoSession mSession;
-    private static volatile boolean isSaveData;
-    public static final String DBNAME="sport.db";
+    private static boolean isSaveData;
+    public static final String DBNAME = "sport.db";
 
     public static DataManager getInstance() {
         if (manager == null) {
@@ -46,8 +48,9 @@ public class DataManager {
         return manager;
     }
 
-    public void setIsSaveData(boolean saveData) {
-        isSaveData = saveData;
+    public static void setIsSaveData(boolean saveData) {
+       DataManager.isSaveData = saveData;
+        Log.i(TAG, "是否保存数据:" + saveData);
     }
 
     public void initDB(@NonNull Context mContext) {
@@ -63,7 +66,7 @@ public class DataManager {
 
     private void initDataBase(@NonNull Context mContext) {
 
-        UpgradeHelper mHelper = new UpgradeHelper(mContext.getApplicationContext(), DBNAME, null);
+        UpgradeHelper mHelper = new UpgradeHelper(mContext.getApplicationContext(), "sport.db", null);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         mSession = daoMaster.newSession(IdentityScopeType.None);
@@ -100,6 +103,7 @@ public class DataManager {
      */
     public void insertBatchHeartData(List<HeartData> cacheList) {
         if (cacheList == null || cacheList.isEmpty() || !isSaveData) {
+            Log.e(TAG, "不符合保存心率数据的条件,不保存数据");
             return;
         }
         LogUtils.e(TAG, "插入数据库的心率数据:" + JSONObject.toJSONString(cacheList));
@@ -107,6 +111,8 @@ public class DataManager {
             HeartDataDao heartDataCacheDao = mSession.getHeartDataDao();
             heartDataCacheDao.insertOrReplaceInTx(cacheList);
             heartDataCacheDao.detachAll();
+        } else {
+            Log.e(TAG, "mSession不存在");
         }
     }
 
