@@ -74,6 +74,7 @@ public class QueryMotionData {
             public void run() {
                 if (type == 0) {//表示日常数据
                     List<DailyData> dailyDataList = DataManager.getInstance().queryDailyData();
+                    LogUtils.i(TAG, JSONObject.toJSONString(dailyDataList));
                     List<Map<String, Object>> dataList = new ArrayList<>();
                     if (dailyDataList != null && !dailyDataList.isEmpty()) {
                         for (int i = 0; i < dailyDataList.size(); i++) {
@@ -274,15 +275,15 @@ public class QueryMotionData {
                         jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
                         sendBigWatchData(jsonObject);
                     }
-                }else if (type==11){
+                } else if (type == 11) {
                     List<SleepScore> sleepScoreList = DataManager.getInstance().querySleepScoreData();
                     List<Map<String, Object>> dataList = new ArrayList<>();
                     if (sleepScoreList != null && !sleepScoreList.isEmpty()) {
                         for (int i = 0; i < sleepScoreList.size(); i++) {
                             Map<String, Object> map = new HashMap<>();
-                            map.put("startTime", sleepScoreList.get(i).getStartTime());
-                            map.put("endTime", sleepScoreList.get(i).getEndTime());
-                            map.put("score", sleepScoreList.get(i).getSleep_score());
+                            map.put("beginTimeStamp", sleepScoreList.get(i).getStartTime());
+                            map.put("endTimeStamp", sleepScoreList.get(i).getEndTime());
+                            map.put("sleepScore", sleepScoreList.get(i).getSleep_score());
                             dataList.add(map);
                         }
                         JSONObject jsonObject = new JSONObject();
@@ -290,14 +291,14 @@ public class QueryMotionData {
                         jsonObject.put("dataType", kEADataInfoTypeSleepScoreData);
                         sendBigWatchData(jsonObject);
                     }
-                }else if (type==12){
+                } else if (type == 12) {
                     List<MotionHeart> motionHeartList = DataManager.getInstance().queryMotionHeartData();
                     List<Map<String, Object>> dataList = new ArrayList<>();
                     if (motionHeartList != null && !motionHeartList.isEmpty()) {
                         for (int i = 0; i < motionHeartList.size(); i++) {
                             Map<String, Object> map = new HashMap<>();
-                            map.put("stampTime", motionHeartList.get(i).getStampTime());
-                            map.put("motionHr", motionHeartList.get(i).getMotionHr());
+                            map.put("timeStamp", motionHeartList.get(i).getStampTime());
+                            map.put("hrValue", motionHeartList.get(i).getMotionHr());
                             dataList.add(map);
                         }
                         JSONObject jsonObject = new JSONObject();
@@ -313,7 +314,7 @@ public class QueryMotionData {
 
     private void sendBigWatchData(@NonNull JSONObject jsonObject) {
         if (channel != null) {
-            LogUtils.i(TAG, "Deliver query big data to flutter:"+jsonObject.toJSONString());
+            LogUtils.i(TAG, "Deliver query big data to flutter:" + jsonObject.toJSONString());
             channel.invokeMethod(kQueryBigWatchData, jsonObject.toJSONString());
         }
         mHandler = null;

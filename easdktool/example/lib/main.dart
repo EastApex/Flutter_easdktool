@@ -1009,7 +1009,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('31.Query saved data【查询保存的运动数据】'),
                 onTap: () {
                   //1 为保存,0为步保存
-                  secondEasdkTool.queryMotionData(QueryType.heart_data,
+                  secondEasdkTool.queryMotionData(QueryType.daily_data,
                       QueryMotionDataCallback(((info) {
                     showMotionData(info);
                   })));

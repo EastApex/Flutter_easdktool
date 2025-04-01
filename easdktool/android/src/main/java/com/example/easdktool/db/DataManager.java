@@ -49,7 +49,7 @@ public class DataManager {
     }
 
     public static void setIsSaveData(boolean saveData) {
-       DataManager.isSaveData = saveData;
+        DataManager.isSaveData = saveData;
         Log.i(TAG, "是否保存数据:" + saveData);
     }
 
@@ -519,6 +519,8 @@ public class DataManager {
         if (mSession != null) {
             DailyDataDao dailyDataDao = mSession.getDailyDataDao();
             return dailyDataDao.queryBuilder().orderAsc(DailyDataDao.Properties.Time_stamp).list();
+        } else {
+            LogUtils.i(TAG, "session不存在");
         }
         return null;
     }

@@ -1,14 +1,4 @@
--dontpreverify
--optimizationpasses 5
-# 是否使用大小写混合(windows大小写不敏感，建议加入)
--dontusemixedcaseclassnames
- # 是否混淆非公共的库的类
--dontskipnonpubliclibraryclasses
-# 是否混淆非公共的库的类的成员
--dontskipnonpubliclibraryclassmembers
-# 混淆时是否做预校验(Android不需要预校验，去掉可以加快混淆速度)
-# 混淆时是否记录日志(混淆后会生成映射文件)
--verbose
+
 
 
 # 混淆时所采用的算法(谷歌推荐算法)
@@ -34,6 +24,26 @@ public static java.lang.String TABLENAME;
     public static void dropTable(org.greenrobot.greendao.database.Database, boolean);
     public static void createTable(org.greenrobot.greendao.database.Database, boolean);
 }
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.** { *; }
+-keep class com.example.easdktool_example.** { *; }  # 替换com.example.yourappname为你的包名
+
+# 保留Dart代码
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends android.content.BroadcastReceiver  {
+    public <init>();
+}
+-keep public class * extends  android.content.ContentProvider{
+ public <init>();
+}
+# Flutter wrapper
+-keep class * extends android.app.Activity
+
+
 
 
 

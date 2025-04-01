@@ -8,10 +8,17 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
+import com.apex.ax_bluetooth.callback.GeneralCallback;
 import com.apex.ax_bluetooth.callback.MotionDataReportCallback;
+import com.apex.ax_bluetooth.callback.MotionDataResponseCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.data_package.package_data.PackageData;
 import com.apex.ax_bluetooth.enumeration.CommonFlag;
+import com.apex.ax_bluetooth.enumeration.EABleConnectState;
+import com.apex.ax_bluetooth.enumeration.MotionReportType;
 import com.apex.ax_bluetooth.model.EABleBloodOxygen;
 import com.apex.ax_bluetooth.model.EABleDailyData;
+import com.apex.ax_bluetooth.model.EABleGeneralSportRespond;
 import com.apex.ax_bluetooth.model.EABleGpsData;
 import com.apex.ax_bluetooth.model.EABleHabitRecord;
 import com.apex.ax_bluetooth.model.EABleHeartData;
@@ -23,6 +30,7 @@ import com.apex.ax_bluetooth.model.EABleRestingRateData;
 import com.apex.ax_bluetooth.model.EABleSleepData;
 import com.apex.ax_bluetooth.model.EABleSleepScore;
 import com.apex.ax_bluetooth.model.EABleStepFrequencyData;
+import com.apex.ax_bluetooth.utils.LogData2File;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.db.MotionHeart;
 import com.example.easdktool.db.SleepScore;
@@ -105,6 +113,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (dailyDataList != null && !dailyDataList.isEmpty()) {
             DataManager.getInstance().insertBatchDailyData(dailyDataList);
         }
+        replyWatch(3001, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeStepData);
@@ -129,6 +138,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (sleepDataList != null && !sleepDataList.isEmpty()) {
             DataManager.getInstance().insertBatchSleepData(sleepDataList);
         }
+        replyWatch(3002, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeSleepData);
@@ -152,8 +162,11 @@ public class MotionDataListener implements MotionDataReportCallback {
         }
         if (heartDataList != null && !heartDataList.isEmpty()) {
             DataManager.getInstance().insertBatchHeartData(heartDataList);
-        }else{
-            Log.i(TAG,"数据不存在");
+        } else {
+            Log.i(TAG, "数据不存在");
+        }
+        if (commonFlag != null) {
+            replyWatch(3003, commonFlag);
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
@@ -181,6 +194,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (gpsDataList != null && !gpsDataList.isEmpty()) {
             DataManager.getInstance().insertBatchGpsData(gpsDataList);
         }
+        replyWatch(3004, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeGPSData);
@@ -245,6 +259,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (multiDataList != null && !multiDataList.isEmpty()) {
             DataManager.getInstance().insertBatchMultiData(multiDataList);
         }
+        replyWatch(3005, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeSportsData);
@@ -270,6 +285,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (bloodDataList != null && !bloodDataList.isEmpty()) {
             DataManager.getInstance().insertBatchBloodData(bloodDataList);
         }
+        replyWatch(3006, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeBloodOxygenData);
@@ -296,6 +312,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (stressDataList != null && !stressDataList.isEmpty()) {
             DataManager.getInstance().insertBatchStressData(stressDataList);
         }
+        replyWatch(3007, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeStressData);
@@ -320,6 +337,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (stepFreqDataList != null && !stepFreqDataList.isEmpty()) {
             DataManager.getInstance().insertBatchFreqData(stepFreqDataList);
         }
+        replyWatch(3008, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeStepFreqData);
@@ -344,6 +362,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (stepPaceDataList != null && !stepPaceDataList.isEmpty()) {
             DataManager.getInstance().insertBatchPaceData(stepPaceDataList);
         }
+        replyWatch(3009, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeStepPaceData);
@@ -368,6 +387,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (restingHeartDataList != null && !restingHeartDataList.isEmpty()) {
             DataManager.getInstance().insertBatchRestingHeartData(restingHeartDataList);
         }
+        replyWatch(3010, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeRestingHeartRateData);
@@ -413,6 +433,7 @@ public class MotionDataListener implements MotionDataReportCallback {
         if (habitDataList != null && !habitDataList.isEmpty()) {
             DataManager.getInstance().insertBatchHabitData(habitDataList);
         }
+        replyWatch(3011, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", EADataInfoTypeHabitTrackerData);
@@ -432,15 +453,15 @@ public class MotionDataListener implements MotionDataReportCallback {
             sleepScore.setEndTime(list.get(i).getEndTime());
             scoresDataList.add(sleepScore);
             Map<String, Object> map = new HashMap<>();
-            map.put("startTime", list.get(i).getStartTime());
-            map.put("score", list.get(i).getSleep_score());
-            map.put("endTime", list.get(i).getEndTime());
+            map.put("beginTimeStamp", list.get(i).getStartTime());
+            map.put("sleepScore", list.get(i).getSleep_score());
+            map.put("endTimeStamp", list.get(i).getEndTime());
             dataList.add(map);
         }
         if (scoresDataList != null && !scoresDataList.isEmpty()) {
             DataManager.getInstance().insertBatchSleepScoreData(scoresDataList);
         }
-
+        replyWatch(3012, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeSleepScoreData);
@@ -458,13 +479,14 @@ public class MotionDataListener implements MotionDataReportCallback {
             motionHeart.setStampTime(list.get(i).getStampTime());
             motionHeartDataList.add(motionHeart);
             Map<String, Object> map = new HashMap<>();
-            map.put("stampTime", list.get(i).getStampTime());
-            map.put("motionHr", list.get(i).getMotionHr());
+            map.put("timeStamp", list.get(i).getStampTime());
+            map.put("hrValue", list.get(i).getMotionHr());
             dataList.add(map);
         }
         if (motionHeartDataList != null && !motionHeartDataList.isEmpty()) {
             DataManager.getInstance().insertBatchMotionHeartData(motionHeartDataList);
         }
+        replyWatch(3013, commonFlag);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", dataList);
         jsonObject.put("dataType", kEADataInfoTypeMotionHeartData);
@@ -490,4 +512,77 @@ public class MotionDataListener implements MotionDataReportCallback {
         });
 
     }
+
+    private void replyWatch(final int flag, final CommonFlag commonFlag) {
+        if (commonFlag == null) {
+            return;
+        }
+        EABleGeneralSportRespond eaBleGeneralSportRespond = new EABleGeneralSportRespond();
+        eaBleGeneralSportRespond.setRequest_id(flag);
+        eaBleGeneralSportRespond.setE_common_flag(commonFlag);
+        if (EABleManager.getInstance().getDeviceConnectState() == EABleConnectState.STATE_CONNECTED) {
+            EABleManager.getInstance().motionDataResponse(eaBleGeneralSportRespond, new MotionDataResponseCallback() {
+                @Override
+                public void mutualSuccess() {
+                    LogUtils.i(TAG, "大数据回应成功");
+
+                }
+
+                @Override
+                public void mutualFail(int errorCode) {
+                    LogUtils.i(TAG, "大数据回应失败");
+                    LogData2File.getInstance().saveLogData("大数据回应失败");
+                    repeatSyncData(flag);
+
+                }
+            });
+        } else {
+            LogUtils.i(TAG, "大数据回应的时候已断连");
+            LogData2File.getInstance().saveLogData("大数据回应的时候已断连");
+        }
+    }
+
+    private void repeatSyncData(final int flag) {
+        if (EABleManager.getInstance().getDeviceConnectState() == EABleConnectState.STATE_CONNECTED) {
+            MotionReportType motionReportType = MotionReportType.multi_sports_data_req;
+            if (flag == 3001) {
+                motionReportType = MotionReportType.sport_data_req;
+            } else if (flag == 3002) {
+                motionReportType = MotionReportType.sleep_data_req;
+            } else if (flag == 3003) {
+                motionReportType = MotionReportType.hr_data_req;
+            } else if (flag == 3004) {
+                motionReportType = MotionReportType.gps_data_req;
+            } else if (flag == 3005) {
+                motionReportType = MotionReportType.multi_sports_data_req;
+            } else if (flag == 3006) {
+                motionReportType = MotionReportType.blood_oxygen_data_req;
+            } else if (flag == 3007) {
+                motionReportType = MotionReportType.pressure_data_req;
+            } else if (flag == 3008) {
+                motionReportType = MotionReportType.step_freq_data_req;
+            } else if (flag == 3009) {
+                motionReportType = MotionReportType.pace_data_req;
+            } else if (flag == 3010) {
+                motionReportType = MotionReportType.resting_hr_data_req;
+            } else {
+                motionReportType = MotionReportType.sport_data_req;
+            }
+            EABleManager.getInstance().requestSyncMotionData(motionReportType, new GeneralCallback() {
+                @Override
+                public void result(boolean success, int reason) {
+
+                }
+
+                @Override
+                public void mutualFail(int errorCode) {
+                    LogUtils.i(TAG, "重复请求数据同步失败:" + errorCode);
+                    LogData2File.getInstance().saveLogData("重复请求数据同步失败:" + errorCode);
+                    repeatSyncData(flag);
+                }
+            });
+        }
+
+    }
+
 }

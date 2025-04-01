@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -275,7 +276,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                     } else {
                         mContext.registerReceiver(btConnectBroadcast, intentFilter);
                     }
-                    LogUtils.i(TAG,"开始蓝牙广播监听");
+                    LogUtils.i(TAG, "开始蓝牙广播监听");
 
 
                 }
@@ -395,87 +396,68 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
         } else if (call.method.equals(queryData)) {//查询数据库保存的数据
             String arguments = (String) call.arguments;
-            if (checkArgumentName("dataType",arguments)){
-              JSONObject jsonObject=  JSONObject.parseObject(arguments);
-              if (jsonObject!=null){
-                  int value=jsonObject.getIntValue("dataType");
-                  LogUtils.e(TAG, "查询传过来的参数:" + arguments);
-                  new QueryMotionData(channel, value).queryData();
-              }
+            if (checkArgumentName("dataType", arguments)) {
+                JSONObject jsonObject = JSONObject.parseObject(arguments);
+                if (jsonObject != null) {
+                    int value = jsonObject.getIntValue("dataType");
+                    LogUtils.e(TAG, "查询传过来的参数:" + arguments);
+                    new QueryMotionData(channel, value).queryData();
+                }
             }
 
         } else if (call.method.equals(pairBT)) {
             String arguments = (String) call.arguments;
-            //    if (checkArgumentName("btAddress", arguments)) {
-            //        BtConnect btConnect = JSONObject.parseObject(arguments, BtConnect.class);
             if (!TextUtils.isEmpty(arguments) && BluetoothAdapter.checkBluetoothAddress(arguments.toUpperCase())) {
-                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(arguments.toUpperCase());
-                if (bluetoothDevice != null) {
-                    int states = bluetoothDevice.getBondState();
-                    if (btConnectBroadcast != null) {
-                        btConnectBroadcast.setCurrentBlueAddress(arguments.toUpperCase());
-                    }
-                    LogUtils.i(TAG, "开始连接BT:" + states);
-                    if (states == BluetoothDevice.BOND_NONE) {
+                Intent intent = new Intent("com.apex.pairBluetooth");
+                intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                intent.setPackage(mContext.getPackageName());
+                intent.putExtra("mac", arguments);
+                mContext.sendBroadcast(intent);
+                /**
+                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                 BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(arguments.toUpperCase());
+                 if (bluetoothDevice != null) {
+                 int states = bluetoothDevice.getBondState();
+                 if (btConnectBroadcast != null) {
+                 btConnectBroadcast.setCurrentBlueAddress(arguments.toUpperCase());
+                 }
+                 LogUtils.i(TAG, "开始连接BT:" + states);
+                 if (states == BluetoothDevice.BOND_NONE) {
 
-                        //配对
+                 if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
+                 LogUtils.e(TAG, "走直连配对");
+                 bluetoothDevice.createBond();
 
-                        if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
-                            LogUtils.e(TAG, "走直连配对");
-                            bluetoothDevice.createBond();
+                 } else {
+                 // try {
+                 Log.e(TAG, "非直连配对");
+                 //   Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
+                 bluetoothDevice.createBond();
+                 //  bondMethod.setAccessible(true);
+                 //  bondMethod.invoke(bluetoothDevice, 1);
 
-                        } else {
-                            try {
-                                Log.e(TAG, "非直连配对");
-                                Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
-                                bondMethod.setAccessible(true);
-                                bondMethod.invoke(bluetoothDevice, 1);
-                            } catch (NoSuchMethodException e) {
-                                LogUtils.e(TAG, "找不到反射的方法");
-                            } catch (InvocationTargetException e) {
-                                LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
-                            } catch (IllegalAccessException e) {
-                                LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
-                            }
-                        }
-                    } else if (states == BluetoothDevice.BOND_BONDING) {
-                        LogUtils.i(TAG, "正在配对");
-                    } else if (states == BluetoothDevice.BOND_BONDED) {
-                        LogUtils.i(TAG, "已经配对");
-                        new ConnectAudioUtils().connectAudio(mContext, bluetoothDevice);
-                    }
-                }
+                 } catch(NoSuchMethodException e){
+                 LogUtils.e(TAG, "找不到反射的方法");
+                 } catch(InvocationTargetException e){
+                 LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
 
-/**
- if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
- Intent intent = new Intent(mContext, PairService.class);
- intent.putExtra("btAddress", btConnect.btAddress);
- intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
- intent.setPackage(mContext.getPackageName());
- mContext.startService(intent);
- } else {
- if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
- int permission = ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT);
- if (permission != PackageManager.PERMISSION_GRANTED) {
- channel.invokeMethod(kArgumentsError, "bluetooth connect permission off");
- return;
- }
- }
- Intent intent = new Intent(mContext, PairService.class);
- intent.putExtra("btAddress", btConnect.btAddress);
- intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
- intent.setPackage(mContext.getPackageName());
- mContext.startForegroundService(intent);
- return;
- }
- */
+                 } catch(IllegalAccessException e){
+                 LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
+                 }
 
+                 }
+                 } else if (states == BluetoothDevice.BOND_BONDING) {
+                 LogUtils.i(TAG, "正在配对");
+                 } else if (states == BluetoothDevice.BOND_BONDED) {
+                 LogUtils.i(TAG, "已经配对");
+                 new ConnectAudioUtils().connectAudio(mContext, bluetoothDevice);
+                 }
+                 */
             } else {
                 channel.invokeMethod(kArgumentsError, "param error");
                 return;
             }
-            //      }
+
         } else if (call.method.equals(kEACustomWatchface)) {//自定义表盘
             String arguments = (String) call.arguments;
             final CustomWatchFace customWatchFace = JSONObject.parseObject(arguments, CustomWatchFace.class);
@@ -559,11 +541,11 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
         } else if (call.method.equals(deleteData)) {//删除数据库里面的运动数据
             String arguments = (String) call.arguments;
-            if (checkArgumentName("dataType",arguments)){
+            if (checkArgumentName("dataType", arguments)) {
                 JSONObject jsonObject = JSONObject.parseObject(arguments);
-                if (jsonObject!=null){
-                  int value=  jsonObject.getIntValue("dataType");
-                    if (value== 0) {
+                if (jsonObject != null) {
+                    int value = jsonObject.getIntValue("dataType");
+                    if (value == 0) {
                         DataManager.getInstance().deleteDailyData(null);
                     } else if (value == 1) {
                         DataManager.getInstance().deleteSleepData(null);
@@ -604,7 +586,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
 
             try {
-                EABleBluetoothOption.autoReply = true;
+                //  EABleBluetoothOption.autoReply = true;
                 EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
