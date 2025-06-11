@@ -1,53 +1,42 @@
 group 'com.example.easdktool'
-version '1.0'
-
+version '1.0-SNAPSHOT'
 buildscript {
     repositories {
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.aliyun.com/repository/releases' }
-//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        //  maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10"
+
     }
 }
 
 rootProject.allprojects {
     repositories {
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.aliyun.com/repository/releases' }
-//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://jitpack.io' }
-
+        //   maven { url 'https://plugins.gradle.org/m2/' }
         flatDir {
             dirs project(':easdktool').file('libs')
         }
-
     }
 }
-
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.protobuf'
 apply plugin: 'org.greenrobot.greendao'
-
 android {
+    namespace 'com.example.easdktool'
     compileSdk 34
 
     compileOptions {
@@ -61,7 +50,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             multiDexEnabled true
             debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -69,6 +58,7 @@ android {
         }
         debug {
             minifyEnabled false
+            multiDexEnabled true
             debuggable true //true代表开启 false 关闭,新建项目默认是没有这个参数的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
@@ -83,6 +73,14 @@ greendao {
     // 生成的数据库相关文件的包名
     daoPackage 'com.greendao.gen'
 }
+tasks.whenTaskAdded { task ->
+    if (task.name.matches("\\w*compile\\w*Kotlin")
+            || task.name.matches("\\w*kaptGenerateStubs\\w*Kotlin")
+            || task.name.matches("\\w*kapt\\w*Kotlin")) {
+        task.dependsOn('greendao')
+    }
+}
+
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
     api(name: 'ax_sdk_4.3.6', ext: 'aar')

@@ -29,6 +29,7 @@ import 'ForegroundTaskHandler.dart';
 // import 'package:flutter_ble_lib/flutter_ble_lib.dart';
 
 void main() {
+  FlutterForegroundTask.initCommunicationPort();
   runApp(const MyApp());
 }
 
@@ -158,6 +159,13 @@ class _MyAppState extends State<MyApp> {
   EASetDataCallback? eaSetDataCallback;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    FlutterForegroundTask.stopService();
+  }
+
+  @override
   void initState() {
     super.initState();
 
@@ -165,7 +173,6 @@ class _MyAppState extends State<MyApp> {
       checkLocationPermission();
 
       //The second method is to initialize the channel
-
     } else {
       secondEasdkTool.showLog(1);
       secondEasdkTool.initChannel();
@@ -220,16 +227,27 @@ class _MyAppState extends State<MyApp> {
   }
 
   foregroundTask() {
-    _ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) async {
-      // You can get the previous ReceivePort without restarting the service.
-      if (await FlutterForegroundTask.isRunningService) {
-        final newReceivePort = await FlutterForegroundTask.receivePort;
-        registerReceivePort(newReceivePort);
-      } else {
-        initForegroundTask();
-        startForegroundTask();
-      }
-    });
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'foreground_service',
+        channelName: 'Foreground Service Notification',
+        channelDescription:
+            'This notification appears when the foreground service is running.',
+        onlyAlertOnce: true,
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: false,
+        playSound: false,
+      ),
+      foregroundTaskOptions: ForegroundTaskOptions(
+        eventAction: ForegroundTaskEventAction.repeat(5000),
+        autoRunOnBoot: true,
+        autoRunOnMyPackageReplaced: true,
+        allowWakeLock: true,
+        allowWifiLock: true,
+      ),
+    );
+    _startService();
   }
 
   bool registerReceivePort(ReceivePort? receivePort) {
@@ -251,53 +269,28 @@ class _MyAppState extends State<MyApp> {
     receivePort = null;
   }
 
-  Future<void> initForegroundTask() async {
-    FlutterForegroundTask.init(
-      androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'notification_channel_id',
-        channelName: 'Foreground Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
-        channelImportance: NotificationChannelImportance.LOW,
-        priority: NotificationPriority.LOW,
-        iconData: const NotificationIconData(
-          resType: ResourceType.mipmap,
-          resPrefix: ResourcePrefix.ic,
-          name: 'launcher',
-          // backgroundColor: Colors.orange,
-        ),
-      ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions: const ForegroundTaskOptions(
-        interval: 5000,
-        autoRunOnBoot: true,
-        allowWifiLock: true,
-      ),
-      //printDevLog: true,
-    );
-  }
-
-  Future<bool> startForegroundTask() async {
-    ReceivePort? receivePort;
-    bool reqResult;
+  Future<ServiceRequestResult> _startService() async {
     if (await FlutterForegroundTask.isRunningService) {
-      reqResult = await FlutterForegroundTask.restartService();
+      return FlutterForegroundTask.restartService();
     } else {
-      reqResult = await FlutterForegroundTask.startService(
-        notificationTitle: '',
-        notificationText: '',
+      return FlutterForegroundTask.startService(
+        // You can manually specify the foregroundServiceType for the service
+        // to be started, as shown in the comment below.
+        // serviceTypes: [
+        //   ForegroundServiceTypes.dataSync,
+        //   ForegroundServiceTypes.remoteMessaging,
+        // ],
+        serviceId: 256,
+        notificationTitle: 'Foreground Service is running',
+        notificationText: 'Tap to return to the app',
+        notificationIcon: null,
+        notificationButtons: [
+          const NotificationButton(id: 'btn_hello', text: 'hello'),
+        ],
+        notificationInitialRoute: '/',
         callback: ForegroundTaskCallback,
       );
     }
-
-    if (reqResult) {
-      receivePort = await FlutterForegroundTask.receivePort;
-    }
-
-    return registerReceivePort(receivePort);
   }
 
   void secondMethodSetWatchData(int dataType, Map map) {
@@ -310,116 +303,118 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getBigWatchData() {
-    if (LocalPlatform().isAndroid) {
-      firstMethodSetWatchData(29, Map(),
-          EASetDataCallback(onRespond: (onRespond) {
+    /**
+        if (LocalPlatform().isAndroid) {
+        firstMethodSetWatchData(29, Map(),
+        EASetDataCallback(onRespond: (onRespond) {
         print("get Big data,The first method is to get the callback" +
-            onRespond.respondCodeType.toString());
-      }), 4);
-    } else {
-      secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
-        /// Determine what kind of big data "dataType" is
-        ///【判断dataType是属于那种大数据】
+        onRespond.respondCodeType.toString());
+        }), 4);
+        } else {
+     */
+    secondEasdkTool.getBigWatchData(EAGetBitDataCallback(((info) {
+      /// Determine what kind of big data "dataType" is
+      ///【判断dataType是属于那种大数据】
 
-        int dataType = info['dataType'];
-        List<dynamic> list = info['value'];
-        print(dataType);
+      int dataType = info['dataType'];
+      List<dynamic> list = info['value'];
+      print(dataType);
 
-        if (list.isEmpty) {
-          return;
-        }
-        switch (dataType) {
-          case kEADataInfoTypeStepData: //Daily steps【日常步数】
+      if (list.isEmpty) {
+        return;
+      }
+      switch (dataType) {
+        case kEADataInfoTypeStepData: //Daily steps【日常步数】
 
-            for (Map<String, dynamic> item in list) {
-              EABigDataStep model = EABigDataStep.fromMap(item);
-              print(model.timeStamp);
-              print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
-            }
-            break;
-          case kEADataInfoTypeSleepData: // sleep
-            for (Map<String, dynamic> item in list) {
-              EABigDataSleep model = EABigDataSleep.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeHeartRateData: // heart rate
-            for (Map<String, dynamic> item in list) {
-              EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
-              print(model.timeStamp);
-              print('heart rate date: ' + timestampToDateStr(model.timeStamp));
-            }
+          for (Map<String, dynamic> item in list) {
+            EABigDataStep model = EABigDataStep.fromMap(item);
+            print(model.timeStamp);
+            print('Daily steps date: ' + timestampToDateStr(model.timeStamp));
+          }
+          break;
+        case kEADataInfoTypeSleepData: // sleep
+          for (Map<String, dynamic> item in list) {
+            EABigDataSleep model = EABigDataSleep.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeHeartRateData: // heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataHeartRate model = EABigDataHeartRate.fromMap(item);
+            print(model.timeStamp);
+            print('heart rate date: ' + timestampToDateStr(model.timeStamp));
+          }
 
-            break;
-          case kEADataInfoTypeGPSData: // gps
-            for (Map<String, dynamic> item in list) {
-              EABigDataGPS model = EABigDataGPS.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeSportsData: // sports
-            for (Map<String, dynamic> item in list) {
-              EABigDataSport model = EABigDataSport.fromMap(item);
-              print(model.beginTimeStamp);
-              print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
-            }
-            break;
-          case kEADataInfoTypeBloodOxygenData: // Blood oxygen
-            for (Map<String, dynamic> item in list) {
-              EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeStressData: // Stress
-            for (Map<String, dynamic> item in list) {
-              EABigDataStress model = EABigDataStress.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeStepFreqData: // stride frequency
-            for (Map<String, dynamic> item in list) {
-              EABigDataStrideFrequency model =
-                  EABigDataStrideFrequency.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeStepPaceData: // stride Pace
-            for (Map<String, dynamic> item in list) {
-              EABigDataStridePace model = EABigDataStridePace.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case kEADataInfoTypeRestingHeartRateData: //resting heart rate
-            for (Map<String, dynamic> item in list) {
-              EABigDataRestingHeartRate model =
-                  EABigDataRestingHeartRate.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case EADataInfoTypeHabitTrackerData: // habit tracker
-            for (Map<String, dynamic> item in list) {
-              EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
-              print(model.timeStamp);
-            }
-            break;
-          case EADataInfoTypeSleepScoreData: //  Sleep Score
-            for (Map<String, dynamic> item in list) {
-              EABigDataSleepScore model = EABigDataSleepScore.fromMap(item);
-              print(model.sleepScore);
-            }
-            break;
-          case EADataInfoTypeSportHrData: //  Sport heart rate
-            for (Map<String, dynamic> item in list) {
-              EABigDataSportHeartRate model =
-                  EABigDataSportHeartRate.fromMap(item);
-              print(model.hrValue);
-            }
-            break;
-          default:
-            break;
-        }
-      })));
-    }
+          break;
+        case kEADataInfoTypeGPSData: // gps
+          for (Map<String, dynamic> item in list) {
+            EABigDataGPS model = EABigDataGPS.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeSportsData: // sports
+          for (Map<String, dynamic> item in list) {
+            EABigDataSport model = EABigDataSport.fromMap(item);
+            print(model.beginTimeStamp);
+            print('beginDate: ' + timestampToDateStr(model.beginTimeStamp));
+          }
+          break;
+        case kEADataInfoTypeBloodOxygenData: // Blood oxygen
+          for (Map<String, dynamic> item in list) {
+            EABigDataBloodOxygen model = EABigDataBloodOxygen.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStressData: // Stress
+          for (Map<String, dynamic> item in list) {
+            EABigDataStress model = EABigDataStress.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepFreqData: // stride frequency
+          for (Map<String, dynamic> item in list) {
+            EABigDataStrideFrequency model =
+                EABigDataStrideFrequency.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeStepPaceData: // stride Pace
+          for (Map<String, dynamic> item in list) {
+            EABigDataStridePace model = EABigDataStridePace.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case kEADataInfoTypeRestingHeartRateData: //resting heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataRestingHeartRate model =
+                EABigDataRestingHeartRate.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case EADataInfoTypeHabitTrackerData: // habit tracker
+          for (Map<String, dynamic> item in list) {
+            EABigDataHabitTracker model = EABigDataHabitTracker.fromMap(item);
+            print(model.timeStamp);
+          }
+          break;
+        case EADataInfoTypeSleepScoreData: //  Sleep Score
+          for (Map<String, dynamic> item in list) {
+            EABigDataSleepScore model = EABigDataSleepScore.fromMap(item);
+            print(model.sleepScore);
+          }
+          break;
+        case EADataInfoTypeSportHrData: //  Sport heart rate
+          for (Map<String, dynamic> item in list) {
+            EABigDataSportHeartRate model =
+                EABigDataSportHeartRate.fromMap(item);
+            print(model.hrValue);
+          }
+          break;
+        default:
+          break;
+      }
+    })));
+    //  }
   }
 
   /// Timestamp to date 【时间戳转日期】
@@ -733,33 +728,39 @@ class _MyAppState extends State<MyApp> {
 
   void firstMethodGetWatchData(
       int dataType, EAGetDataCallback getetDataCallback) {
-    if (LocalPlatform().isAndroid) {
-      eaGetDataCallback = getetDataCallback;
-      PackageData packageData = PackageData();
-      packageData.action = 1;
-      packageData.param = dataType;
-      final SendPort? send =
-          IsolateNameServer.lookupPortByName("_notifications_");
-      send?.send(packageData);
-    } else {
-      getWatchData(dataType);
-    }
+    /***
+        if (LocalPlatform().isAndroid) {
+        eaGetDataCallback = getetDataCallback;
+        PackageData packageData = PackageData();
+        packageData.action = 1;
+        packageData.param = dataType;
+        final SendPort? send =
+        IsolateNameServer.lookupPortByName("_notifications_");
+        send?.send(packageData);
+        } else {
+     */
+    getWatchData(dataType);
+    // }
   }
 
   void firstMethodSetWatchData(
       int dataType, Map map, EASetDataCallback setDataCallback, int action) {
-    if (LocalPlatform().isAndroid) {
-      eaSetDataCallback = setDataCallback;
-      PackageData packageData = PackageData();
-      packageData.action = action;
-      packageData.dataType = dataType;
-      packageData.param = map;
-      final SendPort? send =
-          IsolateNameServer.lookupPortByName("_notifications_");
-      send?.send(packageData);
-    } else {
-      setWatchData(dataType, map);
-    }
+    /**
+        if (LocalPlatform().isAndroid) {
+        eaSetDataCallback = setDataCallback;
+        PackageData packageData = PackageData();
+        packageData.action = action;
+        packageData.dataType = dataType;
+        packageData.param = map;
+        final SendPort? send =
+        IsolateNameServer.lookupPortByName("_notifications_");
+        send?.send(packageData);
+
+
+        } else {
+     */
+    setWatchData(dataType, map);
+    // }
   }
 
   void secondMethodGetWatchData(int dataType) {
@@ -1695,7 +1696,6 @@ class _MyAppState extends State<MyApp> {
                     print("OTA进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
-
                     } else if (progress == 100) {
                       // transmit data succ;
                     } else {
@@ -1724,7 +1724,6 @@ class _MyAppState extends State<MyApp> {
                     print("表盘进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
-
                     } else if (progress == 100) {
                       // transmit data succ;
                     } else {
@@ -1740,7 +1739,6 @@ class _MyAppState extends State<MyApp> {
                     print("进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
-
                     } else if (progress == 100) {
                       // transmit data succ;
                     } else {
@@ -1784,7 +1782,6 @@ class _MyAppState extends State<MyApp> {
                     print("OTA进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
-
                     } else if (progress == 100) {
                       // transmit data succ;
                     } else {
@@ -1826,7 +1823,6 @@ class _MyAppState extends State<MyApp> {
                     print("OTA进度:" + progress.toString());
                     if (progress == -1) {
                       // transmit data fail;
-
                     } else if (progress == 100) {
                       // transmit data succ;
                     } else {

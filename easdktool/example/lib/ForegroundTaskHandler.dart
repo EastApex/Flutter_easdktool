@@ -1,4 +1,5 @@
 import 'dart:async';
+
 //import 'dart:html';
 import 'dart:io';
 import 'dart:isolate';
@@ -9,125 +10,47 @@ import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:flutter_notification_listener/flutter_notification_listener.dart';
+//import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 
 import 'FirstMethodPackageData.dart';
-
+@pragma('vm:entry-point')
 void ForegroundTaskCallback() {
-  FlutterForegroundTask.setTaskHandler(ForegroundTaskHandler());
+  FlutterForegroundTask.setTaskHandler(MyTaskHandler());
 }
 
-class ForegroundTaskHandler extends TaskHandler {
-  int count = 0;
-  SendPort? _sendPort;
-  ReceivePort _port = ReceivePort();
-  ReceivePort _notifPort = ReceivePort();
+class MyTaskHandler extends TaskHandler {
   EASDKTool easdkTool = new EASDKTool();
 
+  @override
+  Future<void> onDestroy(DateTime timestamp) {
+    // TODO: implement onDestroy
+    throw UnimplementedError();
+  }
 
   @override
-  Future<void> onStart(DateTime timestamp, SendPort? sendPort) async {
-    _sendPort = sendPort;
+  void onRepeatEvent(DateTime timestamp) {
+    // TODO: implement onRepeatEvent
+  }
 
+
+  @override
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
+    // TODO: implement onStart
     print("Foreground Service Started");
     initEASDK();
-
-    if (Platform.isAndroid) {
-      //The first way is to perform data interaction with the watch
-      IsolateNameServer.registerPortWithName(
-          _notifPort.sendPort, '_notifications_');
-      _notifPort.listen((message) {
-        PackageData packageData = message;
-        dynamic param = packageData.param;
-        if (packageData.action == 3) {
-          pushNotification(param);
-        } else if (packageData.action == 1) {
-          getWatchData(param);
-        } else if (packageData.action == 2) {
-          int dataType = packageData.dataType;
-          setWatchData(dataType, param);
-        } else if (packageData.action == 4) {
-          easdkTool.getNewBigWatchData(EASetDataCallback(onRespond: ((respond) {
-            print(respond.respondCodeType.toString() +
-                ",获取到大数据的回调:" +
-                respond.dataType.toString());
-          })));
-        }
-      });
-    }
-
-    NotificationsListener.initialize(callbackHandle: _notificationCallback);
-
-    var hasPermission = await NotificationsListener.hasPermission;
-    if (!hasPermission!) {
-      print("no permission, so open settings");
-      NotificationsListener.openPermissionSettings();
-      return;
-    }
   }
 
-  @override
-  Future<void> onEvent(DateTime timestamp, SendPort? sendPort) async {}
-
-  @override
-  Future<void> onDestroy(DateTime timestamp, SendPort? sendPort) async {}
-
-  @override
-  void onButtonPressed(String id) {
-    print('onButtonPressed >> $id');
-  }
-
-  @override
-  void onNotificationPressed() {
-    FlutterForegroundTask.launchApp("/dashboard");
-    _sendPort?.send('onNotificationPressed');
-  }
-
-  static void _notificationCallback(NotificationEvent evt) {
-    //This is the place we are getting the notification from the device.
-
-    // print("Foreground Notification received: $evt");
-    // The first way is to perform data interaction with the watch
-    final SendPort? send = IsolateNameServer.lookupPortByName(
-        '_notifications_'); //Sending the notification to Foreground Isolate.
-    print("获取到通知");
-    PackageData packageData = PackageData();
-    packageData.action = 3;
-    packageData.param = evt;
-    send?.send(packageData);
-  }
-
-  pushNotification(NotificationEvent event) {
-    //This method handles pushing the notification to watch.
-    EAPushMessage eapushMessage = EAPushMessage();
-    eapushMessage.messageType = EAPushMessageType.whatsApp;
-    eapushMessage.messageActionType = EAPushMessageActionType.add;
-    eapushMessage.title = event.title.toString();
-
-    DateTime dateTime = DateTime.now();
-    eapushMessage.date = dateTime.year.toString() +
-        (dateTime.month < 10
-            ? "0" + dateTime.month.toString()
-            : dateTime.month.toString()) +
-        (dateTime.day < 10
-            ? "0" + dateTime.day.toString()
-            : dateTime.day.toString()) +
-        "T" +
-        (dateTime.hour < 10
-            ? "0" + dateTime.hour.toString()
-            : dateTime.hour.toString()) +
-        (dateTime.minute < 10
-            ? "0" + dateTime.minute.toString()
-            : dateTime.minute.toString()) +
-        (dateTime.second < 10
-            ? "0" + dateTime.second.toString()
-            : dateTime.second.toString());
-    eapushMessage.content = event.message.toString();
-    easdkTool.setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap(),
-        EASetDataCallback(onRespond: ((respond) {
-          print('---> ${eapushMessage.messageType}');
-          print(respond.respondCodeType);
-        })));
+  void initEASDK() async {
+    easdkTool.showLog(1);
+    EASDKTool.addBleConnectListener(ConnectListener(easdkTool));
+    EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
+      operationPhoneListener(info);
+    }));
+    EASDKTool.addMotionDataCallback(EAGetBitDataCallback(((info) {
+      showMotionData(info);
+    })));
+    easdkTool.initChannel();
+    connectBluetooth();
   }
 
   void connectBluetooth() {
@@ -141,7 +64,7 @@ class ForegroundTaskHandler extends TaskHandler {
         EAGetDataCallback(
             onSuccess: ((info) {
               final SendPort? sendPort =
-              IsolateNameServer.lookupPortByName("_ui_get_isolate");
+                  IsolateNameServer.lookupPortByName("_ui_get_isolate");
               print("将获取到的数据传到UI线程");
               sendPort?.send(info);
               //将数据回传到UI界面
@@ -155,29 +78,23 @@ class ForegroundTaskHandler extends TaskHandler {
   void setWatchData(int dataType, Map map) {
     easdkTool.setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-          final SendPort? sendPort =
+      final SendPort? sendPort =
           IsolateNameServer.lookupPortByName("_ui_set_isolate");
-          print("将设置的结果传到UI线程");
-          sendPort?.send(respond);
-        })));
+      print("将设置的结果传到UI线程");
+      sendPort?.send(respond);
+    })));
   }
 
   static DateTime timestampToDate(int timestamp) {
     DateTime dateTime = DateTime.now();
 
     ///如果是十三位时间戳返回这个
-    if (timestamp
-        .toString()
-        .length == 13) {
+    if (timestamp.toString().length == 13) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    } else if (timestamp
-        .toString()
-        .length == 16) {
+    } else if (timestamp.toString().length == 16) {
       ///如果是十六位时间戳
       dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
-    } else if (timestamp
-        .toString()
-        .length == 10) {
+    } else if (timestamp.toString().length == 10) {
       ///如果是十位时间戳
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     }
@@ -194,19 +111,6 @@ class ForegroundTaskHandler extends TaskHandler {
       dateTime = dataList[0];
     }
     return dateTime;
-  }
-
-  void initEASDK() async {
-    easdkTool.showLog(1);
-    EASDKTool.addBleConnectListener(ConnectListener(easdkTool));
-    EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
-      operationPhoneListener(info);
-    }));
-    EASDKTool.addMotionDataCallback(EAGetBitDataCallback(((info) {
-      showMotionData(info);
-    })));
-    easdkTool.initChannel();
-    connectBluetooth();
   }
 
   void operationPhoneListener(Map info) {
@@ -230,10 +134,18 @@ class ForegroundTaskHandler extends TaskHandler {
      */
     if (info.isNotEmpty) {
       int type = info["opePhoneType"];
-      if (type == 0) {} else if (type == 1) {} else if (type == 2) {} else
-      if (type == 3) {} else if (type == 4) {} else if (type == 5) {} else
-      if (type == 6) {} else if (type == 7) {} else if (type == 8) {} else
-      if (type == 9) {} else if (type == 11) {} else if (type == 12) {
+      if (type == 0) {
+      } else if (type == 1) {
+      } else if (type == 2) {
+      } else if (type == 3) {
+      } else if (type == 4) {
+      } else if (type == 5) {
+      } else if (type == 6) {
+      } else if (type == 7) {
+      } else if (type == 8) {
+      } else if (type == 9) {
+      } else if (type == 11) {
+      } else if (type == 12) {
         int action = info["action"];
         /**
          * action   0    Start playing
@@ -245,7 +157,7 @@ class ForegroundTaskHandler extends TaskHandler {
          */
         print(action.toString());
       } else if (type == 0x18) {
-        if(Platform.isAndroid) {
+        if (Platform.isAndroid) {
           print("开始连接BT");
           easdkTool.pairBt("45:41:5B:16:58:4A");
         }
@@ -312,7 +224,7 @@ class ForegroundTaskHandler extends TaskHandler {
       case kEADataInfoTypeStepFreqData: // stride frequency
         for (Map<String, dynamic> item in list) {
           EABigDataStrideFrequency model =
-          EABigDataStrideFrequency.fromMap(item);
+              EABigDataStrideFrequency.fromMap(item);
           print(model.timeStamp);
         }
         break;
@@ -325,7 +237,7 @@ class ForegroundTaskHandler extends TaskHandler {
       case kEADataInfoTypeRestingHeartRateData: //resting heart rate
         for (Map<String, dynamic> item in list) {
           EABigDataRestingHeartRate model =
-          EABigDataRestingHeartRate.fromMap(item);
+              EABigDataRestingHeartRate.fromMap(item);
           print(model.timeStamp);
         }
         break;
@@ -352,6 +264,40 @@ class ForegroundTaskHandler extends TaskHandler {
         break;
     }
   }
+/**
+    pushNotification(NotificationEvent event) {
+    //This method handles pushing the notification to watch.
+    EAPushMessage eapushMessage = EAPushMessage();
+    eapushMessage.messageType = EAPushMessageType.whatsApp;
+    eapushMessage.messageActionType = EAPushMessageActionType.add;
+    eapushMessage.title = event.title.toString();
+
+    DateTime dateTime = DateTime.now();
+    eapushMessage.date = dateTime.year.toString() +
+    (dateTime.month < 10
+    ? "0" + dateTime.month.toString()
+    : dateTime.month.toString()) +
+    (dateTime.day < 10
+    ? "0" + dateTime.day.toString()
+    : dateTime.day.toString()) +
+    "T" +
+    (dateTime.hour < 10
+    ? "0" + dateTime.hour.toString()
+    : dateTime.hour.toString()) +
+    (dateTime.minute < 10
+    ? "0" + dateTime.minute.toString()
+    : dateTime.minute.toString()) +
+    (dateTime.second < 10
+    ? "0" + dateTime.second.toString()
+    : dateTime.second.toString());
+    eapushMessage.content = event.message.toString();
+    easdkTool.setWatchData(kEADataInfoTypePushInfo, eapushMessage.toMap(),
+    EASetDataCallback(onRespond: ((respond) {
+    print('---> ${eapushMessage.messageType}');
+    print(respond.respondCodeType);
+    })));
+    }
+ */
 }
 
 class ConnectListener implements EABleConnectListener {
@@ -392,19 +338,19 @@ class ConnectListener implements EABleConnectListener {
 
                 EABindInfo bindInfo = EABindInfo();
                 bindInfo.user_id = "1008690";
-                // Turn on the daily step interval for 30 minutes
+// Turn on the daily step interval for 30 minutes
                 bindInfo.bindMod = 0;
                 if (eaBleWatchInfo.isWaitForBinding == 0) {
-                  //Bind command type: End【绑定命令类型：结束】
+//Bind command type: End【绑定命令类型：结束】
                   bindInfo.bindingCommandType = 1;
                 } else {
-                  //Bind command type: Begin【绑定命令类型：开始】
+//Bind command type: Begin【绑定命令类型：开始】
                   bindInfo.bindingCommandType = 0;
                 }
                 _easdkTool?.bindingWatch(bindInfo,
                     EABindingWatchCallback(onRespond: ((respond) {
-                      print(respond.respondCodeType);
-                    })));
+                  print(respond.respondCodeType);
+                })));
               }
             }),
             onFail: ((info) {})));

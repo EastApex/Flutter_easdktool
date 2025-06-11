@@ -20,12 +20,14 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontpreverify
+-dontobfuscate
 -dontwarn net.sqlcipher.database.**
 -dontwarn rx.**
+-dontwarn org.greenrobot.greendao.**
 -keepattributes *Annotation*,InnerClasses
 -keepattributes Signature
 -keepattributes SourceFile,LineNumberTable
--keeppackagenames com.apex.ax_bluetooth.*
+#-keeppackagenames com.apex.ax_bluetooth.*
 -keep class com.apex.ax_bluetooth.*{*;}
 -keep class android.Manifest{*;}
 -keep class android.content.*{*;}
@@ -48,55 +50,45 @@
 -keep public class java.io.*{*;}
 -keep public class java.lang.*{*;}
 -keep public class java.text.*{*;}
--keep class com.github.yuweiguocn.library.greendao.*{*;}
 -keep public class * extends android.content.BroadcastReceiver**
 
--keep class * extends org.greenrobot.greendao.AbstractDaoMaster
--keep class * extends org.greenrobot.greendao.database.DatabaseOpenHelper{*;}
--keep class * extends android.database.sqlite.SQLiteOpenHelper
-
-
-#-keep  class org.greenrobot.greendao.identityscope.IdentityScopeType{*;}
 -keep class org.greenrobot.greendao.**{*;}
--keep public interface org.greenrobot.greendao.**
-
--keep class com.github.yuweiguocn.library.greendao.**{*;}
-
--dontwarn org.greenrobot.greendao.database.**
-
-
-
--dontobfuscate
+-keep public class * extends org.greenrobot.greendao.AbstractDao
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
 public static java.lang.String TABLENAME;
 }
--keep class **$Properties { *; }
-
+-keep class **$Properties
+-keepclassmembers class **$Properties {*;}
+-keep class net.sqlcipher.database.**{*;}
+-keep public interface net.sqlcipher.database.**
+-keep class * extends android.database.sqlite.SQLiteOpenHelper
+-keep class com.github.yuweiguocn.library.greendao.**{*;}
 # If you DO use SQLCipher:
 -keep class org.greenrobot.greendao.database.SqlCipherEncryptedHelper { *; }
-
-# If you do NOT use SQLCipher:
--dontwarn net.sqlcipher.database.**
-# If you do NOT use RxJava:
--dontwarn rx.**
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
     public static void dropTable(org.greenrobot.greendao.database.Database, boolean);
     public static void createTable(org.greenrobot.greendao.database.Database, boolean);
 }
--keep class com.example.easdktool.*{*;}
+-keep class com.greendao.gen.**{*;}
+
+
+# If you do NOT use RxJava:
+-dontwarn rx.**
+-keep class com.example.easdktool.**{*;}
 -keepclassmembers enum *{*;}
 -keep class com.example.easdktool.enumerate.*{*;}
 -keep class io.flutter.*{*;}
--keep class com.alibaba.*{*;}
+-keep class com.alibaba.fastjson.** { *; }
+-keepclassmembers class com.alibaba.fastjson.** { *; }
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
+-keep class okhttp3.logging.HttpLoggingInterceptor { *; }
 -dontwarn okhttp3.**
 -keep class * implements android.os.Parcelable {
 
   public static final android.os.Parcelable$Creator *;
 
 }
--keep class * implements io.flutter.embedding.engine.plugins.FlutterPlugin
--keep class * implements io.flutter.plugin.common.EventChannel.*{*;}
+
 
 

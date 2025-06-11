@@ -1,5 +1,4 @@
 package com.example.easdktool_example;
-
 import android.Manifest;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;

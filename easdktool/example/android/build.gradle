@@ -1,38 +1,34 @@
+
 buildscript {
-   // ext.kotlin_version = '1.6.10'
-    ext.kotlin_version = '1.7.0'
     repositories {
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.aliyun.com/repository/releases' }
-//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://jitpack.io' }
     }
-
+   // ext.kotlin_version = '1.6.10'
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:8.6.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10"
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.4'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.1'
     }
 }
+
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.aliyun.com/repository/releases' }
-//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        jcenter()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://jitpack.io' }
     }
 }
-
+apply plugin: 'kotlin'
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
@@ -40,7 +36,8 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(':app')
 }
-
-task clean(type: Delete) {
+/**
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+ */

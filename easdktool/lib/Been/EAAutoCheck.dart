@@ -38,6 +38,7 @@ weekCycleBit 为127 即 开启每天监测功能
   int endMinute = 0;
 
   EAAutoCheckSleep();
+
   EAAutoCheckSleep.fromMap(Map<String, dynamic> map) {
     if (map["weekCycleBit"] != null) {
       weekCycleBit = map["weekCycleBit"];
@@ -74,6 +75,7 @@ class EAAutoCheckHeartRate {
   int interval = 30;
 
   EAAutoCheckHeartRate(this.interval);
+
   EAAutoCheckHeartRate.fromMap(Map<String, dynamic> map) {
     if (map["interval"] != null) {
       interval = map["interval"];
@@ -93,9 +95,15 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
 
   /// 间隔时长：单位分钟，0为关闭监测功能
   int interval = 60;
+  int noonBeginHour = 12;
+  int noonBeginMinute = 0;
+  int noonEndHour = 14;
+  int noonEndMinute = 0;
+  int noonSw = 0;
 
   int sw = 11; // 开关：10off 11on
   EAAutoCheckSedentariness();
+
   EAAutoCheckSedentariness.fromMap(Map<String, dynamic> map)
       : super.fromMap(map) {
     if (map["stepThreshold"] != null) {
@@ -107,6 +115,21 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
     if (map["sw"] != null) {
       sw = map["sw"];
     }
+    if (map["noonSw"] != null) {
+      noonSw = map["noonSw"];
+    }
+    if (map["noonEndMinute"] != null) {
+      noonEndMinute = map["noonEndMinute"];
+    }
+    if (map["noonEndHour"] != null) {
+      noonEndHour = map["noonEndHour"];
+    }
+    if (map["noonBeginMinute"] != null) {
+      noonBeginMinute = map["noonBeginMinute"];
+    }
+    if (map["noonBeginHour"] != null) {
+      noonBeginHour = map["noonBeginHour"];
+    }
   }
 
   @override
@@ -115,6 +138,11 @@ class EAAutoCheckSedentariness extends EAAutoCheckSleep {
     map["interval"] = interval;
     map["stepThreshold"] = stepThreshold;
     map["sw"] = sw;
+    map["noonBeginHour"]=noonBeginHour;
+    map["noonBeginMinute"]=noonBeginMinute;
+    map["noonEndHour"]=noonEndHour;
+    map["noonEndMinute"]=noonEndMinute;
+    map["noonSw"]=noonSw;
     return map;
   }
 }
