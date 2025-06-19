@@ -174,7 +174,7 @@ class _MyAppState extends State<MyApp> {
 
       //The second method is to initialize the channel
     } else {
-      secondEasdkTool.showLog(1);
+      secondEasdkTool.showLog(0);
       secondEasdkTool.initChannel();
 
       /// 【添加监听】
@@ -188,9 +188,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// 打开 SDKLog
-    EASDKTool().showLog(1);
+    EASDKTool().showLog(0);
 
-    EASDKTool().showTest(1);
+    EASDKTool().showTest(0);
 
     // ///搜索手表
     // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {

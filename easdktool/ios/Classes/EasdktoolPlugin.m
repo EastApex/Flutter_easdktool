@@ -170,8 +170,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     EAPhoneOpsModel *phoneOpsModel = (EAPhoneOpsModel *)noti.object;
     NSDictionary *info = @{
-                    @"opePhoneType":@(phoneOpsModel.eOps)
-                };
+        @"opePhoneType":@(phoneOpsModel.eOps)
+    };
     [_channel invokeMethod:kOperationPhone arguments:[info modelToJSONString]];
     
     if(phoneOpsModel.eOps == EAPhoneOpsBig8803DataUpdateFinish) {
@@ -179,7 +179,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         for (int i = 1; i < 14; i ++) {
             
             NSInteger dataType = 3000 + i;
-//            NSArray *list = [[EABleSendManager defaultManager] getBigDataWithBigDataType:(dataType)];
+            //            NSArray *list = [[EABleSendManager defaultManager] getBigDataWithBigDataType:(dataType)];
             NSArray *list = [[EABleBigDataManager defaultManager] eaGetBigDataWithBigDataType:dataType];
             if (list.count > 0) {
                 
@@ -380,7 +380,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             EADataInfoType dataInfoType = [arguments[@"dataType"] integerValue];
             NSInteger type = [arguments[@"type"] integerValue];
             [self getWatchInfo:dataInfoType type:type];
-
+            
         }
     }
     else if ([call.method isEqualToString:kEASetWatchInfo]) { // FIXME: - 设置手表信息
@@ -538,7 +538,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                     if ([startDate containsString:@"-"] && startDate.length == 10 && (keepDay >=4 || keepDay<=10) && (cycleDay >=20 || cycleDay <=45)) {
                         
-//                        EAMenstruals *model = [EAMenstruals allocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay];
+                        //                        EAMenstruals *model = [EAMenstruals allocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay];
                         EAMenstruals *model = [EAMenstruals eaAllocInitWithStartDate:startDate keepDay:keepDay cycleDay:cycleDay judgeCurrentTime:NO];
                         [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                             
@@ -588,7 +588,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EASocialSwitchModel *model = [EASocialSwitchModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeMonitorReminder:{
@@ -596,7 +596,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAMonitorReminder *model = [EAMonitorReminder modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeTelephoneBook:{
@@ -604,7 +604,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EATelephoneBookModel *model = [EATelephoneBookModel modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeSleepBloodOxygenMonitor:{
@@ -612,7 +612,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EASleepBloodOxygenMonitor *model = [EASleepBloodOxygenMonitor modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeStressMonitor:{
@@ -620,7 +620,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAStressMonitor *model = [EAStressMonitor modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeVibrateIntensity:{
@@ -628,7 +628,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAVibrateIntensity *model = [EAVibrateIntensity modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 case  EADataInfoTypeMenstrualReminder:{
@@ -636,7 +636,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     EAMenstrualReminder *model = [EAMenstrualReminder modelWithJSON:value];
                     [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
                         
-                       [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
                 default:
@@ -658,14 +658,14 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             return;
         }
         
-//        EAGetBigDataRequestModel *model = [[EAGetBigDataRequestModel alloc] init];
-//        model.sportDataReq = 1;
-//        [[EABleSendManager defaultManager] operationgGetBigData:model respond:^(EARespondModel * _Nonnull respondModel) {
-//            
-//        }];
+        //        EAGetBigDataRequestModel *model = [[EAGetBigDataRequestModel alloc] init];
+        //        model.sportDataReq = 1;
+        //        [[EABleSendManager defaultManager] operationgGetBigData:model respond:^(EARespondModel * _Nonnull respondModel) {
+        //
+        //        }];
         
         [[EABleBigDataManager defaultManager] eaSendSyncBigData:^(EARespondCodeType eaRespondCodeType) {
-                    
+            
         }];
     }
     else if ([call.method isEqualToString:kEAOperationWatch]) { // FIXME: - 操作手表
@@ -736,17 +736,27 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
-//        BOOL isSupportGPS = [call.arguments boolValue];
-////        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-////        BOOL isSupportGPS = [[arguments objectForKey:@"isSupportGPS"] boolValue];
-//        if (isSupportGPS) {
+        //        BOOL isSupportGPS = [call.arguments boolValue];
+        ////        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        ////        BOOL isSupportGPS = [[arguments objectForKey:@"isSupportGPS"] boolValue];
+        //        if (isSupportGPS) {
+        
+        [[EAOTAManager defaultManager] eaUpgradeAGPSProgress:^(CGFloat progress) {
             
-            [[EAOTAManager defaultManager] eaUpgradeAGPSProgress:^(CGFloat progress) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
+            
+        } complete:^(BOOL succ, NSError * _Nullable error) {
+            
+            if (succ) {
                 
-            } complete:^(BOOL succ, NSError * _Nullable error) {
-                
-            }];
-//        }
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+            }
+        }];
+        //        }
     }
     else if ([call.method isEqualToString:kEACustomWatchface]) {
         
@@ -764,7 +774,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [_channel invokeMethod:kArgumentsError arguments:@"bgImagePath not null"];
             return;
         }
-       
+        
         BOOL isNumberWf = [arguments[@"isNumberWf"] boolValue];
         BOOL getPreviewImage = [arguments[@"getPreviewImage"] boolValue];
         NSInteger pointerColorType = [arguments[@"pointerColorType"] integerValue];
@@ -785,7 +795,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             }
             else
             {
-//                [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color];
+                //                [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color];
                 [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color watchFaceId:@"" progress:^(CGFloat progress) {
                     
                 } complete:^(BOOL succ, NSError * _Nullable error) {
@@ -809,7 +819,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             }
         }
         
-      
+        
         
     }
     else{
@@ -856,7 +866,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 EAShowAppMessageModel *showAppMessageModel = [EAShowAppMessageModel eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)baseModel];
                 value = [showAppMessageModel modelToJSONObject];
             }
-           
+            
             if ([[value objectForKey:@"type"] isEqualToString:@"G01"]) {
                 
                 NSMutableDictionary *newValue = [NSMutableDictionary dictionaryWithDictionary:value];
@@ -951,7 +961,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             isWatchFace = YES;
         }
         
-//        EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
+        //        EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
         EAFileModel *fileModel = [EAFileModel eaInitWithPath:binPath otaType:otaType version:version];
         [models addObject:fileModel];
     }
@@ -961,20 +971,39 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if(!isWatchFace) {
             
-//            [[EABleSendManager defaultManager] upgradeFiles:models];
+            //            [[EABleSendManager defaultManager] upgradeFiles:models];
             [[EAOTAManager defaultManager] eaUpgradeFiles:models progress:^(CGFloat progress) {
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
                 
             } complete:^(BOOL succ, NSError * _Nullable error) {
                 
+                if (succ) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+                }
+                else
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+                }
             }];
         }
         else if(isWatchFace && models.count == 1)
         {
-//            [[EABleSendManager defaultManager] upgradeWatchFaceFile:[models firstObject]];
+            //            [[EABleSendManager defaultManager] upgradeWatchFaceFile:[models firstObject]];
             [[EAOTAManager defaultManager] eaUpgradeWatchFaceFile:[models firstObject] progress:^(CGFloat progress) {
                 
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
             } complete:^(BOOL succ, NSError * _Nullable error) {
                 
+                if (succ) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+                }
+                else
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+                }
             }];
         }
         else {
@@ -990,11 +1019,19 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)watchfaceAction:(EAFileModel *)fileModel {
     
-//    [[EABleSendManager defaultManager] upgradeWatchFaceFile:fileModel];
+    //    [[EABleSendManager defaultManager] upgradeWatchFaceFile:fileModel];
     [[EAOTAManager defaultManager] eaUpgradeWatchFaceFile:fileModel progress:^(CGFloat progress) {
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
     } complete:^(BOOL succ, NSError * _Nullable error) {
-        
+        if (succ) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+        }
     }];
 }
 
@@ -1053,10 +1090,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 /// 扫描发现的设备 （实时）
 /// @param peripheralModel 设备
 - (void)didDiscoverPeripheral:(EAPeripheralModel *)peripheralModel {
-    
-    
-    
-    
     
     NSMutableDictionary *advertisementData = [NSMutableDictionary dictionaryWithDictionary:peripheralModel.advertisementData];
     advertisementData[kData] = [EADataValue eaConvertToHexStringByData:peripheralModel.advertisementData[kData]];
@@ -1119,25 +1152,25 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
  
  import 'package:flutter/services.dart';
  import 'package:path_provider/path_provider.dart';
-  
+ 
  // 假设这是你的iOS插件通道
  const platform = MethodChannel('plugins.flutter.io/my_plugin');
-  
+ 
  Future<void> getImageAndPassToPlugin(String imageName) async {
-   // 获取图片目录
-   final directory = await getApplicationDocumentsDirectory();
-   final imagePath = '${directory.path}/$imageName';
-  
-   // 传递图片路径给iOS插件
-   try {
-     final Map<String, dynamic> params = <String, dynamic>{
-       'imagePath': imagePath,
-     };
-     await platform.invokeMethod('passImagePath', params);
-   } on PlatformException catch (e) {
-     print("Failed to pass image path: '${e.message}'.");
-   }
+ // 获取图片目录
+ final directory = await getApplicationDocumentsDirectory();
+ final imagePath = '${directory.path}/$imageName';
+ 
+ // 传递图片路径给iOS插件
+ try {
+ final Map<String, dynamic> params = <String, dynamic>{
+ 'imagePath': imagePath,
+ };
+ await platform.invokeMethod('passImagePath', params);
+ } on PlatformException catch (e) {
+ print("Failed to pass image path: '${e.message}'.");
  }
-
+ }
+ 
  
  */
