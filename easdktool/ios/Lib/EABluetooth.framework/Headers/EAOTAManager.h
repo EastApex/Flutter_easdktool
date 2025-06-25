@@ -30,6 +30,7 @@ typedef void(^CheckJsonProgressBlock)(CGFloat progress);
 + (instancetype)defaultManager;
 - (BOOL)getOTAState;
 
+
 /// OTA
 /// - Parameter list: Files that need to be upgraded (multiple)【需要升级的文件(可多个)】
 - (BOOL)eaUpgradeFiles:(NSArray<EAFileModel *> *)list progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
@@ -38,6 +39,9 @@ typedef void(^CheckJsonProgressBlock)(CGFloat progress);
 /// OTA Watch Face【OTA表盘】
 /// - Parameter watchFaceFile: Watch Face File【表盘文件】
 - (BOOL)eaUpgradeWatchFaceFile:(EAFileModel *)watchFaceFile progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+
+
 
 
 /// Check the HisRes.zip file【解压并获取需要OTA的文件】
@@ -63,6 +67,7 @@ typedef void(^CheckJsonProgressBlock)(CGFloat progress);
 - (void)eaCheckHisJsonPath:(NSString *)jsonPath checkProgress:(void (^)(CGFloat progress))checkProgress complete:(CheckHisResCompleteBlock)complete fail:(CheckHisResErrorBlock)fail;
 
 
+- (BOOL)eaUpgradeAGPSFile:(EAFileModel *)agpsFile progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 /// Upgrade AGPS
 /// - Parameters:

@@ -18,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface EATemplateEnvironmentData : EABigDataModel
+@interface EATemplateEnvironmentData : EABaseBigDataModel
+
+@property(nonatomic, strong) NSMutableArray<EATemplateEnvironmentDataItem *> *sIndexArray;
 
 + (EATemplateEnvironmentData *)getBigData:(NSData *)data;
 @end

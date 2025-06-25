@@ -37,11 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// App controlled watch App操控手表
 - (void)operationControlledWatchWithType:(EADeviceOpsType)deviceOpsType result:(RespondBlock )respond;
 
-/// Retrieve audio data [Call this method to retrieve audio data only when notification 'recording completed' is received]
-/// 获取音频数据【通知收到 ‘录音完成’ 才能调用此方法获取录音数据】
-- (NSData *)getAudioDataData;
-
-
 
 
 /// upgrade [OTA]
@@ -76,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
+- (void)getPpgDataResult:(ResultGetPpgBlock )result;
 
 
 /** * You are not advised to use */

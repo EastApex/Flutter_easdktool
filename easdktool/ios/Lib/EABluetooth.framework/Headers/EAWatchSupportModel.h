@@ -347,6 +347,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 功能与协议: muslim日历
 @property(nonatomic, assign) BOOL muslimTimestampSupport;
 
+
+/** 功能与协议: 自定义表盘协议支持（id = 73\\74\\75） */
+@property(nonatomic, assign) BOOL cusWatchfaceSupport;
+
+/** 功能与协议: AI文字下发协议支持（id = 76\\77） */
+@property(nonatomic, assign) BOOL aiTxtSupport;
+
+/** 功能与协议:心率PPG数据开关支持（id = 78\\79） */
+@property(nonatomic, assign) BOOL hrPpgSwSupport;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -102,6 +102,14 @@
 #import <EABluetooth/EAMuslimDirectionTime.h>
 #import <EABluetooth/EAMuslimCalendar.h>
 
+
+#import <EABluetooth/EAAiText.h>
+#import <EABluetooth/EAAiConfig.h>
+#import <EABluetooth/EAVoiceData.h>
+
+#import <EABluetooth/EAPpgManual.h>
+#import <EABluetooth/EAPpgAuto.h>
+
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>

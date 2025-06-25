@@ -15,8 +15,8 @@
  
 */
 
-#define kEASDKVERSION   @"1.1.09"
-#define kEASDKBUILD     @"5"
+#define kEASDKVERSION   @"1.1.17"
+#define kEASDKBUILD     @"1"
 
 
 
@@ -100,10 +100,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// ReplayMessage
 #define kNTF_EAReplayMessage                @"EAReplayMessage"
 
-
-
 /// GPS bug
 #define kNTF_EADebugGpsNmeaData             @"EADebugGpsNmeaData"
+
+/// recording completed
+#define kNTF_RecordingCompleted             @"EARecordingCompleted"
 
 
 

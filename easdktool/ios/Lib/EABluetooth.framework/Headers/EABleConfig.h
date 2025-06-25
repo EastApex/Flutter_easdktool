@@ -83,6 +83,10 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 /// ignore：
 @property(nonatomic,assign) NSInteger popUpInterface;
 
+/// ignore：
+@property(nonatomic,assign) NSInteger extraSportHrs;
+
+
 /// 初始化默认配置,不是单例（debug:NO,scanchannel:8800,canScanAllDevices:NO,isTest:NO,saveLog:NO）
 + (EABleConfig *)getDefaultConfig;
 

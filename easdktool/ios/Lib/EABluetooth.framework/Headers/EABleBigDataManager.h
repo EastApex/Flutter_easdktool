@@ -50,7 +50,13 @@ typedef void(^ResultBlock)(EARespondCodeType eaRespondCodeType);
 
 
 
+/// AolonFit专用
+- (NSArray *)aolonFitHrsWithBenginTimestamp:(NSInteger )benginTimestamp endTimestamp:(NSInteger )endTimestamp;
 
+
+///// Retrieve audio data [Call this method to retrieve audio data only when notification 'recording completed' is received]
+///// 获取音频数据【通知收到 ‘录音完成’ 才能调用此方法获取录音数据】
+//- (NSData *)getAudioDataData;
 
 
 

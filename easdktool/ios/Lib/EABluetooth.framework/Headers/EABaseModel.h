@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^ResultGetInfoBlock)(EABaseModel *baseModel);
 typedef void(^RespondBlock)(EARespondModel *respondModel);
-
+typedef void(^ResultGetPpgBlock)(NSString *ppgData);
 
 @interface EABaseModel : NSObject<NSCopying>
 
@@ -48,6 +48,8 @@ typedef void(^RespondBlock)(EARespondModel *respondModel);
 + (instancetype )getModelByData:(NSData *)data;
 
 - (void)eaSend:(void (^)(EARespondCodeType respondCodeType ))completion;
+
++ (void)eaGetWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
 @end
 
 

@@ -20,7 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontpreverify
--dontobfuscate
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-verbose
+-keepattributes *Annotation*
 -dontwarn net.sqlcipher.database.**
 -dontwarn rx.**
 -dontwarn org.greenrobot.greendao.**

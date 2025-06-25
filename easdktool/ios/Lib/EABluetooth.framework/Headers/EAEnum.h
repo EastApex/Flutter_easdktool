@@ -390,6 +390,44 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /// EAMuslimCalendar
     EADataInfoTypeMuslimCalendar = 71,
     
+    /// id = 72
+    /// EAUploadGPSLocation
+    EADataInfoTypeUploadGPSLocation = 72,
+    
+    /// id = 73
+    /// EACusWatchFaceConfig
+    EADataInfoTypeCusWatchFaceConfig = 73,
+    
+    /// id = 74
+    /// EACusWatchFaceIds
+    EADataInfoTypeCusWatchFaceIds = 74,
+    
+    /// id = 75
+    /// EACusWatchFaceSetting
+    EADataInfoTypeCusWatchFaceSetting = 75,
+    
+    /// id = 76
+    /// EAAiText
+    EADataInfoTypeAiText = 76,
+    
+    
+    /// id = 77
+    /// EAAiConfig
+    EADataInfoTypeAiConfig = 77,
+    
+    
+    
+    /// id = 78: App操作手表（开始/停止【心率、血氧、压力、呼吸】）
+    /// id = 78: App operation watch (start/stop [heart rate, blood oxygen, pressure, breathing])
+    /// EAAppOps
+    EADataInfoTypePpgManual = 78,
+    
+    /// id = 79: App操作手表（开始/停止【心率、血氧、压力、呼吸】）
+    /// id = 79: App operation watch (start/stop [heart rate, blood oxygen, pressure, breathing])
+    /// EAAppOps
+    EADataInfoTypePpgAuto = 79,
+    
+    
     
     /// Operating Phone Commands
     /// 操作手机命令
@@ -489,6 +527,10 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     /// EATemplateEnvironmentData
     EADataInfoTypeTemplateEnvironmentData = 3015,
     
+    /// 语音包数据
+    /// Voicet data
+    /// EAVoiceData
+    EADataInfoTypeVoiceData = 3016,
     
     
     
@@ -1436,6 +1478,15 @@ typedef NS_ENUM(NSUInteger,EAPhoneOps) {
     
     /** 宠物器需求：绑定清除用户数据成功回应 ，默认15秒失败*/
     EAPhoneOpsClearUserdataSucc = 26,
+    
+    /** 请求手机的经纬度信息 */
+    EAPhoneOpsRequestGpsLocation = 27,
+
+    /** 启动AI文字下发 */
+    EAPhoneOpsStartAiTxt = 28,
+
+    /** 停止AI文字下发 */
+    EAPhoneOpsStopAiTxt = 29,
     
 };
 
@@ -2806,6 +2857,66 @@ typedef NS_ENUM(NSUInteger,EAWatchSportType) {
     /** 室内溜冰 */
     EAWatchSportIndoorSkatingRink = 168,
     
+    /** 马拉松赛跑  Marathon */
+    EAWatchSportMarathon = 169,
+
+    /** 平衡训练    Balance */
+    EAWatchSportBalance = 170,
+
+    /** 深蹲          Squats */
+    EAWatchSportSquats = 171,
+
+    /** 背包旅行    Backpacking */
+    EAWatchSportBackpacking = 172,
+
+    /** 铁饼          Discus */
+    EAWatchSportDiscus = 173,
+
+    /** 标枪          Javelin Throw */
+    EAWatchSportJavelinThrow = 174,
+
+    /** 滑板车      Scooter */
+    EAWatchSportScooter = 175,
+
+    /** 水上自行车  Water Biking */
+    EAWatchSportWaterBiking = 176,
+
+    /** 双打网球      Doubles Tennis */
+    EAWatchSportDoublesTennis = 177,
+
+    /** 草地曲棍球  Field Hockey */
+    EAWatchSportFieldHockey = 178,
+
+    /** 链球          Hammer Throw */
+    EAWatchSportHammerThrow = 179,
+
+    /** 铅球            Shot Put */
+    EAWatchSportShotPut = 180,
+
+    /** 舞蹈扶手杠  Barre */
+    EAWatchSportBarre = 181,
+
+    /** 霹雳舞      Break Dance */
+    EAWatchSportBreakDance = 182,
+
+    /** 肢体格斗       Body Combat */
+    EAWatchSportBodyCombat = 183,
+
+    /** 踢拳           Kickboxing */
+    EAWatchSportKickboxing = 184,
+
+    /** 花式骑术    Dressage */
+    EAWatchSportDressage = 185,
+
+    /** 悬挂训练      Trx */
+    EAWatchSportTrx = 186,
+
+    /** 滑水        Water Skiing */
+    EAWatchSportWaterSkiing = 187,
+
+    /** 游泳        Swimming */
+    EAWatchSportSwimming = 188,
+
     
     
     /// Intelligent movement: Daily
@@ -3411,5 +3522,143 @@ typedef NS_ENUM(NSUInteger,EABtType) {
     EABtTypeOn = 1,
     EABtTypeConnected = 2,
 };
+
+
+typedef NS_ENUM(NSUInteger,EAAiTextType) {
+
+    /** 识别结果 */
+    EAAiTextTypeVoiceResult = 0,
+
+    /** 思考过程: 开始 */
+    EAAiTextTypeThinkBegin = 1,
+
+    /** 思考过程: 进行中 */
+    EAAiTextTypeThinkProcess = 2,
+
+    /** 思考过程: 结束 */
+    EAAiTextTypeThinkEnd = 3,
+
+    /** 正文: 开始 */
+    EAAiTextTypeTxtBegin = 4,
+
+    /** 正文: 进行中 */
+    EAAiTextTypeTxtProcess = 5,
+
+    /** 正文: 结束 */
+    EAAiTextTypeTxtEnd = 6,
+};
+
+
+typedef NS_ENUM(NSUInteger,EACusWatchFaceSetType) {
+
+  /** 读取配置:(只需赋值ewfops及cusid) */
+    EACusWatchFaceSetTypeRead = 0,
+
+  /** 设置配置 */
+    EACusWatchFaceSetTypeWrite = 1,
+
+  /** 删除对应表盘:(只需赋值ewfops及cusid) */
+    EACusWatchFaceSetTypeDel = 2,
+};
+
+typedef NS_ENUM(NSUInteger,EACusWatchFaceSetTimeStyle) {
+
+  /** 时间样式1 */
+    EACusWatchFaceSetTimeStyle1 = 0,
+    
+    /** 时间样式2 */
+    EACusWatchFaceSetTimeStyle2 = 1,
+    
+    /** 时间样式3 */
+    EACusWatchFaceSetTimeStyle3 = 2,
+    
+    /** 时间样式4 */
+    EACusWatchFaceSetTimeStyle4 = 3,
+    
+    /** 时间样式5 */
+    EACusWatchFaceSetTimeStyle5 = 4,
+    
+    /** 指针样式1 */
+    EACusWatchFaceSetTimeStylePointer1 = 5,
+};
+
+typedef NS_ENUM(NSUInteger,EACusWatchFaceSetTimePosition) {
+
+  /** 上方 */
+    EACusWatchFaceSetTimePositionTop = 0,
+
+  /** 下方 */
+    EACusWatchFaceSetTimePositionBottom = 1,
+};
+
+
+typedef NS_ENUM(NSUInteger,EACusWatchFaceFunctionType) {
+
+ 
+
+  /** 无数据 */
+  EACusWatchFaceFunctionTypeNoData = 1,
+
+  /** 步数 */
+  EACusWatchFaceFunctionTypeStep = 2,
+
+  /** 电量 */
+  EACusWatchFaceFunctionTypeBat = 3,
+
+  /** 活动小时 */
+  EACusWatchFaceFunctionTypeActivityHours = 4,
+
+  /** 活动热量 */
+  EACusWatchFaceFunctionTypeActivityCal = 5,
+
+  /** 心率 */
+  EACusWatchFaceFunctionTypeHr = 6,
+
+  /** 压力 */
+  EACusWatchFaceFunctionTypePressure = 7,
+
+  /** 锻炼时长 */
+  EACusWatchFaceFunctionTypeExerciseDuration = 8,
+
+  /** UV */
+  EACusWatchFaceFunctionTypeUv = 9,
+
+  /** 健康三叶草 */
+  EACusWatchFaceFunctionTypeHealthyClover = 10,
+
+  /** 最大摄氧量 */
+  EACusWatchFaceFunctionTypeMaxOxygen = 11,
+
+  /** 睡眠 */
+  EACusWatchFaceFunctionTypeSleep = 12,
+
+  /** 血氧 */
+  EACusWatchFaceFunctionTypeSpo2 = 13,
+
+  /** AQI */
+  EACusWatchFaceFunctionTypeAqi = 14,
+
+  /** 日出 */
+  EACusWatchFaceFunctionTypeSunrise = 15,
+
+  /** 日落 */
+  EACusWatchFaceFunctionTypeSunset = 16,
+
+  /** 月出 */
+  EACusWatchFaceFunctionTypeMoonrise = 17,
+
+  /** 月落 */
+  EACusWatchFaceFunctionTypeMoondown = 18,
+
+  /** 月相 */
+  EACusWatchFaceFunctionTypeMoonphase = 19,
+
+  /** 双时区 */
+  EACusWatchFaceFunctionTypeDualTimezone = 20,
+
+  /** 天气 */
+  EACusWatchFaceFunctionTypeWeather = 21,
+};
+
 
 #endif /* EAEnumh */
