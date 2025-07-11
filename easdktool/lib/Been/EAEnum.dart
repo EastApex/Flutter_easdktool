@@ -541,7 +541,7 @@ enum EAOperationWatchType {
 
 ///【OTA 固件类型】
 /// Firmware type
-enum EAFirmwareType { Apollo, Res, Tp, Hr, wf }
+enum EAFirmwareType { Apollo, Res, Tp, Hr, wf, JL_firmware }
 
 /// 手表连接状态
 /// Watch Connect State Type

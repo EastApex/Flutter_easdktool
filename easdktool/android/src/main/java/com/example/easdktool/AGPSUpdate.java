@@ -75,14 +75,14 @@ public class AGPSUpdate {
                             @Override
                             public void run() {
                                 super.run();
-                                File file = getLocalCacheFile(mContext);
-                                if (isTimeOut(file)) {
+                              //  File file = getLocalCacheFile(mContext);
+                              //  if (isTimeOut(file)) {
                                     LogUtils.i(TAG, "重新下载");
                                     //重新下载
                                     startDownAgps(mContext);
                                     packageAgpsFile(mContext);
 
-                                }
+                              //  }
 
                                 if (mHandler == null) {
                                     mHandler = new Handler(Looper.getMainLooper());

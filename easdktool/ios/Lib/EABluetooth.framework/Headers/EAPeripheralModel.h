@@ -28,6 +28,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) NSString *kehuhao;
 @property(nonatomic,strong) NSString *banben;
 @property(nonatomic,assign) NSInteger number;
+
+@property(nonatomic,assign) NSInteger ap;
+@property(nonatomic,assign) NSInteger b;
+@property(nonatomic,assign) NSInteger r;
+@property(nonatomic,assign) NSInteger b1;
+
+/// quantity of electricity
+@property(nonatomic,assign) NSInteger charge;
+
+@property(nonatomic,assign) NSInteger fStatus;
+
+
+/// 0协议 1杰里库
+@property(nonatomic,assign) NSInteger typeOfOTA;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

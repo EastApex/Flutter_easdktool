@@ -174,7 +174,7 @@ class _MyAppState extends State<MyApp> {
 
       //The second method is to initialize the channel
     } else {
-      secondEasdkTool.showLog(0);
+      secondEasdkTool.showLog(1);
       secondEasdkTool.initChannel();
 
       /// 【添加监听】
@@ -188,7 +188,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// 打开 SDKLog
-    EASDKTool().showLog(0);
+    EASDKTool().showLog(1);
 
     EASDKTool().showTest(0);
 
@@ -1617,91 +1617,124 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
+                  bool isJL707 = true;
+                  if (isJL707) {
+                    var bytes = await rootBundle
+                        .load("assets/bin/002086_AP0.1B0.5.ufw");
+                    String path = (await getApplicationSupportDirectory()).path;
+                    String filePath =
+                        '$path/' + DateTime.now().toString() + '.ufw';
+                    final buffer9 = bytes.buffer;
+                    await File(filePath).writeAsBytes(buffer9.asUint8List(
+                        bytes.offsetInBytes, bytes.lengthInBytes));
 
-                  var bytes =
-                      await rootBundle.load("assets/bin/002019_AP0.1B0.4.bin");
-                  String path = (await getApplicationSupportDirectory()).path;
-                  String filePath =
-                      '$path/' + DateTime.now().toString() + '.bin';
-                  final buffer = bytes.buffer;
-                  await File(filePath).writeAsBytes(buffer.asUint8List(
-                      bytes.offsetInBytes, bytes.lengthInBytes));
+                    EAOTA dialOTA =
+                        EAOTA(filePath, EAFirmwareType.JL_firmware, "");
+                    EAOTAList eaList = EAOTAList(0, [dialOTA]);
+                    secondEasdkTool.otaUpgrade(eaList,
+                        EAOTAProgressCallback((progress) {
+                      print("OTA progress:" + progress.toString());
+                      if (progress == -1) {
+                        // transmit data fail;
+                      } else if (progress == 100) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    }));
+                  } else {
+                    var bytes = await rootBundle
+                        .load("assets/bin/002019_AP0.1B0.4.bin");
+                    String path = (await getApplicationSupportDirectory()).path;
+                    String filePath =
+                        '$path/' + DateTime.now().toString() + '.bin';
+                    final buffer = bytes.buffer;
+                    await File(filePath).writeAsBytes(buffer.asUint8List(
+                        bytes.offsetInBytes, bytes.lengthInBytes));
 
-                  var bytes1 =
-                      await rootBundle.load("assets/bin/002019_AP0.1B0.5.bin");
-                  String path1 = (await getApplicationSupportDirectory()).path;
-                  String filePath1 =
-                      '$path1/' + DateTime.now().toString() + '.bin';
-                  final buffer1 = bytes1.buffer;
-                  await File(filePath1).writeAsBytes(buffer1.asUint8List(
-                      bytes1.offsetInBytes, bytes1.lengthInBytes));
-                  var bytes4 =
-                      await rootBundle.load("assets/bin/002019_AP0.1B0.6.bin");
-                  String path4 = (await getApplicationSupportDirectory()).path;
-                  String filePath4 =
-                      '$path4/' + DateTime.now().toString() + '.bin';
-                  final buffer4 = bytes4.buffer;
-                  await File(filePath4).writeAsBytes(buffer4.asUint8List(
-                      bytes4.offsetInBytes, bytes4.lengthInBytes));
+                    var bytes1 = await rootBundle
+                        .load("assets/bin/002019_AP0.1B0.5.bin");
+                    String path1 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath1 =
+                        '$path1/' + DateTime.now().toString() + '.bin';
+                    final buffer1 = bytes1.buffer;
+                    await File(filePath1).writeAsBytes(buffer1.asUint8List(
+                        bytes1.offsetInBytes, bytes1.lengthInBytes));
+                    var bytes4 = await rootBundle
+                        .load("assets/bin/002019_AP0.1B0.6.bin");
+                    String path4 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath4 =
+                        '$path4/' + DateTime.now().toString() + '.bin';
+                    final buffer4 = bytes4.buffer;
+                    await File(filePath4).writeAsBytes(buffer4.asUint8List(
+                        bytes4.offsetInBytes, bytes4.lengthInBytes));
 
-                  var bytes5 =
-                      await rootBundle.load("assets/bin/002019_AP0.1B0.7.bin");
-                  String path5 = (await getApplicationSupportDirectory()).path;
-                  String filePath5 =
-                      '$path5/' + DateTime.now().toString() + '.bin';
-                  final buffer5 = bytes5.buffer;
-                  await File(filePath5).writeAsBytes(buffer5.asUint8List(
-                      bytes5.offsetInBytes, bytes5.lengthInBytes));
+                    var bytes5 = await rootBundle
+                        .load("assets/bin/002019_AP0.1B0.7.bin");
+                    String path5 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath5 =
+                        '$path5/' + DateTime.now().toString() + '.bin';
+                    final buffer5 = bytes5.buffer;
+                    await File(filePath5).writeAsBytes(buffer5.asUint8List(
+                        bytes5.offsetInBytes, bytes5.lengthInBytes));
 
-                  var bytes2 =
-                      await rootBundle.load("assets/bin/002019_R0.2.bin");
-                  String path2 = (await getApplicationSupportDirectory()).path;
-                  String filePath2 =
-                      '$path2/' + DateTime.now().toString() + '.bin';
-                  final buffer2 = bytes2.buffer;
-                  await File(filePath2).writeAsBytes(buffer2.asUint8List(
-                      bytes2.offsetInBytes, bytes2.lengthInBytes));
+                    var bytes2 =
+                        await rootBundle.load("assets/bin/002019_R0.2.bin");
+                    String path2 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath2 =
+                        '$path2/' + DateTime.now().toString() + '.bin';
+                    final buffer2 = bytes2.buffer;
+                    await File(filePath2).writeAsBytes(buffer2.asUint8List(
+                        bytes2.offsetInBytes, bytes2.lengthInBytes));
 
-                  var bytes3 =
-                      await rootBundle.load("assets/bin/002019_R0.3.bin");
-                  String path3 = (await getApplicationSupportDirectory()).path;
-                  String filePath3 =
-                      '$path3/' + DateTime.now().toString() + '.bin';
-                  final buffer3 = bytes3.buffer;
-                  await File(filePath3).writeAsBytes(buffer3.asUint8List(
-                      bytes3.offsetInBytes, bytes3.lengthInBytes));
-                  var bytes9 =
-                      await rootBundle.load("assets/bin/watchface_U38.bin");
-                  String path9 = (await getApplicationSupportDirectory()).path;
-                  String filePath9 =
-                      '$path9/' + DateTime.now().toString() + '.bin';
-                  final buffer9 = bytes9.buffer;
-                  await File(filePath9).writeAsBytes(buffer9.asUint8List(
-                      bytes9.offsetInBytes, bytes9.lengthInBytes));
-                  EAOTA dialOTA = EAOTA(filePath9, EAFirmwareType.wf, "");
-                  EAOTA appoloOTA =
-                      EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B0.4");
-                  EAOTA appoloOTA1 =
-                      EAOTA(filePath1, EAFirmwareType.Apollo, "AP0.1B0.5");
-                  EAOTA resOTA = EAOTA(filePath2, EAFirmwareType.Res, "R0.2");
-                  EAOTA resOTA1 = EAOTA(filePath3, EAFirmwareType.Res, "R0.3");
-                  EAOTA appoloOTA2 =
-                      EAOTA(filePath4, EAFirmwareType.Apollo, "AP0.1B0.6");
-                  EAOTA appoloOTA3 =
-                      EAOTA(filePath5, EAFirmwareType.Apollo, "AP0.1B0.7");
+                    var bytes3 =
+                        await rootBundle.load("assets/bin/002019_R0.3.bin");
+                    String path3 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath3 =
+                        '$path3/' + DateTime.now().toString() + '.bin';
+                    final buffer3 = bytes3.buffer;
+                    await File(filePath3).writeAsBytes(buffer3.asUint8List(
+                        bytes3.offsetInBytes, bytes3.lengthInBytes));
+                    var bytes9 =
+                        await rootBundle.load("assets/bin/watchface_U38.bin");
+                    String path9 =
+                        (await getApplicationSupportDirectory()).path;
+                    String filePath9 =
+                        '$path9/' + DateTime.now().toString() + '.bin';
+                    final buffer9 = bytes9.buffer;
+                    await File(filePath9).writeAsBytes(buffer9.asUint8List(
+                        bytes9.offsetInBytes, bytes9.lengthInBytes));
+                    EAOTA dialOTA = EAOTA(filePath9, EAFirmwareType.wf, "");
+                    EAOTA appoloOTA =
+                        EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B0.4");
+                    EAOTA appoloOTA1 =
+                        EAOTA(filePath1, EAFirmwareType.Apollo, "AP0.1B0.5");
+                    EAOTA resOTA = EAOTA(filePath2, EAFirmwareType.Res, "R0.2");
+                    EAOTA resOTA1 =
+                        EAOTA(filePath3, EAFirmwareType.Res, "R0.3");
+                    EAOTA appoloOTA2 =
+                        EAOTA(filePath4, EAFirmwareType.Apollo, "AP0.1B0.6");
+                    EAOTA appoloOTA3 =
+                        EAOTA(filePath5, EAFirmwareType.Apollo, "AP0.1B0.7");
 
-                  EAOTAList eaList = EAOTAList(0, [dialOTA]);
-                  secondEasdkTool.otaUpgrade(eaList,
-                      EAOTAProgressCallback((progress) {
-                    print("OTA进度:" + progress.toString());
-                    if (progress == -1) {
-                      // transmit data fail;
-                    } else if (progress == 100) {
-                      // transmit data succ;
-                    } else {
-                      // transmit data progress
-                    }
-                  }));
+                    EAOTAList eaList = EAOTAList(0, [dialOTA]);
+                    secondEasdkTool.otaUpgrade(eaList,
+                        EAOTAProgressCallback((progress) {
+                      print("OTA进度:" + progress.toString());
+                      if (progress == -1) {
+                        // transmit data fail;
+                      } else if (progress == 100) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    }));
+                  }
                 },
               ),
               GestureDetector(

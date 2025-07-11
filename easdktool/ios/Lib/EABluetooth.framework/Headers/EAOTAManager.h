@@ -23,6 +23,8 @@ typedef void(^CheckHisResErrorBlock)(NSError * _Nullable error);
 typedef void(^OTACompleteBlock)(BOOL succ, NSError * _Nullable error);
 typedef void(^UncompressProgressBlock)(CGFloat progress);
 typedef void(^CheckJsonProgressBlock)(CGFloat progress);
+typedef void(^OTAProgressBlock)(CGFloat progress);
+
 
 
 @interface EAOTAManager : NSObject
@@ -73,6 +75,9 @@ typedef void(^CheckJsonProgressBlock)(CGFloat progress);
 /// - Parameters:
 - (BOOL)eaUpgradeAGPSProgress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
+/// Upgrade AGPS
+/// - Parameters:
+- (BOOL)eaUpgradeAGPSCheckTime:(BOOL)checkAgpsUpdateTime progress :(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 @end
 

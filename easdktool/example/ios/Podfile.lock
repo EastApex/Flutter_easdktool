@@ -77,7 +77,7 @@ SPEC CHECKSUMS:
   BGFMDB: 48e6823027232402a678acc7f71484b1fc9171d0
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
-  easdktool: 1b380ab7f8e328d50f2c535ef5c67bfb9445245d
+  easdktool: 2cc59101dc5d188c652f3fa6f1cda0d00243595d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_foreground_task: 21ef182ab0a29a3005cc72cd70e5f45cb7f7f817
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46

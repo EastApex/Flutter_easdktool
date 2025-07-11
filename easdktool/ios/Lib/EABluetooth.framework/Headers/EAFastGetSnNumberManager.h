@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define kWatchServices @[[CBUUID UUIDWithString:@"8800"],[CBUUID UUIDWithString:@"9900"],[CBUUID UUIDWithString:@"0012"],[CBUUID UUIDWithString:@"0011"]]
 
+#define kFastGetClientCode  @"clientCode"
+#define kFastGetSn          @"sn"
+#define kFastGetJl707       @"jieli707"
 @interface EAFastGetSnNumberManager : NSObject
 
 

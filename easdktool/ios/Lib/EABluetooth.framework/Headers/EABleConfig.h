@@ -87,6 +87,7 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 @property(nonatomic,assign) NSInteger extraSportHrs;
 
 
+
 /// 初始化默认配置,不是单例（debug:NO,scanchannel:8800,canScanAllDevices:NO,isTest:NO,saveLog:NO）
 + (EABleConfig *)getDefaultConfig;
 
@@ -98,6 +99,8 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 + (BOOL)saveLogEnable;
 
 + (void)writeLog:(NSString *)logLastString;
+
++ (BOOL)checkJLBil;
 
 @end
 

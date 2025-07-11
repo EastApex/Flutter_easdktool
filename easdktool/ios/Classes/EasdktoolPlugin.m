@@ -955,12 +955,16 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             
             otaType = EAOtaRequestTypeHr;
             
-        }else if (otaType == 4) {
+        }
+        else if (otaType == 4) {
             
             otaType = EAOtaRequestTypeUserWf;
             isWatchFace = YES;
         }
-        
+        else if (otaType == 5) {
+            
+            otaType = EAOtaRequestTypeJLFirmware;
+        }
         //        EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
         EAFileModel *fileModel = [EAFileModel eaInitWithPath:binPath otaType:otaType version:version];
         [models addObject:fileModel];

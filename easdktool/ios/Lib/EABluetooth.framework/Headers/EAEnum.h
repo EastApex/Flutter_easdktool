@@ -564,6 +564,12 @@ typedef NS_ENUM(NSUInteger, EACharacteristicType) {
     /// OTA通道
     EACharacteristicTypeOTAData, // 9902
     
+    /// 杰里
+    EACharacteristicTypeJLAE01, // AE01
+    
+    /// 杰里
+    EACharacteristicTypeJLAE02,  // AE02
+    
 };
 
 
@@ -3059,6 +3065,16 @@ typedef NS_ENUM(NSUInteger,EAOtaRequestType) {
     
     /// 海思音乐: 支持类型AAC,wav,flac,sbc,ogg,mp3
     EAOtaRequestTypeHisMusic = 10,
+    
+    ///
+    ///Ji Li Firmware
+    EAOtaRequestTypeJLFirmware= 980,
+    
+    ///
+    ///Ji Li Watch Face
+    EAOtaRequestTypeJLWatchFace= 981,
+    
+    
     
     /// Watch face
     /// 海思表盘
