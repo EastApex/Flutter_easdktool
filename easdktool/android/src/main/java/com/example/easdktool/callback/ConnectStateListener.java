@@ -3,13 +3,13 @@ package com.example.easdktool.callback;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.apex.ax_bluetooth.listener.EABleConnectListener;
+import com.apex.ax_bluetooth.callback.BleConnectStatusListener;
 import com.example.easdktool.enumerate.BluetoothState;
 import com.example.easdktool.enumerate.ConnectState;
 
 import io.flutter.plugin.common.MethodChannel;
 
-public class ConnectStateListener implements EABleConnectListener {
+public class ConnectStateListener implements BleConnectStatusListener {
     private MethodChannel channel;
     final String kConnectState = "ConnectState";
     final String kBluetoothState = "BluetoothState";

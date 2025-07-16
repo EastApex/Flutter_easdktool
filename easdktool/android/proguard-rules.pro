@@ -92,6 +92,7 @@ public static java.lang.String TABLENAME;
   public static final android.os.Parcelable$Creator *;
 
 }
+-keep class com.jieli.jl_bt_ota.** { *; }
 
 
 

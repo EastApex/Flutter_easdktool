@@ -58,6 +58,7 @@ import com.example.easdktool.callback.PrewMapCallBack;
 import com.example.easdktool.callback.WatchFileCallback;
 import com.example.easdktool.db.DataManager;
 import com.example.easdktool.enumerate.ConnectState;
+import com.example.easdktool.jieli_ota.JieliOtaInstance;
 
 
 import java.io.ByteArrayOutputStream;
@@ -230,6 +231,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     private final String DISPATCHER_HANDLE_KEY = "dispatch_handler";
     BtConnectBroadcast btConnectBroadcast;
     EventChannel eventChannel;
+
 
     public EasdktoolPlugin() {
         LogUtils.e(TAG, "创建plugin");
@@ -587,7 +589,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
             try {
                 //  EABleBluetoothOption.autoReply = true;
-                EABleManager.getInstance().connectToPeripheral(address, mContext, new ConnectStateListener(channel), 128, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
+                ConnectStateListener connectStateListener = new ConnectStateListener(channel);
+                EABleManager.getInstance().connectToPeripheral(address, mContext, connectStateListener, 400, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
+                JieliOtaInstance.getInstance().setReconnectApi(connectStateListener);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -651,7 +655,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             String arguments = (String) call.arguments;
             if (checkArgumentName("type", arguments) && checkArgumentName("otas", arguments)) {
                 Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
-                new OTAFunction(channel).startOta(map);
+                new OTAFunction(channel).startOta(map, mContext);
             }
 
         } else if (call.method.equals(kEAAGPS)) {//更新AGPS

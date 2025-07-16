@@ -33,7 +33,7 @@ const kEASportTypeOurdoorCycling = 6;
 const kEASportTypeOutdoorSwimming = 7;
 
 /// Stepper
-/// Stepper
+/// 室内步行
 const kEASportTypeStepper = 8;
 
 /// Indoor running
@@ -598,7 +598,7 @@ const kEASportTypeWaltz = 148;
 
 /// 爵士舞
 /// Jazz Dance
-const kEASportTypeJazzDance = 149;
+const kEASportTypeJazzDance = 159;
 
 /// 探戈
 /// Tango
@@ -723,6 +723,70 @@ const kEASportTypeWaterSkiing = 187;
 
 /// 游泳        Swimming */
 const kEASportTypeSwimming = 188;
+
+/// Intelligent movement: Daily
+/// 智慧运动: 日常运动
+const kEASportTypeDailyEx = 32768;
+
+/// Intelligent movement:
+/// 智慧运动: 户外步行
+const kEASportTypeOurdoorWalkingEx = 32769;
+
+/// Intelligent movement:
+/// 智慧运动: 户外跑步
+const kEASportTypeOurdoorRunningEx = 32770;
+
+/// Intelligent movement:
+/// 智慧运动: 户外徒步
+const kEASportTypeOurdoorOnFootEx = 32771;
+
+/// Intelligent movement:
+/// 智慧运动: 户外登山
+const kEASportTypeOurdoorOnMountaineeringEx = 32772;
+
+/// Intelligent movement:
+/// 智慧运动: 户外越野跑
+const kEASportTypeOurdoorTrailRunningEx = 32773;
+
+/// Intelligent movement:
+/// 智慧运动: 户外单车
+const kEASportTypeOurdoorCyclingEx = 32774;
+
+/// Intelligent movement:
+/// 智慧运动: 户外游泳
+const kEASportTypeOutdoorSwimmingEx = 32775;
+
+/// Intelligent movement:
+/// 智慧运动: 室内步行
+const kEASportTypeIndoorWalkingEx = 32776;
+
+/// Intelligent movement:
+/// 智慧运动: 室内跑步
+const kEASportTypeIndoorRunningEx = 32777;
+
+/// Intelligent movement:
+/// 智慧运动: 室内锻炼
+const kEASportTypeIndoorExerciseEx = 32778;
+
+/// Intelligent movement:
+/// 智慧运动: 室内单车
+const kEASportTypeIndoorCyclingEx = 32779;
+
+/// Intelligent movement:
+/// 智慧运动: 椭圆机
+const kEASportTypeEllipticalEx = 32780;
+
+/// Intelligent movement:
+/// 智慧运动: 瑜伽
+const kEASportTypeYogaEx = 32781;
+
+/// Intelligent movement:
+/// 智慧运动: 划船机
+const kEASportTypeRowingEx = 32782;
+
+/// Intelligent movement:
+/// 智慧运动: 室内游泳
+const kEASportTypeIndoorSwimmingEx = 32783;
 
 class EABigDataSport {
   // 运动类型

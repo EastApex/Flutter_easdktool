@@ -19,7 +19,7 @@ class EAConnectParam {
 
   EAConnectParam.testInit() {
     // connectAddress = "45:41:6C:30:92:4F";
-    connectAddress = "45:41:5B:16:58:4A";
+    connectAddress = "45:41:34:10:B5:26";
     // "45:41:15:82:52:84"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     snNumber = "45:42:F0:E0:E0:03";
     //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need

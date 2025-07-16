@@ -9,6 +9,9 @@ import com.apex.ax_bluetooth.callback.OtaCallback;
 import com.apex.ax_bluetooth.core.EABleManager;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
+import com.example.easdktool.jieli_ota.JieliOtaInstance;
+
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,8 @@ public class OTAFunction {
                 } else if (type == 4) {
                     tempOtaData.setOtaType(EABleOta.OtaType.user_wf);
 
+                } else if (type == 5) {
+                    tempOtaData.setOtaType(null);
                 }
                 tempOtaData.setFilePath(wMap.getString("binPath"));
                 otaDataList.add(tempOtaData);
@@ -57,14 +62,82 @@ public class OTAFunction {
         return null;
     }
 
-    public void startOta(Map<String, Object> map) {
+    public void startOta(Map<String, Object> map, Context mContext) {
         List<EABleOta> otaList = getOtaInfo(map);
         if (otaList != null && !otaList.isEmpty()) {
+            EABleOta jieliOta = null;
+            for (EABleOta ota : otaList) {
+                if (ota.getOtaType() == null) {
+                    jieliOta = ota;
+
+                }
+                break;
+            }
+            if (jieliOta != null) {
+                JieliOtaInstance.getInstance().startOta(jieliOta.getFilePath(),mContext, new OtaCallback() {
+                    @Override
+                    public void success() {
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (channel != null) {
+                                    channel.invokeMethod(kProgress, 100);
+                                }
+                                mHandler = null;
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void progress(int i) {
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                LogUtils.i(TAG, "当前进度:" + i);
+                                if (channel != null) {
+                                    channel.invokeMethod(kProgress, i);
+                                }
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void hisUpdateId(int[] ints) {
+
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (channel != null) {
+                                    channel.invokeMethod(kProgress, -1);
+                                }
+                                mHandler = null;
+                            }
+                        });
+
+                    }
+                });
+                return;
+            }
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
                 @Override
                 public void success() {
-                    if (mHandler==null){
-                        mHandler=new Handler(Looper.getMainLooper());
+                    if (mHandler == null) {
+                        mHandler = new Handler(Looper.getMainLooper());
                     }
                     mHandler.post(new Runnable() {
                         @Override
@@ -72,7 +145,7 @@ public class OTAFunction {
                             if (channel != null) {
                                 channel.invokeMethod(kProgress, 100);
                             }
-                            mHandler=null;
+                            mHandler = null;
                         }
                     });
 
@@ -80,8 +153,8 @@ public class OTAFunction {
 
                 @Override
                 public void progress(int i) {
-                    if (mHandler==null){
-                        mHandler=new Handler(Looper.getMainLooper());
+                    if (mHandler == null) {
+                        mHandler = new Handler(Looper.getMainLooper());
                     }
                     mHandler.post(new Runnable() {
                         @Override
@@ -102,8 +175,8 @@ public class OTAFunction {
 
                 @Override
                 public void mutualFail(int i) {
-                    if (mHandler==null){
-                        mHandler=new Handler(Looper.getMainLooper());
+                    if (mHandler == null) {
+                        mHandler = new Handler(Looper.getMainLooper());
                     }
                     mHandler.post(new Runnable() {
                         @Override
@@ -111,7 +184,7 @@ public class OTAFunction {
                             if (channel != null) {
                                 channel.invokeMethod(kProgress, -1);
                             }
-                            mHandler=null;
+                            mHandler = null;
                         }
                     });
 
@@ -123,12 +196,13 @@ public class OTAFunction {
             }
         }
     }
-    public void startCustomWatchFace(List<EABleOta> otaList){
+
+    public void startCustomWatchFace(List<EABleOta> otaList) {
         EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
             @Override
             public void success() {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -136,15 +210,15 @@ public class OTAFunction {
                         if (channel != null) {
                             channel.invokeMethod(kProgress, 100);
                         }
-                        mHandler=null;
+                        mHandler = null;
                     }
                 });
             }
 
             @Override
             public void progress(int i) {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -164,8 +238,8 @@ public class OTAFunction {
 
             @Override
             public void mutualFail(int i) {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -173,18 +247,19 @@ public class OTAFunction {
                         if (channel != null) {
                             channel.invokeMethod(kProgress, -1);
                         }
-                        mHandler=null;
+                        mHandler = null;
                     }
                 });
             }
         });
     }
-    public void startAgps2Watch(List<EABleOta> otaList){
+
+    public void startAgps2Watch(List<EABleOta> otaList) {
         EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
             @Override
             public void success() {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -192,15 +267,15 @@ public class OTAFunction {
                         if (channel != null) {
                             channel.invokeMethod(kProgress, 100);
                         }
-                        mHandler=null;
+                        mHandler = null;
                     }
                 });
             }
 
             @Override
             public void progress(int i) {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -220,8 +295,8 @@ public class OTAFunction {
 
             @Override
             public void mutualFail(int i) {
-                if (mHandler==null){
-                    mHandler=new Handler(Looper.getMainLooper());
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
                 }
                 mHandler.post(new Runnable() {
                     @Override
@@ -229,7 +304,7 @@ public class OTAFunction {
                         if (channel != null) {
                             channel.invokeMethod(kProgress, -1);
                         }
-                        mHandler=null;
+                        mHandler = null;
                     }
                 });
             }
