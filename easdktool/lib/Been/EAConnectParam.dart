@@ -4,8 +4,8 @@ part of easdktool.been;
 
 /*
  * 连接手表
- * Android 需要传 connectAddress
- * iOS 需要传 snNumber
+ * Android need connectAddress
+ * iOS need snNumber
  */
 class EAConnectParam {
   String connectAddress = "";
@@ -14,6 +14,7 @@ class EAConnectParam {
   Map advertisementData = {};
   int rssi = 0;
   String uuid = "";
+  bool isJL707 = false; //  true  is jl707 watch
 
   EAConnectParam();
 
@@ -51,6 +52,9 @@ class EAConnectParam {
     }
     if (map["uuid"] != null) {
       uuid = map["uuid"];
+    }
+    if (map["isJL707"] != null) {
+      isJL707 = map["isJL707"];
     }
   }
 }

@@ -1617,6 +1617,10 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
+
+                  // check Class EAWatchInfo.lcdPixelType
+                  // if  (EAWatchInfo.lcdPixelType == 4) is JL707 watch
+
                   bool isJL707 = true;
                   if (isJL707) {
                     var bytes = await rootBundle

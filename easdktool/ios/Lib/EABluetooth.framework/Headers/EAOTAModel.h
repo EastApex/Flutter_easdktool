@@ -98,6 +98,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (EAFileModel *)eaInitHisResWithPath:(NSString *)zipPath;
 
 
++ (EAFileModel *)eaInitHisMusicWithPath:(NSString *)musicPath;
+
 
 /// Deprecated
 /// 弃用
