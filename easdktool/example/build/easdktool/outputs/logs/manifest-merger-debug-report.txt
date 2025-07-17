@@ -1,0 +1,98 @@
+-- Merging decision tree log ---
+manifest
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:1:1-39:12
+INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:1:1-39:12
+	package
+		INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:4:5-75
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:4:22-72
+uses-permission#android.permission.READ_CONTACTS
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:5:5-72
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:5:22-69
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:6:5-72
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:6:22-69
+uses-permission#android.permission.READ_SMS
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:7:5-67
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:7:22-64
+uses-permission#android.permission.RECEIVE_SMS
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:8:5-70
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:8:22-67
+uses-permission#android.permission.INTERNET
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:9:5-67
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:9:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:10:5-79
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:10:22-76
+uses-permission#android.permission.BLUETOOTH
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:11:5-68
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:11:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:12:5-74
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:12:22-71
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:13:5-76
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:13:22-73
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:14:5-73
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:14:22-70
+application
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:17:5-38:19
+	android:networkSecurityConfig
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:19:9-56
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:18:9-40
+receiver#com.example.easdktool.broadcast.SMSReceiveBroadcast
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:20:9-27:20
+	android:enabled
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:22:13-35
+	android:exported
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:23:13-36
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:21:13-58
+intent-filter#action:name:android.provider.Telephony.SMS_RECEIVED
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:24:13-26:29
+	android:priority
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:24:28-51
+action#android.provider.Telephony.SMS_RECEIVED
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:25:17-82
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:25:25-79
+receiver#com.example.easdktool.broadcast.CallReceiveBroadcast
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:28:9-35:20
+	android:enabled
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:30:13-35
+	android:exported
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:31:13-36
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:29:13-59
+intent-filter#action:name:android.intent.action.PHONE_STATE
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:32:13-34:29
+	android:priority
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:32:28-51
+action#android.intent.action.PHONE_STATE
+ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:33:17-76
+	android:name
+		ADDED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml:33:25-73
+uses-sdk
+INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml
+INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from F:\EASDKTool_Flutter\easdktool\android\src\main\AndroidManifest.xml
