@@ -34,6 +34,7 @@ A new flutter plugin project.
     'Lib/JLLogHelper/JLLogHelper.framework',
     'Lib/JL_OTALib/JL_OTALib.framework',
     'Lib/JL_HashPair/JL_HashPair.framework',
+    'Lib/JL_BLEKit/JL_BLEKit.framework',
     'Lib/JL_AdvParse/JL_AdvParse.framework'
   ]
   

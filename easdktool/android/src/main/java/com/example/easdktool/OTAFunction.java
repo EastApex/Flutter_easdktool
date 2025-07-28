@@ -74,7 +74,7 @@ public class OTAFunction {
                 break;
             }
             if (jieliOta != null) {
-                JieliOtaInstance.getInstance().startOta(jieliOta.getFilePath(),mContext, new OtaCallback() {
+                JieliOtaInstance.getInstance().startOta(jieliOta.getFilePath(), new OtaCallback() {
                     @Override
                     public void success() {
                         if (mHandler == null) {
@@ -130,7 +130,7 @@ public class OTAFunction {
                         });
 
                     }
-                });
+                },mContext);
                 return;
             }
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {

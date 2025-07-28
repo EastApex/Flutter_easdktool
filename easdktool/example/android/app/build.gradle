@@ -72,6 +72,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    buildFeatures {
+        buildConfig true
+    }
 }
 dependencies {
     implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'

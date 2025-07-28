@@ -13,6 +13,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 //import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 
 import 'FirstMethodPackageData.dart';
+
 @pragma('vm:entry-point')
 void ForegroundTaskCallback() {
   FlutterForegroundTask.setTaskHandler(MyTaskHandler());
@@ -31,7 +32,6 @@ class MyTaskHandler extends TaskHandler {
   void onRepeatEvent(DateTime timestamp) {
     // TODO: implement onRepeatEvent
   }
-
 
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
@@ -347,10 +347,12 @@ class ConnectListener implements EABleConnectListener {
 //Bind command type: Begin【绑定命令类型：开始】
                   bindInfo.bindingCommandType = 0;
                 }
+
                 _easdkTool?.bindingWatch(bindInfo,
                     EABindingWatchCallback(onRespond: ((respond) {
                   print(respond.respondCodeType);
                 })));
+
               }
             }),
             onFail: ((info) {})));

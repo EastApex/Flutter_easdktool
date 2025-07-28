@@ -1624,7 +1624,7 @@ class _MyAppState extends State<MyApp> {
                   bool isJL707 = true;
                   if (isJL707) {
                     var bytes = await rootBundle
-                        .load("assets/bin/002086_AP0.1B0.5.ufw");
+                        .load("assets/bin/update707.ufw");
                     String path = (await getApplicationSupportDirectory()).path;
                     String filePath =
                         '$path/' + DateTime.now().toString() + '.ufw';

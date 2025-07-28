@@ -3,43 +3,33 @@ package com.example.easdktool.jieli_ota;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.apex.ax_bluetooth.callback.BleConnectStatusListener;
-import com.apex.ax_bluetooth.callback.DataReportCallback;
 import com.apex.ax_bluetooth.callback.JieliConnectListener;
 import com.apex.ax_bluetooth.callback.JieliDataCallback;
-import com.apex.ax_bluetooth.callback.MotionDataReportCallback;
 import com.apex.ax_bluetooth.callback.OtaCallback;
 import com.apex.ax_bluetooth.core.EABleBluetoothOption;
 import com.apex.ax_bluetooth.core.EABleManager;
 import com.apex.ax_bluetooth.enumeration.EABleConnectState;
-import com.jieli.jl_bt_ota.constant.ErrorCode;
 import com.jieli.jl_bt_ota.constant.StateCode;
 import com.jieli.jl_bt_ota.impl.BluetoothOTAManager;
 import com.jieli.jl_bt_ota.impl.RcspAuth;
-import com.jieli.jl_bt_ota.interfaces.IActionCallback;
 import com.jieli.jl_bt_ota.interfaces.IBluetoothCallback;
-import com.jieli.jl_bt_ota.interfaces.IUpgradeCallback;
-import com.jieli.jl_bt_ota.model.BleScanMessage;
 import com.jieli.jl_bt_ota.model.BluetoothOTAConfigure;
-import com.jieli.jl_bt_ota.model.base.BaseError;
-import com.jieli.jl_bt_ota.model.base.CommandBase;
-import com.jieli.jl_bt_ota.model.response.TargetInfoResponse;
-import com.jieli.jl_bt_ota.util.CHexConver;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.IllegalFormatCodePointException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class JieliOtaManager extends BluetoothOTAManager {
     private int currentStates;
     IBluetoothCallback iBluetoothCallback;
-    ConcurrentLinkedQueue<ReceiveData> receiveDataCache = new ConcurrentLinkedQueue<>();
-    ScheduledExecutorService sendExecutorService = Executors.newScheduledThreadPool(1);
     Context mContext;
+    OtaCallback otaCallback;
+    BleConnectStatusListener bleConnectStatusListener;
 
 
     public JieliOtaManager(Context context) {
@@ -53,8 +43,7 @@ public class JieliOtaManager extends BluetoothOTAManager {
                 if (i == 1) {
                     addReceiveDeviceData();
                 }
-                Log.i(TAG, "开始改变连接设备状态");
-                onBtDeviceConnection(getConnectedDevice(), i);
+                changeDeviceConnectState(i);
             }
         });
         int setState;
@@ -66,41 +55,67 @@ public class JieliOtaManager extends BluetoothOTAManager {
         } else {
             setState = StateCode.CONNECTION_DISCONNECT;
         }
-        onBtDeviceConnection(getConnectedDevice(), setState);
+        changeDeviceConnectState(setState);
 
 
     }
 
+    public void changeDeviceConnectState(int newStatus) {
+        Log.i("jieliLog", "需要改变的改变连接状态：" + newStatus + ",改变之前的状态：" + currentStates);
+        if (currentStates != newStatus) {
+            currentStates = newStatus;
+            onBtDeviceConnection(getConnectedDevice(), currentStates);
+            if (newStatus == 0) {
+                setConnectedBtDevice(null);
+            }
+        }
+    }
+
+    public void setOtaCallback(OtaCallback otaCallback) {
+        this.otaCallback = otaCallback;
+    }
+
+    public void setBleConnectStatusListener(BleConnectStatusListener bleConnectStatusListener) {
+        this.bleConnectStatusListener = bleConnectStatusListener;
+    }
+
     @Override
-    public void onBtDeviceConnection(BluetoothDevice bluetoothDevice, int i) {
-        if (currentStates != i) {
-            currentStates = i;
-            Log.i(TAG, "改变连接设备状态");
-            super.onBtDeviceConnection(bluetoothDevice, currentStates);
-        } else {
-            Log.i(TAG, "设备状态相同，不用改变");
+    public BluetoothDevice getConnectedDevice() {
+        Log.i(TAG, "获取连接设备");
+        BluetoothDevice bluetoothDevice = EABleManager.getInstance().getConnectDevice();
+        Log.i(TAG, "getConnectedDevice:" + (bluetoothDevice != null ? bluetoothDevice.toString() : null));
+        return bluetoothDevice;
+    }
+
+    @Override
+    public BluetoothGatt getConnectedBluetoothGatt() {
+        Log.i(TAG, "获取连接设备蓝牙gatt");
+        BluetoothGatt bluetoothGatt = EABleManager.getInstance().getConnectedBluetoothGatt();
+        Log.i(TAG, "getConnectedBluetoothGatt:" + (bluetoothGatt != null ? bluetoothGatt.toString() : null));
+        return bluetoothGatt;
+    }
+
+
+    @Override
+    public void connectBluetoothDevice(BluetoothDevice bluetoothDevice) {
+        Log.i("jieliLog", "连接蓝牙");
+        if (isBleScanning()) {
+            stopBLEScan();
+        }
+        if (bluetoothDevice == null) {
+            Log.i("jieliLog", "连接的蓝牙信息不存在");
+            return;
+        }
+        if (!getBluetoothOption().isUseReconnect()) {
+            autoReconnect(bluetoothDevice.getAddress());
         }
 
     }
 
     @Override
-    public BluetoothDevice getConnectedDevice() {
-        return EABleManager.getInstance().getConnectDevice();
-    }
-
-    @Override
-    public BluetoothGatt getConnectedBluetoothGatt() {
-        return EABleManager.getInstance().getConnectedBluetoothGatt();
-    }
-
-    @Override
-    public void connectBluetoothDevice(BluetoothDevice bluetoothDevice) {
-
-    }
-
-    @Override
     public void disconnectBluetoothDevice(BluetoothDevice bluetoothDevice) {
-
+        Log.i(TAG, "断开蓝牙，释放资源");
+        EABleManager.getInstance().disconnectPeripheral();
     }
 
     @Override
@@ -121,12 +136,15 @@ public class JieliOtaManager extends BluetoothOTAManager {
      * OTA开始之前进行设置
      */
     private void createOTAConfigure() {
+        EABleManager.getInstance().setJieliOtaStatus(true);
         BluetoothOTAConfigure bluetoothOption = new BluetoothOTAConfigure();
         bluetoothOption.setPriority(BluetoothOTAConfigure.PREFER_BLE);
         bluetoothOption.setUseReconnect(false);
         bluetoothOption.setUseAuthDevice(true);
-        bluetoothOption.setMtu(EABleBluetoothOption.maxMtu > 20 ? EABleBluetoothOption.maxMtu - 3 : 20);//现在默认等于20
-        //  bluetoothOption.setMtu(EABleBluetoothOption.otaMtu > 20 ? EABleBluetoothOption.otaMtu - 3 : 20);//现在默认等于20
+      //  bluetoothOption.setMtu(EABleBluetoothOption.maxMtu > 20 ? EABleBluetoothOption.maxMtu - 3 : 20);
+      //  if (BuildConfig.DEBUG) {
+            bluetoothOption.setMtu(EABleBluetoothOption.otaMtu > 20 ? EABleBluetoothOption.otaMtu - 3 : 20);//现在默认等于20
+      //  }
         bluetoothOption.setTimeoutMs(30000);
         bluetoothOption.setNeedChangeMtu(false);
         bluetoothOption.setUseJLServer(false);
@@ -156,6 +174,7 @@ public class JieliOtaManager extends BluetoothOTAManager {
         });
     }
 
+
     class ReceiveData {
         BluetoothDevice device;
         byte[] data;
@@ -174,8 +193,17 @@ public class JieliOtaManager extends BluetoothOTAManager {
         mContext = null;
         EABleManager.getInstance().setJieliConnectListener(null);
         EABleManager.getInstance().addJieliDataCallback(null);
+        EABleManager.getInstance().setJieliOtaStatus(false);
         super.release();
     }
 
+    public void autoReconnect(final String macAddress) {
+        if (!TextUtils.isEmpty(macAddress)) {
+            //开始搜寻蓝牙
+            Log.i("jieliLog", "开始重连:" + macAddress);
+            EABleManager.getInstance().disconnectPeripheral();
+            new Reconnect(otaCallback, bleConnectStatusListener).reconnectDevice(macAddress, mContext);
+        }
+    }
 
 }
