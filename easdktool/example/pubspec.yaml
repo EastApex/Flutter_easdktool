@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.11
   #flutter_notification_listener: ^1.3.4
- # notification_listener_service:
+  # notification_listener_service:
   flutter_foreground_task: ^8.17.0
   permission_handler: ^10.4.5
   # path_provider: ^2.0.5
@@ -83,6 +83,9 @@ flutter:
     - assets/bin/watchface_U38.bin
     - assets/bin/002086_AP0.1B0.5.ufw
     - assets/bin/update707.ufw
+    - assets/bin/015025_AP0.1B2.5.bin
+    - assets/bin/002083_R0.6.bin
+    - assets/bin/002083_AP0.1B1.4_116X.bin
     - assets/images/
     # - assets/images/466*466.png
     # - assets/images/368*448.png

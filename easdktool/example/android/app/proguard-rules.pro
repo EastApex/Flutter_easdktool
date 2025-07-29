@@ -89,6 +89,7 @@ public static java.lang.String TABLENAME;
     public static void createTable(org.greenrobot.greendao.database.Database, boolean);
 }
 -keep class com.greendao.gen.**{*;}
+-keep class com.jieli.jl_bt_ota.** { *; }
 
 
 
