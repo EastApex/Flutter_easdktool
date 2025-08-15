@@ -44,8 +44,6 @@ typedef void(^OTAProgressBlock)(CGFloat progress);
 
 
 
-
-
 /// Check the HisRes.zip file【解压并获取需要OTA的文件】
 /// - Parameters:
 ///   - hisResZipFile: HisRes.zip
@@ -71,6 +69,7 @@ typedef void(^OTAProgressBlock)(CGFloat progress);
 
 - (BOOL)eaUpgradeAGPSFile:(EAFileModel *)agpsFile progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
+
 /// Upgrade AGPS
 /// - Parameters:
 - (BOOL)eaUpgradeAGPSProgress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
@@ -78,6 +77,10 @@ typedef void(^OTAProgressBlock)(CGFloat progress);
 /// Upgrade AGPS
 /// - Parameters:
 - (BOOL)eaUpgradeAGPSCheckTime:(BOOL)checkAgpsUpdateTime progress :(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+
+/// OTA Music File
+- (BOOL)eaOTAMusicFile:(EAFileModel *)musicFile progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 @end
 

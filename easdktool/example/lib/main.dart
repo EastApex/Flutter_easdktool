@@ -185,6 +185,15 @@ class _MyAppState extends State<MyApp> {
 
       EAConnectParam connectParam = EAConnectParam.testInit();
       EASDKTool().connectToPeripheral(connectParam);
+
+      EASDKTool.addJieLiNeedForcedOtaCallback(
+          JieLiNeedForcedOtaCallback((needOta) {
+            
+       // After receiving this message, 
+       // the developer needs to continue sending the OTA package to the watch 
+       // and re-call the otaUpgrade() method for OTA.
+        print('After receiving this message, the developer needs to continue sending the OTA package to the watch and re-call the otaUpgrade() method for OTA.');
+      }));
     }
 
     /// 打开 SDKLog
@@ -1623,7 +1632,6 @@ class _MyAppState extends State<MyApp> {
                   /**
                    *  只有jieli-707平台的才需要设置类型为 EAFirmwareType.JL_firmware，目前只有iTOUCH AIR PRO属于此平台，其它平台均不得设置为此类型，其它平台按以前的规则要求进行类型设置
                    */
-
 
                   bool isJL707 = false;
                   if (isJL707) {

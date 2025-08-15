@@ -40,9 +40,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger fStatus;
 
 
-/// 0协议 1杰里库
+/// 1: jl_707
 @property(nonatomic,assign) NSInteger typeOfOTA;
-
+/// 1: in uboot
+@property(nonatomic,assign) NSInteger statusOfOTA;
 
 @end
 

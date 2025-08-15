@@ -17,11 +17,11 @@ class EABleWatchInfo {
   String firmwareVersion = ""; //  版本号
   EABindingType bindingType = EABindingType.unbound; // 绑定状态
   String userId = ""; // 已绑定的用户id
-  int agpsUpdateTimestamp = 0; // agps更新时间
+  int agpsUpdateTimestamp = 0; // agps Update Timestamp
   String bleMacAddr = ""; //
   int isWaitForBinding =
       0; // Whether to wait for the device to confirm binding【是否需要等待设备确认绑定】
-  int lcdPixelType = 0;
+  int lcdPixelType = 0; // if 4 is jl 707 watch
 
   // int proj_settings = 0;				//项目功能列表: 0 不支持 1:支持 (固件端实现 id=44协议后才能写1)
   // int lcd_full_w =0;				//LCD表盘宽度

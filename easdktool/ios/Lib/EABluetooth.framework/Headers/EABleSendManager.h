@@ -12,6 +12,7 @@
 #import <EABluetooth/EABleConfig.h>
 #import <EABluetooth/EAWatchSupportModel.h>
 #import <UIKit/UIKit.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -87,7 +88,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)changeInfo:(EABaseModel *)baseModel respond:(RespondBlock )respond;
 /// Get big data 获取大数据【单线程操作】
 - (void)getBigDataRequestModel:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;;
-
 
 
 /// ignore：

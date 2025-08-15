@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <EABluetooth/EAEnum.h>
 #import "EACustomNumberWatchFaceModel.h"
+
 #import <EABluetooth/EAOTAManager.h>
+
 NS_ASSUME_NONNULL_BEGIN
+
+@class EACusWatchFaceSetting;
 
 @interface EAMakeWatchFaceManager : NSObject
 
@@ -38,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 3.默认自定义数字表盘（需要设置颜色） ==> Type3
 /// 4.自定义数字表盘（需要设置数字颜色、数字大小、数字位置）  ==> Type4
 /// 5.自定义指针表盘（需要设置图片、位置、旋转点） ==> Type5
-///
+/// 6.自定义海思表盘 ==> Type6
 /// 二、使用介绍：
 /// 1.每种自定义表盘 分别提供 获取缩略图方法 和 ota表盘方法
 /// 2.使用 ota表盘 方法时，如果需要监听 OTA进度 需要添加 通知  kNTF_EAOTAAGPSDataing 和 kNTF_EAOTAAGPSDataFinish 并实现.
@@ -72,6 +76,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// Type2：Create thumbnail of pointer watch face【创建指针表盘缩略图】
 /// @return Thumbnail
 + (UIImage *)eaGetDefaultPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle;
+
+
+
+/// Type 6: Get the thumbnail of the custom watch face on the His platform
+/// @return Thumbnail
++ (UIImage *)eaGetHisCusThumbnailWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting;
+
 
 
 /**
@@ -111,7 +122,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSInteger )eaOtaPointerWatchFaceWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
-
+/// Type6
++ (NSInteger )eaOtaHisCusThumbnailWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
 

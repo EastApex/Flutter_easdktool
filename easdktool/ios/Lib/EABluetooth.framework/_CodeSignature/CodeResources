@@ -86,11 +86,11 @@
 		</data>
 		<key>Headers/EABleConfig.h</key>
 		<data>
-		wND58P8sCBbITo3ppSAxj1dUERw=
+		FdUMp4pE/LraAIUIjYBL28v2UAc=
 		</data>
 		<key>Headers/EABleManager.h</key>
 		<data>
-		nyVmcuhMjpERYJOj/oqlLWnru0M=
+		zTwXCEp1nMLq9u66U9RYjDaaoVE=
 		</data>
 		<key>Headers/EABlePairStateModel.h</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>Headers/EABleSendManager.h</key>
 		<data>
-		HDAqHYxFytywjtTyPM8lAhkcEOY=
+		Db2U5UR22zmwg60dsECZDNIxFUg=
 		</data>
 		<key>Headers/EABloodOxygenDataModel.h</key>
 		<data>
@@ -110,7 +110,7 @@
 		</data>
 		<key>Headers/EABluetooth.h</key>
 		<data>
-		92+brLG479ToQ76wvqPgye5yIpQ=
+		GJZ8CYY1IoEjTlkzEAAAcfI9XXY=
 		</data>
 		<key>Headers/EACaloriesSettingModel.h</key>
 		<data>
@@ -123,6 +123,22 @@
 		<key>Headers/EACreatThumbnail.h</key>
 		<data>
 		ZWSablAA45hm7KOrxwnI0LhhrBM=
+		</data>
+		<key>Headers/EACusWatchFaceConfig.h</key>
+		<data>
+		AuZ/+GQy9HkC7/uA1vX1QhdGzAY=
+		</data>
+		<key>Headers/EACusWatchFaceGlobalSetting.h</key>
+		<data>
+		R08nigymFbVe8bY/sRByBjJta28=
+		</data>
+		<key>Headers/EACusWatchFaceIds.h</key>
+		<data>
+		mt/X121n32IXchu5Pu7p9i3K/m8=
+		</data>
+		<key>Headers/EACusWatchFaceSetting.h</key>
+		<data>
+		hJQJeXozVFjiHv2yUMpSnbwsWb0=
 		</data>
 		<key>Headers/EACustomNumberWatchFaceModel.h</key>
 		<data>
@@ -138,7 +154,7 @@
 		</data>
 		<key>Headers/EADataValue.h</key>
 		<data>
-		zJdQOZEAn/3k0ZLfOQEdw85xe64=
+		SaYZXv78exMETzIp7oYG2k/+L2g=
 		</data>
 		<key>Headers/EADebugGpsNmeaData.h</key>
 		<data>
@@ -162,15 +178,19 @@
 		</data>
 		<key>Headers/EAEnum.h</key>
 		<data>
-		C1l34GxWjAvRUH7l7TqDO8LdHao=
+		5LQKHRM/9Vohq4P3C48omsmKEy8=
 		</data>
 		<key>Headers/EAFastGetSnNumberManager.h</key>
 		<data>
-		syq/MfVNHjJsJjPNmRC9gAkdNl4=
+		yM3sHIzQXztkGssL3waeoToEz34=
 		</data>
 		<key>Headers/EAGPSDataModel.h</key>
 		<data>
 		Vi2O9LpfIKx2MiIpPKEZz7PGW5w=
+		</data>
+		<key>Headers/EAGPSLocation.h</key>
+		<data>
+		1fEhMQIgePScyCvGbcJRVvzdZi4=
 		</data>
 		<key>Headers/EAGesturesSettingModel.h</key>
 		<data>
@@ -208,13 +228,17 @@
 		<data>
 		zWmlJyCUjvVQbzIwbuIPGgtx3IU=
 		</data>
+		<key>Headers/EAJLBleManager.h</key>
+		<data>
+		Ajine5WOipSEVxKQYQZm7l3ckcA=
+		</data>
 		<key>Headers/EALanguageModel.h</key>
 		<data>
 		UKyf2DAcEbXzKAZ3EBM/jUxD2tI=
 		</data>
 		<key>Headers/EAMakeWatchFaceManager.h</key>
 		<data>
-		U1RcA+6EP7In2z0v54uejwbANdc=
+		thQKy0FtvCx3Xf5Ww0vsxwcRIdM=
 		</data>
 		<key>Headers/EAMenstrualModel.h</key>
 		<data>
@@ -230,7 +254,7 @@
 		</data>
 		<key>Headers/EAModelHeader.h</key>
 		<data>
-		1o4L0w1UklxAwtQlK54xYSsWEgk=
+		8c2vb+Qiu7SMHgyDrmFZqwoSQd0=
 		</data>
 		<key>Headers/EAMonitorReminder.h</key>
 		<data>
@@ -254,11 +278,11 @@
 		</data>
 		<key>Headers/EAOTAManager.h</key>
 		<data>
-		OfvYSw8Ag2hxhJpXxaHH1ZhqwRk=
+		yMmKQ+K28T1e7y39aERDY8NcLGE=
 		</data>
 		<key>Headers/EAOTAModel.h</key>
 		<data>
-		EiM0MmSp1l1zh7SUpnll8PvmWlU=
+		9yIlMlhE/1Iu10cfI4gDGtNs0OY=
 		</data>
 		<key>Headers/EAOnlyGetBigData.h</key>
 		<data>
@@ -282,7 +306,7 @@
 		</data>
 		<key>Headers/EAPeripheralModel.h</key>
 		<data>
-		22X2LgSgVoHEDsoyp9bzrA5Nmsw=
+		CYxwbRRmNb/OxqdpNz1GpEE1hpg=
 		</data>
 		<key>Headers/EAPhoneOpsModel.h</key>
 		<data>
@@ -322,7 +346,7 @@
 		</data>
 		<key>Headers/EARequestModel.h</key>
 		<data>
-		zUoeCkWMojs0NqqN7X3NKjHMF6k=
+		plFU+5UZpq9klx+guS5BeL0YZpE=
 		</data>
 		<key>Headers/EARespondModel.h</key>
 		<data>
@@ -482,7 +506,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Si8Z8vN35QDVIUyBLDSOG2Gi8gM=
+		Q/aEsJHAs8rgD+8BlhpjAtm0hMI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -715,22 +739,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			wND58P8sCBbITo3ppSAxj1dUERw=
+			FdUMp4pE/LraAIUIjYBL28v2UAc=
 			</data>
 			<key>hash2</key>
 			<data>
-			3OemqnmSEeYXD6oPdAyWoxPaBYR+lQq9f/Td3ePPtXg=
+			ixcsje3O2fG5LG6hnPR1sYc1LXfWVzklT/BSfEaS8RA=
 			</data>
 		</dict>
 		<key>Headers/EABleManager.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			nyVmcuhMjpERYJOj/oqlLWnru0M=
+			zTwXCEp1nMLq9u66U9RYjDaaoVE=
 			</data>
 			<key>hash2</key>
 			<data>
-			QoxDDs06jrHyP1QMwFWEgdsre729b0GmOBgc7r66Tjg=
+			fafp1G5FOBuH752nygXH2BLL0r92nYbhI+iM2oLMvRA=
 			</data>
 		</dict>
 		<key>Headers/EABlePairStateModel.h</key>
@@ -748,11 +772,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HDAqHYxFytywjtTyPM8lAhkcEOY=
+			Db2U5UR22zmwg60dsECZDNIxFUg=
 			</data>
 			<key>hash2</key>
 			<data>
-			6iHFeW6G1SMBGXRj4ErO/0hGRuX9L91onZUIiDfxysw=
+			7OjtHWZuIDCPDjTMaYJWd10ZMqjA7JIEV5xXNrgkn58=
 			</data>
 		</dict>
 		<key>Headers/EABloodOxygenDataModel.h</key>
@@ -781,11 +805,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			92+brLG479ToQ76wvqPgye5yIpQ=
+			GJZ8CYY1IoEjTlkzEAAAcfI9XXY=
 			</data>
 			<key>hash2</key>
 			<data>
-			rzMi6hfINUe2UFo4TiGDqwo35itwwnwmw2xPVtpABTs=
+			jNBhzuZOa8q9jy0eq/kaei/50g24TCmZr+U/iVa+G+c=
 			</data>
 		</dict>
 		<key>Headers/EACaloriesSettingModel.h</key>
@@ -819,6 +843,50 @@
 			<key>hash2</key>
 			<data>
 			y3bBsV0EJjK/A9oJNQhMpVPTdpCpnL0JwMnNPSQdiS8=
+			</data>
+		</dict>
+		<key>Headers/EACusWatchFaceConfig.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			AuZ/+GQy9HkC7/uA1vX1QhdGzAY=
+			</data>
+			<key>hash2</key>
+			<data>
+			aQmoXSg3SFr5ItyatOZQOLArxHla/j2/u/Jh3f0kymk=
+			</data>
+		</dict>
+		<key>Headers/EACusWatchFaceGlobalSetting.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			R08nigymFbVe8bY/sRByBjJta28=
+			</data>
+			<key>hash2</key>
+			<data>
+			A88x4lwAfxpfsX9pC/6DMtA8C/V8NUpn4vsgy4JpTXM=
+			</data>
+		</dict>
+		<key>Headers/EACusWatchFaceIds.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			mt/X121n32IXchu5Pu7p9i3K/m8=
+			</data>
+			<key>hash2</key>
+			<data>
+			qR1ATfwir+Wc8TgsID8w9CVeVia6q9Nq1mELOdR488w=
+			</data>
+		</dict>
+		<key>Headers/EACusWatchFaceSetting.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			hJQJeXozVFjiHv2yUMpSnbwsWb0=
+			</data>
+			<key>hash2</key>
+			<data>
+			RUy/O+lhVPiQtKekCm+qmP2lYq62tVzzVY6HmX3BpGY=
 			</data>
 		</dict>
 		<key>Headers/EACustomNumberWatchFaceModel.h</key>
@@ -858,11 +926,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zJdQOZEAn/3k0ZLfOQEdw85xe64=
+			SaYZXv78exMETzIp7oYG2k/+L2g=
 			</data>
 			<key>hash2</key>
 			<data>
-			Gfnphy03iuVkeoa2rw9h24HRGajaMDcgHVf82RscMa0=
+			8CA55dARVlcp60xowkgQK5PbHEPdnBdPiFFgM7Bu9xg=
 			</data>
 		</dict>
 		<key>Headers/EADebugGpsNmeaData.h</key>
@@ -924,22 +992,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			C1l34GxWjAvRUH7l7TqDO8LdHao=
+			5LQKHRM/9Vohq4P3C48omsmKEy8=
 			</data>
 			<key>hash2</key>
 			<data>
-			zMrW9WeBHSIO81M7PtgyrYXapWIXkh8wMPS0B6tELDU=
+			BWrY04sU3MFsUMAi1QPyqWiBE3KtjzJHxEv6hqVWuTs=
 			</data>
 		</dict>
 		<key>Headers/EAFastGetSnNumberManager.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			syq/MfVNHjJsJjPNmRC9gAkdNl4=
+			yM3sHIzQXztkGssL3waeoToEz34=
 			</data>
 			<key>hash2</key>
 			<data>
-			QNSRzQOGgAXA3sDboBBx8IHA1FYKHJFNTgn/duDkYgA=
+			mhTZIhB599KL+hpl+xUE1qRPm/cZwHQPHjeiFEryCJw=
 			</data>
 		</dict>
 		<key>Headers/EAGPSDataModel.h</key>
@@ -951,6 +1019,17 @@
 			<key>hash2</key>
 			<data>
 			vAdTmCIhsoDIwtKyuG7bzWLHC3V2ZwHtTdx5TqlZ9eA=
+			</data>
+		</dict>
+		<key>Headers/EAGPSLocation.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			1fEhMQIgePScyCvGbcJRVvzdZi4=
+			</data>
+			<key>hash2</key>
+			<data>
+			sFz2vw2AhHHZDAig9CLnSM0t1rqzRzHt1nADMNHTAMg=
 			</data>
 		</dict>
 		<key>Headers/EAGesturesSettingModel.h</key>
@@ -1052,6 +1131,17 @@
 			bVUnsOfCq9UFns3LuTT+M65GBZaE2OlxF4qWagn2/ww=
 			</data>
 		</dict>
+		<key>Headers/EAJLBleManager.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Ajine5WOipSEVxKQYQZm7l3ckcA=
+			</data>
+			<key>hash2</key>
+			<data>
+			UGI23jPMDAri7fo90TDOivGzPdf4f7T6vDD5qrA5c6U=
+			</data>
+		</dict>
 		<key>Headers/EALanguageModel.h</key>
 		<dict>
 			<key>hash</key>
@@ -1067,11 +1157,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			U1RcA+6EP7In2z0v54uejwbANdc=
+			thQKy0FtvCx3Xf5Ww0vsxwcRIdM=
 			</data>
 			<key>hash2</key>
 			<data>
-			1VKFGsn+I25MgpZny7b8myuG7FTGfxO1AWOfUF0v2YU=
+			ruciWeUkS5p9lzwOOHPTbfmyCdHmaJm2AAlWbUIf31M=
 			</data>
 		</dict>
 		<key>Headers/EAMenstrualModel.h</key>
@@ -1111,11 +1201,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1o4L0w1UklxAwtQlK54xYSsWEgk=
+			8c2vb+Qiu7SMHgyDrmFZqwoSQd0=
 			</data>
 			<key>hash2</key>
 			<data>
-			RhuXBV6/iHGzJ31wYY3+09DNMz7QjKWhrchq+Fs1dr8=
+			sHFla7pj1vX39vp3Afd6Ka6bkisC6KOFEXpC5QWftDI=
 			</data>
 		</dict>
 		<key>Headers/EAMonitorReminder.h</key>
@@ -1177,22 +1267,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OfvYSw8Ag2hxhJpXxaHH1ZhqwRk=
+			yMmKQ+K28T1e7y39aERDY8NcLGE=
 			</data>
 			<key>hash2</key>
 			<data>
-			dMry9WP9zj2NU7eFYeawl3cZetA1acqV4oUOcgjLfI4=
+			6EzzT5l1RzDkL+7kdm+vJhMEuDCNliO4Ed60cAh1/3I=
 			</data>
 		</dict>
 		<key>Headers/EAOTAModel.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			EiM0MmSp1l1zh7SUpnll8PvmWlU=
+			9yIlMlhE/1Iu10cfI4gDGtNs0OY=
 			</data>
 			<key>hash2</key>
 			<data>
-			48ruM2exPbUAoknF9eun+EsWLaWJBANSqsm9PaBLzOU=
+			hQxE/uAmUrIGTZoH6C8/uuXrxR+4ck2DheKv5fGLLVU=
 			</data>
 		</dict>
 		<key>Headers/EAOnlyGetBigData.h</key>
@@ -1254,11 +1344,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			22X2LgSgVoHEDsoyp9bzrA5Nmsw=
+			CYxwbRRmNb/OxqdpNz1GpEE1hpg=
 			</data>
 			<key>hash2</key>
 			<data>
-			yQGK+apr0J9bzH21+Q7t1699GHuZgruXaBu7lGKi04s=
+			3xKcXeCCU/w8kJFTsMhZKYjA2qtW61TT2stnMd/K7X4=
 			</data>
 		</dict>
 		<key>Headers/EAPhoneOpsModel.h</key>
@@ -1364,11 +1454,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zUoeCkWMojs0NqqN7X3NKjHMF6k=
+			plFU+5UZpq9klx+guS5BeL0YZpE=
 			</data>
 			<key>hash2</key>
 			<data>
-			OEL7rgzwlj00VzP/3I8A0drovq1RKn6tCJ5faHSaeI4=
+			G+c/WTH+NLj2W26YRjYiJL22ZvdtS6YMeXMxghF7i+I=
 			</data>
 		</dict>
 		<key>Headers/EARespondModel.h</key>

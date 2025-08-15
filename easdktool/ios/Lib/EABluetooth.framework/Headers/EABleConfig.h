@@ -101,7 +101,7 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 + (void)writeLog:(NSString *)logLastString;
 
 + (BOOL)checkJLBil;
-
++ (BOOL)checkEAHisCompress;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -61,6 +61,8 @@
 #define kScanWacthResponse          @"ScanWacthResponse"
 #define kOperationWacthResponse     @"OperationWacthResponse"
 #define kCustomWatchFaceResponse    @"CustomWatchFaceResponse"
+#define kJieLiNeedForcedOTA         @"JieLiNeedForcedOTA"
+
 
 /// MARK: - 枚举
 //绑定状态 0:连接失败 1:连接成功 2:断开连接 3:连接超时 4:无此设备 5:iOS需要移除配对
@@ -129,9 +131,17 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showProgress:) name:kNTF_EAOTAAGPSDataing object:nil];
     
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jlNeedForcedOTA) name:kNTF_EAJLNeedForcedOTA object:nil];
+
     
 }
+
+- (void)jlNeedForcedOTA  {
+    
+    [_channel invokeMethod:kJieLiNeedForcedOTA arguments:@""];
+    
+}
+
 
 - (void)connectSucc {
     
@@ -1104,6 +1114,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     [item setValue:@(peripheralModel.RSSI.integerValue) forKey:@"rssi"];
     [item setValue:advertisementData forKey:@"advertisementData"];
     [item setValue:peripheralModel.peripheral.identifier.UUIDString forKey:@"uuid"];
+    [item setValue:@(peripheralModel.typeOfOTA) forKey:@"isJL707"];
+    [item setValue:@(peripheralModel.statusOfOTA) forKey:@"needOta"];
+
     
     [self.channel invokeMethod:kScanWacthResponse arguments:[item modelToJSONString]];
 }

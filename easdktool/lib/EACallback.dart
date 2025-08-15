@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:easdktool/Been/EABeen.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,7 @@ typedef OnRespond = void Function(EARespond respond);
 typedef Progress = void Function(int progress);
 typedef ScanRespond = void Function(EAConnectParam connectParam);
 typedef PreviewImage = void Function(Image previewImage);
+typedef NeedOTA = void Function(bool needOTAinfo);
 
 /// Get the watch data callback【获取手表数据回调】
 class EAGetDataCallback {
@@ -74,6 +77,12 @@ class EAScanWatchCallback {
   ScanRespond scanRespond;
 
   EAScanWatchCallback(this.scanRespond);
+}
+
+/// JieLi Need Forced OTA  the callback【操作回调】
+class JieLiNeedForcedOtaCallback {
+  NeedOTA needOTA;
+  JieLiNeedForcedOtaCallback(this.needOTA);
 }
 
 // Watch connection status and Bluetooth monitoring【手表连接状态和蓝牙监听】

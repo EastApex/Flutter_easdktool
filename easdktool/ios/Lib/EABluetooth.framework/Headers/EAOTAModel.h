@@ -75,6 +75,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// 海思ResId
 @property(nonatomic,assign,readonly) NSInteger hisResId;
 
+
+@property(nonatomic,strong) NSString *musicName;
+
+@property(nonatomic,assign) BOOL jlNeedForcedUOTA;
+
+
 - (instancetype )initWithHisResId:(NSInteger)hisResId ;
 
 
@@ -94,11 +100,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (EAFileModel *)eaInitHisWatchFaceFileWithData:(NSData *)binData;
 
 
+/// init His Cus watch face file
++ (EAFileModel *)eaInitHisCusWatchFaceFileWithData:(NSData *)binData;
++ (EAFileModel *)eaInitHisCusWatchFaceFileWithPath:(NSString *)binPath;
+
+
 /// init
 + (EAFileModel *)eaInitHisResWithPath:(NSString *)zipPath;
 
 
-+ (EAFileModel *)eaInitHisMusicWithPath:(NSString *)musicPath;
++ (EAFileModel *)eaInitMusicWithPath:(NSString *)musicPath musicName:(NSString *)musicName;
 
 
 /// Deprecated

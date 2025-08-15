@@ -15,12 +15,14 @@ class EAConnectParam {
   int rssi = 0;
   String uuid = "";
   bool isJL707 = false; //  true  is jl707 watch
+  bool needOta =
+      false; //  true: It indicates that the jl707 watch requires mandatory OTA
 
   EAConnectParam();
 
   EAConnectParam.testInit() {
-     connectAddress = "45:41:94:2B:80:CC";
-   // connectAddress = "45:42:B9:00:60:03";
+    connectAddress = "45:41:94:2B:80:CC";
+    // connectAddress = "45:42:B9:00:60:03";
     // "45:41:15:82:52:84"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     snNumber = "45:42:F0:E0:E0:03";
     //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need
@@ -55,6 +57,10 @@ class EAConnectParam {
     }
     if (map["isJL707"] != null) {
       isJL707 = map["isJL707"];
+    }
+
+    if (map["needOta"] != null) {
+      isJL707 = map["needOta"];
     }
   }
 }

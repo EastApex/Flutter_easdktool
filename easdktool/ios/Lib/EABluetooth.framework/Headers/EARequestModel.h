@@ -22,9 +22,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger type;
 
 
+/// 目前在 requestId = 75 使用
+@property(nonatomic, strong) NSString *string;
+
+
+
 - (instancetype)initWithRequestId:(NSInteger )requestId type:(NSInteger )type;
 + (instancetype)eaInitWithRequestId:(NSInteger )requestId type:(NSInteger )type;
 
+
++ (instancetype)eaInitWithRequestId:(NSInteger )requestId string:(NSString *)string;
 
 
 //+ (NSData *)getModelDataByRequestId:(NSInteger )requestId;

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-#define kWatchServices @[[CBUUID UUIDWithString:@"8800"],[CBUUID UUIDWithString:@"9900"],[CBUUID UUIDWithString:@"0012"],[CBUUID UUIDWithString:@"0011"]]
+#define kWatchServices  @[[CBUUID UUIDWithString:@"8800"],[CBUUID UUIDWithString:@"9900"],[CBUUID UUIDWithString:@"0012"],[CBUUID UUIDWithString:@"0011"],[CBUUID UUIDWithString:@"9008"],[CBUUID UUIDWithString:@"FF10"]]
 
 #define kFastGetClientCode  @"clientCode"
 #define kFastGetSn          @"sn"

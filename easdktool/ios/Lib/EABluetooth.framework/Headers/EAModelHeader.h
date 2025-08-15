@@ -110,6 +110,14 @@
 #import <EABluetooth/EAPpgManual.h>
 #import <EABluetooth/EAPpgAuto.h>
 
+
+#import <EABluetooth/EAGPSLocation.h>
+
+#import <EABluetooth/EACusWatchFaceConfig.h>
+#import <EABluetooth/EACusWatchFaceIds.h>
+#import <EABluetooth/EACusWatchFaceSetting.h>
+#import <EABluetooth/EACusWatchFaceGlobalSetting.h>
+
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>

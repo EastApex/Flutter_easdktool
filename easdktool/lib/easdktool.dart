@@ -50,6 +50,7 @@ const String queryData = "queryData";
 final String deleteData = "deleteData";
 const String kQueryBigWatchData = "QueryBigWatchData";
 final String ConnectBT = "connectClassicBluetooth";
+const String kJieLiNeedForcedOTA = "JieLiNeedForcedOTA";
 
 class EASDKTool {
   static const MethodChannel _channel = MethodChannel(kEAsdktool);
@@ -73,6 +74,8 @@ class EASDKTool {
   EAScanWatchCallback? mScanWatchCallback;
   QueryMotionDataCallback? mQueryMotionDataCallback;
   EACustomWatchfacePreviewImageCallback? mCustomWatchfacePreviewImageCallback;
+  JieLiNeedForcedOtaCallback? mJieLiNeedForcedOtaCallback;
+
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
     mOperationPhoneCallback = operationPhoneCallback;
@@ -84,6 +87,11 @@ class EASDKTool {
 
   static void addBleConnectListener(EABleConnectListener eaBleConnectListener) {
     mEaBleConnectListener = eaBleConnectListener;
+  }
+
+  static void addJieLiNeedForcedOtaCallback(
+      JieLiNeedForcedOtaCallback mJieLiNeedForcedOtaCallback) {
+    mJieLiNeedForcedOtaCallback = mJieLiNeedForcedOtaCallback;
   }
 
   void initChannel() {
@@ -291,6 +299,14 @@ class EASDKTool {
 
     String methodName = methodCall.method;
     switch (methodName) {
+      case kJieLiNeedForcedOTA:
+        print("JieLiNeedForcedOTA");
+        if (mJieLiNeedForcedOtaCallback != null) {
+          mJieLiNeedForcedOtaCallback!.needOTA(true);
+        }
+        //
+
+        break;
       case kArgumentsError:
         String error = methodCall.arguments;
         print("error");

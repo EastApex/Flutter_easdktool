@@ -95,6 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)eaConvertToTwoByHexString:(NSString *)HexString;
 
 
++ (NSData *)eaGetAll0xFFWithteNumber:(NSInteger)byteNumber;
 
 /// 获取周期 int
 /// @param bitString bitString

@@ -15,7 +15,7 @@
  
 */
 
-#define kEASDKVERSION   @"1.1.17"
+#define kEASDKVERSION   @"1.1.19"
 #define kEASDKBUILD     @"1"
 
 
@@ -105,6 +105,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// recording completed
 #define kNTF_RecordingCompleted             @"EARecordingCompleted"
+
+/// JL7070 Mandatory upgrade
+#define kNTF_EAJLNeedForcedOTA             @"EAJLNeedForcedOTA"
 
 
 
