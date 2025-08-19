@@ -84,6 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EAJLBleManager : HandleBroadcastPtl
 
+@property (strong, nonatomic) EAPeripheralModel *peripheralModel;
 
 @property (assign, nonatomic) CBManagerState mBleManagerState;
 @property (strong, nonatomic) CBPeripheral *__nullable mBlePeripheral;

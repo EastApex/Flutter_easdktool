@@ -356,6 +356,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 功能与协议:心率PPG数据开关支持（id = 78\\79） */
 @property(nonatomic, assign) BOOL hrPpgSwSupport;
+
+
+/** 功能与协议:自定义表盘全局配置（id =80） */
+@property(nonatomic, assign) BOOL watchfaceGlobalSettingSupport;
+
 @end
 
 NS_ASSUME_NONNULL_END
