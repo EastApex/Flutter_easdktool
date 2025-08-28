@@ -65,6 +65,9 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 /// Enable command timeout response.  Defalut NO,
 @property (nonatomic, assign) BOOL openCmdTimeOut;
 
+
+@property (nonatomic, assign) BOOL onlyShowEaWatch;
+
 /// ignore：
 /// 工具 ，默认关闭
 @property (nonatomic, assign) BOOL tool;

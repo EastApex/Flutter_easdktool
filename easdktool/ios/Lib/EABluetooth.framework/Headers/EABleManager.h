@@ -16,7 +16,7 @@
 */
 
 #define kEASDKVERSION   @"1.1.19"
-#define kEASDKBUILD     @"1"
+#define kEASDKBUILD     @"2"
 
 
 
@@ -136,7 +136,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
+typedef void(^InitSuccBlock)(void);
 
 @interface EABleManager : NSObject
 
@@ -164,6 +164,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// Bluetooth status
 @property(nonatomic,assign) EABleState bleState;
 
+
+@property(nonatomic,copy) InitSuccBlock initSuccBlock;
 
 /// The singleton
 /// 单例

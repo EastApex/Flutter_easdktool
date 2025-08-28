@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger bindMod;
 
 
++ (instancetype)eaInitBeginWithUid:(NSString *)uid;
++ (instancetype)eaInitEndWithUid:(NSString *)uid;
 
 @end
 

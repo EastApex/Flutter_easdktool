@@ -48,6 +48,8 @@ typedef void(^ResultGetPpgBlock)(NSString *ppgData);
 + (instancetype )getModelByData:(NSData *)data;
 
 - (void)eaSend:(void (^)(EARespondCodeType respondCodeType ))completion;
++ (void)eaGet:(ResultGetInfoBlock )result;
+
 
 + (void)eaGetWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
 @end

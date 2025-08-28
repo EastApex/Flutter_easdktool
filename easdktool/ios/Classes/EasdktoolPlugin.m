@@ -649,6 +649,14 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
                     }];
                 }break;
+                case  EADataInfoTypeUploadGPSLocation:{
+                    
+                    EAGPSLocation *model = [EAGPSLocation modelWithJSON:value];
+                    [[EABleSendManager defaultManager] operationChangeModel:model respond:^(EARespondModel * _Nonnull respondModel) {
+                        
+                        [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];
+                    }];
+                }break;
                 default:
                     [_channel invokeMethod:kArgumentsError arguments:@"arguments error"];
                     break;

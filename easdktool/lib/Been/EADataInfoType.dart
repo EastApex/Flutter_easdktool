@@ -84,7 +84,7 @@ const int kEADataInfoTypeBloodOxygenMonitor = 50;
 const int kEADataInfoTypeStressMonitor = 51;
 const int kEADataInfoTypeVibrateIntensity = 53;
 const int kEADataInfoTypeMenstrualReminder = 55;
-// const int kEADataInfoTypeSportHrWarning = 57;
+const int kEADataInfoTypeGPSLocation = 72;
 
 /* 手表操作手机命令 */
 const int kEADataInfoTypePhoneOps = 2001;

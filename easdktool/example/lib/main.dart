@@ -188,11 +188,11 @@ class _MyAppState extends State<MyApp> {
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
-            
-       // After receiving this message, 
-       // the developer needs to continue sending the OTA package to the watch 
-       // and re-call the otaUpgrade() method for OTA.
-        print('After receiving this message, the developer needs to continue sending the OTA package to the watch and re-call the otaUpgrade() method for OTA.');
+        // After receiving this message,
+        // the developer needs to continue sending the OTA package to the watch
+        // and re-call the otaUpgrade() method for OTA.
+        print(
+            'After receiving this message, the developer needs to continue sending the OTA package to the watch and re-call the otaUpgrade() method for OTA.');
       }));
     }
 
@@ -1471,16 +1471,17 @@ class _MyAppState extends State<MyApp> {
                       eaMenstrualReminder.toMap());
                 },
               ),
-              // GestureDetector(
-              //   child: NewTextView('25.Set Sport Hr Warning【运动心率告警】'),
-              //   onTap: () {
-              //     EASportHrWarning eaSportHrWarning =
-              //         EASportHrWarning(0, 180, 60);
+              GestureDetector(
+                child: NewTextView('26.Set GPS Location【经纬度】'),
+                onTap: () {
+                  EAGPSLocation eagpsLocation = EAGPSLocation();
+                  eagpsLocation.latitude = 23.0;
+                  eagpsLocation.longitude = 113.0;
 
-              //     secondMethodSetWatchData(
-              //         kEADataInfoTypeSportHrWarning, eaSportHrWarning.toMap());
-              //   },
-              // ),
+                  secondMethodSetWatchData(
+                      kEADataInfoTypeGPSLocation, eagpsLocation.toMap());
+                },
+              ),
               TitleView(' Getting big data【获取大数据】'),
               GestureDetector(
                 child:

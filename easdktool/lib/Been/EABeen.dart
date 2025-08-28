@@ -111,3 +111,5 @@ part 'EAMenstrualReminder.dart';
 part 'EASportHrWarning.dart';
 
 part 'EABigDataSleepScore.dart';
+
+part 'EAGPSLocation.dart';

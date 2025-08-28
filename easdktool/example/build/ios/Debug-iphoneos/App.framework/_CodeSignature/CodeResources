@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		zbyFMbcQbF1/zXAQZ0bW9ziHMi8=
+		Z4BoxttHxCCRti2WOzL2UgZDEus=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		Rg4jBD3H8j25twbDip5QnHgOm7Y=
+		yDiBCokaAtZnnj7TUVt24D+apHM=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -60,9 +60,29 @@
 		<data>
 		pIgaAquFY5NdGf8ha2Bcw+V+UUU=
 		</data>
+		<key>flutter_assets/assets/bin/002083_AP0.1B1.4_116X.bin</key>
+		<data>
+		JpRBf5650AYxew6Qjqx6uCRIGTA=
+		</data>
+		<key>flutter_assets/assets/bin/002083_R0.6.bin</key>
+		<data>
+		hEsAlC9UumrJfoDMed3HYdqqCX4=
+		</data>
+		<key>flutter_assets/assets/bin/002086_AP0.1B0.5.ufw</key>
+		<data>
+		GZiSTBkUJR9NoyhMYkJ9KrNjtX8=
+		</data>
+		<key>flutter_assets/assets/bin/015025_AP0.1B2.5.bin</key>
+		<data>
+		f2P0LPfHa68ClvjKshGvulUyiks=
+		</data>
 		<key>flutter_assets/assets/bin/AP0.2B2.3.bin</key>
 		<data>
 		es8CktteSL6q8dMRFXWkACaZM4k=
+		</data>
+		<key>flutter_assets/assets/bin/update707.ufw</key>
+		<data>
+		PuQ4ShmvNE4Z73PhDscSGOvkVIE=
 		</data>
 		<key>flutter_assets/assets/bin/watchface_U38.bin</key>
 		<data>
@@ -87,14 +107,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mbShiw0WiWk8M9c1anSE62f1PsFCDUP0eLs/Qx6yQRE=
+			fsvU+7H9G87Y1GPYasq7L3avy66D0gTDajPbjz5OS6g=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			neEej3qeiwde92elEnkeITAuhyNOaIbQ18WvH2GAAN0=
+			2Ytft5WKgFXYM1kkHk0X40Mzu1CfSftUHbeunmiLO74=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -174,11 +194,46 @@
 			eROu2s0sBNookGNrrTd/CnItQjLsun5sLQFHkp6loBs=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/bin/002083_AP0.1B1.4_116X.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			iEn+iWoqkoXubwEsnF6deojldnZBZj7cGY7RVKn+XPM=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/bin/002083_R0.6.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			uTvA0GQyP5/ku/n8RWpZ2DRes6Qn7fT+9sKSPX3g0W0=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/bin/002086_AP0.1B0.5.ufw</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GJQyzvomECaon3xYAHV9dEGEhylRT7xbpINJBJL8+gA=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/bin/015025_AP0.1B2.5.bin</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pSaHMb0SHlqSmtuLt3IgVVAsR8KIyyvhBdAWH9MtvcU=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/bin/AP0.2B2.3.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			uh21AuNQ8Ovkhb/4EzWeqRuEIhUlbI6OkggXRseWtWs=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/bin/update707.ufw</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			231bVTktR47ZlT6V03mtzqk1hc38OOBAdKlswFFttPw=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/bin/watchface_U38.bin</key>
