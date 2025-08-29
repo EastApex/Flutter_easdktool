@@ -1,6 +1,0 @@
-framework module easdktool {
-  umbrella header "easdktool-umbrella.h"
-
-  export *
-  module * { export * }
-}

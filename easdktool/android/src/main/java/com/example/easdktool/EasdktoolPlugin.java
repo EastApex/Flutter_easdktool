@@ -210,6 +210,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeStress = 51;
     final int kEADataInfoTypeVibrate = 53;
     final int kEADataInfoTypePeriodReminder = 55;
+    final int kEADataInfoTypeGPSLocation = 72;
 
     /* 操作手机命令 */
     final int kEADataInfoTypePhoneOps = 2001;
@@ -926,6 +927,10 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             case (kEADataInfoTypePeriodReminder):
                 LogUtils.i(TAG, "set period reminder");
                 new SetWatchData(channel).setPeriodReminder(jsonString);
+                break;
+            case (kEADataInfoTypeGPSLocation):
+                LogUtils.i(TAG, "set GPS location");
+                new SetWatchData(channel).syncLocation(jsonString);
                 break;
             default:
                 channel.invokeMethod(kArgumentsError, "argument error");

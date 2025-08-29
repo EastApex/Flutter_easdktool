@@ -128,7 +128,7 @@ public class DeviceOperationListener implements DataReportCallback {
         if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.play_stop) {
             jsonObject.put("action", 1);
         }
-        if (eaBleMusicControl.getE_ops()== EABleMusicControl.MusicControl.previous_song) {
+        if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.previous_song) {
             jsonObject.put("action", 2);
         }
         if (eaBleMusicControl.getE_ops() == EABleMusicControl.MusicControl.next_song) {
@@ -178,12 +178,16 @@ public class DeviceOperationListener implements DataReportCallback {
 
     @Override
     public void answerIncoming() {
-
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("opePhoneType", 0x24);
+        sendOpePhone(jsonObject);
     }
 
     @Override
     public void hangUpIncoming() {
-
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("opePhoneType", 0x23);
+        sendOpePhone(jsonObject);
     }
 
     @Override

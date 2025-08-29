@@ -44,6 +44,7 @@ import com.example.easdktool.callback.SetCallback;
 import com.example.easdktool.db.DataManager;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -231,6 +232,14 @@ public class SetWatchData {
         EABlePeriodReminder eaBlePeriodReminder = new String2Object().string2PeriodReminder(jsonString);
         LogUtils.i(TAG, "eaBlePeriodReminder:" + JSONObject.toJSONString(eaBlePeriodReminder));
         EABleManager.getInstance().setPeriodReminder(eaBlePeriodReminder, new SetCallback(55, channel));
+    }
+
+    public void syncLocation(String jsonString) {
+        Map<String, BigDecimal> map = JSONObject.parseObject(jsonString, Map.class);
+        BigDecimal longitude =map.get("longitude");
+        BigDecimal latitude = map.get("latitude");
+        LogUtils.i(TAG, "longitude:" + longitude.doubleValue()+",latitude:"+latitude.doubleValue());
+        EABleManager.getInstance().syncLocationInfo(longitude.doubleValue(), latitude.doubleValue(), new SetCallback(72, channel));
     }
 
     public void unbindDevice() {

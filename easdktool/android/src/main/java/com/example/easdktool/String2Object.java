@@ -38,6 +38,7 @@ import com.apex.ax_bluetooth.model.EABleWeather;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.been.ShowAppMessage;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -888,6 +889,7 @@ public class String2Object {
         return eaBlePeriodReminder;
     }
 
+
     public EABleBindInfo string2BindInfo(String jsonString) {
         Map<String, Object> param = JSONObject.parseObject(jsonString, Map.class);
         int ops = (int) param.get("ops");
@@ -1015,77 +1017,78 @@ public class String2Object {
         } else if (type == 48) {
             return EABleSocialContact.SocialContactType.uber_eats;
         }/**
-        else if (type == 49) {
-            return EABleSocialContact.SocialContactType.doordash;
-        } else if (type == 50) {
-            return EABleSocialContact.SocialContactType.grubhub;
-        } else if (type == 51) {
-            return EABleSocialContact.SocialContactType.instacart;
-        } else if (type == 52) {
-            return EABleSocialContact.SocialContactType.postmates;
-        } else if (type == 53) {
-            return EABleSocialContact.SocialContactType.zoom;
-        } else if (type == 54) {
-            return EABleSocialContact.SocialContactType.uber;
-        } else if (type == 55) {
-            return EABleSocialContact.SocialContactType.apple_email;
-        } else if (type == 56) {
-            return EABleSocialContact.SocialContactType.ding_talk;
-        } else if (type == 57) {
-            return EABleSocialContact.SocialContactType.alipay;
-        } else if (type == 58) {
-            return EABleSocialContact.SocialContactType.true_caller;
-        } else if (type == 59) {
-            return EABleSocialContact.SocialContactType.hotstar;
-        } else if (type == 60) {
-            return EABleSocialContact.SocialContactType.phone_pe;
-        } else if (type == 61) {
-            return EABleSocialContact.SocialContactType.zomato;
-        } else if (type == 62) {
-            return EABleSocialContact.SocialContactType.dailyhunt;
-        } else if (type == 63) {
-            return EABleSocialContact.SocialContactType.inshorts;
-        } else if (type == 64) {
-            return EABleSocialContact.SocialContactType.jio_tv;
-        } else if (type == 65) {
-            return EABleSocialContact.SocialContactType.yahoo;
-        } else if (type == 66) {
-            return EABleSocialContact.SocialContactType.paytm;
-        } else if (type == 67) {
-            return EABleSocialContact.SocialContactType.swiggy;
-        } else if (type == 68) {
-            return EABleSocialContact.SocialContactType.calendar;
-        } else if (type == 69) {
-            return EABleSocialContact.SocialContactType.wynk_music;
-        } else if (type == 70) {
-            return EABleSocialContact.SocialContactType.gaana;
-        } else if (type == 71) {
-            return EABleSocialContact.SocialContactType.flipkart;
-        } else if (type == 72) {
-            return EABleSocialContact.SocialContactType.netflix;
-        } else if (type == 73) {
-            return EABleSocialContact.SocialContactType.amazon_prime;
-        } else if (type == 74) {
-            return EABleSocialContact.SocialContactType.google_pay;
-        } else if (type == 75) {
-            return EABleSocialContact.SocialContactType.ola;
-        } else if (type == 76) {
-            return EABleSocialContact.SocialContactType.zalo;
-        } else if (type == 77) {
-            return EABleSocialContact.SocialContactType.book_my_show;
-        } else if (type == 78) {
-            return EABleSocialContact.SocialContactType.make_my_trip;
-        } else if (type == 79) {
-            return EABleSocialContact.SocialContactType.fastrack_reflex_word;
-        } else if (type == 80) {
-            return EABleSocialContact.SocialContactType.yt_music;
-        } else if (type == 81) {
-            return EABleSocialContact.SocialContactType.dunzo;
-        } else if (type == 82) {
-            return EABleSocialContact.SocialContactType.google_drive;
-        } else if (type == 83) {
-            return EABleSocialContact.SocialContactType.titan_smart_word;
-        }*/ else {
+         else if (type == 49) {
+         return EABleSocialContact.SocialContactType.doordash;
+         } else if (type == 50) {
+         return EABleSocialContact.SocialContactType.grubhub;
+         } else if (type == 51) {
+         return EABleSocialContact.SocialContactType.instacart;
+         } else if (type == 52) {
+         return EABleSocialContact.SocialContactType.postmates;
+         } else if (type == 53) {
+         return EABleSocialContact.SocialContactType.zoom;
+         } else if (type == 54) {
+         return EABleSocialContact.SocialContactType.uber;
+         } else if (type == 55) {
+         return EABleSocialContact.SocialContactType.apple_email;
+         } else if (type == 56) {
+         return EABleSocialContact.SocialContactType.ding_talk;
+         } else if (type == 57) {
+         return EABleSocialContact.SocialContactType.alipay;
+         } else if (type == 58) {
+         return EABleSocialContact.SocialContactType.true_caller;
+         } else if (type == 59) {
+         return EABleSocialContact.SocialContactType.hotstar;
+         } else if (type == 60) {
+         return EABleSocialContact.SocialContactType.phone_pe;
+         } else if (type == 61) {
+         return EABleSocialContact.SocialContactType.zomato;
+         } else if (type == 62) {
+         return EABleSocialContact.SocialContactType.dailyhunt;
+         } else if (type == 63) {
+         return EABleSocialContact.SocialContactType.inshorts;
+         } else if (type == 64) {
+         return EABleSocialContact.SocialContactType.jio_tv;
+         } else if (type == 65) {
+         return EABleSocialContact.SocialContactType.yahoo;
+         } else if (type == 66) {
+         return EABleSocialContact.SocialContactType.paytm;
+         } else if (type == 67) {
+         return EABleSocialContact.SocialContactType.swiggy;
+         } else if (type == 68) {
+         return EABleSocialContact.SocialContactType.calendar;
+         } else if (type == 69) {
+         return EABleSocialContact.SocialContactType.wynk_music;
+         } else if (type == 70) {
+         return EABleSocialContact.SocialContactType.gaana;
+         } else if (type == 71) {
+         return EABleSocialContact.SocialContactType.flipkart;
+         } else if (type == 72) {
+         return EABleSocialContact.SocialContactType.netflix;
+         } else if (type == 73) {
+         return EABleSocialContact.SocialContactType.amazon_prime;
+         } else if (type == 74) {
+         return EABleSocialContact.SocialContactType.google_pay;
+         } else if (type == 75) {
+         return EABleSocialContact.SocialContactType.ola;
+         } else if (type == 76) {
+         return EABleSocialContact.SocialContactType.zalo;
+         } else if (type == 77) {
+         return EABleSocialContact.SocialContactType.book_my_show;
+         } else if (type == 78) {
+         return EABleSocialContact.SocialContactType.make_my_trip;
+         } else if (type == 79) {
+         return EABleSocialContact.SocialContactType.fastrack_reflex_word;
+         } else if (type == 80) {
+         return EABleSocialContact.SocialContactType.yt_music;
+         } else if (type == 81) {
+         return EABleSocialContact.SocialContactType.dunzo;
+         } else if (type == 82) {
+         return EABleSocialContact.SocialContactType.google_drive;
+         } else if (type == 83) {
+         return EABleSocialContact.SocialContactType.titan_smart_word;
+         }*/
+        else {
             return EABleSocialContact.SocialContactType.unknow;
         }
     }

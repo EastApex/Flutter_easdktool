@@ -131,6 +131,10 @@ class MyTaskHandler extends TaskHandler {
      *        12 Music operation      Pause playback, increase and decrease the volume of the previous song and the next song.
      *                                After the app completes the corresponding action,it needs to synchronize the music information
      *                                to the watch to keep consistent
+     *
+     *
+     *        0x23  hang up
+     *        0x24  answer the phone
      */
     if (info.isNotEmpty) {
       int type = info["opePhoneType"];
