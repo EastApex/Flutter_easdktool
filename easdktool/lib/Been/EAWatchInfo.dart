@@ -22,6 +22,7 @@ class EABleWatchInfo {
   int isWaitForBinding =
       0; // Whether to wait for the device to confirm binding【是否需要等待设备确认绑定】
   int lcdPixelType = 0; // if 4 is jl 707 watch
+  String custom_firmware_version = "";
 
   // int proj_settings = 0;				//项目功能列表: 0 不支持 1:支持 (固件端实现 id=44协议后才能写1)
   // int lcd_full_w =0;				//LCD表盘宽度
@@ -73,6 +74,9 @@ class EABleWatchInfo {
     }
     if (map["lcd_pixel_type"] != null) {
       isWaitForBinding = map["lcd_pixel_type"];
+    }
+    if (map["custom_firmware_version"] != null) {
+      custom_firmware_version = map["custom_firmware_version"];
     }
   }
 }
