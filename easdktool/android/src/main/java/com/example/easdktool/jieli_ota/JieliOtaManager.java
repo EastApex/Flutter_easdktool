@@ -30,6 +30,7 @@ public class JieliOtaManager extends BluetoothOTAManager {
     Context mContext;
     OtaCallback otaCallback;
     BleConnectStatusListener bleConnectStatusListener;
+    private String reconnectAddress;
 
 
     public JieliOtaManager(Context context) {
@@ -141,13 +142,16 @@ public class JieliOtaManager extends BluetoothOTAManager {
         bluetoothOption.setPriority(BluetoothOTAConfigure.PREFER_BLE);
         bluetoothOption.setUseReconnect(false);
         bluetoothOption.setUseAuthDevice(true);
-      //  bluetoothOption.setMtu(EABleBluetoothOption.maxMtu > 20 ? EABleBluetoothOption.maxMtu - 3 : 20);
-      //  if (BuildConfig.DEBUG) {
+        bluetoothOption.setMtu(EABleBluetoothOption.maxMtu > 20 ? EABleBluetoothOption.maxMtu - 3 : 20);
+        /**
+        if (BuildConfig.DEBUG) {
             bluetoothOption.setMtu(EABleBluetoothOption.otaMtu > 20 ? EABleBluetoothOption.otaMtu - 3 : 20);//现在默认等于20
-      //  }
+        }
+         */
         bluetoothOption.setTimeoutMs(30000);
         bluetoothOption.setNeedChangeMtu(false);
         bluetoothOption.setUseJLServer(false);
+        bluetoothOption.setPriorityCallbackOtaFinish(true);
         configure(bluetoothOption);
         RcspAuth.setAuthTimeout(10000);
     }
@@ -200,10 +204,20 @@ public class JieliOtaManager extends BluetoothOTAManager {
     public void autoReconnect(final String macAddress) {
         if (!TextUtils.isEmpty(macAddress)) {
             //开始搜寻蓝牙
+            reconnectAddress = macAddress;
             Log.i("jieliLog", "开始重连:" + macAddress);
             EABleManager.getInstance().disconnectPeripheral();
             new Reconnect(otaCallback, bleConnectStatusListener).reconnectDevice(macAddress, mContext);
         }
+    }
+
+    public String getReconnectAddress() {
+        return reconnectAddress;
+    }
+
+    @Override
+    public void setReconnectAddress(String reconnectAddress) {
+        this.reconnectAddress = reconnectAddress;
     }
 
 }

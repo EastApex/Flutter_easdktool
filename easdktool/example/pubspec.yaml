@@ -86,7 +86,9 @@ flutter:
     - assets/bin/015025_AP0.1B2.5.bin
     - assets/bin/002083_R0.6.bin
     - assets/bin/002083_AP0.1B1.4_116X.bin
-    - assets/images/
+    - assets/bin/002086_AP0.1B3.8.ufw
+    - assets/bin/002086_AP0.1B8.1.ufw
+    #- assets/images/
     # - assets/images/466*466.png
     # - assets/images/368*448.png
     # - assets/images/240*280.png

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/../../../../f_sdk/flutter/packages/flutter_tools/gradle" name="gradle">
+                <projects>
+                  <project path="$PROJECT_DIR$/../../../../f_sdk/flutter/packages/flutter_tools/gradle" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/../../android" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../../../f_sdk/flutter/packages/flutter_tools/gradle" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/device_info_plus-10.1.2/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/path_provider_android-2.2.15/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/permission_handler_android-10.3.6/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/shared_preferences_android-2.4.7/android" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

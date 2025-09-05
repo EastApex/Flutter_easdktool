@@ -113,3 +113,5 @@ part 'EASportHrWarning.dart';
 part 'EABigDataSleepScore.dart';
 
 part 'EAGPSLocation.dart';
+
+part 'EAOtaProgress.dart';

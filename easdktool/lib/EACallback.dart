@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 typedef OnSuccess = void Function(Map<String, dynamic> info);
 typedef OnFail = void Function(Map<String, dynamic> info);
 typedef OnRespond = void Function(EARespond respond);
-typedef Progress = void Function(int progress);
+typedef Progress = void Function(int progress, bool isSuccess);
 typedef ScanRespond = void Function(EAConnectParam connectParam);
 typedef PreviewImage = void Function(Image previewImage);
 typedef NeedOTA = void Function(bool needOTAinfo);
@@ -70,6 +70,7 @@ class EAOTAProgressCallback {
 /// Custom Watch Face Preview Image callback【预览图回调】
 class EACustomWatchfacePreviewImageCallback {
   PreviewImage previewImage;
+
   EACustomWatchfacePreviewImageCallback(this.previewImage);
 }
 
@@ -82,6 +83,7 @@ class EAScanWatchCallback {
 /// JieLi Need Forced OTA  the callback【操作回调】
 class JieLiNeedForcedOtaCallback {
   NeedOTA needOTA;
+
   JieLiNeedForcedOtaCallback(this.needOTA);
 }
 

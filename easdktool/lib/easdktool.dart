@@ -368,9 +368,11 @@ class EASDKTool {
         }
         break;
       case kProgress:
-        int progress = methodCall.arguments;
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
-          mOTAProgressCallback!.callback(progress);
+          mOTAProgressCallback!
+              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess);
         }
         break;
       case kScanWacthResponse:

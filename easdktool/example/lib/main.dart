@@ -1634,10 +1634,10 @@ class _MyAppState extends State<MyApp> {
                    *  只有jieli-707平台的才需要设置类型为 EAFirmwareType.JL_firmware，目前只有iTOUCH AIR PRO属于此平台，其它平台均不得设置为此类型，其它平台按以前的规则要求进行类型设置
                    */
 
-                  bool isJL707 = false;
+                  bool isJL707 = true;
                   if (isJL707) {
-                    var bytes =
-                        await rootBundle.load("assets/bin/update707.ufw");
+                    var bytes = await rootBundle
+                        .load("assets/bin/002086_AP0.1B8.1.ufw");
                     String path = (await getApplicationSupportDirectory()).path;
                     String filePath =
                         '$path/' + DateTime.now().toString() + '.ufw';
@@ -1649,12 +1649,19 @@ class _MyAppState extends State<MyApp> {
                         EAOTA(filePath, EAFirmwareType.JL_firmware, "");
                     EAOTAList eaList = EAOTAList(0, [dialOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress) {
-                      print("OTA progress:" + progress.toString());
+                        EAOTAProgressCallback((progress, isSuccess) {
+                      print("OTA progress:" +
+                          progress.toString() +
+                          ",ota result:" +
+                          isSuccess.toString());
                       if (progress == -1) {
                         // transmit data fail;
                       } else if (progress == 100) {
-                        // transmit data succ;
+                        if (isSuccess) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+                        }
                       } else {
                         // transmit data progress
                       }
@@ -1684,12 +1691,19 @@ class _MyAppState extends State<MyApp> {
 
                     EAOTAList eaList = EAOTAList(0, [resOTA, appoloOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress) {
-                      print("OTA进度:" + progress.toString());
+                        EAOTAProgressCallback((progress, isSuccess) {
+                      print("OTA progress:" +
+                          progress.toString() +
+                          ",ota result:" +
+                          isSuccess.toString());
                       if (progress == -1) {
                         // transmit data fail;
                       } else if (progress == 100) {
-                        // transmit data succ;
+                        if (isSuccess) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+                        }
                       } else {
                         // transmit data progress
                       }
@@ -1713,12 +1727,19 @@ class _MyAppState extends State<MyApp> {
 
                   EAOTAList eaList = EAOTAList(1, [watchfaceOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
-                      EAOTAProgressCallback((progress) {
-                    print("表盘进度:" + progress.toString());
+                      EAOTAProgressCallback((progress, isSuccess) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      // transmit data succ;
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
                     } else {
                       // transmit data progress
                     }
@@ -1728,12 +1749,20 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.AGPS'),
                 onTap: () async {
-                  secondEasdkTool.syncAGPS(EAOTAProgressCallback((progress) {
-                    print("进度:" + progress.toString());
+                  secondEasdkTool
+                      .syncAGPS(EAOTAProgressCallback((progress, isSuccess) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      // transmit data succ;
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
                     } else {
                       // transmit data progress
                     }
@@ -1771,12 +1800,19 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.numbeColorHex = "#0000FF";
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress) {
-                    print("OTA进度:" + progress.toString());
+                      EAOTAProgressCallback((progress, isSuccess) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      // transmit data succ;
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
                     } else {
                       // transmit data progress
                     }
@@ -1812,12 +1848,19 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.pointerColorType = 1;
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress) {
-                    print("OTA进度:" + progress.toString());
+                      EAOTAProgressCallback((progress, isSuccess) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      // transmit data succ;
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
                     } else {
                       // transmit data progress
                     }

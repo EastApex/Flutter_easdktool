@@ -75,9 +75,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/lints-5.0.0",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/lints-5.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.6"
     },
     {
       "name": "matcher",
@@ -102,6 +102,12 @@
       "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "sky_engine",
@@ -161,7 +167,7 @@
       "name": "easdktool",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.5"
     }
   ],
   "generator": "pub",

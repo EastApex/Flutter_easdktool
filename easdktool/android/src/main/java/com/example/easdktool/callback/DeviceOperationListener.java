@@ -223,6 +223,12 @@ public class DeviceOperationListener implements DataReportCallback {
     }
 
     @Override
+    public void start707Ota() {
+
+    }
+
+
+    @Override
     public void mutualFail(final int i) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("opePhoneType", 0x0F);

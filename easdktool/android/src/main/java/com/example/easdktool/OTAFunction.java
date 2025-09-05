@@ -5,10 +5,13 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.apex.ax_bluetooth.callback.GeneralCallback;
 import com.apex.ax_bluetooth.callback.OtaCallback;
 import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.model.EABleDev;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
+import com.example.easdktool.been.OtaProgress;
 import com.example.easdktool.jieli_ota.JieliOtaInstance;
 
 import android.content.Context;
@@ -16,6 +19,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -49,7 +54,6 @@ public class OTAFunction {
                     tempOtaData.setOtaType(EABleOta.OtaType.tp);
                 } else if (type == 4) {
                     tempOtaData.setOtaType(EABleOta.OtaType.user_wf);
-
                 } else if (type == 5) {
                     tempOtaData.setOtaType(null);
                 }
@@ -74,9 +78,109 @@ public class OTAFunction {
                 break;
             }
             if (jieliOta != null) {
-                JieliOtaInstance.getInstance().startOta(jieliOta.getFilePath(), new OtaCallback() {
+                EABleDev eaBleDev = new EABleDev();
+                eaBleDev.setE_ops(EABleDev.DevOps.jl707_ota_start_request);
+                final String otaPath = jieliOta.getFilePath();
+                EABleManager.getInstance().setDeviceOps(eaBleDev, new GeneralCallback() {
                     @Override
-                    public void success() {
+                    public void result(boolean b, final int i) {
+                        if (b) {
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    JieliOtaInstance.getInstance().startOta(otaPath, new OtaCallback() {
+                                        @Override
+                                        public void success() {
+                                            if (mHandler == null) {
+                                                mHandler = new Handler(Looper.getMainLooper());
+                                            }
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (channel != null) {
+                                                        OtaProgress otaProgress = new OtaProgress();
+                                                        otaProgress.isSuccess = true;
+                                                        otaProgress.progress = 100;
+                                                        channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
+                                                    }
+                                                    mHandler = null;
+                                                }
+                                            });
+
+                                        }
+
+                                        @Override
+                                        public void progress(final int progress) {
+                                            if (mHandler == null) {
+                                                mHandler = new Handler(Looper.getMainLooper());
+                                            }
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    LogUtils.i(TAG, "当前进度:" + progress);
+                                                    if (channel != null) {
+                                                        OtaProgress otaProgress = new OtaProgress();
+                                                        otaProgress.isSuccess = false;
+                                                        otaProgress.progress = progress;
+                                                        channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
+                                                    }
+                                                    mHandler = null;
+                                                }
+                                            });
+
+                                        }
+
+                                        @Override
+                                        public void hisUpdateId(int[] ints) {
+
+                                        }
+
+                                        @Override
+                                        public void mutualFail(final int i) {
+                                            if (mHandler == null) {
+                                                mHandler = new Handler(Looper.getMainLooper());
+                                            }
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (channel != null) {
+                                                        OtaProgress otaProgress = new OtaProgress();
+                                                        otaProgress.isSuccess = false;
+                                                        otaProgress.progress = -1;
+                                                        channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
+                                                    }
+                                                    mHandler = null;
+                                                }
+                                            });
+
+                                        }
+                                    }, mContext);
+                                }
+                            }, 2000);
+
+                        } else {
+                            if (mHandler == null) {
+                                mHandler = new Handler(Looper.getMainLooper());
+                            }
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (channel != null) {
+                                        OtaProgress otaProgress = new OtaProgress();
+                                        otaProgress.isSuccess = false;
+                                        otaProgress.progress = -1;
+                                        channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
+                                    }
+                                    mHandler = null;
+                                }
+                            });
+                        }
+
+                    }
+
+                    @Override
+                    public void mutualFail(final int i) {
+                        Log.e(TAG, "请求707OTA开始错误:" + i);
                         if (mHandler == null) {
                             mHandler = new Handler(Looper.getMainLooper());
                         }
@@ -84,53 +188,17 @@ public class OTAFunction {
                             @Override
                             public void run() {
                                 if (channel != null) {
-                                    channel.invokeMethod(kProgress, 100);
+                                    OtaProgress otaProgress = new OtaProgress();
+                                    otaProgress.isSuccess = false;
+                                    otaProgress.progress = -1;
+                                    channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                                 }
                                 mHandler = null;
                             }
                         });
-
                     }
+                });
 
-                    @Override
-                    public void progress(int i) {
-                        if (mHandler == null) {
-                            mHandler = new Handler(Looper.getMainLooper());
-                        }
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                LogUtils.i(TAG, "当前进度:" + i);
-                                if (channel != null) {
-                                    channel.invokeMethod(kProgress, i);
-                                }
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void hisUpdateId(int[] ints) {
-
-                    }
-
-                    @Override
-                    public void mutualFail(int i) {
-                        if (mHandler == null) {
-                            mHandler = new Handler(Looper.getMainLooper());
-                        }
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (channel != null) {
-                                    channel.invokeMethod(kProgress, -1);
-                                }
-                                mHandler = null;
-                            }
-                        });
-
-                    }
-                },mContext);
                 return;
             }
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
@@ -143,7 +211,10 @@ public class OTAFunction {
                         @Override
                         public void run() {
                             if (channel != null) {
-                                channel.invokeMethod(kProgress, 100);
+                                OtaProgress otaProgress = new OtaProgress();
+                                otaProgress.isSuccess = true;
+                                otaProgress.progress = 100;
+                                channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
                             mHandler = null;
                         }
@@ -161,7 +232,10 @@ public class OTAFunction {
                         public void run() {
                             LogUtils.i(TAG, "当前进度:" + i);
                             if (channel != null) {
-                                channel.invokeMethod(kProgress, i);
+                                OtaProgress otaProgress = new OtaProgress();
+                                otaProgress.isSuccess = false;
+                                otaProgress.progress = i;
+                                channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
                         }
                     });
@@ -182,7 +256,10 @@ public class OTAFunction {
                         @Override
                         public void run() {
                             if (channel != null) {
-                                channel.invokeMethod(kProgress, -1);
+                                OtaProgress otaProgress = new OtaProgress();
+                                otaProgress.isSuccess = false;
+                                otaProgress.progress = -1;
+                                channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
                             mHandler = null;
                         }
@@ -192,7 +269,10 @@ public class OTAFunction {
             });
         } else {
             if (channel != null) {
-                channel.invokeMethod(kProgress, -1);
+                OtaProgress otaProgress = new OtaProgress();
+                otaProgress.isSuccess = false;
+                otaProgress.progress = -1;
+                channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
             }
         }
     }
@@ -208,7 +288,10 @@ public class OTAFunction {
                     @Override
                     public void run() {
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, 100);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = true;
+                            otaProgress.progress = 100;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
                     }
@@ -216,7 +299,7 @@ public class OTAFunction {
             }
 
             @Override
-            public void progress(int i) {
+            public void progress(final int i) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -225,8 +308,12 @@ public class OTAFunction {
                     public void run() {
                         LogUtils.i(TAG, "当前进度:" + i);
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, i);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = false;
+                            otaProgress.progress = i;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
+                        mHandler = null;
                     }
                 });
             }
@@ -245,7 +332,10 @@ public class OTAFunction {
                     @Override
                     public void run() {
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, -1);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = false;
+                            otaProgress.progress = -1;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
                     }
@@ -265,7 +355,10 @@ public class OTAFunction {
                     @Override
                     public void run() {
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, 100);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = true;
+                            otaProgress.progress = 100;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
                     }
@@ -273,7 +366,7 @@ public class OTAFunction {
             }
 
             @Override
-            public void progress(int i) {
+            public void progress(final int i) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -282,7 +375,10 @@ public class OTAFunction {
                     public void run() {
                         LogUtils.i(TAG, "当前进度:" + i);
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, i);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = false;
+                            otaProgress.progress = i;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                     }
                 });
@@ -302,7 +398,10 @@ public class OTAFunction {
                     @Override
                     public void run() {
                         if (channel != null) {
-                            channel.invokeMethod(kProgress, -1);
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = false;
+                            otaProgress.progress = -1;
+                            channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
                     }

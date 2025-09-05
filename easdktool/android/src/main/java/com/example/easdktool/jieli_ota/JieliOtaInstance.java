@@ -37,7 +37,6 @@ public class JieliOtaInstance {
     private JieliOtaManager jieliOtaManager;
     private OtaCallback otaCallback;
     private BleConnectStatusListener bleConnectStatusListener;
-    private String reconnectAddress;
 
 
     public static JieliOtaInstance getInstance() {
@@ -122,61 +121,69 @@ public class JieliOtaInstance {
             Log.i("jieliLog", "设备连接状态：" + i + ",设备信息;" + (bluetoothDevice != null ? bluetoothDevice.toString() : null));
             //将状态通知到界面
             if (i == StateCode.CONNECTION_OK && jieliOtaManager != null) {
-                reconnectAddress = bluetoothDevice.getAddress();
                 if (jieliOtaManager.isOTA()) {
                     Log.i(TAG, "正在OTA");
-                    if (otaCallback != null) {
-                        otaCallback.mutualFail(0x11);
+                    if (!TextUtils.isEmpty(jieliOtaManager.getReconnectAddress())) {
+                        return;
+                    } else {
+                        if (otaCallback != null) {
+                            otaCallback.mutualFail(0x11);
+                        }
+                        release();
+                        return;
                     }
-                    return;
+                } else {
+                    if (jieliOtaManager != null) {
+                        jieliOtaManager.getBluetoothOption().setFirmwareFilePath(filePath);
+                        jieliOtaManager.startOTA(new JieliUpdateCallback());
+                    }
                 }
+/**
+ jieliOtaManager.queryMandatoryUpdate(new IActionCallback<TargetInfoResponse>() {
+@Override public void onSuccess(TargetInfoResponse targetInfoResponse) {
+Log.i(TAG, "查询强制升级信息");
+if (targetInfoResponse != null) {
+Log.i(TAG, "当前模式：" + targetInfoResponse.getCurFunction());
+Log.i(TAG, "强制升级：" + targetInfoResponse.getMandatoryUpgradeFlag());
+Log.i(TAG, "请求升级标志：" + targetInfoResponse.getRequestOtaFlag());
+Log.i(TAG, "是否支持双备份：" + targetInfoResponse.isSupportDoubleBackup());
+Log.i(TAG, "单备份连接方式：" + targetInfoResponse.getSingleBackupOtaWay());
+Log.i(TAG, "扩展模式：" + targetInfoResponse.getExpandMode());
+Log.i(TAG, "是否允许连接：" + targetInfoResponse.getAllowConnectFlag());
+}
+if (jieliOtaManager != null) {
+jieliOtaManager.getBluetoothOption().setFirmwareFilePath(filePath);
+jieliOtaManager.startOTA(new JieliUpdateCallback());
+}
 
-                jieliOtaManager.queryMandatoryUpdate(new IActionCallback<TargetInfoResponse>() {
-                    @Override
-                    public void onSuccess(TargetInfoResponse targetInfoResponse) {
-                        Log.i(TAG, "查询强制升级信息");
-                        if (targetInfoResponse != null) {
-                            Log.i(TAG, "当前模式：" + targetInfoResponse.getCurFunction());
-                            Log.i(TAG, "强制升级：" + targetInfoResponse.getMandatoryUpgradeFlag());
-                            Log.i(TAG, "请求升级标志：" + targetInfoResponse.getRequestOtaFlag());
-                            Log.i(TAG, "是否支持双备份：" + targetInfoResponse.isSupportDoubleBackup());
-                            Log.i(TAG, "单备份连接方式：" + targetInfoResponse.getSingleBackupOtaWay());
-                            Log.i(TAG, "扩展模式：" + targetInfoResponse.getExpandMode());
-                            Log.i(TAG, "是否允许连接：" + targetInfoResponse.getAllowConnectFlag());
-                        }
-                        if (jieliOtaManager != null) {
-                            jieliOtaManager.getBluetoothOption().setFirmwareFilePath(filePath);
-                            jieliOtaManager.startOTA(new JieliUpdateCallback());
-                        }
 
+}
 
-                    }
+@Override public void onError(BaseError baseError) {
+Log.i("HomeActivity", "查询强制升级信息错误");
+if (baseError.getCode() == ErrorCode.ERR_NONE && baseError.getSubCode() == ErrorCode.ERR_NONE) {
+TargetInfoResponse targetInfoResponse = jieliOtaManager.getDeviceInfo();
+if (targetInfoResponse != null) {
+Log.i(TAG, "当前模式：" + targetInfoResponse.getCurFunction());
+Log.i(TAG, "强制升级：" + targetInfoResponse.getMandatoryUpgradeFlag());
+Log.i(TAG, "请求升级标志：" + targetInfoResponse.getRequestOtaFlag());
+Log.i(TAG, "是否支持双备份：" + targetInfoResponse.isSupportDoubleBackup());
+Log.i(TAG, "单备份连接方式：" + targetInfoResponse.getSingleBackupOtaWay());
+Log.i(TAG, "扩展模式：" + targetInfoResponse.getExpandMode());
+Log.i(TAG, "是否允许连接：" + targetInfoResponse.getAllowConnectFlag());
+}
+//开始OTA升级
+if (jieliOtaManager != null) {
+jieliOtaManager.getBluetoothOption().setFirmwareFilePath(filePath);
+jieliOtaManager.startOTA(new JieliUpdateCallback());
 
-                    @Override
-                    public void onError(BaseError baseError) {
-                        Log.i("HomeActivity", "查询强制升级信息错误");
-                        if (baseError.getCode() == ErrorCode.ERR_NONE && baseError.getSubCode() == ErrorCode.ERR_NONE) {
-                            TargetInfoResponse targetInfoResponse = jieliOtaManager.getDeviceInfo();
-                            if (targetInfoResponse != null) {
-                                Log.i(TAG, "当前模式：" + targetInfoResponse.getCurFunction());
-                                Log.i(TAG, "强制升级：" + targetInfoResponse.getMandatoryUpgradeFlag());
-                                Log.i(TAG, "请求升级标志：" + targetInfoResponse.getRequestOtaFlag());
-                                Log.i(TAG, "是否支持双备份：" + targetInfoResponse.isSupportDoubleBackup());
-                                Log.i(TAG, "单备份连接方式：" + targetInfoResponse.getSingleBackupOtaWay());
-                                Log.i(TAG, "扩展模式：" + targetInfoResponse.getExpandMode());
-                                Log.i(TAG, "是否允许连接：" + targetInfoResponse.getAllowConnectFlag());
-                            }
-                            //开始OTA升级
-                            if (jieliOtaManager != null) {
-                                jieliOtaManager.getBluetoothOption().setFirmwareFilePath(filePath);
-                                jieliOtaManager.startOTA(new JieliUpdateCallback());
-
-                            }
-                            return;
-                        }
-                        Log.i("HomeActivity", baseError.toString());
-                    }
-                });
+}
+return;
+}
+Log.i("HomeActivity", baseError.toString());
+}
+});
+ */
             } else if (i == StateCode.CONNECTION_DISCONNECT || i == StateCode.CONNECTION_FAILED) {
                 Log.i("jieliLog", "断连");
                 EABleManager.getInstance().disconnectPeripheral();
@@ -290,7 +297,6 @@ public class JieliOtaInstance {
                             int value = CHexConver.byteToInt(addressByte[addressByte.length - 1]) + 1;
                             addressByte[addressByte.length - 1] = CHexConver.intToByte(value);
                             String newAddr = BluetoothUtil.hexDataCovetToAddress(addressByte);
-                            reconnectAddress = newAddr;
                             Log.i("jieliLog", "新的蓝牙地址：" + newAddr + ",旧的蓝牙地址：" + s);
                             if (jieliOtaManager != null) {
                                 jieliOtaManager.autoReconnect(newAddr);
@@ -317,7 +323,9 @@ public class JieliOtaInstance {
                 otaCallback.progress(100);
                 otaCallback.success();
             }
-            reconnectAddress = null;
+            if (jieliOtaManager != null) {
+                jieliOtaManager.setReconnectAddress(null);
+            }
             release();
             EABleManager.getInstance().disconnectPeripheral();
             if (bleConnectStatusListener != null) {
@@ -331,6 +339,9 @@ public class JieliOtaInstance {
             Log.i(TAG, "ota被取消");
             if (otaCallback != null) {
                 otaCallback.mutualFail(0x18);
+            }
+            if (jieliOtaManager != null) {
+                jieliOtaManager.setReconnectAddress(null);
             }
             release();
         }
@@ -428,6 +439,9 @@ public class JieliOtaInstance {
             } else if (code == 0x3002 || code == 0x3007 || code == 0x3008 || code == 0x300A || code == 0x300B || code == 0x400B || code == 0x4011 || code == 0x4012) {
                 setDeviceConnection(StateCode.CONNECTION_DISCONNECT);
                 EABleManager.getInstance().disconnectPeripheral();
+                if (otaCallback != null) {
+                    otaCallback.mutualFail(0x06);
+                }
                 if (bleConnectStatusListener != null) {
                     bleConnectStatusListener.deviceDisconnect();
                 }
