@@ -14,19 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-
-
-
-
-typedef void(^CheckHisResCompleteBlock)(NSArray * _Nullable hisresFiles);
-typedef void(^CheckHisResErrorBlock)(NSError * _Nullable error);
-typedef void(^OTACompleteBlock)(BOOL succ, NSError * _Nullable error);
-typedef void(^UncompressProgressBlock)(CGFloat progress);
-typedef void(^CheckJsonProgressBlock)(CGFloat progress);
-typedef void(^OTAProgressBlock)(CGFloat progress);
-
-
-
 @interface EAOTAManager : NSObject
 
 + (instancetype)defaultManager;
@@ -81,6 +68,9 @@ typedef void(^OTAProgressBlock)(CGFloat progress);
 
 /// OTA Music File
 - (BOOL)eaOTAMusicFile:(EAFileModel *)musicFile progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+/// MARK: - 杰里 OTA
+- (BOOL)eaUpgradeJLFile:(EAFileModel *)jlFile progress:(OTAProgressBlock)otaProgress complete:(OTACompleteBlock)otaCompleteBlock;
 
 @end
 

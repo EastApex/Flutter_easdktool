@@ -58,7 +58,6 @@ import com.example.easdktool.callback.PrewMapCallBack;
 import com.example.easdktool.callback.WatchFileCallback;
 import com.example.easdktool.db.DataManager;
 import com.example.easdktool.enumerate.ConnectState;
-import com.example.easdktool.jieli_ota.JieliOtaInstance;
 
 
 import java.io.ByteArrayOutputStream;
@@ -131,6 +130,9 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String deleteData = "deleteData";
     final String pairBT = "connectClassicBluetooth";
     final String kEACustomWatchface = "EACustomWatchface"; // 自定义表盘及OTA
+    final String kAddJieLiWatchFace = "AddJieLiWatchFace";
+    final String kDeleteJieLiWatchFace = "DeleteJieLiWatchFace";
+    final String kGetJieLiWatchFace = "GetJieLiWatchFace";
 
     /// 数据类型
     /* 手表 */
@@ -592,7 +594,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 //  EABleBluetoothOption.autoReply = true;
                 ConnectStateListener connectStateListener = new ConnectStateListener(channel);
                 EABleManager.getInstance().connectToPeripheral(address, mContext, connectStateListener, 400, new DeviceOperationListener(channel), new MotionDataListener(channel), false);
-                JieliOtaInstance.getInstance().setReconnectApi(connectStateListener);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -669,6 +670,18 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
             }
             LogUtils.i(TAG, "开始更新AGPS");
             new AGPSUpdate(channel).startUpdate(mContext);
+        } else if (call.method.equals(kAddJieLiWatchFace)) {
+            String arguments = (String) call.arguments;
+            new JieLiWatchFace(channel).addWatchFace(arguments);
+
+        } else if (call.method.equals(kDeleteJieLiWatchFace)) {
+            String arguments = (String) call.arguments;
+            new JieLiWatchFace(channel).deleteWatchFace(arguments);
+
+        } else if (call.method.equals(kGetJieLiWatchFace)) {
+
+            new JieLiWatchFace(channel).getWatchFace();
+
         } else {
             result.notImplemented();
         }

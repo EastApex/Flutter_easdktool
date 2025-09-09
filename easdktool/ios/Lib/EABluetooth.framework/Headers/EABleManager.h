@@ -15,9 +15,10 @@
  
 */
 
-#define kEASDKVERSION   @"1.1.19"
+#define kEASDKVERSION   @"1.1.21"
 #define kEASDKBUILD     @"2"
-
+#define kEAAppVersion   [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
+#define kEAAppBulid     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 
 
 
@@ -83,6 +84,12 @@ NS_ASSUME_NONNULL_BEGIN
 #define kNTF_EAOTAHisResFileKeys            @"EAOTAHisResFileKeys"
 #define kNTF_EAOTAHisResFileFail            @"EAOTAHisResFileFail"
 #define kNTF_EAOTARespond                   @"EAOTARespond"
+
+
+/// 杰里连接成功，可以通讯了
+#define kNTF_EAJLBleManager_CanCmd           @"EAJLBleManager_CanCmd"
+
+
 /// 实时数据
 /// Real time data
 #define kNTF_EARealTimeData                 @"EARealTimeData"
@@ -136,6 +143,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+/// Bluetooth data Broker
+/// 蓝牙数据代理
+@protocol EAJLBleManagerDataDelegate <NSObject>
+
+#pragma mark - 设备特征回调
+- (void)eaPeripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service ;
+
+#pragma mark - 更新通知特征的状态
+- (void)eaPeripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(nonnull CBCharacteristic *)characteristic;
+
+#pragma mark - 设备返回的数据 GET
+- (void)eaPeripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic;
+
+#pragma mark - 设备断开连接
+- (void)eaCentralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral;
+
+#pragma mark - 蓝牙初始化 Callback
+- (void)eaCentralManagerDidUpdateState:(CBCentralManager *)central;
+
+
+@end
+
+
+
 typedef void(^InitSuccBlock)(void);
 
 @interface EABleManager : NSObject
@@ -148,9 +180,8 @@ typedef void(^InitSuccBlock)(void);
 /// 搜索设备代理
 @property(nonatomic,weak) id<EABleManagerDelegate> delegate;
 
-/// ignore：Bluetooth data Broker
-/// 忽略：蓝牙数据代理
-@property(nonatomic,weak) id<EABleManagerDataDelegate> dataDelegate;
+/// 杰里
+@property(nonatomic,weak) id<EAJLBleManagerDataDelegate> jlDelegate;
 
 /// Watch connection status
 /// 连接设备状态
@@ -256,6 +287,10 @@ typedef void(^InitSuccBlock)(void);
 - (BOOL)isScanning;
 - (BOOL)checkKey;
 - (NSString *)getPeripheralId;
+/// ignore：Bluetooth data Broker
+/// 忽略：蓝牙数据代理
+@property(nonatomic,weak) id<EABleManagerDataDelegate> dataDelegate;
+
 @end
 
 NS_ASSUME_NONNULL_END

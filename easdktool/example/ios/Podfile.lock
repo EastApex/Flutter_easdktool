@@ -10,7 +10,7 @@ PODS:
   - CocoaLumberjack/Core (3.8.5)
   - device_info_plus (0.0.1):
     - Flutter
-  - easdktool (1.1.07.1):
+  - easdktool (1.1.21.2):
     - BGFMDB
     - Flutter
     - Protobuf
@@ -18,6 +18,7 @@ PODS:
     - SVGKit
     - YYKit
     - ZipArchive
+    - zipzap
   - Flutter (1.0.0)
   - flutter_foreground_task (0.0.1):
     - Flutter
@@ -37,6 +38,7 @@ PODS:
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
   - ZipArchive (1.4.0)
+  - zipzap (8.1.1)
 
 DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -56,6 +58,7 @@ SPEC REPOS:
     - SVGKit
     - YYKit
     - ZipArchive
+    - zipzap
 
 EXTERNAL SOURCES:
   device_info_plus:
@@ -77,7 +80,7 @@ SPEC CHECKSUMS:
   BGFMDB: 48e6823027232402a678acc7f71484b1fc9171d0
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
-  easdktool: 2cc59101dc5d188c652f3fa6f1cda0d00243595d
+  easdktool: 2e34e40535f1300f1c2ce03fb0d11e27dd474397
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_foreground_task: 21ef182ab0a29a3005cc72cd70e5f45cb7f7f817
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
@@ -88,7 +91,8 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
   ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
+  zipzap: 940162d9c9c60472c2eab341385e4214da0fdf1c
 
-PODFILE CHECKSUM: 13433a4f4e94e756e3d3f84e40717e2337c796e3
+PODFILE CHECKSUM: 3edc7a296122428681abc0ac0242b32cb69cda97
 
 COCOAPODS: 1.16.2

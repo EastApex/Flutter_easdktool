@@ -33,6 +33,12 @@ class EABindingWatchCallback {
   EABindingWatchCallback({required this.onRespond});
 }
 
+class JieLiWatchFaceCallback {
+  OnSuccess callback;
+
+  JieLiWatchFaceCallback(this.callback);
+}
+
 /// Get watch big data callback【获取手表大数据回调】
 class EAGetBitDataCallback {
   OnSuccess callback;

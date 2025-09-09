@@ -115,3 +115,5 @@ part 'EABigDataSleepScore.dart';
 part 'EAGPSLocation.dart';
 
 part 'EAOtaProgress.dart';
+
+part 'JieliWatchFace.dart';

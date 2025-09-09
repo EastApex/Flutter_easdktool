@@ -78,7 +78,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic,strong) NSString *musicName;
 
-@property(nonatomic,assign) BOOL jlNeedForcedUOTA;
+
+@property(nonatomic,readonly) NSString *jlWatchFaceName;
+
 
 
 - (instancetype )initWithHisResId:(NSInteger)hisResId ;
@@ -110,6 +112,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (EAFileModel *)eaInitMusicWithPath:(NSString *)musicPath musicName:(NSString *)musicName;
+
++ (EAFileModel *)eaInitJlFirmwareFileWithPath:(NSString *)binPath;
++ (EAFileModel *)eaInitJlWatchFaceFileWithPath:(NSString *)binPath;
 
 
 /// Deprecated

@@ -434,6 +434,18 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     EADataInfoTypeCusWatchFaceGlobalSetting = 80,
     
     
+    
+    
+    
+    
+    /// get jieli watch face list
+    EADataInfoTypeGetJLWatchFaces = 1200,
+    /// set current jieli watch face
+    EADataInfoTypeSetCurrentJLWatchFace = 1201,
+    /// delete jieli watch face
+    EADataInfoTypeDelJLWatchFace = 1202,
+    
+    
     /// Operating Phone Commands
     /// 操作手机命令
     /// EAPhoneOpsModel
@@ -1024,6 +1036,14 @@ typedef NS_ENUM(NSUInteger,EADeviceOpsType) {
     
     ///  开启手机拍照 
     EADeviceOpsTypeStartPhoneCamera = 17,
+    
+    ///  停止手表配对 (只有工厂OTA工具才使用)
+    EADeviceOpsTypeFactoryOtaStopBlePair = 18,
+
+    ///  JL707ota请求启动
+    EADeviceOpsTypeJl707OtaStartRequest = 19,
+    
+    
 };
 
 
@@ -1498,6 +1518,9 @@ typedef NS_ENUM(NSUInteger,EAPhoneOps) {
 
     ///  停止AI文字下发 
     EAPhoneOpsStopAiTxt = 29,
+    
+    /// JL707ota可以启动
+    EAPhoneOpsJl707OtaStart = 30,
     
 };
 

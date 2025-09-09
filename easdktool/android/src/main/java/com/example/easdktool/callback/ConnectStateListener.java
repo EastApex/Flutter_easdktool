@@ -4,8 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.apex.ax_bluetooth.callback.BleConnectStatusListener;
+import com.apex.ax_bluetooth.callback.WatchInfoCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.enumeration.QueryWatchInfoType;
+import com.apex.ax_bluetooth.model.EABleWatchInfo;
 import com.example.easdktool.enumerate.BluetoothState;
 import com.example.easdktool.enumerate.ConnectState;
+import com.example.easdktool.jieli.watchface.JieliWatchFaceManager;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -20,6 +25,24 @@ public class ConnectStateListener implements BleConnectStatusListener {
 
     @Override
     public void deviceConnected() {
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
+            @Override
+            public void watchInfo(EABleWatchInfo eaBleWatchInfo) {
+                if (eaBleWatchInfo != null) {
+                    if (eaBleWatchInfo.getLcd_pixel_type() == 4) {
+                        JieliWatchFaceManager.getInstance().release();
+                        JieliWatchFaceManager.getInstance().addConnectListener();
+                        JieliWatchFaceManager.getInstance().addReceiveDeviceData();
+                        JieliWatchFaceManager.getInstance().init();
+                    }
+                }
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -28,6 +51,7 @@ public class ConnectStateListener implements BleConnectStatusListener {
                 }
             }
         });
+
     }
 
 

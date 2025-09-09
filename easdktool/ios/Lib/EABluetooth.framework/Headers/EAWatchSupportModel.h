@@ -348,18 +348,22 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL muslimTimestampSupport;
 
 
-/** 功能与协议: 自定义表盘协议支持（id = 73\\74\\75） */
+///功能与协议: 自定义表盘协议支持（id = 73\\74\\75）
 @property(nonatomic, assign) BOOL cusWatchfaceSupport;
 
-/** 功能与协议: AI文字下发协议支持（id = 76\\77） */
+///功能与协议: AI文字下发协议支持（id = 76\\77）
 @property(nonatomic, assign) BOOL aiTxtSupport;
 
-/** 功能与协议:心率PPG数据开关支持（id = 78\\79） */
+///功能与协议:心率PPG数据开关支持（id = 78\\79）
 @property(nonatomic, assign) BOOL hrPpgSwSupport;
 
 
-/** 功能与协议:自定义表盘全局配置（id =80） */
+///功能与协议:自定义表盘全局配置（id =80）
 @property(nonatomic, assign) BOOL watchfaceGlobalSettingSupport;
+
+
+///功能与协议:手机的经纬度信息支持（id = 72） 
+@property(nonatomic, assign) BOOL appGpsLocationSupport;
 
 @end
 

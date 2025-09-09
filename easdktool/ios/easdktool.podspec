@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easdktool'
-  s.version          = '1.1.07.1'
+  s.version          = '1.1.21.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -17,6 +17,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
+  s.libraries = 'c++' 
   
   s.dependency 'ZipArchive'
   s.dependency 'Protobuf'
@@ -24,18 +25,18 @@ A new flutter plugin project.
   s.dependency 'BGFMDB'
   s.dependency 'SAMKeychain'
   s.dependency 'SVGKit'
-#  s.dependency "Realm"
+  s.dependency 'zipzap'
 
   s.resource_bundles = {'EAWatchFace' => ['Lib/EAWatchFace.bundle/*']} #工程需要引入的bundle
-  #s.ios.vendored_frameworks = 'Lib/EABluetooth.framework'
-  #s.vendored_frameworks = 'EABluetooth.framework'
+
   s.vendored_frameworks = [
     'Lib/EABluetooth.framework',
-    'Lib/JLLogHelper/JLLogHelper.framework',
-    'Lib/JL_OTALib/JL_OTALib.framework',
-    'Lib/JL_HashPair/JL_HashPair.framework',
-    'Lib/JL_BLEKit/JL_BLEKit.framework',
-    'Lib/JL_AdvParse/JL_AdvParse.framework'
+    'Lib/JLLogHelper.framework',
+    'Lib/JL_OTALib.framework',
+    'Lib/JL_HashPair.framework',
+    'Lib/JJL_BLEKit.framework',
+    'Lib/JL_AdvParse.framework',
+    'Lib/JLDialUnit.framework'
   ]
   
   

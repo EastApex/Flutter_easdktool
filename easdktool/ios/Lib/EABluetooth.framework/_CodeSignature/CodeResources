@@ -86,11 +86,11 @@
 		</data>
 		<key>Headers/EABleConfig.h</key>
 		<data>
-		+PzqZEccFO1vHbjK/Xuq0dN3ZJA=
+		klyid6BOL+gVRCia0EJvtmYtTq8=
 		</data>
 		<key>Headers/EABleManager.h</key>
 		<data>
-		TM14Ey0hrWxpzcMm+Ub0165iojU=
+		CTrkxpuFQPjBFQhTl4FQiBEd24c=
 		</data>
 		<key>Headers/EABlePairStateModel.h</key>
 		<data>
@@ -110,7 +110,7 @@
 		</data>
 		<key>Headers/EABluetooth.h</key>
 		<data>
-		GJZ8CYY1IoEjTlkzEAAAcfI9XXY=
+		92+brLG479ToQ76wvqPgye5yIpQ=
 		</data>
 		<key>Headers/EACaloriesSettingModel.h</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>Headers/EAEnum.h</key>
 		<data>
-		5LQKHRM/9Vohq4P3C48omsmKEy8=
+		+YEtsey4+LHHGB5Eo3cDYveec9A=
 		</data>
 		<key>Headers/EAFastGetSnNumberManager.h</key>
 		<data>
@@ -228,9 +228,9 @@
 		<data>
 		zWmlJyCUjvVQbzIwbuIPGgtx3IU=
 		</data>
-		<key>Headers/EAJLBleManager.h</key>
+		<key>Headers/EAJieLiWacthFace.h</key>
 		<data>
-		NzayJQGjryKqK+EG7jXcu8wMIYE=
+		06uX35dv3x22t6v4pA7p21h2CD8=
 		</data>
 		<key>Headers/EALanguageModel.h</key>
 		<data>
@@ -254,7 +254,7 @@
 		</data>
 		<key>Headers/EAModelHeader.h</key>
 		<data>
-		8c2vb+Qiu7SMHgyDrmFZqwoSQd0=
+		NsF7gpXheAqd5U1bj1eJu+GI4vg=
 		</data>
 		<key>Headers/EAMonitorReminder.h</key>
 		<data>
@@ -278,11 +278,11 @@
 		</data>
 		<key>Headers/EAOTAManager.h</key>
 		<data>
-		yMmKQ+K28T1e7y39aERDY8NcLGE=
+		caWnFGS1CxqXfdbzN0HWxmtCp9U=
 		</data>
 		<key>Headers/EAOTAModel.h</key>
 		<data>
-		9yIlMlhE/1Iu10cfI4gDGtNs0OY=
+		xVDnD6MkT2eMXMszaZREXbLfU18=
 		</data>
 		<key>Headers/EAOnlyGetBigData.h</key>
 		<data>
@@ -486,11 +486,11 @@
 		</data>
 		<key>Headers/EAWatchModel.h</key>
 		<data>
-		FvW6DXXovRtG90Uu5gfl5FR9ktI=
+		Hzqy+X+bAXzxlBdi3fNdaZsFCMo=
 		</data>
 		<key>Headers/EAWatchSupportModel.h</key>
 		<data>
-		cR4d+d+h0PPv4kOAMr15KnZwHLM=
+		1AixoBaBpmf+jVLGEgBHRJg+/so=
 		</data>
 		<key>Headers/EAWeatherModel.h</key>
 		<data>
@@ -506,7 +506,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		Q/aEsJHAs8rgD+8BlhpjAtm0hMI=
+		3qHCqnuMqp1kK+HgDM8+zTpLeLs=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -739,22 +739,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+PzqZEccFO1vHbjK/Xuq0dN3ZJA=
+			klyid6BOL+gVRCia0EJvtmYtTq8=
 			</data>
 			<key>hash2</key>
 			<data>
-			a3WsLAzqYSaTcRruah44pVZ99RuwsauzGCmfxFW0kQI=
+			QuH9oyNmsWBaTnQSkdfu0ynPUOOvPy2I758LufO6hIU=
 			</data>
 		</dict>
 		<key>Headers/EABleManager.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TM14Ey0hrWxpzcMm+Ub0165iojU=
+			CTrkxpuFQPjBFQhTl4FQiBEd24c=
 			</data>
 			<key>hash2</key>
 			<data>
-			XSP14Sk6d9CSUcpToq8DYlGPEbJNB75GVPHpOFHhlIo=
+			m22RZzDHqGqRlAv1BvPzT1EosifbFENzRFucIxHaTP8=
 			</data>
 		</dict>
 		<key>Headers/EABlePairStateModel.h</key>
@@ -805,11 +805,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GJZ8CYY1IoEjTlkzEAAAcfI9XXY=
+			92+brLG479ToQ76wvqPgye5yIpQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			jNBhzuZOa8q9jy0eq/kaei/50g24TCmZr+U/iVa+G+c=
+			rzMi6hfINUe2UFo4TiGDqwo35itwwnwmw2xPVtpABTs=
 			</data>
 		</dict>
 		<key>Headers/EACaloriesSettingModel.h</key>
@@ -992,11 +992,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5LQKHRM/9Vohq4P3C48omsmKEy8=
+			+YEtsey4+LHHGB5Eo3cDYveec9A=
 			</data>
 			<key>hash2</key>
 			<data>
-			BWrY04sU3MFsUMAi1QPyqWiBE3KtjzJHxEv6hqVWuTs=
+			Mlg26DYA17X0P0e3bjA5VweMdyzgrxVzYlpjGkQ7Rw8=
 			</data>
 		</dict>
 		<key>Headers/EAFastGetSnNumberManager.h</key>
@@ -1131,15 +1131,15 @@
 			bVUnsOfCq9UFns3LuTT+M65GBZaE2OlxF4qWagn2/ww=
 			</data>
 		</dict>
-		<key>Headers/EAJLBleManager.h</key>
+		<key>Headers/EAJieLiWacthFace.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			NzayJQGjryKqK+EG7jXcu8wMIYE=
+			06uX35dv3x22t6v4pA7p21h2CD8=
 			</data>
 			<key>hash2</key>
 			<data>
-			qgDHXBKabln9kcLCl6UDvAmIMhDzcZgKAb9sh1krPXs=
+			qmwWQc/1fGEitIQy0NYod33ac0/u9629w8Cl+Bb7dPs=
 			</data>
 		</dict>
 		<key>Headers/EALanguageModel.h</key>
@@ -1201,11 +1201,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8c2vb+Qiu7SMHgyDrmFZqwoSQd0=
+			NsF7gpXheAqd5U1bj1eJu+GI4vg=
 			</data>
 			<key>hash2</key>
 			<data>
-			sHFla7pj1vX39vp3Afd6Ka6bkisC6KOFEXpC5QWftDI=
+			O5WTpm4HsRv4YjHajjKdPkH9Ut40OOgbywWom0TbyTA=
 			</data>
 		</dict>
 		<key>Headers/EAMonitorReminder.h</key>
@@ -1267,22 +1267,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			yMmKQ+K28T1e7y39aERDY8NcLGE=
+			caWnFGS1CxqXfdbzN0HWxmtCp9U=
 			</data>
 			<key>hash2</key>
 			<data>
-			6EzzT5l1RzDkL+7kdm+vJhMEuDCNliO4Ed60cAh1/3I=
+			E+sWLRI07ENoqw3a2/GFvUerdVg5GgovZg66AVyW26o=
 			</data>
 		</dict>
 		<key>Headers/EAOTAModel.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9yIlMlhE/1Iu10cfI4gDGtNs0OY=
+			xVDnD6MkT2eMXMszaZREXbLfU18=
 			</data>
 			<key>hash2</key>
 			<data>
-			hQxE/uAmUrIGTZoH6C8/uuXrxR+4ck2DheKv5fGLLVU=
+			qfdTeABFLu1OErlYBQtRNEGABbbkKdR6vvO/3Yg0t2U=
 			</data>
 		</dict>
 		<key>Headers/EAOnlyGetBigData.h</key>
@@ -1839,22 +1839,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FvW6DXXovRtG90Uu5gfl5FR9ktI=
+			Hzqy+X+bAXzxlBdi3fNdaZsFCMo=
 			</data>
 			<key>hash2</key>
 			<data>
-			EHmJhc2Cx1oXhoz1O2rLNlJeyBMrakwGbXcemqb246A=
+			iRHO21nP6ygxIeAPolDqLWbBlB2CgkDCFRI6gsHslj8=
 			</data>
 		</dict>
 		<key>Headers/EAWatchSupportModel.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			cR4d+d+h0PPv4kOAMr15KnZwHLM=
+			1AixoBaBpmf+jVLGEgBHRJg+/so=
 			</data>
 			<key>hash2</key>
 			<data>
-			MPub22KQSl0fUJw8wd85bzn+VMLJ/axWzM3G+eoCeKE=
+			RCteu2pCHtnAbourYzSW1bX+/qCGHmL1+25ccscf2N4=
 			</data>
 		</dict>
 		<key>Headers/EAWeatherModel.h</key>

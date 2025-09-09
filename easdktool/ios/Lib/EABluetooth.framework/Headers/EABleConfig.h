@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define EALog(format, ...) {\
 if ([EABleConfig logEnable]) {\
-NSLog(@"[EASDKLog]%s-%d " format, __func__,__LINE__, ##__VA_ARGS__);\
+NSLog(@"[EALog]%s-%d " format, __func__,__LINE__, ##__VA_ARGS__);\
 NSString *logFirstString = [NSString stringWithFormat:@"%s:%d ||** ",__func__,__LINE__];\
 NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 [EABleConfig writeLog:[logFirstString stringByAppendingString:logString]];\
@@ -106,5 +106,18 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 + (BOOL)checkJLBil;
 + (BOOL)checkEAHisCompress;
 @end
+
+
+
+
+typedef void(^CheckHisResCompleteBlock)(NSArray * _Nullable hisresFiles);
+typedef void(^CheckHisResErrorBlock)(NSError * _Nullable error);
+typedef void(^OTACompleteBlock)(BOOL succ, NSError * _Nullable error);
+typedef void(^UncompressProgressBlock)(CGFloat progress);
+typedef void(^CheckJsonProgressBlock)(CGFloat progress);
+typedef void(^OTAProgressBlock)(CGFloat progress);
+
+typedef void(^EAJieLiOTAResultBlock)  (NSInteger result);
+
 
 NS_ASSUME_NONNULL_END

@@ -32,6 +32,9 @@ const String kEAStopScanWacth = "EAStopScanWacth"; //停止搜索手表
 const String kEAGetWacthStateInfo = "EAGetWacthStateInfo"; //获取手表连接状态信息
 const String kEATest = "EATest"; // Test mode
 const String kEAAGPS = "EAAGPS"; // AGPS
+const String kAddJieLiWatchFace = "AddJieLiWatchFace";
+const String kDeleteJieLiWatchFace = "DeleteJieLiWatchFace";
+const String kGetJieLiWatchFace = "GetJieLiWatchFace";
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -75,6 +78,7 @@ class EASDKTool {
   QueryMotionDataCallback? mQueryMotionDataCallback;
   EACustomWatchfacePreviewImageCallback? mCustomWatchfacePreviewImageCallback;
   JieLiNeedForcedOtaCallback? mJieLiNeedForcedOtaCallback;
+  JieLiWatchFaceCallback? mJieliWatchFaceCallback;
 
   static void addOperationPhoneCallback(
       OperationPhoneCallback operationPhoneCallback) {
@@ -256,6 +260,22 @@ class EASDKTool {
     _channel.invokeMethod(kEAOTA, param);
   }
 
+  void addJieLiWatchFace(
+      String filePath, EAOTAProgressCallback otaProgressCallback) {
+    mOTAProgressCallback = otaProgressCallback;
+    _channel.invokeListMethod(kAddJieLiWatchFace, filePath);
+  }
+
+  void deleteJieLiWatchFace(String filePath, EASetDataCallback dataCallback) {
+    mSetDataCallback = dataCallback;
+    _channel.invokeListMethod(kDeleteJieLiWatchFace, filePath);
+  }
+
+  void getJieLiWatchFace(JieLiWatchFaceCallback jieLiWatchFaceCallback) {
+    mJieliWatchFaceCallback = jieLiWatchFaceCallback;
+    _channel.invokeListMethod(kGetJieLiWatchFace);
+  }
+
   void watchface(EAOTAList otaList, EAOTAProgressCallback otaProgressCallback) {
     mOTAProgressCallback = otaProgressCallback;
     String param = convert.jsonEncode(otaList);
@@ -307,6 +327,31 @@ class EASDKTool {
         //
 
         break;
+      case kAddJieLiWatchFace:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
+        if (mOTAProgressCallback != null) {
+          mOTAProgressCallback!
+              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess);
+        }
+        break;
+      case kDeleteJieLiWatchFace:
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        EARespond respond = EARespond.fromMap(info);
+        if (mSetDataCallback != null) {
+          mSetDataCallback!.onRespond(respond);
+        }
+        break;
+      case kGetJieLiWatchFace:
+        debugPrint("707 dial has been pulled back to Flutter");
+        Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
+        if (mJieliWatchFaceCallback != null) {
+          mJieliWatchFaceCallback!.callback(info);
+        } else {
+          debugPrint("Flutter doesn't set up 707 dial callbacks");
+        }
+        break;
+
       case kArgumentsError:
         String error = methodCall.arguments;
         print("error");

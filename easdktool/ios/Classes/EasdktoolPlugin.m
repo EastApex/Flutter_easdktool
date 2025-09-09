@@ -46,6 +46,12 @@
 #define kEATest                     @"EATest"               // 测试状态
 #define kEAAGPS                     @"EAAGPS"               // AGPS
 
+// 杰里表盘相关
+#define kAddJieLiWatchFace          @"AddJieLiWatchFace"
+#define kDeleteJieLiWatchFace       @"DeleteJieLiWatchFace"
+#define kGetJieLiWatchFace          @"GetJieLiWatchFace"
+
+
 
 
 /// MARK: - invoke method Name
@@ -112,10 +118,6 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     _config = [EABleConfig getDefaultConfig];
     _config.debug = YES;
     _config.canScanAllDevices = YES;
-    _config.openCmdTimeOut = YES;
-    _config.canScanAllDevices = YES;
-    _config.popUpInterface = 0;
-    _config.onlyShowEaWatch = NO;
     [[EABleManager defaultManager] setBleConfig:_config];
     
     [self addNotification];
@@ -843,6 +845,41 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         
         
+    }
+    else if ([call.method isEqualToString:kAddJieLiWatchFace]) {
+           
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        NSLog(@"%@",arguments);
+        
+    }
+    else if ([call.method isEqualToString:kDeleteJieLiWatchFace]) {
+        
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        NSLog(@"%@",arguments);
+        
+    }
+    else if ([call.method isEqualToString:kGetJieLiWatchFace]) {
+        
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        NSLog(@"%@",arguments);
     }
     else{
         

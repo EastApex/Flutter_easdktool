@@ -12,7 +12,7 @@ import com.apex.ax_bluetooth.model.EABleDev;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.been.OtaProgress;
-import com.example.easdktool.jieli_ota.JieliOtaInstance;
+import com.example.easdktool.jieli.ota.JieliOtaInstance;
 
 import android.content.Context;
 

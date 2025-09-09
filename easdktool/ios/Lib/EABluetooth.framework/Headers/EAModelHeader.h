@@ -137,5 +137,9 @@
 #import <EABluetooth/EADataValue.h>
 #import <EABluetooth/EACustomNumberWatchFaceModel.h>
 
+// jie li
+#import <EABluetooth/EAJieLiWacthFace.h>
+
+
 
 #endif /* EAModelHeader_h */
