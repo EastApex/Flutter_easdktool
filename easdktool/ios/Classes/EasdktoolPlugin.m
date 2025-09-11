@@ -5,7 +5,7 @@
 
 
 #define kTimerSec 10
-#define PlugInLog(format,...)  (self.config.debug ?  NSLog(@"[🍀🍀]:- " format, ##__VA_ARGS__) : @"")
+#define kPlugInLog(format,...)  (self.config.debug ?  NSLog(@"SDK[🍀🍀]:- " format, ##__VA_ARGS__) : @"")
 
 
 @interface EasdktoolPlugin()<EABleManagerDelegate>
@@ -19,6 +19,7 @@
 
 @property(nonatomic,strong) EABleConfig *config;
 
+@property(nonatomic,strong) EAFileModel *jlFirmwareFileModel;
 
 @end
 
@@ -144,7 +145,29 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)jlNeedForcedOTA  {
     
-    [_channel invokeMethod:kJieLiNeedForcedOTA arguments:@""];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(connectTimeOut) object:nil];
+
+    if (_jlFirmwareFileModel) {
+        
+        [[EAOTAManager defaultManager] eaUpgradeJLFile:_jlFirmwareFileModel progress:^(CGFloat progress) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
+        } complete:^(BOOL succ, NSError * _Nullable error) {
+            
+            if (succ) {
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+            }
+        }];
+    }
+    else
+    {
+        [_channel invokeMethod:kJieLiNeedForcedOTA arguments:@""];
+    }
     
 }
 
@@ -214,7 +237,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 - (void)showProgress:(NSNotification *)no {
     
-    PlugInLog(@"~~~~~~ showProgress:%@",no.object);
+    kPlugInLog(@"~~~~~~ showProgress:%@",no.object);
     if ([no.object floatValue] < 0) {
         
         [_channel invokeMethod:kProgress arguments:@(-1)];
@@ -229,7 +252,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    PlugInLog(@"call method:%@ , arguments = %@",call.method,call.arguments);
+    kPlugInLog(@"call method:%@ , arguments = %@",call.method,call.arguments);
     if ([call.method isEqualToString:kEALog]) { // FIXME: - log
         
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
@@ -334,10 +357,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 
                 bingingOps.userId = userId;
             }
-            PlugInLog(@"开始绑定");
+            kPlugInLog(@"开始绑定");
             if (ops == EABindingOpsTypeNormalBegin) {
                 
-                PlugInLog(@"绑定中：等待用户点击");
+                kPlugInLog(@"绑定中：等待用户点击");
             }
             WeakSelf;
             [[EABleSendManager defaultManager] operationChangeModel:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
@@ -347,11 +370,11 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     
                     if (respondModel.eErrorCode == EARespondCodeTypeSuccess) {
                         
-                        PlugInLog(@"绑定中：用户点击 ✅");
+                        kPlugInLog(@"绑定中：用户点击 ✅");
                         bingingOps.ops = EABindingOpsTypeEnd;
                         [[EABleSendManager defaultManager] operationChangeModel:bingingOps respond:^(EARespondModel * _Nonnull respondModel) {
                             
-                            PlugInLog(@"绑定结束");
+                            kPlugInLog(@"绑定结束");
                             [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                             
                             
@@ -360,19 +383,19 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                             ops.deviceOpsStatus = EADeviceOpsStatusExecute;
                             [[EABleSendManager defaultManager] operationChangeModel:ops respond:^(EARespondModel * _Nonnull respondModel) {
                                 
-                                PlugInLog(@"弹窗 iOS配对");
+                                kPlugInLog(@"弹窗 iOS配对");
                                 [selfWeak setWatchRespondWithDataType:EADataInfoTypeDeviceOps respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                             }];
                         }];
                     }else {
                         
-                        PlugInLog(@"绑定中：用户点击 ❎");
+                        kPlugInLog(@"绑定中：用户点击 ❎");
                         [[EABleManager defaultManager] disconnectAndNotReConnectPeripheral];
-                        PlugInLog(@"绑定结束");
+                        kPlugInLog(@"绑定结束");
                     }
                 }else {
                     
-                    PlugInLog(@"绑定结束");
+                    kPlugInLog(@"绑定结束");
                     [selfWeak setWatchRespondWithDataType:EADataInfoTypeBinding respondCodeType:(respondModel.eErrorCode == EARespondCodeTypeSuccess)?0:1];
                     if (respondModel.eErrorCode == EARespondCodeTypeFail) {
                         
@@ -734,6 +757,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
+
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
         // 判断设置类型
         if (![self checkArgumentName:@"otas" inArguments:arguments]) {
@@ -760,10 +784,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
-        //        BOOL isSupportGPS = [call.arguments boolValue];
-        ////        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        ////        BOOL isSupportGPS = [[arguments objectForKey:@"isSupportGPS"] boolValue];
-        //        if (isSupportGPS) {
+ 
         
         [[EAOTAManager defaultManager] eaUpgradeAGPSProgress:^(CGFloat progress) {
             
@@ -782,7 +803,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         }];
         //        }
     }
-    else if ([call.method isEqualToString:kEACustomWatchface]) {
+    
+    else if ([call.method isEqualToString:kEACustomWatchface]) { // FIXME: - 自定义表盘
         
         // 判断断连
         if (![EABleManager defaultManager].isConnected) {
@@ -790,6 +812,13 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
+        
+        if ([EABleManager defaultManager].eaPeripheralModel.typeOfOTA == 1) {
+            
+            [_channel invokeMethod:kArgumentsError arguments:@"not support this function"];
+            return;
+        }
+        
         NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
         
         NSString *bgImagePath = arguments[@"bgImagePath"];
@@ -819,11 +848,21 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             }
             else
             {
-                //                [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color];
                 [EAMakeWatchFaceManager eaOtaDefaultNumberWatchFaceWithImage:bgImage color:color watchFaceId:@"" progress:^(CGFloat progress) {
+                    
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
                     
                 } complete:^(BOOL succ, NSError * _Nullable error) {
                     
+                    if (succ) {
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+                    }
+                    else
+                    {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+                    }
                 }];
             }
         }
@@ -837,8 +876,19 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             {
                 [EAMakeWatchFaceManager eaOtaDefaultPointerWatchFaceWithImage:bgImage colorType:(pointerColorType == 0 ? EACWFTimerColorTypeBlack : EACWFTimerColorTypeWhite) watchFaceId:@"" progress:^(CGFloat progress) {
                     
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
+                    
                 } complete:^(BOOL succ, NSError * _Nullable error) {
                     
+                    if (succ) {
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+                    }
+                    else
+                    {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+                    }
                 }];
             }
         }
@@ -846,19 +896,81 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         
     }
-    else if ([call.method isEqualToString:kAddJieLiWatchFace]) {
+    else if ([call.method isEqualToString:kAddJieLiWatchFace]) { // FIXME: - 杰里707 添加表盘
            
+        WeakSelf
         // 判断断连
         if (![EABleManager defaultManager].isConnected) {
             
             [self loseConnect];
             return;
         }
-        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        NSLog(@"%@",arguments);
+        NSString *filePath = call.arguments;
+        EAFileModel *fileModel = [EAFileModel eaInitJlWatchFaceFileWithPath:filePath];
+        [[EAOTAManager defaultManager] eaUpgradeWatchFaceFile:fileModel progress:^(CGFloat progress) {
+            
+            NSDictionary *info = @{
+                @"progress":@(progress),
+                @"isSuccess":@(NO)
+            };
+            [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+         
+            
+        } complete:^(BOOL succ, NSError * _Nullable error) {
+            
+            if (succ) {
+                
+                NSDictionary *info = @{
+                    @"isSuccess":@(YES)
+                };
+                [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+            
+            }
+            else
+            {
+                
+                NSDictionary *info = @{
+                    @"isSuccess":@(NO),
+                    @"errorType":@(error.code),
+                    @"error":[error.domain isNotBlank]?error.domain:@""
+                };
+                [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+                
+            }
+        }];
+    }
+    else if ([call.method isEqualToString:kDeleteJieLiWatchFace]) { // FIXME: - 杰里707 删除表盘
+        
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        NSString *wfName = call.arguments;
+        if (![wfName isNotBlank]) {
+            
+            [_channel invokeMethod:kArgumentsError arguments:@"Pls write dail name"];
+            return;
+        }
+        
+        WeakSelf
+        [EAJieLiWacthFace eaDelWatchFace:wfName complete:^(BOOL succ, NSError * _Nonnull error) {
+           
+            if (error) {
+                
+                kPlugInLog(@"%@",error.domain);
+            }
+            int respondCodeType = (succ)?0:1;
+            NSDictionary *info = @{
+                @"respondCodeType":@(respondCodeType),
+            };
+            [selfWeak.channel invokeMethod:kDeleteJieLiWatchFace arguments:[info modelToJSONString]];
+        }];
+        
         
     }
-    else if ([call.method isEqualToString:kDeleteJieLiWatchFace]) {
+    else if ([call.method isEqualToString:kGetJieLiWatchFace]) {// FIXME: - 杰里707 获取表盘
         
         // 判断断连
         if (![EABleManager defaultManager].isConnected) {
@@ -866,20 +978,28 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
             [self loseConnect];
             return;
         }
-        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        NSLog(@"%@",arguments);
-        
-    }
-    else if ([call.method isEqualToString:kGetJieLiWatchFace]) {
-        
-        // 判断断连
-        if (![EABleManager defaultManager].isConnected) {
-            
-            [self loseConnect];
-            return;
-        }
-        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
-        NSLog(@"%@",arguments);
+      
+        WeakSelf
+        [EAJieLiWacthFace eaGetWatchFaceList:^(NSArray * _Nonnull wfNames, NSError * _Nonnull error) {
+           
+            if (error) {
+                
+                NSDictionary *info = @{
+                    @"isSuccess":@(NO),
+                    @"errorType":@(error.code),
+                    @"error":[error.domain isNotBlank]?error.domain:@""
+                };
+                [selfWeak.channel invokeMethod:kGetJieLiWatchFace arguments:[info modelToJSONString]];
+            }
+            else
+            {
+                
+                NSDictionary *info = @{
+                    @"value":[wfNames modelToJSONString],
+                };
+                [selfWeak.channel invokeMethod:kGetJieLiWatchFace arguments:[info modelToJSONString]];
+            }
+        }];
     }
     else{
         
@@ -985,6 +1105,9 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     // OTA
     NSMutableArray *models = [NSMutableArray new];
     
+    
+    _jlFirmwareFileModel = nil;
+    
     BOOL isWatchFace = NO;
     
     for (NSDictionary *item in otas) {
@@ -999,7 +1122,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         if (data.length == 0) {
             
             [_channel invokeMethod:kProgress arguments:@(-1)];
-            PlugInLog(@"The data is null in binPath!");
+            kPlugInLog(@"The data is null in binPath!");
             return;
         }
         if (otaType == 1) {
@@ -1023,11 +1146,35 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         else if (otaType == 5) {
             
             otaType = EAOtaRequestTypeJLFirmware;
+            
+            _jlFirmwareFileModel = [EAFileModel eaInitJlFirmwareFileWithPath:binPath];
         }
         //        EAFileModel *fileModel = [EAFileModel allocInitWithPath:binPath otaType:otaType version:version];
         EAFileModel *fileModel = [EAFileModel eaInitWithPath:binPath otaType:otaType version:version];
         [models addObject:fileModel];
     }
+    
+    
+    if (_jlFirmwareFileModel) {
+        
+        [[EAOTAManager defaultManager] eaUpgradeJLFile:_jlFirmwareFileModel progress:^(CGFloat progress) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:progress] userInfo:nil];
+        } complete:^(BOOL succ, NSError * _Nullable error) {
+            
+            if (succ) {
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+            }
+        }];
+        
+        return;
+    }
+    
     
     
     if (models.count > 0) {
@@ -1140,7 +1287,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
 }
 
 - (void)showFail {
-    PlugInLog(@"~~~~~~ method:showFail");
+    kPlugInLog(@"~~~~~~ method:showFail");
     WeakSelf
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -1182,7 +1329,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&err];
     if(err){
-        PlugInLog(@"json解析失败：%@",err);
+        kPlugInLog(@"json解析失败：%@",err);
         return nil;
     }
     return dic;

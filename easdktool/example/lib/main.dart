@@ -93,8 +93,8 @@ class ConnectListener implements EABleConnectListener {
 
             easdkTool.bindingWatch(bindInfo,
                 EABindingWatchCallback(onRespond: ((respond) {
-                  print('binding response  ${respond.respondCodeType}');
-                })));
+              print('binding response  ${respond.respondCodeType}');
+            })));
           } else {
             // XWatch.xWatchConnectionListener?.deviceConnected();
             // easdkTool.disConnectWatch();
@@ -188,12 +188,13 @@ class _MyAppState extends State<MyApp> {
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
-            // After receiving this message,
-            // the developer needs to continue sending the OTA package to the watch
-            // and re-call the otaUpgrade() method for OTA.
-            print(
-                'After receiving this message, the developer needs to continue sending the OTA package to the watch and re-call the otaUpgrade() method for OTA.');
-          }));
+        // After receiving this message,
+        // the developer needs to continue sending the OTA package to the watch
+        // and re-call the otaUpgrade() method for OTA.
+
+        print(
+            'After receiving this message, the developer needs to continue sending the OTA package to the watch and re-call the otaUpgrade() method for OTA.');
+      }));
     }
 
     /// 打开 SDKLog
@@ -203,7 +204,7 @@ class _MyAppState extends State<MyApp> {
 
     // ///搜索手表
     // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-    //   print(connectParam.name + "🍀🍀🍀" + connectParam.snNumber);
+    //   print(connectParam.name + "🍀🍀" + connectParam.snNumber);
     //   print("");
     //   print(connectParam.uuid);
     //   print("");
@@ -213,7 +214,7 @@ class _MyAppState extends State<MyApp> {
   void operationPhoneListener(Map info) {
     ///  Check whether info["opePhoneType"] belongs to EAOpePhoneType and perform the corresponding operation
     /// 【判断 info["opePhoneType"] 是属于EAOpePhoneType的哪一个，做对应的操作】
-    print("🍀🍀🍀");
+    print("🍀🍀:operationPhoneListener");
     print(info);
   }
 
@@ -241,7 +242,7 @@ class _MyAppState extends State<MyApp> {
         channelId: 'foreground_service',
         channelName: 'Foreground Service Notification',
         channelDescription:
-        'This notification appears when the foreground service is running.',
+            'This notification appears when the foreground service is running.',
         onlyAlertOnce: true,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
@@ -305,10 +306,10 @@ class _MyAppState extends State<MyApp> {
   void secondMethodSetWatchData(int dataType, Map map) {
     secondEasdkTool.setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-          print(respond.respondCodeType.toString() +
-              '设置的数据类型:' +
-              respond.dataType.toString());
-        })));
+      print(respond.respondCodeType.toString() +
+          '设置的数据类型:' +
+          respond.dataType.toString());
+    })));
   }
 
   void getBigWatchData() {
@@ -383,7 +384,7 @@ class _MyAppState extends State<MyApp> {
         case kEADataInfoTypeStepFreqData: // stride frequency
           for (Map<String, dynamic> item in list) {
             EABigDataStrideFrequency model =
-            EABigDataStrideFrequency.fromMap(item);
+                EABigDataStrideFrequency.fromMap(item);
             print(model.timeStamp);
           }
           break;
@@ -396,7 +397,7 @@ class _MyAppState extends State<MyApp> {
         case kEADataInfoTypeRestingHeartRateData: //resting heart rate
           for (Map<String, dynamic> item in list) {
             EABigDataRestingHeartRate model =
-            EABigDataRestingHeartRate.fromMap(item);
+                EABigDataRestingHeartRate.fromMap(item);
             print(model.timeStamp);
           }
           break;
@@ -415,7 +416,7 @@ class _MyAppState extends State<MyApp> {
         case EADataInfoTypeSportHrData: //  Sport heart rate
           for (Map<String, dynamic> item in list) {
             EABigDataSportHeartRate model =
-            EABigDataSportHeartRate.fromMap(item);
+                EABigDataSportHeartRate.fromMap(item);
             print(model.hrValue);
           }
           break;
@@ -445,18 +446,12 @@ class _MyAppState extends State<MyApp> {
     DateTime dateTime = DateTime.now();
 
     ///如果是十三位时间戳返回这个
-    if (timestamp
-        .toString()
-        .length == 13) {
+    if (timestamp.toString().length == 13) {
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    } else if (timestamp
-        .toString()
-        .length == 16) {
+    } else if (timestamp.toString().length == 16) {
       ///如果是十六位时间戳
       dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
-    } else if (timestamp
-        .toString()
-        .length == 10) {
+    } else if (timestamp.toString().length == 10) {
       ///如果是十位时间戳
       dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     }
@@ -482,7 +477,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeBlacklight:
         {
           EAScreenBrightness eaScreenBrightness =
-          EAScreenBrightness.fromMap(value);
+              EAScreenBrightness.fromMap(value);
           print(eaScreenBrightness.level);
         }
         break;
@@ -495,7 +490,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeGesturesSetting:
         {
           EAScreenGesturesSetting eaScreenBrightness =
-          EAScreenGesturesSetting.fromMap(value);
+              EAScreenGesturesSetting.fromMap(value);
           print(eaScreenBrightness.beginHour);
         }
         break;
@@ -551,14 +546,14 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeAutoCheckHeartRate:
         {
           EAAutoCheckHeartRate eaAutoCheckHeartRate =
-          EAAutoCheckHeartRate.fromMap(value);
+              EAAutoCheckHeartRate.fromMap(value);
           print(eaAutoCheckHeartRate.interval);
         }
         break;
       case kEADataInfoTypeAutoCheckSedentariness:
         {
           EAAutoCheckSedentariness eaAutoCheckSedentariness =
-          EAAutoCheckSedentariness.fromMap(value);
+              EAAutoCheckSedentariness.fromMap(value);
           print(eaAutoCheckSedentariness.stepThreshold);
         }
         break;
@@ -577,21 +572,21 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeHeartRateWaringSetting:
         {
           EAHeartRateWaringSetting eaHeartRateWaringSetting =
-          EAHeartRateWaringSetting.fromMap(value);
+              EAHeartRateWaringSetting.fromMap(value);
           print(eaHeartRateWaringSetting.maxHr);
         }
         break;
       case kEADataInfoTypeCaloriesSetting:
         {
           EACaloriesSetting eaCaloriesSetting =
-          EACaloriesSetting.fromMap(value);
+              EACaloriesSetting.fromMap(value);
           print(eaCaloriesSetting.sw);
         }
         break;
       case kEADataInfoTypeWatchSettingInfo:
         {
           EAWatchSettingInfo eaWatchSettingInfo =
-          EAWatchSettingInfo.fromMap(value);
+              EAWatchSettingInfo.fromMap(value);
           print(eaWatchSettingInfo.wfId);
         }
         break;
@@ -616,7 +611,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeBlePairState:
         {
           EAWatchPairStateModel sportShowData =
-          EAWatchPairStateModel.fromMap(value);
+              EAWatchPairStateModel.fromMap(value);
           print(sportShowData.secState);
         }
         break;
@@ -645,14 +640,14 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeReadTelephoneBook:
         {
           EAReadTelephoneBook readTelephoneBook =
-          EAReadTelephoneBook.formMap(value);
+              EAReadTelephoneBook.formMap(value);
           print(readTelephoneBook);
         }
         break;
       case kEADataInfoTypeBloodOxygenMonitor:
         {
           EABloodOxygenMonitor bloodOxygenMonitor =
-          EABloodOxygenMonitor.fromMap(value);
+              EABloodOxygenMonitor.fromMap(value);
           print(bloodOxygenMonitor.interval);
         }
         break;
@@ -665,23 +660,23 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeVibrateIntensity:
         {
           EAVibrateIntensity vibrateIntensity =
-          EAVibrateIntensity.fromMap(value);
+              EAVibrateIntensity.fromMap(value);
           print(vibrateIntensity);
         }
         break;
       case kEADataInfoTypeMenstrualReminder:
         {
           EAMenstrualReminder menstrualReminder =
-          EAMenstrualReminder.fromMap(value);
+              EAMenstrualReminder.fromMap(value);
           print(menstrualReminder);
         }
         break;
-    // case kEADataInfoTypeSportHrWarning:
-    //   {
-    //     EASportHrWarning sportHrWarning = EASportHrWarning.fromMap(value);
-    //     print(sportHrWarning);
-    //   }
-    //   break;
+      // case kEADataInfoTypeSportHrWarning:
+      //   {
+      //     EASportHrWarning sportHrWarning = EASportHrWarning.fromMap(value);
+      //     print(sportHrWarning);
+      //   }
+      //   break;
       default:
         break;
     }
@@ -735,14 +730,14 @@ class _MyAppState extends State<MyApp> {
   void setWatchData(int dataType, Map map) {
     EASDKTool().setWatchData(dataType, map,
         EASetDataCallback(onRespond: ((respond) {
-          print(respond.respondCodeType.toString() +
-              "设置的数据类型:" +
-              respond.dataType.toString());
-        })));
+      print(respond.respondCodeType.toString() +
+          "设置的数据类型:" +
+          respond.dataType.toString());
+    })));
   }
 
-  void firstMethodGetWatchData(int dataType,
-      EAGetDataCallback getetDataCallback) {
+  void firstMethodGetWatchData(
+      int dataType, EAGetDataCallback getetDataCallback) {
     /***
         if (LocalPlatform().isAndroid) {
         eaGetDataCallback = getetDataCallback;
@@ -758,8 +753,8 @@ class _MyAppState extends State<MyApp> {
     // }
   }
 
-  void firstMethodSetWatchData(int dataType, Map map,
-      EASetDataCallback setDataCallback, int action) {
+  void firstMethodSetWatchData(
+      int dataType, Map map, EASetDataCallback setDataCallback, int action) {
     /**
         if (LocalPlatform().isAndroid) {
         eaSetDataCallback = setDataCallback;
@@ -843,8 +838,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '3.Get watch screen brightness【获取手表屏幕亮度】'),
+                child: TextView('3.Get watch screen brightness【获取手表屏幕亮度】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeBlacklight);
                 },
@@ -862,22 +856,19 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '6.Obtain the device unit system【设备单位制度】'),
+                child: TextView('6.Obtain the device unit system【设备单位制度】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeUnifiedUnit);
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '7.Obtain the DND period【获取手表免打扰时间段】'),
+                child: TextView('7.Obtain the DND period【获取手表免打扰时间段】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeNotDisturb);
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '8.Obtain the daily target value【获取手表日常目标值】'),
+                child: TextView('8.Obtain the daily target value【获取手表日常目标值】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeDailyGoal);
                 },
@@ -897,8 +888,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '11.Get watch sedentary monitoring【获取手表久坐监测】'),
+                child: TextView('11.Get watch sedentary monitoring【获取手表久坐监测】'),
                 onTap: () {
                   secondMethodGetWatchData(
                       kEADataInfoTypeAutoCheckSedentariness);
@@ -919,8 +909,7 @@ class _MyAppState extends State<MyApp> {
               ),
               GestureDetector(
                 child:
-                TextView(
-                    '14.Get heart rate alarm threshold【获取手表心率报警门限】'),
+                    TextView('14.Get heart rate alarm threshold【获取手表心率报警门限】'),
                 onTap: () {
                   secondMethodGetWatchData(
                       kEADataInfoTypeHeartRateWaringSetting);
@@ -964,8 +953,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '21.Get the first-level menu【获取手表一级菜单】'),
+                child: TextView('21.Get the first-level menu【获取手表一级菜单】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeHomePage);
                 },
@@ -985,7 +973,7 @@ class _MyAppState extends State<MyApp> {
               ),
               GestureDetector(
                 child:
-                TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
+                    TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeHabitTracker);
                 },
@@ -1009,23 +997,20 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '28.Obtain App notifications 【获取App消息推送】'),
+                child: TextView('28.Obtain App notifications 【获取App消息推送】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeAppMessage);
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '29.read monitor reminder event 【提醒事件监测（读取）】'),
+                child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
                 onTap: () {
                   secondMethodGetWatchData2(kEADataInfoTypeMonitorReminder,
                       EAMonitorReminderType.drink.index);
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '30.Save motion data to database【保存运动数据到数据库】'),
+                child: TextView('30.Save motion data to database【保存运动数据到数据库】'),
                 onTap: () {
                   //1 为保存,0为步保存
                   secondEasdkTool.saveData2DB(1);
@@ -1037,8 +1022,8 @@ class _MyAppState extends State<MyApp> {
                   //1 为保存,0为步保存
                   secondEasdkTool.queryMotionData(QueryType.daily_data,
                       QueryMotionDataCallback(((info) {
-                        showMotionData(info);
-                      })));
+                    showMotionData(info);
+                  })));
                 },
               ),
               GestureDetector(
@@ -1048,15 +1033,13 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: NewTextView(
-                    '33.Get Watch Address Book 【获取手表通讯录】'),
+                child: NewTextView('33.Get Watch Address Book 【获取手表通讯录】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeReadTelephoneBook);
                 },
               ),
               GestureDetector(
-                child: NewTextView(
-                    '34.Blood oxygen monitoring data【血氧监测数据】'),
+                child: NewTextView('34.Blood oxygen monitoring data【血氧监测数据】'),
                 onTap: () {
                   secondMethodGetWatchData(kEADataInfoTypeBloodOxygenMonitor);
                 },
@@ -1099,10 +1082,9 @@ class _MyAppState extends State<MyApp> {
                   firstMethodSetWatchData(
                       kEADataInfoTypeUser, personInfo.toMap(),
                       EASetDataCallback(onRespond: (onRespond) {
-                        print(
-                            "set data,The first method is to get the callback" +
-                                onRespond.respondCodeType.toString());
-                      }), 2);
+                    print("set data,The first method is to get the callback" +
+                        onRespond.respondCodeType.toString());
+                  }), 2);
                 },
               ),
               GestureDetector(
@@ -1143,8 +1125,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '4.Set the watch unit-british【设置手表单位-MI】'),
+                child: TextView('4.Set the watch unit-british【设置手表单位-MI】'),
                 onTap: () {
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.british;
@@ -1184,7 +1165,7 @@ class _MyAppState extends State<MyApp> {
                     '7.Set up automatic heart rate monitoring【设置自动心率监测】'),
                 onTap: () {
                   EAAutoCheckHeartRate autoCheckHeartRate =
-                  EAAutoCheckHeartRate(15);
+                      EAAutoCheckHeartRate(15);
                   secondMethodSetWatchData(kEADataInfoTypeAutoCheckHeartRate,
                       autoCheckHeartRate.toMap());
                 },
@@ -1193,7 +1174,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('8.Set sedentary monitoring【设置久坐监测】'),
                 onTap: () {
                   EAAutoCheckSedentariness autoCheckSedentariness =
-                  EAAutoCheckSedentariness();
+                      EAAutoCheckSedentariness();
                   autoCheckSedentariness.beginHour = 8;
                   autoCheckSedentariness.endHour = 22;
                   autoCheckSedentariness.stepThreshold = 100;
@@ -1236,8 +1217,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '10.Set the alarm and remind time【设置闹钟、提醒时间】'),
+                child: TextView('10.Set the alarm and remind time【设置闹钟、提醒时间】'),
                 onTap: () {
                   /** Note:【注意事项：】
                    * 【id_p】：edit, delete only need to assign, edit, delete the corresponding reminder.【编辑、删除才需要赋值，编辑、删除对应的提醒。】
@@ -1280,11 +1260,10 @@ class _MyAppState extends State<MyApp> {
               ),
               GestureDetector(
                 child:
-                TextView(
-                    '11.Set the heart rate alarm threshold【设置心率报警门限】'),
+                    TextView('11.Set the heart rate alarm threshold【设置心率报警门限】'),
                 onTap: () {
                   EAHeartRateWaringSetting heartRateWaringSetting =
-                  EAHeartRateWaringSetting(1, 160, 40);
+                      EAHeartRateWaringSetting(1, 160, 40);
                   secondMethodSetWatchData(
                       kEADataInfoTypeHeartRateWaringSetting,
                       heartRateWaringSetting.toMap());
@@ -1296,7 +1275,7 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   // 全天开启
                   EAScreenGesturesSetting screenGesturesSetting =
-                  EAScreenGesturesSetting.allDay();
+                      EAScreenGesturesSetting.allDay();
                   secondMethodSetWatchData(kEADataInfoTypeGesturesSetting,
                       screenGesturesSetting.toMap());
                 },
@@ -1402,13 +1381,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('19.Set social switch【社交提醒开关】'),
                 onTap: () {
                   EASocialSwitch eaSocialSwitch = EASocialSwitch.init(
-                      1,
-                      1,
-                      1,
-                      1,
-                      1,
-                      1,
-                      EARemindActionType.LongShortVibration);
+                      1, 1, 1, 1, 1, 1, EARemindActionType.LongShortVibration);
                   secondMethodSetWatchData(
                       kEADataInfoTypeSocialSwitch, eaSocialSwitch.toMap());
                 },
@@ -1448,9 +1421,9 @@ class _MyAppState extends State<MyApp> {
                 child: NewTextView('22.Set telephone book【同步通讯录】'),
                 onTap: () {
                   EAContactModel eaContactModel =
-                  EAContactModel("Tony", "+011125128");
+                      EAContactModel("Tony", "+011125128");
                   EAContactModel eaContactModel2 =
-                  EAContactModel("Lily", "+018461382");
+                      EAContactModel("Lily", "+018461382");
                   EATelephoneBook eaTelephoneBook = EATelephoneBook();
                   eaTelephoneBook.contacts = [eaContactModel, eaContactModel2];
                   secondMethodSetWatchData(
@@ -1461,7 +1434,7 @@ class _MyAppState extends State<MyApp> {
                 child: NewTextView('23.Set Blood Oxygen Monitor【设置血氧监测】'),
                 onTap: () {
                   EABloodOxygenMonitor eaBloodOxygenMonitor =
-                  EABloodOxygenMonitor(0, 60);
+                      EABloodOxygenMonitor(0, 60);
 
                   secondMethodSetWatchData(kEADataInfoTypeBloodOxygenMonitor,
                       eaBloodOxygenMonitor.toMap());
@@ -1480,7 +1453,7 @@ class _MyAppState extends State<MyApp> {
                 child: NewTextView('25.Set VibrateIntensity【设置震动】'),
                 onTap: () {
                   EAVibrateIntensity eaVibrateIntensity =
-                  EAVibrateIntensity(EAVibrateIntensityType.Medium);
+                      EAVibrateIntensity(EAVibrateIntensityType.Medium);
 
                   secondMethodSetWatchData(kEADataInfoTypeVibrateIntensity,
                       eaVibrateIntensity.toMap());
@@ -1490,7 +1463,7 @@ class _MyAppState extends State<MyApp> {
                 child: NewTextView('25.Set Menstrual Reminder【经期提醒】'),
                 onTap: () {
                   EAMenstrualReminder eaMenstrualReminder =
-                  EAMenstrualReminder();
+                      EAMenstrualReminder();
                   eaMenstrualReminder.menstrualBeginSw = true;
                   eaMenstrualReminder.menstrualReminderDaysBefore = 1;
                   eaMenstrualReminder.menstrualReminderHours = 9;
@@ -1513,8 +1486,7 @@ class _MyAppState extends State<MyApp> {
               TitleView(' Getting big data【获取大数据】'),
               GestureDetector(
                 child:
-                TextView(
-                    'Send a request to obtain big data 【发送获取大数据请求】'),
+                    TextView('Send a request to obtain big data 【发送获取大数据请求】'),
                 onTap: () {
                   /**
                    * 返回所有的大数据，手表会自动清除已返回的大数据
@@ -1576,8 +1548,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               GestureDetector(
-                child: TextView(
-                    '4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
+                child: TextView('4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
                 onTap: () {
                   secondEasdkTool.operationWatch(
                       EAOperationWatchType.ShowiPhonePairingAlert,
@@ -1667,7 +1638,7 @@ class _MyAppState extends State<MyApp> {
                   bool isJL707 = true;
                   if (isJL707) {
                     var bytes = await rootBundle
-                        .load("assets/bin/002086_AP0.1B8.1.ufw");
+                        .load("assets/bin/002086_AP0.1B4.3_quick.ufw");
                     String path = (await getApplicationSupportDirectory()).path;
                     String filePath =
                         '$path/' + DateTime.now().toString() + '.ufw';
@@ -1676,29 +1647,29 @@ class _MyAppState extends State<MyApp> {
                         bytes.offsetInBytes, bytes.lengthInBytes));
 
                     EAOTA dialOTA =
-                    EAOTA(filePath, EAFirmwareType.JL_firmware, "");
+                        EAOTA(filePath, EAFirmwareType.JL_firmware, "");
                     EAOTAList eaList = EAOTAList(0, [dialOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
                         EAOTAProgressCallback((progress, isSuccess) {
-                          print("OTA progress:" +
-                              progress.toString() +
-                              ",ota result:" +
-                              isSuccess.toString());
-                          if (progress == -1) {
-                            // transmit data fail;
-                          } else if (progress == 100) {
-                            if (isSuccess) {
-                              // transmit data succ;
-                            } else {
-                              // transmit data progress
-                            }
-                          } else {
-                            // transmit data progress
-                          }
-                        }));
+                      print("OTA progress:" +
+                          progress.toString() +
+                          ",ota result:" +
+                          isSuccess.toString());
+                      if (progress == -1) {
+                        // transmit data fail;
+                      } else if (progress == 100) {
+                        if (isSuccess) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+                        }
+                      } else {
+                        // transmit data progress
+                      }
+                    }));
                   } else {
                     var bytes9 =
-                    await rootBundle.load("assets/bin/002083_R0.6.bin");
+                        await rootBundle.load("assets/bin/002083_R0.6.bin");
                     String path9 =
                         (await getApplicationSupportDirectory()).path;
                     String filePath9 =
@@ -1717,27 +1688,27 @@ class _MyAppState extends State<MyApp> {
                     await File(filePath).writeAsBytes(buffer.asUint8List(
                         bytes.offsetInBytes, bytes.lengthInBytes));
                     EAOTA appoloOTA =
-                    EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
+                        EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
 
                     EAOTAList eaList = EAOTAList(0, [resOTA, appoloOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
                         EAOTAProgressCallback((progress, isSuccess) {
-                          print("OTA progress:" +
-                              progress.toString() +
-                              ",ota result:" +
-                              isSuccess.toString());
-                          if (progress == -1) {
-                            // transmit data fail;
-                          } else if (progress == 100) {
-                            if (isSuccess) {
-                              // transmit data succ;
-                            } else {
-                              // transmit data progress
-                            }
-                          } else {
-                            // transmit data progress
-                          }
-                        }));
+                      print("OTA progress:" +
+                          progress.toString() +
+                          ",ota result:" +
+                          isSuccess.toString());
+                      if (progress == -1) {
+                        // transmit data fail;
+                      } else if (progress == 100) {
+                        if (isSuccess) {
+                          // transmit data succ;
+                        } else {
+                          // transmit data progress
+                        }
+                      } else {
+                        // transmit data progress
+                      }
+                    }));
                   }
                 },
               ),
@@ -1745,7 +1716,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.watch face【表盘】'),
                 onTap: () async {
                   var bytes =
-                  await rootBundle.load("assets/bin/watchface_U38.bin");
+                      await rootBundle.load("assets/bin/watchface_U38.bin");
                   String path = (await getApplicationSupportDirectory()).path;
                   String filePath =
                       '$path/' + DateTime.now().toString() + '.bin';
@@ -1758,22 +1729,22 @@ class _MyAppState extends State<MyApp> {
                   EAOTAList eaList = EAOTAList(1, [watchfaceOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress, isSuccess) {
-                        print("OTA progress:" +
-                            progress.toString() +
-                            ",ota result:" +
-                            isSuccess.toString());
-                        if (progress == -1) {
-                          // transmit data fail;
-                        } else if (progress == 100) {
-                          if (isSuccess) {
-                            // transmit data succ;
-                          } else {
-                            // transmit data progress
-                          }
-                        } else {
-                          // transmit data progress
-                        }
-                      }));
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               GestureDetector(
@@ -1802,39 +1773,37 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('4.add 707watch face【添加707表盘】'),
                 onTap: () async {
-                  var bytes =
-                  await rootBundle.load("assets/bin/watch999");
+                  var bytes = await rootBundle.load("assets/bin/watch999");
                   String path = (await getApplicationSupportDirectory()).path;
-                  String filePath =
-                      '$path/' + "watch999";
+                  String filePath = '$path/' + "watch999";
                   final buffer = bytes.buffer;
                   await File(filePath).writeAsBytes(buffer.asUint8List(
                       bytes.offsetInBytes, bytes.lengthInBytes));
                   secondEasdkTool.addJieLiWatchFace(filePath,
                       EAOTAProgressCallback((progress, isSuccess) {
-                        print("OTA progress:" +
-                            progress.toString() +
-                            ",ota result:" +
-                            isSuccess.toString());
-                        if (progress == -1) {
-                          // transmit data fail;
-                        } else if (progress == 100) {
-                          if (isSuccess) {
-                            // transmit data succ;
-                          } else {
-                            // transmit data progress
-                          }
-                        } else {
-                          // transmit data progress
-                        }
-                      }));
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               GestureDetector(
                 child: NewTextView('5.delete 707watch face【删除707表盘】'),
                 onTap: () async {
                   secondEasdkTool.deleteJieLiWatchFace(
-                      "", EASetDataCallback(onRespond: (onRespond) {}));
+                      "WATCH86", EASetDataCallback(onRespond: (onRespond) {}));
                 },
               ),
               GestureDetector(
@@ -1849,12 +1818,11 @@ class _MyAppState extends State<MyApp> {
                     for (Map<String, dynamic> item in list) {
                       JieliWatchFace model = JieliWatchFace.fromMap(item);
                       print(model.name);
-                      if(model!=null) {//delete dial
-                        secondEasdkTool.deleteJieLiWatchFace(
-                            model.path??"",
+                      if (model != null) {
+                        //delete dial
+                        secondEasdkTool.deleteJieLiWatchFace(model.path ?? "",
                             EASetDataCallback(onRespond: (onRespond) {}));
                       }
-
                     }
                   }));
                 },
@@ -1873,9 +1841,9 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.getPreviewImage = true;
                   secondEasdkTool
                       .getCustomWatchfacePreviewImage(customWatchFace,
-                      EACustomWatchfacePreviewImageCallback((previewImage) {
-                        print(previewImage);
-                      }));
+                          EACustomWatchfacePreviewImageCallback((previewImage) {
+                    print(previewImage);
+                  }));
                 },
               ),
               GestureDetector(
@@ -1891,22 +1859,22 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
                       EAOTAProgressCallback((progress, isSuccess) {
-                        print("OTA progress:" +
-                            progress.toString() +
-                            ",ota result:" +
-                            isSuccess.toString());
-                        if (progress == -1) {
-                          // transmit data fail;
-                        } else if (progress == 100) {
-                          if (isSuccess) {
-                            // transmit data succ;
-                          } else {
-                            // transmit data progress
-                          }
-                        } else {
-                          // transmit data progress
-                        }
-                      }));
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               GestureDetector(
@@ -1922,9 +1890,9 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.getPreviewImage = true;
                   secondEasdkTool
                       .getCustomWatchfacePreviewImage(customWatchFace,
-                      EACustomWatchfacePreviewImageCallback((previewImage) {
-                        print(previewImage);
-                      }));
+                          EACustomWatchfacePreviewImageCallback((previewImage) {
+                    print(previewImage);
+                  }));
                 },
               ),
               GestureDetector(
@@ -1939,22 +1907,22 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
                       EAOTAProgressCallback((progress, isSuccess) {
-                        print("OTA progress:" +
-                            progress.toString() +
-                            ",ota result:" +
-                            isSuccess.toString());
-                        if (progress == -1) {
-                          // transmit data fail;
-                        } else if (progress == 100) {
-                          if (isSuccess) {
-                            // transmit data succ;
-                          } else {
-                            // transmit data progress
-                          }
-                        } else {
-                          // transmit data progress
-                        }
-                      }));
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               TitleView('  unbindWatch【解绑】'),
@@ -2036,7 +2004,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeStepFreqData: // stride frequency
         for (Map<String, dynamic> item in list) {
           EABigDataStrideFrequency model =
-          EABigDataStrideFrequency.fromMap(item);
+              EABigDataStrideFrequency.fromMap(item);
           print(model.timeStamp);
         }
         break;
@@ -2049,7 +2017,7 @@ class _MyAppState extends State<MyApp> {
       case kEADataInfoTypeRestingHeartRateData: //resting heart rate
         for (Map<String, dynamic> item in list) {
           EABigDataRestingHeartRate model =
-          EABigDataRestingHeartRate.fromMap(item);
+              EABigDataRestingHeartRate.fromMap(item);
           print(model.timeStamp);
         }
         break;

@@ -3,6 +3,8 @@ part of easdktool.been;
 class EAOtaProgress {
   int progress = -1;
   bool isSuccess = false;
+  int errorType = -1;
+  String error = "";
 
   EAOtaProgress();
 
@@ -12,6 +14,12 @@ class EAOtaProgress {
     }
     if (map["isSuccess"] != null) {
       isSuccess = map["isSuccess"];
+    }
+    if (map["errorType"] != null) {
+      errorType = map["errorType"];
+    }
+    if (map["error"] != null) {
+      error = map["error"];
     }
   }
 }

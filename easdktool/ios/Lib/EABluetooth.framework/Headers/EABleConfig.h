@@ -77,6 +77,11 @@ NSString *logString = [NSString stringWithFormat:@""format,##__VA_ARGS__];\
 @property (nonatomic, assign) BOOL factory;
 
 /// ignore：
+/// 厂测操作
+@property (nonatomic, assign) NSInteger factory_ops;
+
+
+/// ignore：
 /// 扫描所有设备 ，默认关闭
 @property (nonatomic, assign) BOOL canScanAllDevices;
 

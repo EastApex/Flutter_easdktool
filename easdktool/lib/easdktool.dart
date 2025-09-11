@@ -318,6 +318,9 @@ class EASDKTool {
      */
 
     String methodName = methodCall.method;
+    debugPrint("🍀🍀");
+    debugPrint(methodCall.arguments);
+
     switch (methodName) {
       case kJieLiNeedForcedOTA:
         print("JieLiNeedForcedOTA");
@@ -334,6 +337,7 @@ class EASDKTool {
           mOTAProgressCallback!
               .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess);
         }
+
         break;
       case kDeleteJieLiWatchFace:
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
@@ -350,11 +354,12 @@ class EASDKTool {
         } else {
           debugPrint("Flutter doesn't set up 707 dial callbacks");
         }
+
         break;
 
       case kArgumentsError:
         String error = methodCall.arguments;
-        print("error");
+        print(error);
         break;
       case kConnectState:
         int state = methodCall.arguments;
