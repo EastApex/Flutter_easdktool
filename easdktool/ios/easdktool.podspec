@@ -25,7 +25,7 @@ A new flutter plugin project.
   }
   
   
-    #s.dependency 'zipzap'
+  s.dependency 'zipzap'
   s.dependency 'ZipArchive'
   s.dependency 'Protobuf'
   s.dependency 'YYKit'
