@@ -34,28 +34,14 @@ A new flutter plugin project.
   s.dependency 'SVGKit'
 
   s.resource_bundles = {'EAWatchFace' => ['Lib/EAWatchFace.bundle/*']} #工程需要引入的bundle
-  #s.ios.vendored_frameworks = 'Lib/EABluetooth.framework'
-  #s.vendored_frameworks = 'EABluetooth.framework'
-  s.vendored_frameworks = [
-    'Lib/EABluetooth.framework',
-    'Lib/JLLogHelper/JLLogHelper.framework',
-    'Lib/JL_OTALib/JL_OTALib.framework',
-    'Lib/JL_HashPair/JL_HashPair.framework',
-    'Lib/JL_BLEKit/JL_BLEKit.framework',
-    'Lib/JL_AdvParse/JL_AdvParse.framework'
-  ]
   
   s.public_header_files = [
   
     'Classes/**/*.h',
-#    'Lib/JL_BLEKit.framework/Headers/*.h'
   ]
-
-  
   
   s.source_files = [
-    'Classes/**/*',
-    'Lib/JL_BLEKit/Headers/*'
+    'Classes/**/*'
   ]
   
 
@@ -65,7 +51,7 @@ A new flutter plugin project.
   'Lib/JL_HashPair.framework',
   'Lib/JL_BLEKit.framework',
   'Lib/JL_AdvParse.framework',
-  'Lib/JLDialUnit.framework',
+    # 'Lib/JLDialUnit.framework',
   'Lib/EABluetooth.framework'
  
   ]
