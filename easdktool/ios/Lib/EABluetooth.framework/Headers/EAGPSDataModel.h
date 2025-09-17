@@ -22,6 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 经度
 @property(nonatomic, assign) float longitude;
 
+
+/** 卫星信号强度 */
+@property(nonatomic, assign) NSInteger satelliteSig;
+
 @end
 
 

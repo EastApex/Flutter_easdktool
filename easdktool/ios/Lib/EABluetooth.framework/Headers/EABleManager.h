@@ -15,8 +15,8 @@
  
 */
 
-#define kEASDKVERSION   @"1.1.21"
-#define kEASDKBUILD     @"4"
+#define kEASDKVERSION   @"1.1.23"
+#define kEASDKBUILD     @"2"
 #define kEAAppVersion   [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define kEAAppBulid     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 

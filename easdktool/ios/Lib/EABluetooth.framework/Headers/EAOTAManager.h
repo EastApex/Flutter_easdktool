@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Upgrade AGPS
 /// - Parameters:
-- (BOOL)eaUpgradeAGPSCheckTime:(BOOL)checkAgpsUpdateTime progress :(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+- (BOOL)eaUpgradeAGPSCheckTime:(BOOL)checkAgpsUpdateTime progress :(OTAProgressBlock)progress complete:(OTACompleteBlock)complete;
 
 
 /// OTA Music File

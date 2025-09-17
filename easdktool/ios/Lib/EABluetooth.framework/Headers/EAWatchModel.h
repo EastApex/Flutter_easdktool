@@ -105,6 +105,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// Number of supported schedules: 0: 10 by default n: n supported
 @property(nonatomic, assign) NSInteger numOfScheduleSupported;
 
+/** 内置表盘支持个数 */
+@property(nonatomic, assign) NSInteger inDialNum;
+
+/** 外置表盘支持个数 */
+@property(nonatomic, assign) NSInteger exDialNum;
+
 
 
 

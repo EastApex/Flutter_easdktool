@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easdktool'
-  s.version          = '1.1.21.1'
+  s.version          = '1.1.21.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -25,7 +25,7 @@ A new flutter plugin project.
   }
   
   
-  s.dependency 'zipzap'
+    #s.dependency 'zipzap'
   s.dependency 'ZipArchive'
   s.dependency 'Protobuf'
   s.dependency 'YYKit'
