@@ -23,6 +23,9 @@ import 'package:easdktool/easdktool.dart';
     Singleton:
         EASDKTool()
     
+    Need init:
+       EASDKTool().initChannel();
+       
     SDK log shows:
         EASDKTool().showLog(bool isShow)
             => isShow:true show sdklog, false not show
