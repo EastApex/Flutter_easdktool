@@ -8,7 +8,7 @@ PODS:
   - CocoaLumberjack (3.8.5):
     - CocoaLumberjack/Core (= 3.8.5)
   - CocoaLumberjack/Core (3.8.5)
-  - easdktool (1.1.21.1):
+  - easdktool (1.1.21.2):
     - BGFMDB
     - Flutter
     - Protobuf
@@ -52,7 +52,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BGFMDB: 48e6823027232402a678acc7f71484b1fc9171d0
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
-  easdktool: 7532bca5d511f47d67db21ae11fd684251c83cd4
+  easdktool: a7b0afd4ca5f179e24370b9a3a641fc53431979e
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   Protobuf: 164aea2ae380c3951abdc3e195220c01d17400e0
   SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
