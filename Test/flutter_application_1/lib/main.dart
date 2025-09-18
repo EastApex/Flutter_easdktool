@@ -66,13 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-  easdkTool.initChannel();
+    easdkTool.initChannel();
 
     /// 打开 SDKLog
     easdkTool.showLog(1);
-
-
-   
 
     ///搜索手表
     easdkTool.scanWatch(
