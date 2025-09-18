@@ -1,0 +1,66 @@
+PODS:
+  - BGFMDB (2.0.13):
+    - BGFMDB/BG (= 2.0.13)
+    - BGFMDB/FMDB (= 2.0.13)
+  - BGFMDB/BG (2.0.13):
+    - BGFMDB/FMDB
+  - BGFMDB/FMDB (2.0.13)
+  - CocoaLumberjack (3.8.5):
+    - CocoaLumberjack/Core (= 3.8.5)
+  - CocoaLumberjack/Core (3.8.5)
+  - easdktool (1.1.21.1):
+    - BGFMDB
+    - Flutter
+    - Protobuf
+    - SAMKeychain
+    - SVGKit
+    - YYKit
+    - ZipArchive
+    - zipzap
+  - Flutter (1.0.0)
+  - Protobuf (3.29.5)
+  - SAMKeychain (1.5.3)
+  - SVGKit (3.0.0):
+    - CocoaLumberjack (~> 3.0)
+  - YYKit (1.0.9):
+    - YYKit/no-arc (= 1.0.9)
+  - YYKit/no-arc (1.0.9)
+  - ZipArchive (1.4.0)
+  - zipzap (8.1.1)
+
+DEPENDENCIES:
+  - easdktool (from `.symlinks/plugins/easdktool/ios`)
+  - Flutter (from `Flutter`)
+
+SPEC REPOS:
+  trunk:
+    - BGFMDB
+    - CocoaLumberjack
+    - Protobuf
+    - SAMKeychain
+    - SVGKit
+    - YYKit
+    - ZipArchive
+    - zipzap
+
+EXTERNAL SOURCES:
+  easdktool:
+    :path: ".symlinks/plugins/easdktool/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  BGFMDB: 48e6823027232402a678acc7f71484b1fc9171d0
+  CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
+  easdktool: 7532bca5d511f47d67db21ae11fd684251c83cd4
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Protobuf: 164aea2ae380c3951abdc3e195220c01d17400e0
+  SAMKeychain: 483e1c9f32984d50ca961e26818a534283b4cd5c
+  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
+  ZipArchive: e25a4373192673e3229ac8d6e9f64a3e5713c966
+  zipzap: 940162d9c9c60472c2eab341385e4214da0fdf1c
+
+PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
+
+COCOAPODS: 1.16.2

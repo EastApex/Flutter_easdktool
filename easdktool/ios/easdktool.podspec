@@ -51,7 +51,7 @@ A new flutter plugin project.
   'Lib/JL_HashPair.framework',
   'Lib/JL_BLEKit.framework',
   'Lib/JL_AdvParse.framework',
-    # 'Lib/JLDialUnit.framework',
+  'Lib/JLDialUnit.framework',
   'Lib/EABluetooth.framework'
  
   ]
