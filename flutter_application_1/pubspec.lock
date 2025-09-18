@@ -54,7 +54,7 @@ packages:
     description:
       path: easdktool
       ref: HEAD
-      resolved-ref: "4e2d2f136df61c79e2f36c49bf9e89fd00153827"
+      resolved-ref: "7ae3cedd5537eeeeb847512cb2b89b2e5ea4eb4b"
       url: "https://github.com/EastApex/Flutter_easdktool.git"
     source: git
     version: "0.0.1"
