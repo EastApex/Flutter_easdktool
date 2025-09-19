@@ -68,13 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     easdkTool.initChannel();
 
-    /// 打开 SDKLog
-    easdkTool.showLog(1);
+    // /// 打开 SDKLog
+    easdkTool.showLog(0);
 
     ///搜索手表
     easdkTool.scanWatch(
       EAScanWatchCallback((connectParam) {
-        print("🍀🍀:" + connectParam.name + connectParam.snNumber);
+        print("😁😁:" + connectParam.name + connectParam.snNumber);
       }),
     );
   }

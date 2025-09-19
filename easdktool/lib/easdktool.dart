@@ -319,7 +319,7 @@ class EASDKTool {
 
     String methodName = methodCall.method;
     debugPrint("🍀🍀");
-    debugPrint(methodCall.arguments);
+    // debugPrint(methodCall.arguments);
 
     switch (methodName) {
       case kJieLiNeedForcedOTA:
