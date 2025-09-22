@@ -119,6 +119,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     _config = [EABleConfig getDefaultConfig];
     _config.debug = YES;
     _config.canScanAllDevices = YES;
+    _config.onlyShowEaWatch = NO;
     [[EABleManager defaultManager] setBleConfig:_config];
     
     [self addNotification];
