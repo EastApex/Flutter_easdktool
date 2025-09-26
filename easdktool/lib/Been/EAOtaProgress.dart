@@ -2,7 +2,7 @@ part of easdktool.been;
 
 class EAOtaProgress {
   int progress = -1;
-  bool isSuccess = false;
+  int isSuccess = 0;
   int errorType = -1;
   String error = "";
 

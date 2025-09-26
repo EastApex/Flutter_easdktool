@@ -1650,7 +1650,7 @@ class _MyAppState extends State<MyApp> {
                         EAOTA(filePath, EAFirmwareType.JL_firmware, "");
                     EAOTAList eaList = EAOTAList(0, [dialOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess) {
+                        EAOTAProgressCallback((progress, isSuccess,error) {
                       print("OTA progress:" +
                           progress.toString() +
                           ",ota result:" +
@@ -1658,7 +1658,7 @@ class _MyAppState extends State<MyApp> {
                       if (progress == -1) {
                         // transmit data fail;
                       } else if (progress == 100) {
-                        if (isSuccess) {
+                        if (isSuccess == 1) {
                           // transmit data succ;
                         } else {
                           // transmit data progress
@@ -1692,7 +1692,7 @@ class _MyAppState extends State<MyApp> {
 
                     EAOTAList eaList = EAOTAList(0, [resOTA, appoloOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess) {
+                        EAOTAProgressCallback((progress, isSuccess,error) {
                       print("OTA progress:" +
                           progress.toString() +
                           ",ota result:" +
@@ -1700,7 +1700,7 @@ class _MyAppState extends State<MyApp> {
                       if (progress == -1) {
                         // transmit data fail;
                       } else if (progress == 100) {
-                        if (isSuccess) {
+                        if (isSuccess == 1) {
                           // transmit data succ;
                         } else {
                           // transmit data progress
@@ -1728,7 +1728,7 @@ class _MyAppState extends State<MyApp> {
 
                   EAOTAList eaList = EAOTAList(1, [watchfaceOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
-                      EAOTAProgressCallback((progress, isSuccess) {
+                      EAOTAProgressCallback((progress, isSuccess,error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1736,7 +1736,7 @@ class _MyAppState extends State<MyApp> {
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      if (isSuccess) {
+                      if (isSuccess == 1) {
                         // transmit data succ;
                       } else {
                         // transmit data progress
@@ -1751,7 +1751,7 @@ class _MyAppState extends State<MyApp> {
                 child: NewTextView('3.AGPS'),
                 onTap: () async {
                   secondEasdkTool
-                      .syncAGPS(EAOTAProgressCallback((progress, isSuccess) {
+                      .syncAGPS(EAOTAProgressCallback((progress, isSuccess,error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1759,7 +1759,7 @@ class _MyAppState extends State<MyApp> {
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      if (isSuccess) {
+                      if (isSuccess == 1) {
                         // transmit data succ;
                       } else {
                         // transmit data progress
@@ -1780,7 +1780,7 @@ class _MyAppState extends State<MyApp> {
                   await File(filePath).writeAsBytes(buffer.asUint8List(
                       bytes.offsetInBytes, bytes.lengthInBytes));
                   secondEasdkTool.addJieLiWatchFace(filePath,
-                      EAOTAProgressCallback((progress, isSuccess) {
+                      EAOTAProgressCallback((progress, isSuccess,error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1788,7 +1788,7 @@ class _MyAppState extends State<MyApp> {
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      if (isSuccess) {
+                      if (isSuccess == 1) {
                         // transmit data succ;
                       } else {
                         // transmit data progress
@@ -1858,7 +1858,7 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.numbeColorHex = "#0000FF";
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress, isSuccess) {
+                      EAOTAProgressCallback((progress, isSuccess,error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1866,7 +1866,7 @@ class _MyAppState extends State<MyApp> {
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      if (isSuccess) {
+                      if (isSuccess == 1) {
                         // transmit data succ;
                       } else {
                         // transmit data progress
@@ -1906,7 +1906,7 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.pointerColorType = 1;
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress, isSuccess) {
+                      EAOTAProgressCallback((progress, isSuccess,error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1914,7 +1914,7 @@ class _MyAppState extends State<MyApp> {
                     if (progress == -1) {
                       // transmit data fail;
                     } else if (progress == 100) {
-                      if (isSuccess) {
+                      if (isSuccess == 1) {
                         // transmit data succ;
                       } else {
                         // transmit data progress

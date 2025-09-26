@@ -4,7 +4,6 @@ import 'package:easdktool/easdktool.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('easdktool');
-
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {

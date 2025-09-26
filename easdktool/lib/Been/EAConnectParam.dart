@@ -14,9 +14,9 @@ class EAConnectParam {
   Map advertisementData = {};
   int rssi = 0;
   String uuid = "";
-  int isJL707 = 0; //  1  is jl707 watch
-  int needOta =
-      0; //  1: It indicates that the jl707 watch requires mandatory OTA
+  bool isJL707 = false; //  true  is jl707 watch
+  bool needOta =
+      false; //  true: It indicates that the jl707 watch requires mandatory OTA
 
   EAConnectParam();
 

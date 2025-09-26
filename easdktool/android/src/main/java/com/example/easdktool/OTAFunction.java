@@ -147,6 +147,7 @@ public class OTAFunction {
                                                         OtaProgress otaProgress = new OtaProgress();
                                                         otaProgress.isSuccess = false;
                                                         otaProgress.progress = -1;
+                                                        otaProgress.errorType = i;
                                                         channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                                                     }
                                                     mHandler = null;
@@ -169,6 +170,7 @@ public class OTAFunction {
                                         OtaProgress otaProgress = new OtaProgress();
                                         otaProgress.isSuccess = false;
                                         otaProgress.progress = -1;
+                                        otaProgress.errorType = i;
                                         channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                                     }
                                     mHandler = null;
@@ -191,6 +193,7 @@ public class OTAFunction {
                                     OtaProgress otaProgress = new OtaProgress();
                                     otaProgress.isSuccess = false;
                                     otaProgress.progress = -1;
+                                    otaProgress.errorType = i;
                                     channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                                 }
                                 mHandler = null;
@@ -248,7 +251,7 @@ public class OTAFunction {
                 }
 
                 @Override
-                public void mutualFail(int i) {
+                public void mutualFail(final int i) {
                     if (mHandler == null) {
                         mHandler = new Handler(Looper.getMainLooper());
                     }
@@ -259,6 +262,7 @@ public class OTAFunction {
                                 OtaProgress otaProgress = new OtaProgress();
                                 otaProgress.isSuccess = false;
                                 otaProgress.progress = -1;
+                                otaProgress.errorType = i;
                                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
                             mHandler = null;
@@ -272,6 +276,7 @@ public class OTAFunction {
                 OtaProgress otaProgress = new OtaProgress();
                 otaProgress.isSuccess = false;
                 otaProgress.progress = -1;
+                otaProgress.errorType = 0x10;
                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
             }
         }
@@ -324,7 +329,7 @@ public class OTAFunction {
             }
 
             @Override
-            public void mutualFail(int i) {
+            public void mutualFail(final int i) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -335,6 +340,7 @@ public class OTAFunction {
                             OtaProgress otaProgress = new OtaProgress();
                             otaProgress.isSuccess = false;
                             otaProgress.progress = -1;
+                            otaProgress.errorType=i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
@@ -390,7 +396,7 @@ public class OTAFunction {
             }
 
             @Override
-            public void mutualFail(int i) {
+            public void mutualFail(final int i) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -401,6 +407,7 @@ public class OTAFunction {
                             OtaProgress otaProgress = new OtaProgress();
                             otaProgress.isSuccess = false;
                             otaProgress.progress = -1;
+                            otaProgress.errorType=i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;

@@ -319,7 +319,7 @@ class EASDKTool {
 
     String methodName = methodCall.method;
     debugPrint("🍀🍀");
-    // debugPrint(methodCall.arguments);
+    debugPrint(methodCall.arguments);
 
     switch (methodName) {
       case kJieLiNeedForcedOTA:
@@ -335,7 +335,7 @@ class EASDKTool {
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
           mOTAProgressCallback!
-              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess);
+              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess,eaOtaProgress.errorType);
         }
 
         break;
@@ -422,7 +422,7 @@ class EASDKTool {
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
           mOTAProgressCallback!
-              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess);
+              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess,eaOtaProgress.errorType);
         }
         break;
       case kScanWacthResponse:

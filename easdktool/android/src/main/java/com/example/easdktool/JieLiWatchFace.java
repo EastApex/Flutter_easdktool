@@ -7,6 +7,10 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.apex.ax_bluetooth.callback.GeneralCallback;
 import com.apex.ax_bluetooth.callback.OtaCallback;
+import com.apex.ax_bluetooth.callback.WatchInfoCallback;
+import com.apex.ax_bluetooth.core.EABleManager;
+import com.apex.ax_bluetooth.enumeration.QueryWatchInfoType;
+import com.apex.ax_bluetooth.model.EABleWatchInfo;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.been.OtaProgress;
 import com.example.easdktool.db.DailyData;
@@ -35,7 +39,7 @@ public class JieLiWatchFace {
         this.channel = channel;
     }
 
-    public void addWatchFace(String filePath) {
+    public void addWatchFace(final String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             if (mHandler == null) {
                 mHandler = new Handler(Looper.getMainLooper());
@@ -47,6 +51,7 @@ public class JieLiWatchFace {
                         OtaProgress otaProgress = new OtaProgress();
                         otaProgress.isSuccess = false;
                         otaProgress.progress = -1;
+                        otaProgress.errorType = 0x10;
                         channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
                     }
                     mHandler = null;
@@ -54,6 +59,58 @@ public class JieLiWatchFace {
             });
             return;
         }
+        EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
+            @Override
+            public void watchInfo(EABleWatchInfo eaBleWatchInfo) {
+                if (eaBleWatchInfo != null) {
+                    final int dialNum = eaBleWatchInfo.getEx_dial_num();
+                    JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
+                        @Override
+                        public void jieliDial(List<JieliWatchInfo> watchInfos) {
+                            if (watchInfos != null) {
+                                if (dialNum <= watchInfos.size()) {
+                                    if (mHandler == null) {
+                                        mHandler = new Handler(Looper.getMainLooper());
+                                    }
+                                    mHandler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (channel != null) {
+                                                OtaProgress otaProgress = new OtaProgress();
+                                                otaProgress.isSuccess = false;
+                                                otaProgress.progress = -1;
+                                                otaProgress.errorType = 0x1C;
+                                                channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                                            }
+                                            mHandler = null;
+                                        }
+                                    });
+                                    return;
+                                }
+                            }
+                            add707WatchFace(filePath);
+
+                        }
+
+                        @Override
+                        public void error(BaseError error) {
+
+                        }
+                    });
+                    return;
+                }
+                add707WatchFace(filePath);
+            }
+
+            @Override
+            public void mutualFail(int i) {
+
+            }
+        });
+
+    }
+
+    private void add707WatchFace(final String filePath) {
         JieliWatchFaceManager.getInstance().addWatchFace(filePath, new OtaCallback() {
             @Override
             public void success() {
@@ -101,7 +158,7 @@ public class JieLiWatchFace {
             }
 
             @Override
-            public void mutualFail(int i) {
+            public void mutualFail(final int i) {
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -112,6 +169,7 @@ public class JieLiWatchFace {
                             OtaProgress otaProgress = new OtaProgress();
                             otaProgress.isSuccess = false;
                             otaProgress.progress = -1;
+                            otaProgress.errorType = i;
                             channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
                         }
                         mHandler = null;
@@ -183,7 +241,7 @@ public class JieLiWatchFace {
         JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
             @Override
             public void jieliDial(List<JieliWatchInfo> watchInfos) {
-                List<Map<String, Object>> dataList = new ArrayList<>();
+                final List<Map<String, Object>> dataList = new ArrayList<>();
                 if (watchInfos != null && !watchInfos.isEmpty()) {
                     for (int i = 0; i < watchInfos.size(); i++) {
                         Map<String, Object> map = new HashMap<>();
@@ -222,6 +280,7 @@ public class JieLiWatchFace {
 
             @Override
             public void error(BaseError error) {
+                LogUtils.i(TAG, "获取707表盘时发生错误：" + error.toString());
                 if (mHandler == null) {
                     mHandler = new Handler(Looper.getMainLooper());
                 }
@@ -229,10 +288,10 @@ public class JieLiWatchFace {
                     @Override
                     public void run() {
                         if (channel != null) {
-                            OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
-                            otaProgress.progress = -1;
-                            channel.invokeMethod(kGetJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                            final List<Map<String, Object>> dataList = new ArrayList<>();
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("value", dataList);
+                            channel.invokeMethod(kGetJieLiWatchFace, jsonObject.toJSONString());
                         }
                         mHandler = null;
                     }

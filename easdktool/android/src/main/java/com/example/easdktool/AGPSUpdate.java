@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.apex.ax_bluetooth.callback.FeaturesCallback;
 import com.apex.ax_bluetooth.core.EABleManager;
 import com.apex.ax_bluetooth.enumeration.EABleConnectState;
@@ -17,6 +18,7 @@ import com.apex.ax_bluetooth.enumeration.QueryWatchInfoType;
 import com.apex.ax_bluetooth.model.EABleFeatures;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
+import com.example.easdktool.been.OtaProgress;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,14 +77,14 @@ public class AGPSUpdate {
                             @Override
                             public void run() {
                                 super.run();
-                              //  File file = getLocalCacheFile(mContext);
-                              //  if (isTimeOut(file)) {
-                                    LogUtils.i(TAG, "重新下载");
-                                    //重新下载
-                                    startDownAgps(mContext);
-                                    packageAgpsFile(mContext);
+                                //  File file = getLocalCacheFile(mContext);
+                                //  if (isTimeOut(file)) {
+                                LogUtils.i(TAG, "重新下载");
+                                //重新下载
+                                startDownAgps(mContext);
+                                packageAgpsFile(mContext);
 
-                              //  }
+                                //  }
 
                                 if (mHandler == null) {
                                     mHandler = new Handler(Looper.getMainLooper());
@@ -94,7 +96,11 @@ public class AGPSUpdate {
                                         if (nFile == null || !nFile.exists() || !nFile.isFile()) {
                                             LogUtils.i(TAG, "本地缓存的文件不存在");
                                             if (channel != null) {
-                                                channel.invokeMethod(kProgress, -1);
+                                                OtaProgress otaProgress = new OtaProgress();
+                                                otaProgress.isSuccess = false;
+                                                otaProgress.progress = -1;
+                                                otaProgress.errorType = 0x10;
+                                                channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                                             }
                                         } else {
                                             LogUtils.i(TAG, "本地缓存的文件存在");

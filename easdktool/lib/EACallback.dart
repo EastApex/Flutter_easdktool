@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 typedef OnSuccess = void Function(Map<String, dynamic> info);
 typedef OnFail = void Function(Map<String, dynamic> info);
 typedef OnRespond = void Function(EARespond respond);
-typedef Progress = void Function(int progress, bool isSuccess);
+typedef Progress = void Function(int progress, int isSuccess,int errorType);
 typedef ScanRespond = void Function(EAConnectParam connectParam);
 typedef PreviewImage = void Function(Image previewImage);
 typedef NeedOTA = void Function(bool needOTAinfo);
