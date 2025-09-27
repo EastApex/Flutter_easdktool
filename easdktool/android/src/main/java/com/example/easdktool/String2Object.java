@@ -737,6 +737,7 @@ public class String2Object {
     }
 
     public EABleMusicRespond string2Music(String jsonString) {
+        LogUtils.i(TAG,"The transmitted music information:"+jsonString);
         Map<String, Object> map = JSONObject.parseObject(jsonString, Map.class);
         EABleMusicRespond eaBleMusicRespond = new EABleMusicRespond();
         eaBleMusicRespond.setArtist((String) map.get("artist"));

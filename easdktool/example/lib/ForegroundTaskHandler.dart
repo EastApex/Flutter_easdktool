@@ -10,6 +10,7 @@ import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/easdktool.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 //import 'package:flutter_notification_listener/flutter_notification_listener.dart';
 
 import 'FirstMethodPackageData.dart';
@@ -160,6 +161,27 @@ class MyTaskHandler extends TaskHandler {
          *          5    Volume decrease
          */
         print(action.toString());
+        String mess = "stop playing";
+        if (action == 0) {
+          mess = "start playing";
+        } else if (action == 1) {
+          mess = "stop playing";
+        } else if (action == 2) {
+          mess = "previous song";
+        } else if (action == 3) {
+          mess = "next song";
+        } else if (action == 4) {
+          mess = "volume up";
+        } else if (action == 5) {
+          mess = "Volume decrease";
+        }
+        Fluttertoast.showToast(
+            msg: mess,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            backgroundColor: Colors.grey[800],
+            textColor: Colors.cyan,
+            fontSize: 16.0);
       } else if (type == 0x18) {
         if (Platform.isAndroid) {
           print("开始连接BT");
@@ -356,7 +378,6 @@ class ConnectListener implements EABleConnectListener {
                     EABindingWatchCallback(onRespond: ((respond) {
                   print(respond.respondCodeType);
                 })));
-
               }
             }),
             onFail: ((info) {})));

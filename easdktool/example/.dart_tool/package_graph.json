@@ -12,6 +12,7 @@
         "easdktool",
         "flutter",
         "flutter_foreground_task",
+        "fluttertoast",
         "path_provider",
         "permission_handler",
         "platform"
@@ -101,6 +102,15 @@
       "dependencies": [
         "flutter",
         "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "fluttertoast",
+      "version": "8.2.14",
+      "dependencies": [
+        "flutter",
+        "flutter_web_plugins",
+        "web"
       ]
     },
     {
@@ -398,21 +408,6 @@
       ]
     },
     {
-      "name": "win32_registry",
-      "version": "1.1.5",
-      "dependencies": [
-        "ffi",
-        "win32"
-      ]
-    },
-    {
-      "name": "win32",
-      "version": "5.10.1",
-      "dependencies": [
-        "ffi"
-      ]
-    },
-    {
       "name": "web",
       "version": "1.1.1",
       "dependencies": []
@@ -427,6 +422,21 @@
         "material_color_utilities",
         "meta",
         "vector_math"
+      ]
+    },
+    {
+      "name": "win32_registry",
+      "version": "1.1.5",
+      "dependencies": [
+        "ffi",
+        "win32"
+      ]
+    },
+    {
+      "name": "win32",
+      "version": "5.10.1",
+      "dependencies": [
+        "ffi"
       ]
     },
     {

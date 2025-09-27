@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   device_info_plus: ^10.1.0
   platform: ^3.1.0
+  fluttertoast: ^8.2.2
 
   easdktool:
     # When depending on this package from a real application you should use:
@@ -38,6 +39,7 @@ dependencies:
   # notification_listener_service:
   flutter_foreground_task: ^8.17.0
   permission_handler: ^10.4.5
+
   # path_provider: ^2.0.5
   # dio: ^4.0.0
   # flutter_blue_plus: ^1.3.1

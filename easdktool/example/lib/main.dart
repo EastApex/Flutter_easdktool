@@ -16,6 +16,7 @@ import 'package:easdktool/EACallback.dart';
 import 'package:easdktool/Been/EABeen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:platform/platform.dart';
@@ -157,6 +158,7 @@ class _MyAppState extends State<MyApp> {
   ReceivePort setReceivePort = ReceivePort();
   EAGetDataCallback? eaGetDataCallback;
   EASetDataCallback? eaSetDataCallback;
+  int count = 0;
 
   @override
   void dispose() {
@@ -1411,10 +1413,25 @@ class _MyAppState extends State<MyApp> {
                   eableMusicInfo.artist = "Backstreet Boys";
                   eableMusicInfo.duration = 60 * 4;
                   eableMusicInfo.elapsedtime = 60;
-                  eableMusicInfo.playState = 1;
+                  String mess = "play";
+                  if (count % 2 == 0) {
+                    eableMusicInfo.playState = 1;
+                    mess = "play";
+                  } else {
+                    eableMusicInfo.playState = 2;
+                    mess = "stop";
+                  }
+                  count++;
                   eableMusicInfo.volume = 30;
                   secondMethodSetWatchData(
                       kEADataInfoTypeMusic, eableMusicInfo.toMap());
+                  Fluttertoast.showToast(
+                      msg: mess,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      backgroundColor: Colors.deepPurple,
+                      textColor: Colors.cyan,
+                      fontSize: 16.0);
                 },
               ),
               GestureDetector(
@@ -1635,7 +1652,7 @@ class _MyAppState extends State<MyApp> {
                    *  只有jieli-707平台的才需要设置类型为 EAFirmwareType.JL_firmware，目前只有iTOUCH AIR PRO属于此平台，其它平台均不得设置为此类型，其它平台按以前的规则要求进行类型设置
                    */
 
-                  bool isJL707 = true;
+                  bool isJL707 = false;
                   if (isJL707) {
                     var bytes = await rootBundle
                         .load("assets/bin/002086_AP0.1B4.3_quick.ufw");
@@ -1650,7 +1667,7 @@ class _MyAppState extends State<MyApp> {
                         EAOTA(filePath, EAFirmwareType.JL_firmware, "");
                     EAOTAList eaList = EAOTAList(0, [dialOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess,error) {
+                        EAOTAProgressCallback((progress, isSuccess, error) {
                       print("OTA progress:" +
                           progress.toString() +
                           ",ota result:" +
@@ -1667,7 +1684,9 @@ class _MyAppState extends State<MyApp> {
                         // transmit data progress
                       }
                     }));
-                  } else {
+                  } 
+                  else 
+                  {
                     var bytes9 =
                         await rootBundle.load("assets/bin/002083_R0.6.bin");
                     String path9 =
@@ -1692,7 +1711,7 @@ class _MyAppState extends State<MyApp> {
 
                     EAOTAList eaList = EAOTAList(0, [resOTA, appoloOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess,error) {
+                        EAOTAProgressCallback((progress, isSuccess, error) {
                       print("OTA progress:" +
                           progress.toString() +
                           ",ota result:" +
@@ -1728,7 +1747,7 @@ class _MyAppState extends State<MyApp> {
 
                   EAOTAList eaList = EAOTAList(1, [watchfaceOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
-                      EAOTAProgressCallback((progress, isSuccess,error) {
+                      EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1750,8 +1769,8 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.AGPS'),
                 onTap: () async {
-                  secondEasdkTool
-                      .syncAGPS(EAOTAProgressCallback((progress, isSuccess,error) {
+                  secondEasdkTool.syncAGPS(
+                      EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1780,7 +1799,7 @@ class _MyAppState extends State<MyApp> {
                   await File(filePath).writeAsBytes(buffer.asUint8List(
                       bytes.offsetInBytes, bytes.lengthInBytes));
                   secondEasdkTool.addJieLiWatchFace(filePath,
-                      EAOTAProgressCallback((progress, isSuccess,error) {
+                      EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1858,7 +1877,7 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.numbeColorHex = "#0000FF";
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress, isSuccess,error) {
+                      EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +
@@ -1906,7 +1925,7 @@ class _MyAppState extends State<MyApp> {
                   customWatchFace.pointerColorType = 1;
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaCustomWatchface(customWatchFace,
-                      EAOTAProgressCallback((progress, isSuccess,error) {
+                      EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
                         progress.toString() +
                         ",ota result:" +

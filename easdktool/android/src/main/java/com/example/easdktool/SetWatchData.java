@@ -42,6 +42,7 @@ import com.example.easdktool.callback.EditAttentionCall;
 import com.example.easdktool.callback.HabitResultCall;
 import com.example.easdktool.callback.SetCallback;
 import com.example.easdktool.db.DataManager;
+import com.google.gson.Gson;
 
 
 import java.math.BigDecimal;
@@ -153,6 +154,7 @@ public class SetWatchData {
 
     public void syncMusicInfo(String jsonString) {
         EABleMusicRespond eaBleMusicRespond = new String2Object().string2Music(jsonString);
+        LogUtils.i(TAG, "Send music information to the watch:" + new Gson().toJson(eaBleMusicRespond));
         EABleManager.getInstance().musicQueryResponse(eaBleMusicRespond, new DataResponseCall(channel));
 
     }
@@ -236,9 +238,9 @@ public class SetWatchData {
 
     public void syncLocation(String jsonString) {
         Map<String, BigDecimal> map = JSONObject.parseObject(jsonString, Map.class);
-        BigDecimal longitude =map.get("longitude");
+        BigDecimal longitude = map.get("longitude");
         BigDecimal latitude = map.get("latitude");
-        LogUtils.i(TAG, "longitude:" + longitude.doubleValue()+",latitude:"+latitude.doubleValue());
+        LogUtils.i(TAG, "longitude:" + longitude.doubleValue() + ",latitude:" + latitude.doubleValue());
         EABleManager.getInstance().syncLocationInfo(longitude.doubleValue(), latitude.doubleValue(), new SetCallback(72, channel));
     }
 
