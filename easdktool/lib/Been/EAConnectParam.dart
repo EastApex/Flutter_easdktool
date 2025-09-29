@@ -14,15 +14,15 @@ class EAConnectParam {
   Map advertisementData = {};
   int rssi = 0;
   String uuid = "";
-  bool isJL707 = false; //  true  is jl707 watch
-  bool needOta =
-      false; //  true: It indicates that the jl707 watch requires mandatory OTA
+  int isJL707 = 0; //  1  is jl707 watch
+  int needOta =
+      0; //  1: It indicates that the jl707 watch requires mandatory OTA
 
   EAConnectParam();
 
   EAConnectParam.testInit() {
-     connectAddress = "DC:71:DD:51:D5:74";
-  //  connectAddress = "45:42:B9:00:60:03";
+    connectAddress = "DC:71:DD:51:D5:74";
+    //  connectAddress = "45:42:B9:00:60:03";
     // "45:41:15:82:52:84"; //"45:41:46:03:F2:A7"; // "45:41:70:97:FC:84"; // andriond need
     snNumber = "45:42:B9:03:21:91";
     //"001007220516000001","002006000009999010","001007220719000021","001007220516000001"; //"001001211112000028"; // iOS need

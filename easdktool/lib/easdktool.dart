@@ -318,7 +318,7 @@ class EASDKTool {
      */
 
     String methodName = methodCall.method;
-    debugPrint("🍀🍀");
+    // debugPrint("🍀🍀");
     debugPrint(methodCall.arguments);
 
     switch (methodName) {
@@ -334,8 +334,8 @@ class EASDKTool {
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
-          mOTAProgressCallback!
-              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess,eaOtaProgress.errorType);
+          mOTAProgressCallback!.callback(eaOtaProgress!.progress,
+              eaOtaProgress!.isSuccess, eaOtaProgress.errorType);
         }
 
         break;
@@ -421,11 +421,12 @@ class EASDKTool {
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
-          mOTAProgressCallback!
-              .callback(eaOtaProgress!.progress, eaOtaProgress!.isSuccess,eaOtaProgress.errorType);
+          mOTAProgressCallback!.callback(eaOtaProgress!.progress,
+              eaOtaProgress!.isSuccess, eaOtaProgress.errorType);
         }
         break;
       case kScanWacthResponse:
+        debugPrint("🍀🍀");
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EAConnectParam connectParam = EAConnectParam.fromMap(info);
         if (mScanWatchCallback != null) {

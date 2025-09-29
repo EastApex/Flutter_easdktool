@@ -5,7 +5,7 @@
 
 
 #define kTimerSec 10
-#define kPlugInLog(format,...)  (self.config.debug ?  NSLog(@"SDK[🍀🍀]:- " format, ##__VA_ARGS__) : @"")
+#define kPlugInLog(format,...)  (self.config.debug ?  NSLog(@"SDK[😁]:- " format, ##__VA_ARGS__) : @"")
 
 
 @interface EasdktoolPlugin()<EABleManagerDelegate>

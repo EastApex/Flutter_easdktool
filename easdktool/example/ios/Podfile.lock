@@ -10,7 +10,7 @@ PODS:
   - CocoaLumberjack/Core (3.8.5)
   - device_info_plus (0.0.1):
     - Flutter
-  - easdktool (1.1.21.1):
+  - easdktool (1.1.21.2):
     - BGFMDB
     - Flutter
     - Protobuf
@@ -21,6 +21,8 @@ PODS:
     - zipzap
   - Flutter (1.0.0)
   - flutter_foreground_task (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -45,6 +47,7 @@ DEPENDENCIES:
   - easdktool (from `.symlinks/plugins/easdktool/ios`)
   - Flutter (from `Flutter`)
   - flutter_foreground_task (from `.symlinks/plugins/flutter_foreground_task/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -69,6 +72,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_foreground_task:
     :path: ".symlinks/plugins/flutter_foreground_task/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
@@ -80,9 +85,10 @@ SPEC CHECKSUMS:
   BGFMDB: 48e6823027232402a678acc7f71484b1fc9171d0
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
-  easdktool: 7532bca5d511f47d67db21ae11fd684251c83cd4
+  easdktool: a7b0afd4ca5f179e24370b9a3a641fc53431979e
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_foreground_task: 21ef182ab0a29a3005cc72cd70e5f45cb7f7f817
+  fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   Protobuf: 28c89b24435762f60244e691544ed80f50d82701

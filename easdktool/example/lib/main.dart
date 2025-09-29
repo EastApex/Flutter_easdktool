@@ -185,8 +185,14 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      EAConnectParam connectParam = EAConnectParam.testInit();
-      EASDKTool().connectToPeripheral(connectParam);
+      // EAConnectParam connectParam = EAConnectParam.testInit();
+      // EASDKTool().connectToPeripheral(connectParam);
+
+      ///搜索手表
+      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+        print("【ScanWatch】" + connectParam.uuid);
+      }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -200,17 +206,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// 打开 SDKLog
-    EASDKTool().showLog(1);
+    EASDKTool().showLog(0);
 
     EASDKTool().showTest(0);
-
-    // ///搜索手表
-    // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-    //   print(connectParam.name + "🍀🍀" + connectParam.snNumber);
-    //   print("");
-    //   print(connectParam.uuid);
-    //   print("");
-    // }));
   }
 
   void operationPhoneListener(Map info) {
@@ -1684,9 +1682,7 @@ class _MyAppState extends State<MyApp> {
                         // transmit data progress
                       }
                     }));
-                  } 
-                  else 
-                  {
+                  } else {
                     var bytes9 =
                         await rootBundle.load("assets/bin/002083_R0.6.bin");
                     String path9 =
