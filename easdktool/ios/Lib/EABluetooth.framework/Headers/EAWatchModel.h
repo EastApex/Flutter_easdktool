@@ -92,8 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// Maximum supported dial memory size (storage space, unit KB)
 @property(nonatomic, assign) NSInteger maxWatchSize;
 
-/// LCD像素类型: 0: RGB565 1: GXGPU_RGB888
-/// LCD pixel type: 0: RGB565 1: GXGPU_RGB888 2: ARGB8565(杰理)  3: 海思平台 4:杰里707
+/// 
+/// LCD像素类型: 0: RGB565 1:GXGPU_RGB888 2:ARGB8565(杰理)  3:海思平台 4:JL707单备份 5:JL707双备份（CRC16-CCITT）
 @property(nonatomic, assign) NSInteger lcdPixelType;
 
 

@@ -1,3 +1,4 @@
+import 'package:easdktool/Been/EABeen.dart';
 import 'package:easdktool/EACallback.dart';
 import 'package:flutter/material.dart';
 import 'package:easdktool/easdktool.dart';
@@ -9,58 +10,30 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Devices',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const DeviceListScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class DeviceListScreen extends StatefulWidget {
+  const DeviceListScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _DeviceListScreenState createState() => _DeviceListScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
+class _DeviceListScreenState extends State<DeviceListScreen> {
+  // 存储字符串的列表
+  final List<EAConnectParam> _deviceList = [];
   EASDKTool easdkTool = EASDKTool();
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   void initState() {
@@ -68,67 +41,186 @@ class _MyHomePageState extends State<MyHomePage> {
 
     easdkTool.initChannel();
 
+    /// 【添加监听】
+    EASDKTool.addBleConnectListener(ConnectListener(easdkTool));
+
     // /// 打开 SDKLog
-    easdkTool.showLog(0);
+    easdkTool.showLog(1);
 
     ///搜索手表
     easdkTool.scanWatch(
       EAScanWatchCallback((connectParam) {
-        print("😁😁:" + connectParam.name + connectParam.snNumber);
+        print("【Demo】:Name:${connectParam.name} Sign:${connectParam.snNumber}");
+
+        // 检查设备是否已在列表中
+        bool isAlreadyAdded = _deviceList.any(
+          (d) => d.snNumber == connectParam.snNumber,
+        );
+        if (!isAlreadyAdded) {
+          setState(() {
+            _deviceList.insert(0, connectParam);
+          });
+        }
+
+        if (_deviceList.length > 30) {
+          easdkTool.stopWatch();
+        }
       }),
     );
   }
 
+  // 列表项点击事件处理
+  void _onItemTapped(EAConnectParam connectParam) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Connect Device'),
+        content: Text(
+          "Name:${connectParam.name} Sign:${connectParam.snNumber}",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          // 保存按钮
+          TextButton(
+            onPressed: () {
+              _connectDevice(connectParam);
+              Navigator.pop(context);
+            },
+            child: const Text('Connect'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _connectDevice(EAConnectParam connectParam) {
+    easdkTool.connectToPeripheral(connectParam);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      appBar: AppBar(title: const Text('Devices')),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        // 列表项数量
+        itemCount: _deviceList.length,
+        // 构建每个列表项
+        itemBuilder: (context, index) {
+          final connectParam = _deviceList[index];
+          return Card(
+            elevation: 2,
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            child: ListTile(
+              title: Text(
+                "Name:${connectParam.name} Sign:${connectParam.snNumber}",
+              ),
+              leading: const Icon(Icons.access_time, color: Colors.blue),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              // 添加点击事件
+              onTap: () => _onItemTapped(connectParam),
             ),
-          ],
-        ),
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class ConnectListener implements EABleConnectListener {
+  EASDKTool easdkTool;
+
+  ConnectListener(this.easdkTool);
+
+  @override
+  void connectError() {
+    print('【Demo】: connection Listener - connect Error');
+  }
+
+  @override
+  void connectTimeOut() {
+    print('【Demo】: connection Listener - connect Timeout');
+  }
+
+  @override
+  void deviceConnected() {
+    /// 绑定手表
+    print('【Demo】: connection Listener - connected');
+    easdkTool.getWatchData(
+      kEADataInfoTypeWatch,
+      EAGetDataCallback(
+        onSuccess: ((info) async {
+          Map<String, dynamic> value = info["value"];
+          EABleWatchInfo eaBleWatchInfo = EABleWatchInfo.fromMap(value);
+          print('【Demo】 $value');
+
+          if (eaBleWatchInfo.bindingType == EABindingType.unbound) {
+            EABindInfo bindInfo = EABindInfo();
+            bindInfo.bindMod = 0;
+            bindInfo.bindingCommandType = 1;
+            easdkTool.bindingWatch(
+              bindInfo,
+              EABindingWatchCallback(
+                onRespond: ((respond) {
+                  print('【Demo】binding response  ${respond.respondCodeType}');
+                }),
+              ),
+            );
+          } else {}
+        }),
+        onFail: ((info) {}),
+      ),
+    );
+  }
+
+  @override
+  void deviceDisconnect() {
+    print('【Demo】: connection Listener - device disconnect');
+    // XWatch.xWatchConnectionListener?.deviceDisconnected();
+  }
+
+  @override
+  void deviceNotFind() {
+    print('XWatch Package: connection Listener - device not find');
+    // XWatch.xWatchConnectionListener?.deviceNotFound();
+  }
+
+  @override
+  void notOpenLocation() {
+    print('XWatch Package: connection Listener - not open location');
+  }
+
+  @override
+  void paramError() {
+    print('XWatch Package: connection Listener - Param error');
+    // XWatch.xWatchConnectionListener?.deviceConnectionError();
+  }
+
+  @override
+  void unopenedBluetooth() {
+    print('XWatch Package: connection Listener - unopened Bluetooth');
+  }
+
+  @override
+  void unsupportedBLE() {
+    print('XWatch Package: connection Listener - unsupported BLE');
+  }
+
+  @override
+  void iOSRelievePair() {
+    print('XWatch Package: connection Listener - iOS Relieve Pair');
+  }
+
+  @override
+  void iOSUnAuthorized() {
+    print('XWatch Package: connection Listener - iOS Unauthorized');
   }
 }

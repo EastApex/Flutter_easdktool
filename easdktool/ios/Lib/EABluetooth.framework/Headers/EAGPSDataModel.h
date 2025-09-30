@@ -38,4 +38,38 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
+
+/// ignore:GPS测试数据
+@interface EATestGPSDataModel : EABigDataModel
+
+
+/// latitude
+///  纬度
+@property(nonatomic, assign) float latitude;
+
+/// longitude
+/// 经度
+@property(nonatomic, assign) float longitude;
+
+
+/** 卫星信号强度 */
+@property(nonatomic, assign) NSInteger satelliteSig;
+
+@end
+
+/// ignore:GPS测试数据
+@interface EATestUploadGPSData : EABaseBigDataModel
+
+@property(nonatomic, strong) NSMutableArray<EATestGPSDataModel*> *sIndexArray;
+
++ (EATestUploadGPSData *)getGPSData:(NSData *)data;
+
+@end
+
+
+
+
+
+
+
 NS_ASSUME_NONNULL_END

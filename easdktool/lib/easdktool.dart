@@ -318,14 +318,13 @@ class EASDKTool {
      */
 
     String methodName = methodCall.method;
-    // debugPrint("🍀🍀");
-    debugPrint(methodCall.arguments);
+    debugPrint("🍀🍀$methodName");
 
     switch (methodName) {
       case kJieLiNeedForcedOTA:
         print("JieLiNeedForcedOTA");
         if (mJieLiNeedForcedOtaCallback != null) {
-          mJieLiNeedForcedOtaCallback!.needOTA(true);
+          mJieLiNeedForcedOtaCallback!.needOTA(1);
         }
         //
 

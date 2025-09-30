@@ -162,6 +162,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (uint16_t)getCrcValue:(BOOL)isRes andBinPath:(NSString *)binPath;
 
+- (uint16_t)crc16WithJL707Data:(NSData *)data;
+
+
 - (uint16_t )getHisWfCrcValueWithBinPath:(NSString *)binPath;
 /// 初始化OTA更新
 /// @param binPath binPath

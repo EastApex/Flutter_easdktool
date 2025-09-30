@@ -552,8 +552,10 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     
     
     
-    EADataInfoTypeDebugLogData = 3997,
-    EADataInfoTypeDebugGpsNmeaData = 3998,
+    
+    EADataInfoTypeTestGpsData       = 3996,
+    EADataInfoTypeDebugLogData      = 3997,
+    EADataInfoTypeDebugGpsNmeaData  = 3998,
 
     
     /// OTA命令
@@ -2951,7 +2953,50 @@ typedef NS_ENUM(NSUInteger,EAWatchSportType) {
     ///  游泳        Swimming 
     EAWatchSportSwimming = 188,
 
-    
+    /// 手摇车       Hand_cycle
+    EAWatchSportHandCycle = 189,
+
+    /// 平衡车       Balance_bike
+    EAWatchSportBalanceBike = 190,
+
+    /// 最大摄氧量测试 VO2_max_test
+    EAWatchSportVo2MaxTest = 191,
+
+    /// 健身游戏       Exergaming
+    EAWatchSportExergaming = 192,
+
+    /// 泡沫轴筋膜放松 Foam_rolling_for_myofascial_release
+    EAWatchSportFoamRollingRelease = 193,
+
+    /// 整理放松       Cool-down
+    EAWatchSportCoolDown = 194,
+
+    /// 团体操       Group_calisthenics
+    EAWatchSportGroupCalisthenics = 195,
+
+    /// 搏击操       Cardio_kickboxing
+    EAWatchSportCardioKickboxing = 196,
+
+    /// 休闲运动    Leisure_sports
+    EAWatchSportLeisureSports = 197,
+
+    /// 赛艇           Match_Rowing
+    EAWatchSportMatchRowing = 198,
+
+    /// 引体向上       Pull-up
+    EAWatchSportPullUp = 199,
+
+    /// 雪上运动       Snow_sports
+    EAWatchSportSnowSports = 200,
+
+    /// 美式橄榄球  American_football
+    EAWatchSportUsaFootball = 201,
+
+    /// 澳式足球    Australian_rules_football
+    EAWatchSportAustralianFootball = 202,
+
+    /// 射击        Shooting
+    EAWatchSportShooting = 203,
     
     /// Intelligent movement: Daily
     /// 智慧运动: 日常运动

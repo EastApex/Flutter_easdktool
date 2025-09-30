@@ -9,7 +9,7 @@ typedef OnRespond = void Function(EARespond respond);
 typedef Progress = void Function(int progress, int isSuccess,int errorType);
 typedef ScanRespond = void Function(EAConnectParam connectParam);
 typedef PreviewImage = void Function(Image previewImage);
-typedef NeedOTA = void Function(bool needOTAinfo);
+typedef NeedOTA = void Function(int needOTAinfo);
 
 /// Get the watch data callback【获取手表数据回调】
 class EAGetDataCallback {
