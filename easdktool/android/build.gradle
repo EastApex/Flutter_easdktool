@@ -11,8 +11,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath 'com.android.tools.build:gradle:8.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10"
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.1'
 
     }
 }
@@ -37,7 +38,7 @@ apply plugin: 'com.google.protobuf'
 apply plugin: 'org.greenrobot.greendao'
 android {
     namespace 'com.example.easdktool'
-    compileSdk 34
+    compileSdk 35
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -45,7 +46,7 @@ android {
     }
 
     defaultConfig {
-        minSdk 23
+        minSdk 24
         multiDexEnabled true
     }
     buildTypes {
@@ -86,7 +87,7 @@ tasks.whenTaskAdded { task ->
 
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'
-    api(name: 'ax_sdk_4.4.5', ext: 'aar')
+    api(name: 'ax_sdk_4.4.6', ext: 'aar')
     api(name: 'custom_dial_0.3.4', ext: 'aar')
     implementation 'com.google.protobuf:protobuf-java:3.19.3'
     implementation 'com.google.protobuf:protoc:3.19.3'

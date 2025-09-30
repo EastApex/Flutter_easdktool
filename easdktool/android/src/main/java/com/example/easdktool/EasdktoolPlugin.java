@@ -514,6 +514,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                                         eaBleOta.setPop(true);
                                                         eaBleOta.setOtaType(EABleOta.OtaType.user_wf);
                                                         eaBleOta.setFilePath(filePath);
+                                                        eaBleOta.setWatchType(ConnectStateListener.watchType);
                                                         List<EABleOta> otaList = new ArrayList<>();
                                                         otaList.add(eaBleOta);
                                                         new OTAFunction(channel).startCustomWatchFace(otaList);

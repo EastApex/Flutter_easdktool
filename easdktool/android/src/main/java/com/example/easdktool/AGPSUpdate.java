@@ -19,6 +19,7 @@ import com.apex.ax_bluetooth.model.EABleFeatures;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.been.OtaProgress;
+import com.example.easdktool.callback.ConnectStateListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -109,6 +110,7 @@ public class AGPSUpdate {
                                             eaBleOta.setOtaType(EABleOta.OtaType.agps);
                                             eaBleOta.setPop(false);
                                             eaBleOta.setFilePath(nFile.getAbsolutePath());
+                                            eaBleOta.setWatchType(ConnectStateListener.watchType);
                                             otaList.add(eaBleOta);
                                             new OTAFunction(channel).startAgps2Watch(otaList);
 

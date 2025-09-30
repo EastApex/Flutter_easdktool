@@ -12,6 +12,7 @@ import com.apex.ax_bluetooth.model.EABleDev;
 import com.apex.ax_bluetooth.model.EABleOta;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.example.easdktool.been.OtaProgress;
+import com.example.easdktool.callback.ConnectStateListener;
 import com.example.easdktool.jieli.ota.JieliOtaInstance;
 
 import android.content.Context;
@@ -34,7 +35,7 @@ public class OTAFunction {
         this.channel = channel;
     }
 
-    private List<EABleOta> getOtaInfo(Map<String, Object> map) {
+    private List<EABleOta> getOtaInfo(final Map<String, Object> map) {
         List<JSONObject> wArray = (List<JSONObject>) map.get("otas");
         if (wArray != null && !wArray.isEmpty()) {
             List<EABleOta> otaDataList = new ArrayList<>();
@@ -43,6 +44,8 @@ public class OTAFunction {
                 EABleOta tempOtaData = new EABleOta();
                 tempOtaData.setVersion(wMap.getString("version"));
                 tempOtaData.setPop(true);
+                tempOtaData.setWatchType(ConnectStateListener.watchType);
+                LogUtils.i(TAG, "watchType:" + ConnectStateListener.watchType);
                 int type = wMap.getInteger("firmwareType");
                 if (type == 0) {
                     tempOtaData.setOtaType(EABleOta.OtaType.apollo);
@@ -54,9 +57,11 @@ public class OTAFunction {
                     tempOtaData.setOtaType(EABleOta.OtaType.tp);
                 } else if (type == 4) {
                     tempOtaData.setOtaType(EABleOta.OtaType.user_wf);
-                } else if (type == 5) {
+                }/**
+                else if (type == 5) {
                     tempOtaData.setOtaType(null);
                 }
+                 */
                 tempOtaData.setFilePath(wMap.getString("binPath"));
                 otaDataList.add(tempOtaData);
 
@@ -69,6 +74,7 @@ public class OTAFunction {
     public void startOta(Map<String, Object> map, Context mContext) {
         List<EABleOta> otaList = getOtaInfo(map);
         if (otaList != null && !otaList.isEmpty()) {
+            /**
             EABleOta jieliOta = null;
             for (EABleOta ota : otaList) {
                 if (ota.getOtaType() == null) {
@@ -204,6 +210,8 @@ public class OTAFunction {
 
                 return;
             }
+            */
+
             EABleManager.getInstance().otaUpdate(otaList, new OtaCallback() {
                 @Override
                 public void success() {

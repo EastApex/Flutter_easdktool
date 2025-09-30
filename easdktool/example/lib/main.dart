@@ -1643,46 +1643,18 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
+                  var bytes9 =
+                  await rootBundle.load("assets/bin/002083_AP0.1B1.5_117X.bin");
+                  String path9 =
+                      (await getApplicationSupportDirectory()).path;
+                  String filePath9 =
+                      '$path9/' + DateTime.now().toString() + '.bin';
+                  final buffer9 = bytes9.buffer;
+                  await File(filePath9).writeAsBytes(buffer9.asUint8List(
+                      bytes9.offsetInBytes, bytes9.lengthInBytes));
+                  EAOTA resOTA = EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B1.5");
 
-                  // check Class EAWatchInfo.lcdPixelType
-                  // if  (EAWatchInfo.lcdPixelType == 4) is JL707 watch
-                  /**
-                   *  只有jieli-707平台的才需要设置类型为 EAFirmwareType.JL_firmware，目前只有iTOUCH AIR PRO属于此平台，其它平台均不得设置为此类型，其它平台按以前的规则要求进行类型设置
-                   */
-
-                  bool isJL707 = false;
-                  if (isJL707) {
-                    var bytes = await rootBundle
-                        .load("assets/bin/002086_AP0.1B4.3_quick.ufw");
-                    String path = (await getApplicationSupportDirectory()).path;
-                    String filePath =
-                        '$path/' + DateTime.now().toString() + '.ufw';
-                    final buffer9 = bytes.buffer;
-                    await File(filePath).writeAsBytes(buffer9.asUint8List(
-                        bytes.offsetInBytes, bytes.lengthInBytes));
-
-                    EAOTA dialOTA =
-                        EAOTA(filePath, EAFirmwareType.JL_firmware, "");
-                    EAOTAList eaList = EAOTAList(0, [dialOTA]);
-                    secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess, error) {
-                      print("OTA progress:" +
-                          progress.toString() +
-                          ",ota result:" +
-                          isSuccess.toString());
-                      if (progress == -1) {
-                        // transmit data fail;
-                      } else if (progress == 100) {
-                        if (isSuccess == 1) {
-                          // transmit data succ;
-                        } else {
-                          // transmit data progress
-                        }
-                      } else {
-                        // transmit data progress
-                      }
-                    }));
-                  } else {
+/**
                     var bytes9 =
                         await rootBundle.load("assets/bin/002083_R0.6.bin");
                     String path9 =
@@ -1702,10 +1674,12 @@ class _MyAppState extends State<MyApp> {
                     final buffer = bytes.buffer;
                     await File(filePath).writeAsBytes(buffer.asUint8List(
                         bytes.offsetInBytes, bytes.lengthInBytes));
+
                     EAOTA appoloOTA =
                         EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
+ */
 
-                    EAOTAList eaList = EAOTAList(0, [resOTA, appoloOTA]);
+                    EAOTAList eaList = EAOTAList(0, [resOTA]);
                     secondEasdkTool.otaUpgrade(eaList,
                         EAOTAProgressCallback((progress, isSuccess, error) {
                       print("OTA progress:" +
@@ -1724,7 +1698,7 @@ class _MyAppState extends State<MyApp> {
                         // transmit data progress
                       }
                     }));
-                  }
+
                 },
               ),
               GestureDetector(

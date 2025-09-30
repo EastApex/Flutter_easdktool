@@ -24,7 +24,7 @@ class MyTaskHandler extends TaskHandler {
   EASDKTool easdkTool = new EASDKTool();
 
   @override
-  Future<void> onDestroy(DateTime timestamp) {
+  Future<void> onDestroy(DateTime timestamp,bool isTimeout) {
     // TODO: implement onDestroy
     throw UnimplementedError();
   }
