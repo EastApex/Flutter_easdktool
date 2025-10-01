@@ -185,14 +185,14 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      // EAConnectParam connectParam = EAConnectParam.testInit();
-      // EASDKTool().connectToPeripheral(connectParam);
+      EAConnectParam connectParam = EAConnectParam.testInit();
+      EASDKTool().connectToPeripheral(connectParam);
 
       ///搜索手表
-      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
-        print("【ScanWatch】" + connectParam.uuid);
-      }));
+      // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+      //   print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+      //   print("【ScanWatch】" + connectParam.uuid);
+      // }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -1643,16 +1643,16 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
-                  var bytes9 =
-                  await rootBundle.load("assets/bin/002083_AP0.1B1.5_117X.bin");
-                  String path9 =
-                      (await getApplicationSupportDirectory()).path;
+                  var bytes9 = await rootBundle
+                      .load("assets/bin/002083_AP0.1B1.5_117X.bin");
+                  String path9 = (await getApplicationSupportDirectory()).path;
                   String filePath9 =
                       '$path9/' + DateTime.now().toString() + '.bin';
                   final buffer9 = bytes9.buffer;
                   await File(filePath9).writeAsBytes(buffer9.asUint8List(
                       bytes9.offsetInBytes, bytes9.lengthInBytes));
-                  EAOTA resOTA = EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B1.5");
+                  EAOTA resOTA =
+                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B1.6");
 
 /**
                     var bytes9 =
@@ -1679,26 +1679,25 @@ class _MyAppState extends State<MyApp> {
                         EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
  */
 
-                    EAOTAList eaList = EAOTAList(0, [resOTA]);
-                    secondEasdkTool.otaUpgrade(eaList,
-                        EAOTAProgressCallback((progress, isSuccess, error) {
-                      print("OTA progress:" +
-                          progress.toString() +
-                          ",ota result:" +
-                          isSuccess.toString());
-                      if (progress == -1) {
-                        // transmit data fail;
-                      } else if (progress == 100) {
-                        if (isSuccess == 1) {
-                          // transmit data succ;
-                        } else {
-                          // transmit data progress
-                        }
+                  EAOTAList eaList = EAOTAList(0, [resOTA]);
+                  secondEasdkTool.otaUpgrade(eaList,
+                      EAOTAProgressCallback((progress, isSuccess, error) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess == 1) {
+                        // transmit data succ;
                       } else {
                         // transmit data progress
                       }
-                    }));
-
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
                 },
               ),
               GestureDetector(

@@ -241,12 +241,30 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     kPlugInLog(@"~~~~~~ showProgress:%@",no.object);
     if ([no.object floatValue] < 0) {
         
-        [_channel invokeMethod:kProgress arguments:@(-1)];
+        NSDictionary *info = @{
+            @"progress":@(-1)
+        };
+        [_channel invokeMethod:kProgress arguments:[info modelToJSONString]];
         return;
     }
     
-    NSInteger progress = [[NSString stringWithFormat:@"%0.2f",[no.object floatValue] * 100] integerValue];
-    [_channel invokeMethod:kProgress arguments:@(progress)];
+   NSInteger progress = [[NSString stringWithFormat:@"%0.2f",[no.object floatValue] * 100] integerValue];
+    if (progress >= 100) {
+        
+        NSDictionary *info = @{
+            @"progress":@(progress),
+            @"isSuccess":@(1),
+        };
+        [_channel invokeMethod:kProgress arguments:[info modelToJSONString]];
+    }
+    else
+    {
+        NSDictionary *info = @{
+            @"progress":@(progress),
+            @"isSuccess":@(0),
+        };
+        [_channel invokeMethod:kProgress arguments:[info modelToJSONString]];
+    }
 }
 
 
@@ -908,27 +926,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         }
         NSString *filePath = call.arguments;
         EAFileModel *fileModel = [EAFileModel eaInitJlWatchFaceFileWithPath:filePath];
-        [[EAOTAManager defaultManager] eaUpgradeWatchFaceFile:fileModel progress:^(CGFloat progress) {
-            
-            NSDictionary *info = @{
-                @"progress":@(progress),
-                @"isSuccess":@(NO)
-            };
-            [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
-         
-            
-        } complete:^(BOOL succ, NSError * _Nullable error) {
-            
-            if (succ) {
-                
-                NSDictionary *info = @{
-                    @"isSuccess":@(YES)
-                };
-                [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
-            
-            }
-            else
-            {
+        
+        [EAJieLiWacthFace eaGetWatchFaceList:^(NSArray * _Nonnull wfNames, NSError * _Nonnull error) {
+               
+            if (error) {
                 
                 NSDictionary *info = @{
                     @"isSuccess":@(NO),
@@ -936,9 +937,60 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     @"error":[error.domain isNotBlank]?error.domain:@""
                 };
                 [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
-                
             }
+            else
+            {
+            
+                if (wfNames.count >= 2) {
+                    
+                    NSDictionary *info = @{
+                        @"isSuccess":@(NO),
+                        @"errorType":@(0),
+                        @"error":@"Insufficient space,Please delete and then synchronize [空间不足,请删除后再同步]"
+                    };
+                    [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+                }
+                else
+                {
+                    
+                    [[EAOTAManager defaultManager] eaUpgradeWatchFaceFile:fileModel progress:^(CGFloat progress) {
+                        
+                        NSDictionary *info = @{
+                            @"progress":@(progress * 100),
+                            @"isSuccess":@(0)
+                        };
+                        [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+                     
+                        
+                    } complete:^(BOOL succ, NSError * _Nullable error) {
+                        
+                        if (succ) {
+                            
+                            NSDictionary *info = @{
+                                @"isSuccess":@(YES)
+                            };
+                            [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+                        
+                        }
+                        else
+                        {
+                            
+                            NSDictionary *info = @{
+                                @"isSuccess":@(NO),
+                                @"errorType":@(error.code),
+                                @"error":[error.domain isNotBlank]?error.domain:@""
+                            };
+                            [selfWeak.channel invokeMethod:kAddJieLiWatchFace arguments:[info modelToJSONString]];
+                            
+                        }
+                    }];
+                }
+            }
+            
         }];
+        
+        
+        
     }
     else if ([call.method isEqualToString:kDeleteJieLiWatchFace]) { // FIXME: - 杰里707 删除表盘
         
@@ -1122,7 +1174,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if (data.length == 0) {
             
-            [_channel invokeMethod:kProgress arguments:@(-1)];
+            NSDictionary *info = @{
+                @"progress":@(-1)
+            };
+            [_channel invokeMethod:kProgress arguments:[info modelToJSONString]];
             kPlugInLog(@"The data is null in binPath!");
             return;
         }
@@ -1292,7 +1347,10 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
     WeakSelf
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [selfWeak.channel invokeMethod:kProgress arguments:@(-1)];
+        NSDictionary *info = @{
+            @"progress":@(-1)
+        };
+        [selfWeak.channel invokeMethod:kProgress arguments:[info modelToJSONString]];
     });
 }
 
