@@ -223,7 +223,7 @@ public class OTAFunction {
                         public void run() {
                             if (channel != null) {
                                 OtaProgress otaProgress = new OtaProgress();
-                                otaProgress.isSuccess = true;
+                                otaProgress.isSuccess = 1;
                                 otaProgress.progress = 100;
                                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
@@ -234,7 +234,7 @@ public class OTAFunction {
                 }
 
                 @Override
-                public void progress(int i) {
+                public void progress(final int i) {
                     if (mHandler == null) {
                         mHandler = new Handler(Looper.getMainLooper());
                     }
@@ -244,7 +244,7 @@ public class OTAFunction {
                             LogUtils.i(TAG, "当前进度:" + i);
                             if (channel != null) {
                                 OtaProgress otaProgress = new OtaProgress();
-                                otaProgress.isSuccess = false;
+                                otaProgress.isSuccess = 0;
                                 otaProgress.progress = i;
                                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                             }
@@ -268,7 +268,7 @@ public class OTAFunction {
                         public void run() {
                             if (channel != null) {
                                 OtaProgress otaProgress = new OtaProgress();
-                                otaProgress.isSuccess = false;
+                                otaProgress.isSuccess = -1;
                                 otaProgress.progress = -1;
                                 otaProgress.errorType = i;
                                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
@@ -282,7 +282,7 @@ public class OTAFunction {
         } else {
             if (channel != null) {
                 OtaProgress otaProgress = new OtaProgress();
-                otaProgress.isSuccess = false;
+                otaProgress.isSuccess = -1;
                 otaProgress.progress = -1;
                 otaProgress.errorType = 0x10;
                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
@@ -302,7 +302,7 @@ public class OTAFunction {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = true;
+                            otaProgress.isSuccess = 1;
                             otaProgress.progress = 100;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
@@ -322,7 +322,7 @@ public class OTAFunction {
                         LogUtils.i(TAG, "当前进度:" + i);
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = 0;
                             otaProgress.progress = i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
@@ -346,7 +346,7 @@ public class OTAFunction {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = -1;
                             otaProgress.progress = -1;
                             otaProgress.errorType=i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
@@ -370,7 +370,7 @@ public class OTAFunction {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = true;
+                            otaProgress.isSuccess = 1;
                             otaProgress.progress = 100;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
@@ -390,7 +390,7 @@ public class OTAFunction {
                         LogUtils.i(TAG, "当前进度:" + i);
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = 0;
                             otaProgress.progress = i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));
                         }
@@ -413,7 +413,7 @@ public class OTAFunction {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = -1;
                             otaProgress.progress = -1;
                             otaProgress.errorType=i;
                             channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));

@@ -49,7 +49,7 @@ public class JieLiWatchFace {
                 public void run() {
                     if (channel != null) {
                         OtaProgress otaProgress = new OtaProgress();
-                        otaProgress.isSuccess = false;
+                        otaProgress.isSuccess = -1;
                         otaProgress.progress = -1;
                         otaProgress.errorType = 0x10;
                         channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
@@ -77,7 +77,7 @@ public class JieLiWatchFace {
                                         public void run() {
                                             if (channel != null) {
                                                 OtaProgress otaProgress = new OtaProgress();
-                                                otaProgress.isSuccess = false;
+                                                otaProgress.isSuccess = -1;
                                                 otaProgress.progress = -1;
                                                 otaProgress.errorType = 0x1C;
                                                 channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
@@ -122,7 +122,7 @@ public class JieLiWatchFace {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = true;
+                            otaProgress.isSuccess = 1;
                             otaProgress.progress = 100;
                             channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
                         }
@@ -143,7 +143,7 @@ public class JieLiWatchFace {
                         LogUtils.i(TAG, "当前进度:" + progress);
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = 0;
                             otaProgress.progress = progress;
                             channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
                         }
@@ -167,7 +167,7 @@ public class JieLiWatchFace {
                     public void run() {
                         if (channel != null) {
                             OtaProgress otaProgress = new OtaProgress();
-                            otaProgress.isSuccess = false;
+                            otaProgress.isSuccess = -1;
                             otaProgress.progress = -1;
                             otaProgress.errorType = i;
                             channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));

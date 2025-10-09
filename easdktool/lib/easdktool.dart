@@ -330,7 +330,6 @@ class EASDKTool {
 
         break;
       case kAddJieLiWatchFace:
-        debugPrint("🍀🍀" + methodCall.arguments);
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
         if (mOTAProgressCallback != null) {
@@ -340,7 +339,6 @@ class EASDKTool {
 
         break;
       case kDeleteJieLiWatchFace:
-        debugPrint("🍀🍀" + methodCall.arguments);
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EARespond respond = EARespond.fromMap(info);
         if (mSetDataCallback != null) {
@@ -348,7 +346,7 @@ class EASDKTool {
         }
         break;
       case kGetJieLiWatchFace:
-        debugPrint("🍀🍀" + methodCall.arguments);
+        debugPrint("707 dial has been pulled back to Flutter");
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         if (mJieliWatchFaceCallback != null) {
           mJieliWatchFaceCallback!.callback(info);
@@ -419,10 +417,8 @@ class EASDKTool {
         }
         break;
       case kProgress:
-        // debugPrint(methodCall.arguments);
         Map<String, dynamic> info = convert.jsonDecode(methodCall.arguments);
         EAOtaProgress eaOtaProgress = EAOtaProgress.fromMap(info);
-        // debugPrint("progress: ${eaOtaProgress.progress}");
         if (mOTAProgressCallback != null) {
           mOTAProgressCallback!.callback(eaOtaProgress!.progress,
               eaOtaProgress!.isSuccess, eaOtaProgress.errorType);

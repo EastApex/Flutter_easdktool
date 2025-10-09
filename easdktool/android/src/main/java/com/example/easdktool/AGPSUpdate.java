@@ -98,7 +98,7 @@ public class AGPSUpdate {
                                             LogUtils.i(TAG, "本地缓存的文件不存在");
                                             if (channel != null) {
                                                 OtaProgress otaProgress = new OtaProgress();
-                                                otaProgress.isSuccess = false;
+                                                otaProgress.isSuccess = -1;
                                                 otaProgress.progress = -1;
                                                 otaProgress.errorType = 0x10;
                                                 channel.invokeMethod(kProgress, JSONObject.toJSONString(otaProgress));

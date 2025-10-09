@@ -81,9 +81,9 @@
     },
     {
       "name": "flutter_foreground_task",
-      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-9.1.0",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter_lints",

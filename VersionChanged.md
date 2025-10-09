@@ -1,4 +1,11 @@
+Date:10.09.2025
+Change:
+    Android:
+        1.Solve the OTA completion issue.
+    iOS:
+        No modification for now
 
+=================================================================
 
 Date:10.01.2025
 Change:

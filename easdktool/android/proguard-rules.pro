@@ -93,6 +93,7 @@ public static java.lang.String TABLENAME;
 
 }
 -keep class com.jieli.jl_bt_ota.** { *; }
--keep class com.jieli.** { *; }
+-keep class com.jieli.**{*;}
+
 
 

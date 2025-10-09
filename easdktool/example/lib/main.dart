@@ -185,14 +185,14 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      EAConnectParam connectParam = EAConnectParam.testInit();
-      EASDKTool().connectToPeripheral(connectParam);
+      // EAConnectParam connectParam = EAConnectParam.testInit();
+      // EASDKTool().connectToPeripheral(connectParam);
 
       ///搜索手表
-      // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-      //   print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
-      //   print("【ScanWatch】" + connectParam.uuid);
-      // }));
+      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+        print("【ScanWatch】" + connectParam.uuid);
+      }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -1498,6 +1498,37 @@ class _MyAppState extends State<MyApp> {
                       kEADataInfoTypeGPSLocation, eagpsLocation.toMap());
                 },
               ),
+              GestureDetector(
+                child: NewTextView('27.Push SMS【推送SMS到手表】'),
+                onTap: () {
+                  EAPushMessage eapushMessage = EAPushMessage();
+                  eapushMessage.messageType = EAPushMessageType.sms;
+                  eapushMessage.messageActionType = EAPushMessageActionType.add;
+                  eapushMessage.title = "SMS";
+                  DateTime dateTime = DateTime.now();
+                  eapushMessage.date = dateTime.year.toString() +
+                      (dateTime.month < 10
+                          ? "0" + dateTime.month.toString()
+                          : dateTime.month.toString()) +
+                      (dateTime.day < 10
+                          ? "0" + dateTime.day.toString()
+                          : dateTime.day.toString()) +
+                      "T" +
+                      (dateTime.hour < 10
+                          ? "0" + dateTime.hour.toString()
+                          : dateTime.hour.toString()) +
+                      (dateTime.minute < 10
+                          ? "0" + dateTime.minute.toString()
+                          : dateTime.minute.toString()) +
+                      (dateTime.second < 10
+                          ? "0" + dateTime.second.toString()
+                          : dateTime.second.toString());
+                  eapushMessage.content =
+                      "Test push information" + dateTime.second.toString();
+                  secondMethodSetWatchData(
+                      kEADataInfoTypePushInfo, eapushMessage.toMap());
+                },
+              ),
               TitleView(' Getting big data【获取大数据】'),
               GestureDetector(
                 child:
@@ -1644,7 +1675,7 @@ class _MyAppState extends State<MyApp> {
                   //   }
                   // }));
                   var bytes9 = await rootBundle
-                      .load("assets/bin/002083_AP0.1B1.5_117X.bin");
+                      .load("assets/bin/002086_AP0.1B6.7.bin");
                   String path9 = (await getApplicationSupportDirectory()).path;
                   String filePath9 =
                       '$path9/' + DateTime.now().toString() + '.bin';
@@ -1652,50 +1683,43 @@ class _MyAppState extends State<MyApp> {
                   await File(filePath9).writeAsBytes(buffer9.asUint8List(
                       bytes9.offsetInBytes, bytes9.lengthInBytes));
                   EAOTA resOTA =
-                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B1.6");
+                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B6.7");
 
-/**
-                    var bytes9 =
-                        await rootBundle.load("assets/bin/002083_R0.6.bin");
-                    String path9 =
-                        (await getApplicationSupportDirectory()).path;
-                    String filePath9 =
-                        '$path9/' + DateTime.now().toString() + '.bin';
-                    final buffer9 = bytes9.buffer;
-                    await File(filePath9).writeAsBytes(buffer9.asUint8List(
-                        bytes9.offsetInBytes, bytes9.lengthInBytes));
-                    EAOTA resOTA = EAOTA(filePath9, EAFirmwareType.Res, "R0.6");
+                  /**
+                      var bytes9 =
+                      await rootBundle.load("assets/bin/002083_R0.6.bin");
+                      String path9 =
+                      (await getApplicationSupportDirectory()).path;
+                      String filePath9 =
+                      '$path9/' + DateTime.now().toString() + '.bin';
+                      final buffer9 = bytes9.buffer;
+                      await File(filePath9).writeAsBytes(buffer9.asUint8List(
+                      bytes9.offsetInBytes, bytes9.lengthInBytes));
+                      EAOTA resOTA = EAOTA(filePath9, EAFirmwareType.Res, "R0.6");
 
-                    var bytes = await rootBundle
-                        .load("assets/bin/002083_AP0.1B1.4_116X.bin");
-                    String path = (await getApplicationSupportDirectory()).path;
-                    String filePath =
-                        '$path/' + DateTime.now().toString() + '.bin';
-                    final buffer = bytes.buffer;
-                    await File(filePath).writeAsBytes(buffer.asUint8List(
-                        bytes.offsetInBytes, bytes.lengthInBytes));
+                      var bytes = await rootBundle
+                      .load("assets/bin/002083_AP0.1B1.4_116X.bin");
+                      String path = (await getApplicationSupportDirectory()).path;
+                      String filePath =
+                      '$path/' + DateTime.now().toString() + '.bin';
+                      final buffer = bytes.buffer;
+                      await File(filePath).writeAsBytes(buffer.asUint8List(
+                      bytes.offsetInBytes, bytes.lengthInBytes));
 
-                    EAOTA appoloOTA =
-                        EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
- */
+                      EAOTA appoloOTA =
+                      EAOTA(filePath, EAFirmwareType.Apollo, "AP0.1B1.4");
+                   */
 
                   EAOTAList eaList = EAOTAList(0, [resOTA]);
                   secondEasdkTool.otaUpgrade(eaList,
                       EAOTAProgressCallback((progress, isSuccess, error) {
-                    print("OTA progress:" +
+                    print("OTA-- progress:" +
                         progress.toString() +
                         ",ota result:" +
                         isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
-                    } else if (progress == 100) {
-                      if (isSuccess == 1) {
-                        // transmit data succ;
-                      } else {
-                        // transmit data progress
-                      }
                     } else {
-                      // transmit data progress
                     }
                   }));
                 },
