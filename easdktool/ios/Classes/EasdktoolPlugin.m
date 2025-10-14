@@ -491,6 +491,8 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 case EADataInfoTypeLanguage: {
                     
                     EALanguageModel *language = [EALanguageModel modelWithJSON:value];
+                    EALanguageType languageType = [[value objectForKey:@"language"] integerValue];
+                    language.language = languageType;
                     [[EABleSendManager defaultManager] operationChangeModel:language respond:^(EARespondModel * _Nonnull respondModel) {
                         
                         [selfWeak setWatchRespondWithDataType:dataInfoType respondCodeType:respondModel.eErrorCode];

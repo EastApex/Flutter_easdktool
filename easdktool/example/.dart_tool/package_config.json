@@ -81,9 +81,9 @@
     },
     {
       "name": "flutter_foreground_task",
-      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-9.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_lints",
@@ -165,7 +165,7 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.18",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.19",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -339,7 +339,7 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.14.0",
+      "rootUri": "file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.15.0",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },

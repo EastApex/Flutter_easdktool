@@ -1,3 +1,13 @@
+Date:10.14.2025
+Change:
+    Android:
+        No modification for now
+    iOS:
+        1.Fix the issue where language Settings fail to work.
+
+=================================================================
+
+
 Date:10.09.2025
 Change:
     Android:

@@ -43,9 +43,9 @@ file
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/file-7.0.1/
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/file-7.0.1/lib/
 flutter_foreground_task
-3.0
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0/
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0/lib/
+3.4
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-9.1.0/
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_foreground_task-9.1.0/lib/
 flutter_lints
 3.5
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/flutter_lints-5.0.0/
@@ -92,8 +92,8 @@ file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider-2.1.5/
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider-2.1.5/lib/
 path_provider_android
 3.7
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.18/
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.18/lib/
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.19/
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.19/lib/
 path_provider_foundation
 3.7
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/path_provider_foundation-2.4.2/
@@ -204,8 +204,8 @@ file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/web-1.1.1/
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/web-1.1.1/lib/
 win32
 3.8
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.14.0/
-file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.14.0/lib/
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.15.0/
+file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32-5.15.0/lib/
 win32_registry
 3.4
 file:///Users/aye/.pub-cache/hosted/pub.flutter-io.cn/win32_registry-1.1.5/

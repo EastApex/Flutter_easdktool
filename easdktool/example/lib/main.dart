@@ -185,14 +185,14 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      // EAConnectParam connectParam = EAConnectParam.testInit();
-      // EASDKTool().connectToPeripheral(connectParam);
+      EAConnectParam connectParam = EAConnectParam.testInit();
+      EASDKTool().connectToPeripheral(connectParam);
 
-      ///搜索手表
-      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
-        print("【ScanWatch】" + connectParam.uuid);
-      }));
+      // ///搜索手表
+      // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+      //   print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+      //   print("【ScanWatch】" + connectParam.uuid);
+      // }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -1674,8 +1674,8 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
-                  var bytes9 = await rootBundle
-                      .load("assets/bin/002086_AP0.1B6.7.bin");
+                  var bytes9 =
+                      await rootBundle.load("assets/bin/002086_AP0.1B6.7.bin");
                   String path9 = (await getApplicationSupportDirectory()).path;
                   String filePath9 =
                       '$path9/' + DateTime.now().toString() + '.bin';
@@ -1719,8 +1719,7 @@ class _MyAppState extends State<MyApp> {
                         isSuccess.toString());
                     if (progress == -1) {
                       // transmit data fail;
-                    } else {
-                    }
+                    } else {}
                   }));
                 },
               ),
