@@ -61,50 +61,73 @@ public class JieLiWatchFace {
         }
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
             @Override
-            public void watchInfo(EABleWatchInfo eaBleWatchInfo) {
-                if (eaBleWatchInfo != null) {
-                    final int dialNum = eaBleWatchInfo.getEx_dial_num();
-                    JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
-                        @Override
-                        public void jieliDial(List<JieliWatchInfo> watchInfos) {
-                            if (watchInfos != null) {
-                                if (dialNum <= watchInfos.size()) {
-                                    if (mHandler == null) {
-                                        mHandler = new Handler(Looper.getMainLooper());
-                                    }
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (channel != null) {
-                                                OtaProgress otaProgress = new OtaProgress();
-                                                otaProgress.isSuccess = -1;
-                                                otaProgress.progress = -1;
-                                                otaProgress.errorType = 0x1C;
-                                                channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+            public void watchInfo(final EABleWatchInfo eaBleWatchInfo) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        if (eaBleWatchInfo != null) {
+                            final int dialNum = eaBleWatchInfo.getEx_dial_num();
+
+                            JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
+                                @Override
+                                public void jieliDial(List<JieliWatchInfo> watchInfos) {
+                                    if (watchInfos != null) {
+                                        if (dialNum <= watchInfos.size()) {
+                                            if (mHandler == null) {
+                                                mHandler = new Handler(Looper.getMainLooper());
                                             }
-                                            mHandler = null;
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (channel != null) {
+                                                        OtaProgress otaProgress = new OtaProgress();
+                                                        otaProgress.isSuccess = -1;
+                                                        otaProgress.progress = -1;
+                                                        otaProgress.errorType = 0x1C;
+                                                        channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                                                    }
+                                                    mHandler = null;
+                                                }
+                                            });
+                                            return;
                                         }
-                                    });
-                                    return;
+                                    }
+                                    add707WatchFace(filePath);
+
                                 }
-                            }
-                            add707WatchFace(filePath);
 
+                                @Override
+                                public void error(BaseError error) {
+
+                                }
+                            });
+                            return;
                         }
+                        add707WatchFace(filePath);
+                    }
+                }.start();
 
-                        @Override
-                        public void error(BaseError error) {
-
-                        }
-                    });
-                    return;
-                }
-                add707WatchFace(filePath);
             }
 
             @Override
             public void mutualFail(int i) {
-
+                if (mHandler == null) {
+                    mHandler = new Handler(Looper.getMainLooper());
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (channel != null) {
+                            OtaProgress otaProgress = new OtaProgress();
+                            otaProgress.isSuccess = -1;
+                            otaProgress.progress = -1;
+                            otaProgress.errorType = 0x10;
+                            channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                        }
+                        mHandler = null;
+                    }
+                });
             }
         });
 
@@ -197,107 +220,121 @@ public class JieLiWatchFace {
             });
             return;
         }
-        JieliWatchFaceManager.getInstance().deleteWatchFace(filePath, new GeneralCallback() {
+        new Thread() {
             @Override
-            public void result(final boolean b, int i) {
-                if (mHandler == null) {
-                    mHandler = new Handler(Looper.getMainLooper());
-                }
-                mHandler.post(new Runnable() {
+            public void run() {
+                super.run();
+                JieliWatchFaceManager.getInstance().deleteWatchFace(filePath, new GeneralCallback() {
                     @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("respondCodeType", b ? 0 : 1);
-                        if (channel != null) {
-                            channel.invokeMethod(kDeleteJieLiWatchFace, jsonObject.toJSONString());
+                    public void result(final boolean b, int i) {
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
                         }
-                        mHandler = null;
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("respondCodeType", b ? 0 : 1);
+                                if (channel != null) {
+                                    channel.invokeMethod(kDeleteJieLiWatchFace, jsonObject.toJSONString());
+                                }
+                                mHandler = null;
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void mutualFail(int i) {
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("respondCodeType", 1);
+                                if (channel != null) {
+                                    channel.invokeMethod(kDeleteJieLiWatchFace, jsonObject.toJSONString());
+                                }
+                                mHandler = null;
+                            }
+                        });
                     }
                 });
-
             }
+        }.start();
 
-            @Override
-            public void mutualFail(int i) {
-                if (mHandler == null) {
-                    mHandler = new Handler(Looper.getMainLooper());
-                }
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("respondCodeType", 1);
-                        if (channel != null) {
-                            channel.invokeMethod(kDeleteJieLiWatchFace, jsonObject.toJSONString());
-                        }
-                        mHandler = null;
-                    }
-                });
-            }
-        });
     }
 
     public void getWatchFace() {
-        JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
+        new Thread() {
             @Override
-            public void jieliDial(List<JieliWatchInfo> watchInfos) {
-                final List<Map<String, Object>> dataList = new ArrayList<>();
-                if (watchInfos != null && !watchInfos.isEmpty()) {
-                    for (int i = 0; i < watchInfos.size(); i++) {
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("name", watchInfos.get(i).name);
-                        map.put("status", watchInfos.get(i).status);
-                        map.put("bitmapUri", watchInfos.get(i).bitmapUri);
-                        map.put("uuid", watchInfos.get(i).uuid);
-                        map.put("version", watchInfos.get(i).version);
-                        map.put("size", watchInfos.get(i).size);
-                        map.put("fileUrl", watchInfos.get(i).fileUrl);
-                        map.put("updateUUID", watchInfos.get(i).updateUUID);
-                        map.put("updateVersion", watchInfos.get(i).updateVersion);
-                        map.put("updateUrl", watchInfos.get(i).updateUrl);
-                        map.put("customBgFatPath", watchInfos.get(i).customBgFatPath);
-                        map.put("path", watchInfos.get(i).path);
-                        dataList.add(map);
-                    }
-                }
-                if (mHandler == null) {
-                    mHandler = new Handler(Looper.getMainLooper());
-                }
-                mHandler.post(new Runnable() {
+            public void run() {
+                super.run();
+                JieliWatchFaceManager.getInstance().getDialList(new JieliDialCallback() {
                     @Override
-                    public void run() {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("value", dataList);
-                        if (channel != null) {
-                            LogUtils.i(TAG, "Deliver query big data to flutter:" + jsonObject.toJSONString());
-                            channel.invokeMethod(kGetJieLiWatchFace, jsonObject.toJSONString());
+                    public void jieliDial(List<JieliWatchInfo> watchInfos) {
+                        final List<Map<String, Object>> dataList = new ArrayList<>();
+                        if (watchInfos != null && !watchInfos.isEmpty()) {
+                            for (int i = 0; i < watchInfos.size(); i++) {
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("name", watchInfos.get(i).name);
+                                map.put("status", watchInfos.get(i).status);
+                                map.put("bitmapUri", watchInfos.get(i).bitmapUri);
+                                map.put("uuid", watchInfos.get(i).uuid);
+                                map.put("version", watchInfos.get(i).version);
+                                map.put("size", watchInfos.get(i).size);
+                                map.put("fileUrl", watchInfos.get(i).fileUrl);
+                                map.put("updateUUID", watchInfos.get(i).updateUUID);
+                                map.put("updateVersion", watchInfos.get(i).updateVersion);
+                                map.put("updateUrl", watchInfos.get(i).updateUrl);
+                                map.put("customBgFatPath", watchInfos.get(i).customBgFatPath);
+                                map.put("path", watchInfos.get(i).path);
+                                dataList.add(map);
+                            }
                         }
-                        mHandler = null;
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("value", dataList);
+                                if (channel != null) {
+                                    LogUtils.i(TAG, "Deliver query big data to flutter:" + jsonObject.toJSONString());
+                                    channel.invokeMethod(kGetJieLiWatchFace, jsonObject.toJSONString());
+                                }
+                                mHandler = null;
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void error(BaseError error) {
+                        LogUtils.i(TAG, "获取707表盘时发生错误：" + error.toString());
+                        if (mHandler == null) {
+                            mHandler = new Handler(Looper.getMainLooper());
+                        }
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (channel != null) {
+                                    final List<Map<String, Object>> dataList = new ArrayList<>();
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("value", dataList);
+                                    channel.invokeMethod(kGetJieLiWatchFace, jsonObject.toJSONString());
+                                }
+                                mHandler = null;
+                            }
+                        });
                     }
                 });
-
             }
+        }.start();
 
-            @Override
-            public void error(BaseError error) {
-                LogUtils.i(TAG, "获取707表盘时发生错误：" + error.toString());
-                if (mHandler == null) {
-                    mHandler = new Handler(Looper.getMainLooper());
-                }
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (channel != null) {
-                            final List<Map<String, Object>> dataList = new ArrayList<>();
-                            JSONObject jsonObject = new JSONObject();
-                            jsonObject.put("value", dataList);
-                            channel.invokeMethod(kGetJieLiWatchFace, jsonObject.toJSONString());
-                        }
-                        mHandler = null;
-                    }
-                });
-            }
-        });
     }
 
 }

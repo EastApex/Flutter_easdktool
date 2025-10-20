@@ -49,9 +49,11 @@ public class AGPSUpdate {
     private final String kProgress = "Progress";
     private MethodChannel channel;
     byte[] dataByte;
+    Context mContext;
 
-    public AGPSUpdate(MethodChannel channel) {
+    public AGPSUpdate(MethodChannel channel,Context mContext) {
         this.channel = channel;
+        this.mContext=mContext;
         /**
          if (BuildConfig.DEBUG) {
          urlList = new String[]{"http://apexwear-dev.oss-cn-shenzhen.aliyuncs.com/AGPS/f1e1G7.pgl",
@@ -67,7 +69,7 @@ public class AGPSUpdate {
     }
 
 
-    public void startUpdate(final Context mContext) {
+    public void startUpdate() {
 
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.features, new FeaturesCallback() {
             @Override
@@ -94,6 +96,7 @@ public class AGPSUpdate {
                                     @Override
                                     public void run() {
                                         final File nFile = getLocalCacheFile(mContext);
+                                        mContext=null;
                                         if (nFile == null || !nFile.exists() || !nFile.isFile()) {
                                             LogUtils.i(TAG, "本地缓存的文件不存在");
                                             if (channel != null) {
@@ -110,7 +113,6 @@ public class AGPSUpdate {
                                             eaBleOta.setOtaType(EABleOta.OtaType.agps);
                                             eaBleOta.setPop(false);
                                             eaBleOta.setFilePath(nFile.getAbsolutePath());
-                                            eaBleOta.setWatchType(ConnectStateListener.watchType);
                                             otaList.add(eaBleOta);
                                             new OTAFunction(channel).startAgps2Watch(otaList);
 

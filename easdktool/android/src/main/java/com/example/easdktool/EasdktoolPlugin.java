@@ -474,7 +474,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 //获取手表尺寸
                 EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
                     @Override
-                    public void watchInfo(EABleWatchInfo eaBleWatchInfo) {
+                    public void watchInfo(final EABleWatchInfo eaBleWatchInfo) {
                         if (eaBleWatchInfo != null) {
                             PreviewTask previewTask = new PreviewTask(eaBleWatchInfo, customWatchFace, mContext, null);
                             previewTask.setPrewMapCallBack(new PrewMapCallBack() {
@@ -492,37 +492,60 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                                     if (channel != null) {
                                                         if (bitArray == null) {
                                                             //将其转Uint8List
-                                                            channel.invokeMethod(kArgumentsError, "Failed to create preview image");
+                                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    channel.invokeMethod(kArgumentsError, "Failed to create preview image");
+                                                                }
+                                                            });
                                                         } else {
-                                                            channel.invokeMethod(kEACustomWatchface, bitArray);
+                                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    channel.invokeMethod(kEACustomWatchface, bitArray);
+                                                                }
+                                                            });
+
                                                         }
                                                     }
                                                 }
                                             }.start();
 
                                         } else {
-                                            new CustomWatchFaceUtils(eaBleWatchInfo, customWatchFace, mContext, null, new WatchFileCallback() {
+                                            new Thread() {
                                                 @Override
-                                                public void watchFaceFile(String filePath) {
-                                                    if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
-                                                        if (channel != null) {
-                                                            channel.invokeMethod("Progress", -1);
+                                                public void run() {
+                                                    super.run();
+                                                    new CustomWatchFaceUtils(eaBleWatchInfo, customWatchFace, mContext, null, new WatchFileCallback() {
+                                                        @Override
+                                                        public void watchFaceFile(String filePath) {
+                                                            if (TextUtils.isEmpty(filePath) || !new File(filePath).exists()) {
+                                                                if (channel != null) {
+                                                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
+                                                                            channel.invokeMethod("Progress", -1);
+                                                                        }
+                                                                    });
+
+                                                                }
+
+                                                            } else {
+                                                                EABleOta eaBleOta = new EABleOta();
+                                                                eaBleOta.setPop(true);
+                                                                eaBleOta.setOtaType(EABleOta.OtaType.user_wf);
+                                                                eaBleOta.setFilePath(filePath);
+                                                                List<EABleOta> otaList = new ArrayList<>();
+                                                                otaList.add(eaBleOta);
+                                                                new OTAFunction(channel).startCustomWatchFace(otaList);
+
+
+                                                            }
                                                         }
-
-                                                    } else {
-                                                        EABleOta eaBleOta = new EABleOta();
-                                                        eaBleOta.setPop(true);
-                                                        eaBleOta.setOtaType(EABleOta.OtaType.user_wf);
-                                                        eaBleOta.setFilePath(filePath);
-                                                        eaBleOta.setWatchType(ConnectStateListener.watchType);
-                                                        List<EABleOta> otaList = new ArrayList<>();
-                                                        otaList.add(eaBleOta);
-                                                        new OTAFunction(channel).startCustomWatchFace(otaList);
-
-
-                                                    }
+                                                    }, bitmap).createWatchFaceFile();
                                                 }
-                                            }, bitmap).createWatchFaceFile();
+                                            }.start();
+
                                         }
                                     } else {
                                         channel.invokeMethod(kArgumentsError, "param error");
@@ -540,7 +563,13 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
 
                     @Override
                     public void mutualFail(int i) {
-                        channel.invokeMethod(kArgumentsError, "param error");
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                channel.invokeMethod(kArgumentsError, "param error");
+                            }
+                        });
+
                         return;
                     }
                 });
@@ -670,7 +699,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                 return;
             }
             LogUtils.i(TAG, "开始更新AGPS");
-            new AGPSUpdate(channel).startUpdate(mContext);
+            new AGPSUpdate(channel, mContext).startUpdate();
         } else if (call.method.equals(kAddJieLiWatchFace)) {
             String arguments = (String) call.arguments;
             new JieLiWatchFace(channel).addWatchFace(arguments);

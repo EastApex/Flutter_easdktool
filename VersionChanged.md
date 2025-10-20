@@ -1,3 +1,15 @@
+Date:10.20.2025
+Change:
+    Android:
+        1. Add more log prints
+        2. If the watch fails to connect successfully or is in OTA status, all instructions sent to the watch will become invalid.
+    iOS:
+        No modification for now
+
+=================================================================
+
+
+
 Date:10.14.2025
 Change:
     Android:

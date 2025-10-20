@@ -35,6 +35,7 @@ void main() {
 }
 
 String connectState = "Unknown";
+bool isConnectSuccess = false;
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -156,6 +157,7 @@ class _MyAppState extends State<MyApp> {
   EASDKTool secondEasdkTool = EASDKTool();
   ReceivePort getReceivePort = ReceivePort();
   ReceivePort setReceivePort = ReceivePort();
+  ReceivePort stateReceivePort = ReceivePort();
   EAGetDataCallback? eaGetDataCallback;
   EASetDataCallback? eaSetDataCallback;
   int count = 0;
@@ -170,6 +172,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    initStateIsolate();
 
     if (LocalPlatform().isAndroid) {
       checkLocationPermission();
@@ -185,14 +188,14 @@ class _MyAppState extends State<MyApp> {
         operationPhoneListener(info);
       }));
 
-      EAConnectParam connectParam = EAConnectParam.testInit();
-      EASDKTool().connectToPeripheral(connectParam);
+      // EAConnectParam connectParam = EAConnectParam.testInit();
+      // EASDKTool().connectToPeripheral(connectParam);
 
-      // ///搜索手表
-      // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-      //   print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
-      //   print("【ScanWatch】" + connectParam.uuid);
-      // }));
+      ///搜索手表
+      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+        print("【ScanWatch】" + connectParam.uuid);
+      }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -224,6 +227,16 @@ class _MyAppState extends State<MyApp> {
         getReceivePort.sendPort, "_ui_get_isolate");
     getReceivePort.listen((message) {
       eaGetDataCallback?.onSuccess(message);
+    });
+  }
+
+  void initStateIsolate() {
+    IsolateNameServer.removePortNameMapping("connectState");
+    IsolateNameServer.registerPortWithName(
+        stateReceivePort.sendPort, "connectState");
+    stateReceivePort.listen((message) {
+      isConnectSuccess = message;
+      print("isConnectSuccess:" + message.toString());
     });
   }
 
@@ -819,6 +832,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Obtaining watch Information【获取手表信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   firstMethodGetWatchData(
                       kEADataInfoTypeWatch,
                       EAGetDataCallback(
@@ -834,42 +851,70 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2.Obtaining User information【获取用户信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeUser);
                 },
               ),
               GestureDetector(
                 child: TextView('3.Get watch screen brightness【获取手表屏幕亮度】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeBlacklight);
                 },
               ),
               GestureDetector(
                 child: TextView('4.Obtain the battery【获取手表电量信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeBattery);
                 },
               ),
               GestureDetector(
                 child: TextView('5.Obtain the device language【设备语言信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeLanguage);
                 },
               ),
               GestureDetector(
                 child: TextView('6.Obtain the device unit system【设备单位制度】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeUnifiedUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('7.Obtain the DND period【获取手表免打扰时间段】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeNotDisturb);
                 },
               ),
               GestureDetector(
                 child: TextView('8.Obtain the daily target value【获取手表日常目标值】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeDailyGoal);
                 },
               ),
@@ -877,6 +922,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '9.Obtain the automatic sleep monitoring【获取手表自动睡眠监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeAutoCheckSleep);
                 },
               ),
@@ -884,12 +933,20 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '10.Get watch automatic heart rate monitoring【获取手表自动心率监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeAutoCheckHeartRate);
                 },
               ),
               GestureDetector(
                 child: TextView('11.Get watch sedentary monitoring【获取手表久坐监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(
                       kEADataInfoTypeAutoCheckSedentariness);
                 },
@@ -898,12 +955,20 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '12.Get watch Social alert switch(SMS、PhoneCall、Email)【社交提醒开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeSocialSwitch);
                 },
               ),
               GestureDetector(
                 child: TextView('13.Get watch alerts【获取手表提醒】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeReminder);
                 },
               ),
@@ -911,6 +976,10 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('14.Get heart rate alarm threshold【获取手表心率报警门限】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(
                       kEADataInfoTypeHeartRateWaringSetting);
                 },
@@ -918,18 +987,30 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('15.Get distance unit【获取距离单位】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeDistanceUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('16.Get weight Unit【获取重量单位】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeWeightUnit);
                 },
               ),
               GestureDetector(
                 child: TextView('17.Get heart rate waring【心率报警门限】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(
                       kEADataInfoTypeHeartRateWaringSetting);
                 },
@@ -937,30 +1018,50 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Get calories open state【卡路里开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeCaloriesSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('19.Get gestures open state【抬手亮屏开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeGesturesSetting);
                 },
               ),
               GestureDetector(
                 child: TextView('20.Get general information【获取手表通用信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeWatchSettingInfo);
                 },
               ),
               GestureDetector(
                 child: TextView('21.Get the first-level menu【获取手表一级菜单】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeHomePage);
                 },
               ),
               GestureDetector(
                 child: TextView('22.Interest rates screen time【息屏时间】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeBlacklightTimeout);
                 },
               ),
@@ -975,36 +1076,60 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeHabitTracker);
                 },
               ),
               GestureDetector(
                 child: TextView('25.Obtain sport show data【获取运动显示值】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeSportShowData);
                 },
               ),
               GestureDetector(
                 child: TextView('26.get paired watche state【获取手表配对状态】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeBlePairState);
                 },
               ),
               GestureDetector(
                 child: TextView('27.Obtain watch time【获取手表时间】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeSyncTime);
                 },
               ),
               GestureDetector(
                 child: TextView('28.Obtain App notifications 【获取App消息推送】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeAppMessage);
                 },
               ),
               GestureDetector(
                 child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData2(kEADataInfoTypeMonitorReminder,
                       EAMonitorReminderType.drink.index);
                 },
@@ -1035,30 +1160,50 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('33.Get Watch Address Book 【获取手表通讯录】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeReadTelephoneBook);
                 },
               ),
               GestureDetector(
                 child: NewTextView('34.Blood oxygen monitoring data【血氧监测数据】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeBloodOxygenMonitor);
                 },
               ),
               GestureDetector(
                 child: NewTextView('35.Stress monitoring data【压力监测数据】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeStressMonitor);
                 },
               ),
               GestureDetector(
                 child: NewTextView('36.VibrateIntensity【震动】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeVibrateIntensity);
                 },
               ),
               GestureDetector(
                 child: NewTextView('37.Menstrual Reminder【经期提醒】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondMethodGetWatchData(kEADataInfoTypeMenstrualReminder);
                 },
               ),
@@ -1072,6 +1217,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Set up information【设置用户信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   /// 初始化对象，并赋值
                   EAPersonInfo personInfo = EAPersonInfo();
                   personInfo.age = 27;
@@ -1091,6 +1240,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Set the watch time【设置手表时间】'),
                 // 同步手机时间到手表
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EASyncTime syncTime = EASyncTime();
                   syncTime.day = 2;
                   syncTime.month = 12;
@@ -1109,6 +1262,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Setting the Watch Language【设置手表语言】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EALanguage language = EALanguage();
                   language.type = EALanguageType.francais;
                   secondMethodSetWatchData(
@@ -1118,6 +1275,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Set the watch unit-metric【设置手表单位-KM】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.metric;
                   secondMethodSetWatchData(
@@ -1127,6 +1288,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Set the watch unit-british【设置手表单位-MI】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAUnifiedUnit unifiedUnit = EAUnifiedUnit();
                   unifiedUnit.unit = EAUnifiedUnitType.british;
                   secondMethodSetWatchData(
@@ -1136,6 +1301,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('5.Set the DND period【设置免打扰时间段】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EANotDisturb notDisturb = EANotDisturb();
                   notDisturb.sw = 1;
                   notDisturb.beginHour = 15;
@@ -1149,6 +1318,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('6.Set daily target values【设置日常目标值】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EADailyGoals dailyGoals = EADailyGoals();
                   dailyGoals.sCalorie = EADailyGoalItem.wihtValue(1, 5000);
                   dailyGoals.sStep = EADailyGoalItem.wihtValue(1, 8000);
@@ -1164,6 +1337,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '7.Set up automatic heart rate monitoring【设置自动心率监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAAutoCheckHeartRate autoCheckHeartRate =
                       EAAutoCheckHeartRate(15);
                   secondMethodSetWatchData(kEADataInfoTypeAutoCheckHeartRate,
@@ -1173,6 +1350,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('8.Set sedentary monitoring【设置久坐监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAAutoCheckSedentariness autoCheckSedentariness =
                       EAAutoCheckSedentariness();
                   autoCheckSedentariness.beginHour = 8;
@@ -1189,6 +1370,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('9.Set the weather【设置天气】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EADayWeather dayWeather = EADayWeather();
                   dayWeather.eDayType = EAWeatherType.clearDay;
                   dayWeather.eNightType = EAWeatherType.moderateRain;
@@ -1233,7 +1418,10 @@ class _MyAppState extends State<MyApp> {
                   // reminder.secSw = 0;
                   // reminder.remindActionType = EARemindActionType.LongVibration;
                   // reminder.sleepDuration = 5 * 60;
-
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAReminder reminder2 = EAReminder();
                   reminder2.reminderEventType = EAReminderEventType.Drink;
                   reminder2.hour = 11;
@@ -1262,6 +1450,10 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('11.Set the heart rate alarm threshold【设置心率报警门限】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAHeartRateWaringSetting heartRateWaringSetting =
                       EAHeartRateWaringSetting(1, 160, 40);
                   secondMethodSetWatchData(
@@ -1273,6 +1465,10 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '12.Raise your hand to light the screen switch【抬手亮屏开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   // 全天开启
                   EAScreenGesturesSetting screenGesturesSetting =
                       EAScreenGesturesSetting.allDay();
@@ -1283,6 +1479,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('13.Setting the Level 1 Menu【设置一级菜单】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   ///【显示的页面】
                   EAPage hrPage = EAPage.hr();
                   EAPage musicPage = EAPage.music();
@@ -1296,6 +1496,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('14.Set the period【设置经期】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAMenstrual menstrual = EAMenstrual("2022-04-15", 5, 28);
                   secondMethodSetWatchData(
                       kEADataInfoTypeMenstrual, menstrual.toMap());
@@ -1304,6 +1508,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('15.Set the built-in dial【设置内置表盘】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAWatchFacelInfo watchFacelInfo = EAWatchFacelInfo.buildIn(3);
                   secondMethodSetWatchData(
                       kEADataInfoTypeWatchFace, watchFacelInfo.toMap());
@@ -1312,6 +1520,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('16.Message push switch【消息推送开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   /*
                   1. Use kEADataInfoTypeAppMessage to obtain EAShowAppMessage first
                   2. Set EAShowAppMessage
@@ -1326,6 +1538,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('17.Set the Habit Tracker【设置习惯】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAHabitTracker habitTracker = EAHabitTracker();
                   habitTracker.r = 0;
                   habitTracker.g = 255;
@@ -1349,6 +1565,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Push message【推送信息到手表】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAPushMessage eapushMessage = EAPushMessage();
                   eapushMessage.messageType = EAPushMessageType.facebook;
                   eapushMessage.messageActionType = EAPushMessageActionType.add;
@@ -1380,6 +1600,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('19.Set social switch【社交提醒开关】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EASocialSwitch eaSocialSwitch = EASocialSwitch.init(
                       1, 1, 1, 1, 1, 1, EARemindActionType.LongShortVibration);
                   secondMethodSetWatchData(
@@ -1389,6 +1613,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('20.Monitor reminder event【提醒事件监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAMonitorReminder monitorReminder = EAMonitorReminder();
                   monitorReminder.eReminderType = EAMonitorReminderType.drink;
                   monitorReminder.sw = 1;
@@ -1406,6 +1634,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('21.Set music info【同步当前音乐信息】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EABleMusicInfo eableMusicInfo = EABleMusicInfo();
                   eableMusicInfo.content = "Baby One More Time";
                   eableMusicInfo.artist = "Backstreet Boys";
@@ -1435,6 +1667,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('22.Set telephone book【同步通讯录】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAContactModel eaContactModel =
                       EAContactModel("Tony", "+011125128");
                   EAContactModel eaContactModel2 =
@@ -1448,6 +1684,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('23.Set Blood Oxygen Monitor【设置血氧监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EABloodOxygenMonitor eaBloodOxygenMonitor =
                       EABloodOxygenMonitor(0, 60);
 
@@ -1458,6 +1698,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('24.Set Stress Monitor【设置压力监测】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAStressMonitor eaStressMonitor = EAStressMonitor(0, 60);
 
                   secondMethodSetWatchData(
@@ -1467,6 +1711,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('25.Set VibrateIntensity【设置震动】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAVibrateIntensity eaVibrateIntensity =
                       EAVibrateIntensity(EAVibrateIntensityType.Medium);
 
@@ -1477,6 +1725,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('25.Set Menstrual Reminder【经期提醒】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAMenstrualReminder eaMenstrualReminder =
                       EAMenstrualReminder();
                   eaMenstrualReminder.menstrualBeginSw = true;
@@ -1490,6 +1742,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('26.Set GPS Location【经纬度】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAGPSLocation eagpsLocation = EAGPSLocation();
                   eagpsLocation.latitude = 23.0;
                   eagpsLocation.longitude = 113.0;
@@ -1501,6 +1757,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('27.Push SMS【推送SMS到手表】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   EAPushMessage eapushMessage = EAPushMessage();
                   eapushMessage.messageType = EAPushMessageType.sms;
                   eapushMessage.messageActionType = EAPushMessageActionType.add;
@@ -1541,6 +1801,10 @@ class _MyAppState extends State<MyApp> {
                    * Notice after listener _dataChannel returns 8, you can obtain all types of big data
                    */
                   print("获取大数据");
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   getBigWatchData();
                 },
               ),
@@ -1571,7 +1835,10 @@ class _MyAppState extends State<MyApp> {
                       /// 停止寻找手表
                       StopSearchWatch,
                    */
-
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.operationWatch(
                       EAOperationWatchType.StopSearchPhone,
                       OperationWatchCallback((info) {}));
@@ -1580,6 +1847,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2. Looking for your watch【寻找手表】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.operationWatch(
                       EAOperationWatchType.StartSearchWatch,
                       OperationWatchCallback((info) {}));
@@ -1588,6 +1859,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Stop looking for your watch【停止寻找手表】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.operationWatch(
                       EAOperationWatchType.StopSearchWatch,
                       OperationWatchCallback((info) {}));
@@ -1596,6 +1871,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.operationWatch(
                       EAOperationWatchType.ShowiPhonePairingAlert,
                       OperationWatchCallback((info) {}));
@@ -1674,8 +1953,12 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   var bytes9 =
-                      await rootBundle.load("assets/bin/002086_AP0.1B6.7.bin");
+                      await rootBundle.load("assets/bin/002086_AP0.1B6.6.bin");
                   String path9 = (await getApplicationSupportDirectory()).path;
                   String filePath9 =
                       '$path9/' + DateTime.now().toString() + '.bin';
@@ -1683,7 +1966,7 @@ class _MyAppState extends State<MyApp> {
                   await File(filePath9).writeAsBytes(buffer9.asUint8List(
                       bytes9.offsetInBytes, bytes9.lengthInBytes));
                   EAOTA resOTA =
-                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B6.7");
+                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B6.6");
 
                   /**
                       var bytes9 =
@@ -1726,6 +2009,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2.watch face【表盘】'),
                 onTap: () async {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   var bytes =
                       await rootBundle.load("assets/bin/watchface_U38.bin");
                   String path = (await getApplicationSupportDirectory()).path;
@@ -1761,6 +2048,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.AGPS'),
                 onTap: () async {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.syncAGPS(
                       EAOTAProgressCallback((progress, isSuccess, error) {
                     print("OTA progress:" +
@@ -1784,6 +2075,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('4.add 707watch face【添加707表盘】'),
                 onTap: () async {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   var bytes = await rootBundle.load("assets/bin/watch999");
                   String path = (await getApplicationSupportDirectory()).path;
                   String filePath = '$path/' + "watch999";
@@ -1813,6 +2108,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('5.delete 707watch face【删除707表盘】'),
                 onTap: () async {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.deleteJieLiWatchFace(
                       "WATCH86", EASetDataCallback(onRespond: (onRespond) {}));
                 },
@@ -1820,6 +2119,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('6.get 707watch face【获取707表盘】'),
                 onTap: () async {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool
                       .getJieLiWatchFace(JieLiWatchFaceCallback((callback) {
                     List<dynamic> list = callback['value'];
@@ -1842,8 +2145,12 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('1.Nmuber Preview Image【数字表盘预览图】'),
                 onTap: () async {
-                  String filePath = await getImageAndPassToPlugin(
-                      "assets/images/360*360.png");
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath =
+                      await getImageAndPassToPlugin("assets/images/360.jpeg");
 
                   EACustomWatchFace customWatchFace = EACustomWatchFace();
                   customWatchFace.isNumberWf = true;
@@ -1860,8 +2167,12 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('2.OTA Nmuber Watch Face【OTA数字表盘】'),
                 onTap: () async {
-                  String filePath = await getImageAndPassToPlugin(
-                      "assets/images/360*360.png");
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath =
+                      await getImageAndPassToPlugin("assets/images/360.jpeg");
 
                   EACustomWatchFace customWatchFace = EACustomWatchFace();
                   customWatchFace.isNumberWf = true;
@@ -1891,8 +2202,12 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.Pointer Preview Image【指针表盘预览图】'),
                 onTap: () async {
-                  String filePath = await getImageAndPassToPlugin(
-                      "assets/images/360*360.png");
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath =
+                      await getImageAndPassToPlugin("assets/images/360.jpeg");
 
                   EACustomWatchFace customWatchFace = EACustomWatchFace();
                   customWatchFace.isNumberWf = false;
@@ -1909,8 +2224,12 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('4.OTA Pointer Watch Face【OTA指针表盘】'),
                 onTap: () async {
-                  String filePath = await getImageAndPassToPlugin(
-                      "assets/images/360*360.png");
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath =
+                      await getImageAndPassToPlugin("assets/images/360.jpeg");
                   EACustomWatchFace customWatchFace = EACustomWatchFace();
                   customWatchFace.isNumberWf = false;
                   customWatchFace.bgImagePath = filePath;
@@ -1940,6 +2259,10 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Unbundling equipment【解绑设备】'),
                 onTap: () {
+                  if(!isConnectSuccess){
+                    print("device not connected");
+                    return;
+                  }
                   secondEasdkTool.unbindWatch();
                 },
               ),

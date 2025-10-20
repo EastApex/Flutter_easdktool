@@ -1,4 +1,5 @@
 package com.example.easdktool_example;
+
 import android.Manifest;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
@@ -94,27 +95,28 @@ public class MainActivity extends FlutterActivity {
 
                         //配对
 
-                        if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
-                            LogUtils.e(TAG, "走直连配对");
-                            bluetoothDevice.createBond();
+                        //                    if (!TextUtils.isEmpty(Build.PRODUCT) && (Build.PRODUCT.equalsIgnoreCase("sagit") || Build.PRODUCT.equalsIgnoreCase("starqltezc") || Build.PRODUCT.equalsIgnoreCase("MHA-AL00") || Build.PRODUCT.equalsIgnoreCase("cuscoi_g"))) {
+                        LogUtils.e(TAG, "走直连配对");
+                        bluetoothDevice.createBond();
+/**
+ } else {
+ try {
+ Log.e(TAG, "非直连配对");
+ Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
+ bondMethod.setAccessible(true);
+ bondMethod.invoke(bluetoothDevice, -1);
 
-                        } else {
-                            try {
-                                Log.e(TAG, "非直连配对");
-                                Method bondMethod = BluetoothDevice.class.getDeclaredMethod("createBond", int.class);
-                                bondMethod.setAccessible(true);
-                                bondMethod.invoke(bluetoothDevice, -1);
+ } catch (NoSuchMethodException e) {
+ LogUtils.e(TAG, "找不到反射的方法");
+ } catch (InvocationTargetException e) {
+ LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
 
-                            } catch (NoSuchMethodException e) {
-                                LogUtils.e(TAG, "找不到反射的方法");
-                            } catch (InvocationTargetException e) {
-                                LogUtils.e(TAG, "反射时的错误:" + e.getMessage());
+ } catch (IllegalAccessException e) {
+ LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
+ }
 
-                            } catch (IllegalAccessException e) {
-                                LogUtils.e(TAG, "反射时非法错误:" + e.getMessage());
-                            }
-
-                        }
+ }
+ */
                     } else if (states == BluetoothDevice.BOND_BONDING) {
                         LogUtils.i(TAG, "正在配对");
                     } else if (states == BluetoothDevice.BOND_BONDED) {

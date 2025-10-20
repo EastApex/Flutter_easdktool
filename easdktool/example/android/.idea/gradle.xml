@@ -23,7 +23,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/../../../../f_sdk/flutter/packages/flutter_tools/gradle" />
             <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/device_info_plus-10.1.2/android" />
-            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/flutter_foreground_task-8.17.0/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/flutter_foreground_task-9.1.0/android" />
+            <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/fluttertoast-8.2.14/android" />
             <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/path_provider_android-2.2.15/android" />
             <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/permission_handler_android-10.3.6/android" />
             <option value="$PROJECT_DIR$/../../../../flutter_pub/hosted/pub.flutter-io.cn/shared_preferences_android-2.4.7/android" />

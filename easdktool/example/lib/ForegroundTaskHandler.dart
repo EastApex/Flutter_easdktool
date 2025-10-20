@@ -24,7 +24,7 @@ class MyTaskHandler extends TaskHandler {
   EASDKTool easdkTool = new EASDKTool();
 
   @override
-  Future<void> onDestroy(DateTime timestamp,bool isTimeout) {
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) {
     // TODO: implement onDestroy
     throw UnimplementedError();
   }
@@ -333,17 +333,33 @@ class ConnectListener implements EABleConnectListener {
 
   @override
   void connectError() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("connectError");
   }
 
   @override
   void connectTimeOut() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("connectTimeOut");
   }
 
   @override
   void deviceConnected() {
     print('Device connected');
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(true);
+    Fluttertoast.showToast(
+        msg: "Device connected",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.deepPurple,
+        textColor: Colors.cyan,
+        fontSize: 16.0);
     _easdkTool?.getWatchData(
         kEADataInfoTypeWatch,
         EAGetDataCallback(
@@ -385,41 +401,65 @@ class ConnectListener implements EABleConnectListener {
 
   @override
   void deviceDisconnect() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("deviceDisconnect");
   }
 
   @override
   void deviceNotFind() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("deviceNotFind");
   }
 
   @override
   void notOpenLocation() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("notOpenLocation");
   }
 
   @override
   void paramError() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("paramError");
   }
 
   @override
   void unopenedBluetooth() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("unopenedBluetooth");
   }
 
   @override
   void unsupportedBLE() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("unsupportedBLE");
   }
 
   @override
   void iOSRelievePair() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("iOSRelievePair");
   }
 
   @override
   void iOSUnAuthorized() {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName("connectState");
+    sendPort?.send(false);
     print("iOSUnAuthorized");
   }
 }

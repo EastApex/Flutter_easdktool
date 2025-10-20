@@ -3,6 +3,7 @@ package com.example.easdktool;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
@@ -55,6 +56,7 @@ class PreviewTask extends AsyncTask<Void, Void, Bitmap> {
             int prewHigh = eaBleWatchInfo.getLcd_preview_h();
             int prewWidth = eaBleWatchInfo.getLcd_preview_w();
             BitmapFactory.Options options2 = new BitmapFactory.Options();
+            LogUtils.i(TAG, "手表预览尺寸，宽：" + prewWidth + ",高：" + prewWidth + ",屏幕尺寸，宽：" + screenWidth + ",高:" + screenHigh);
             options2.inPreferredConfig = Bitmap.Config.ARGB_8888;
             Bitmap backBitmap = BitmapFactory.decodeFile(customWatchFace.bgImagePath, options2);
             if (backBitmap != null) {
@@ -69,6 +71,12 @@ class PreviewTask extends AsyncTask<Void, Void, Bitmap> {
                     backBitmap = Bitmap.createBitmap(backBitmap, 0, 0, backBitmap.getWidth(), backBitmap.getHeight(), matrix, false);
                     LogUtils.e(TAG, "缩放之后图片的大小,宽:" + backBitmap.getWidth() + ",高:" + backBitmap.getHeight());
                 }
+                bWidth=backBitmap.getWidth();
+                bHigh=backBitmap.getHeight();
+                if (bWidth>=screenWidth||bHigh>=screenHigh){
+                    backBitmap=Bitmap.createBitmap(backBitmap,0,0,screenWidth,screenHigh);
+                }
+                LogUtils.e(TAG, "最终处理之后图片的大小,宽:" + backBitmap.getWidth() + ",高:" + backBitmap.getHeight());
             }
 
 

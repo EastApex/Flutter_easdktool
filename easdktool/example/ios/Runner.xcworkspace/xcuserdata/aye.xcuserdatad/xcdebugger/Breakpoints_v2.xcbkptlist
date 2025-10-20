@@ -14,8 +14,8 @@
             filePath = "../../ios/Classes/EasdktoolPlugin.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "757"
-            endingLineNumber = "757"
+            startingLineNumber = "755"
+            endingLineNumber = "755"
             landmarkName = "-handleMethodCall:result:"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "../../ios/Classes/EasdktoolPlugin.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1182"
-            endingLineNumber = "1182"
+            startingLineNumber = "1180"
+            endingLineNumber = "1180"
             landmarkName = "-otaAction:"
             landmarkType = "7">
          </BreakpointContent>

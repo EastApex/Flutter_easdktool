@@ -29,7 +29,7 @@ public class GetWatchMsgTask extends Thread {
     private final ThreadStateListener mStateListener;
     private final ArrayList<JieliWatchInfo> watchList = new ArrayList<>();
 
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
+     Handler mHandler = new Handler(Looper.getMainLooper());
     private final Object mLock = new Object();
     private volatile boolean isLock;
 
@@ -120,6 +120,7 @@ public class GetWatchMsgTask extends Thread {
                     } else {
                         mCallback.jieliDial(watchList);
                     }
+                    mHandler=null;
                 });
             }
         }
