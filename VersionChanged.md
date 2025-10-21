@@ -1,3 +1,18 @@
+Date:10.21.2025
+Change:
+    Android:
+        No modification for now
+    iOS:
+        1.ios add jieli 707 custom watch face
+          Add func:
+            getJieLiCustomWatchfacePreviewImage()
+            otaJieLiCustomWatchface()
+        2. See image: style.png
+
+=================================================================
+
+
+
 Date:10.20.2025
 Change:
     Android:
