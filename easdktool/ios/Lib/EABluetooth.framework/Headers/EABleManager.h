@@ -13,12 +13,14 @@
  SDK access documentation
  https://www.showdoc.com.cn/2042713679210858/0
  
+ 
 */
 
-#define kEASDKVERSION   @"1.1.23"
-#define kEASDKBUILD     @"5"
+#define kEASDKVERSION   @"1.1.25"
+#define kEASDKBUILD     @"3"
 #define kEAAppVersion   [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define kEAAppBulid     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+
 
 
 

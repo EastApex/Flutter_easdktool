@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easdktool'
-  s.version          = '1.1.21.2'
+  s.version          = '1.1.25.3'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -52,6 +52,7 @@ A new flutter plugin project.
   'Lib/JL_BLEKit.framework',
   'Lib/JL_AdvParse.framework',
   #'Lib/JLDialUnit.framework',
+  'Lib/JLBmpConvertKit.framework',
   'Lib/EABluetooth.framework'
  
   ]

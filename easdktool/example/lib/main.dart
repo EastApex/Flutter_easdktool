@@ -61,6 +61,8 @@ class ConnectListener implements EABleConnectListener {
 
   @override
   void deviceConnected() {
+    isConnectSuccess = true;
+
     /// 绑定手表
     print('XWatch Package: connection Listener - connected');
     easdkTool.getWatchData(
@@ -182,20 +184,20 @@ class _MyAppState extends State<MyApp> {
       secondEasdkTool.showLog(1);
       secondEasdkTool.initChannel();
 
-      /// 【添加监听】
+      // 【添加监听】
       EASDKTool.addBleConnectListener(ConnectListener(secondEasdkTool));
       EASDKTool.addOperationPhoneCallback(OperationPhoneCallback((info) {
         operationPhoneListener(info);
       }));
 
-      // EAConnectParam connectParam = EAConnectParam.testInit();
-      // EASDKTool().connectToPeripheral(connectParam);
+      EAConnectParam connectParam = EAConnectParam.testInit();
+      EASDKTool().connectToPeripheral(connectParam);
 
-      ///搜索手表
-      EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
-        print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
-        print("【ScanWatch】" + connectParam.uuid);
-      }));
+      // ///搜索手表
+      // EASDKTool().scanWatch(EAScanWatchCallback((connectParam) {
+      //   print("【ScanWatch】" + connectParam.name + connectParam.snNumber);
+      //   print("【ScanWatch】" + connectParam.uuid);
+      // }));
 
       EASDKTool.addJieLiNeedForcedOtaCallback(
           JieLiNeedForcedOtaCallback((needOta) {
@@ -832,7 +834,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Obtaining watch Information【获取手表信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -851,7 +853,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2.Obtaining User information【获取用户信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -861,7 +863,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Get watch screen brightness【获取手表屏幕亮度】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -871,7 +873,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Obtain the battery【获取手表电量信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -881,7 +883,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('5.Obtain the device language【设备语言信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -891,7 +893,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('6.Obtain the device unit system【设备单位制度】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -901,7 +903,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('7.Obtain the DND period【获取手表免打扰时间段】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -911,7 +913,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('8.Obtain the daily target value【获取手表日常目标值】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -922,7 +924,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '9.Obtain the automatic sleep monitoring【获取手表自动睡眠监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -933,7 +935,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '10.Get watch automatic heart rate monitoring【获取手表自动心率监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -943,7 +945,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('11.Get watch sedentary monitoring【获取手表久坐监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -955,7 +957,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '12.Get watch Social alert switch(SMS、PhoneCall、Email)【社交提醒开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -965,7 +967,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('13.Get watch alerts【获取手表提醒】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -976,7 +978,7 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('14.Get heart rate alarm threshold【获取手表心率报警门限】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -987,7 +989,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('15.Get distance unit【获取距离单位】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -997,7 +999,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('16.Get weight Unit【获取重量单位】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1007,7 +1009,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('17.Get heart rate waring【心率报警门限】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1018,7 +1020,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Get calories open state【卡路里开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1028,7 +1030,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('19.Get gestures open state【抬手亮屏开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1038,7 +1040,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('20.Get general information【获取手表通用信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1048,7 +1050,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('21.Get the first-level menu【获取手表一级菜单】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1058,7 +1060,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('22.Interest rates screen time【息屏时间】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1076,7 +1078,7 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('24.Obtain the Habit Tracker of the watch【获取习惯】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1086,7 +1088,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('25.Obtain sport show data【获取运动显示值】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1096,7 +1098,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('26.get paired watche state【获取手表配对状态】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1106,7 +1108,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('27.Obtain watch time【获取手表时间】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1116,7 +1118,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('28.Obtain App notifications 【获取App消息推送】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1126,7 +1128,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('29.read monitor reminder event 【提醒事件监测（读取）】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1160,7 +1162,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('33.Get Watch Address Book 【获取手表通讯录】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1170,7 +1172,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('34.Blood oxygen monitoring data【血氧监测数据】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1180,7 +1182,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('35.Stress monitoring data【压力监测数据】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1190,7 +1192,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('36.VibrateIntensity【震动】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1200,7 +1202,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('37.Menstrual Reminder【经期提醒】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1217,10 +1219,11 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('1.Set up information【设置用户信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
+
                   /// 初始化对象，并赋值
                   EAPersonInfo personInfo = EAPersonInfo();
                   personInfo.age = 27;
@@ -1240,7 +1243,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView('2.Set the watch time【设置手表时间】'),
                 // 同步手机时间到手表
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1262,7 +1265,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Setting the Watch Language【设置手表语言】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1275,7 +1278,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Set the watch unit-metric【设置手表单位-KM】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1288,7 +1291,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Set the watch unit-british【设置手表单位-MI】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1301,7 +1304,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('5.Set the DND period【设置免打扰时间段】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1318,7 +1321,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('6.Set daily target values【设置日常目标值】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1337,7 +1340,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '7.Set up automatic heart rate monitoring【设置自动心率监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1350,7 +1353,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('8.Set sedentary monitoring【设置久坐监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1370,7 +1373,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('9.Set the weather【设置天气】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1418,7 +1421,7 @@ class _MyAppState extends State<MyApp> {
                   // reminder.secSw = 0;
                   // reminder.remindActionType = EARemindActionType.LongVibration;
                   // reminder.sleepDuration = 5 * 60;
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1450,7 +1453,7 @@ class _MyAppState extends State<MyApp> {
                 child:
                     TextView('11.Set the heart rate alarm threshold【设置心率报警门限】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1465,7 +1468,7 @@ class _MyAppState extends State<MyApp> {
                 child: TextView(
                     '12.Raise your hand to light the screen switch【抬手亮屏开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1479,10 +1482,11 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('13.Setting the Level 1 Menu【设置一级菜单】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
+
                   ///【显示的页面】
                   EAPage hrPage = EAPage.hr();
                   EAPage musicPage = EAPage.music();
@@ -1496,7 +1500,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('14.Set the period【设置经期】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1508,7 +1512,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('15.Set the built-in dial【设置内置表盘】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1520,7 +1524,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('16.Message push switch【消息推送开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1538,7 +1542,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('17.Set the Habit Tracker【设置习惯】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1565,7 +1569,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('18.Push message【推送信息到手表】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1600,7 +1604,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('19.Set social switch【社交提醒开关】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1613,7 +1617,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('20.Monitor reminder event【提醒事件监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1634,7 +1638,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('21.Set music info【同步当前音乐信息】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1667,7 +1671,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('22.Set telephone book【同步通讯录】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1684,7 +1688,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('23.Set Blood Oxygen Monitor【设置血氧监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1698,7 +1702,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('24.Set Stress Monitor【设置压力监测】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1711,7 +1715,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('25.Set VibrateIntensity【设置震动】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1725,7 +1729,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('25.Set Menstrual Reminder【经期提醒】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1742,7 +1746,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('26.Set GPS Location【经纬度】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1757,7 +1761,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('27.Push SMS【推送SMS到手表】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1801,7 +1805,7 @@ class _MyAppState extends State<MyApp> {
                    * Notice after listener _dataChannel returns 8, you can obtain all types of big data
                    */
                   print("获取大数据");
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1835,7 +1839,7 @@ class _MyAppState extends State<MyApp> {
                       /// 停止寻找手表
                       StopSearchWatch,
                    */
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1847,7 +1851,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2. Looking for your watch【寻找手表】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1859,7 +1863,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('3.Stop looking for your watch【停止寻找手表】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1871,7 +1875,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('4.Show iPhone pairing alert【iOS手机弹出配对提醒】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -1953,7 +1957,7 @@ class _MyAppState extends State<MyApp> {
                   //     // transmit data progress
                   //   }
                   // }));
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2009,7 +2013,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: TextView('2.watch face【表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2048,7 +2052,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.AGPS'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2075,7 +2079,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('4.add 707watch face【添加707表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2108,7 +2112,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('5.delete 707watch face【删除707表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2119,7 +2123,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('6.get 707watch face【获取707表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2145,7 +2149,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('1.Nmuber Preview Image【数字表盘预览图】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2167,7 +2171,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('2.OTA Nmuber Watch Face【OTA数字表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2202,7 +2206,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('3.Pointer Preview Image【指针表盘预览图】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2224,7 +2228,7 @@ class _MyAppState extends State<MyApp> {
               GestureDetector(
                 child: NewTextView('4.OTA Pointer Watch Face【OTA指针表盘】'),
                 onTap: () async {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }
@@ -2255,11 +2259,71 @@ class _MyAppState extends State<MyApp> {
                   }));
                 },
               ),
+              TitleView('  JieLi Custom Watch Face【杰里707自定义表盘】'),
+              GestureDetector(
+                child: NewTextView(
+                    '1.Preview image of JieLi Custom Watch Face【杰里自定义表盘】'),
+                onTap: () async {
+                  if (!isConnectSuccess) {
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/air5pro.png");
+
+                  EAJieLiCustomWatchFace customWatchFace =
+                      EAJieLiCustomWatchFace();
+                  customWatchFace.style = 3;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.getPreviewImage = true;
+                  secondEasdkTool
+                      .getJieLiCustomWatchfacePreviewImage(customWatchFace,
+                          EACustomWatchfacePreviewImageCallback((previewImage) {
+                    print(previewImage);
+                  }));
+                },
+              ),
+              GestureDetector(
+                child: NewTextView('2.OTA JieLi Custom Watch Face【OTA杰里自定义表盘】'),
+                onTap: () async {
+                  if (!isConnectSuccess) {
+                    print("device not connected");
+                    return;
+                  }
+                  String filePath = await getImageAndPassToPlugin(
+                      "assets/images/air5pro.png");
+
+                  EAJieLiCustomWatchFace customWatchFace =
+                      EAJieLiCustomWatchFace();
+                  customWatchFace.style = 3;
+                  customWatchFace.bgImagePath = filePath;
+                  customWatchFace.getPreviewImage = false;
+                  secondEasdkTool.otaJieLiCustomWatchface(customWatchFace,
+                      EAOTAProgressCallback((progress, isSuccess, error) {
+                    print("OTA progress:" +
+                        progress.toString() +
+                        ",ota result:" +
+                        isSuccess.toString());
+                    if (progress == -1) {
+                      // transmit data fail;
+                    } else if (progress == 100) {
+                      if (isSuccess == 1) {
+                        // transmit data succ;
+                      } else {
+                        // transmit data progress
+                      }
+                    } else {
+                      // transmit data progress
+                    }
+                  }));
+                },
+              ),
+
               TitleView('  unbindWatch【解绑】'),
               GestureDetector(
                 child: TextView('1.Unbundling equipment【解绑设备】'),
                 onTap: () {
-                  if(!isConnectSuccess){
+                  if (!isConnectSuccess) {
                     print("device not connected");
                     return;
                   }

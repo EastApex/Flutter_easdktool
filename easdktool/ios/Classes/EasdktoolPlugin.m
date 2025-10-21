@@ -51,7 +51,7 @@
 #define kAddJieLiWatchFace          @"AddJieLiWatchFace"
 #define kDeleteJieLiWatchFace       @"DeleteJieLiWatchFace"
 #define kGetJieLiWatchFace          @"GetJieLiWatchFace"
-
+#define kJieLiCusWatchFace          @"JieLiCusWatchFace"
 
 
 
@@ -913,9 +913,7 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 }];
             }
         }
-        
-        
-        
+  
     }
     else if ([call.method isEqualToString:kAddJieLiWatchFace]) { // FIXME: - 杰里707 添加表盘
            
@@ -1055,6 +1053,60 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                 [selfWeak.channel invokeMethod:kGetJieLiWatchFace arguments:[info modelToJSONString]];
             }
         }];
+    }
+    else if ([call.method isEqualToString:kJieLiCusWatchFace]) {// FIXME: - 杰里707 自定义表盘
+        
+        // 判断断连
+        if (![EABleManager defaultManager].isConnected) {
+            
+            [self loseConnect];
+            return;
+        }
+        
+        if ([EABleManager defaultManager].eaPeripheralModel.typeOfOTA == 0) {
+            
+            [_channel invokeMethod:kArgumentsError arguments:@"not support this function"];
+            return;
+        }
+        
+        NSDictionary *arguments = [self dictionaryWithJsonString:call.arguments] ;
+        
+        NSString *bgImagePath = arguments[@"bgImagePath"];
+        UIImage *bgImage = [UIImage imageWithContentsOfFile:bgImagePath];
+        if (!bgImage) {
+            [_channel invokeMethod:kArgumentsError arguments:@"bgImagePath not null"];
+            return;
+        }
+        
+        EAJieLiCusWatchFaceSetTimeStyle style = [arguments[@"style"] integerValue];
+        BOOL getPreviewImage = [arguments[@"getPreviewImage"] boolValue];
+        
+        if (getPreviewImage) {
+            
+           UIImage *thumbnail = [EAMakeWatchFaceManager eaGetJieLiThumbnailWithImage:bgImage timeStyle:(style)];
+            [_channel invokeMethod:kCustomWatchFaceResponse arguments:UIImageJPEGRepresentation(thumbnail, 1)];
+        }
+        else
+        {
+            [EAMakeWatchFaceManager eaOTAJieLiWatchFaceWithImage:bgImage timeStyle:style cusInfos:^(NSString * _Nonnull cusId, UIImage * _Nonnull thumbnail, UIImage * _Nonnull bgImage) {
+                
+            } progress:^(CGFloat p) {
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:p] userInfo:nil];
+                
+            } complete:^(BOOL succ, NSError * _Nullable error) {
+                
+                if (succ) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+                }
+                else
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+                }
+            }];
+        }
+        
     }
     else{
         

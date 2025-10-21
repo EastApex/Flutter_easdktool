@@ -78,10 +78,19 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIImage *)eaGetDefaultPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle;
 
 
-
 /// Type 6: Get the thumbnail of the custom watch face on the His platform
 /// @return Thumbnail
 + (UIImage *)eaGetHisCusThumbnailWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting;
+
+
+
+/// Type 7: Get the thumbnail of the Jerry watch face
++ (UIImage *)eaGetJieLiThumbnailWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle;
+
+
+
+
+
 
 
 
@@ -122,17 +131,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSInteger )eaOtaPointerWatchFaceWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
-/// Type6
-+ (NSInteger )eaOtaHisCusThumbnailWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+/// Type6:
++ (NSInteger )eaOtaHisCusWatchFaceWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+
+
+/// Type 7: OTA the JieLi watch face
++ (NSInteger )eaOTAJieLiWatchFaceWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat p))progress complete:(OTACompleteBlock)complete;
 
 
 
 
 
 
-
-
-
++ (void)testJlConvertImage:(UIImage *)image;
 
 
 

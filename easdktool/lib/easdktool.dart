@@ -35,6 +35,7 @@ const String kEAAGPS = "EAAGPS"; // AGPS
 const String kAddJieLiWatchFace = "AddJieLiWatchFace";
 const String kDeleteJieLiWatchFace = "DeleteJieLiWatchFace";
 const String kGetJieLiWatchFace = "GetJieLiWatchFace";
+const String kJieLiCusWatchFace = "JieLiCusWatchFace";
 
 /// MARK: - invoke method Name
 const String kConnectState = "ConnectState";
@@ -301,6 +302,22 @@ class EASDKTool {
     mOTAProgressCallback = otaProgressCallback;
     String param = convert.jsonEncode(customWatchFace);
     _channel.invokeMethod(kEACustomWatchface, param);
+  }
+
+  void getJieLiCustomWatchfacePreviewImage(
+      EAJieLiCustomWatchFace customWatchFace,
+      EACustomWatchfacePreviewImageCallback
+          customWatchfacePreviewImageCallback) {
+    mCustomWatchfacePreviewImageCallback = customWatchfacePreviewImageCallback;
+    String param = convert.jsonEncode(customWatchFace);
+    _channel.invokeMethod(kJieLiCusWatchFace, param);
+  }
+
+  void otaJieLiCustomWatchface(EAJieLiCustomWatchFace customWatchFace,
+      EAOTAProgressCallback otaProgressCallback) {
+    mOTAProgressCallback = otaProgressCallback;
+    String param = convert.jsonEncode(customWatchFace);
+    _channel.invokeMethod(kJieLiCusWatchFace, param);
   }
 
   //

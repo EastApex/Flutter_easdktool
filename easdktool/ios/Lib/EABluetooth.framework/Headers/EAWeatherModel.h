@@ -69,6 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Air quality fraction == AQI
 /// 空气质量分数 == AQI
 @property(nonatomic, assign) NSInteger airGrade;
+
+/** 紫外线指数 */
+@property(nonatomic, assign) NSInteger uvIndex;
 @end
 
 

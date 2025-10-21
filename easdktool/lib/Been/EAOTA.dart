@@ -52,3 +52,19 @@ class EACustomWatchFace {
     };
   }
 }
+
+class EAJieLiCustomWatchFace {
+  String bgImagePath = "";
+  int style = 0; //
+  bool getPreviewImage =
+      true; // true:get Preview Image  false: Ota Custom Watch Face
+
+  EAJieLiCustomWatchFace();
+  Map toJson() {
+    return {
+      "bgImagePath": bgImagePath,
+      "style": style,
+      "getPreviewImage": getPreviewImage,
+    };
+  }
+}

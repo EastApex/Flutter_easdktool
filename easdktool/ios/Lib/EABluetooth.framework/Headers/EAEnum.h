@@ -428,13 +428,20 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     EADataInfoTypePpgAuto = 79,
     
     
-    /// id = 80: 自定义表盘全局设置
-    /// id = 80: Customize the global Settings of the watch face
+    /// id = 80: 海思自定义表盘全局设置
+    /// id = 80: His Customize the global Settings of the watch face
     /// EACusWatchFaceGlobalSetting
     EADataInfoTypeCusWatchFaceGlobalSetting = 80,
     
+    /// id = 81: JL707平台需要删除的表盘信息
+    /// id = 81: The dial information that needs to be deleted on the JL707 platform
+    /// EAJieLiOldWacthFace
+    EADataInfoTypeJieLiOldWatchFace = 81,
     
-    
+    /// id = 82: JL707平台自定义表盘信息
+    /// id = 82: Customize the dial information for the JL707 platform
+    /// EAJieLiCustomWacthFace
+    EADataInfoTypeJieLiCustomWacthFace = 82,
     
     
     
@@ -3759,6 +3766,40 @@ typedef NS_ENUM(NSUInteger,EACusWatchFaceFunctionType) {
   ///  天气 
   EACusWatchFaceFunctionTypeWeather = 21,
 };
+
+
+typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceSetTimeStyle) {
+
+    /** 时间样式(无时间) */
+    EAJieLiCusWatchFaceSetTimeStyleNone = 0,
+
+    /** 时间样式1 */
+    EAJieLiCusWatchFaceSetTimeStyleTimeStyle1 = 1,
+
+    /** 时间样式2 */
+    EAJieLiCusWatchFaceSetTimeStyleTimeStyle2 = 2,
+
+    /** 指针样式1 */
+    EAJieLiCusWatchFaceSetTimeStylePointerStyle1 = 3,
+
+    /** 指针样式2 */
+    EAJieLiCusWatchFaceSetTimeStylePointerStyle2 = 4,
+
+};
+
+typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceOps) {
+
+    /** ota前设置样式(OTA自定义表盘后生效) */
+    EAJieLiCusWatchFaceOpsOTA = 0,
+
+    /** 直接设置样式 */
+    EAJieLiCusWatchFaceOpsSet = 1,
+
+};
+
+
+
+
 
 
 #endif

@@ -365,6 +365,13 @@ NS_ASSUME_NONNULL_BEGIN
 ///功能与协议:手机的经纬度信息支持（id = 72） 
 @property(nonatomic, assign) BOOL appGpsLocationSupport;
 
+
+/// 功能与协议:JL707平台外置表盘信息（id = 81）
+@property(nonatomic, assign) BOOL jl707ExDailInfoSupport;
+
+/// 功能与协议:JL707平台自定义表盘信息（id = 82）
+@property(nonatomic, assign) BOOL jl707CusDailInfoSupport;
+
 @end
 
 NS_ASSUME_NONNULL_END
