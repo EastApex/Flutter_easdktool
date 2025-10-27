@@ -1,4 +1,4 @@
-//
+//  NEED_CLASS_ANALYSIS
 //  EAMakeWatchFaceManager.h
 //  EABluetooth
 //
@@ -16,127 +16,184 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class EACusWatchFaceSetting;
 
+
+/**
+ * EAMakeWatchFaceManager is a custom watch face operation class, responsible for functions such as obtaining custom watch face preview images, generating custom watch faces and synchronizing them to the watch.
+ *
+ * Currently, custom watch faces have their corresponding methods according to different chips.
+ * 1.General chip type
+ *      Currently, several custom watch face methods are defined.
+ *  1.1 Digital watch face: Just pass in the watch - sized dial image and color to generate the watch face defined by the SDK.
+ *  1.2 Pointer watch face: Just pass in the watch - sized dial image and pointer style to generate the watch face defined by the SDK.
+ *  1.3 Pointer - scale watch face: Just pass in the watch - sized dial image, pointer style and scale style to generate the watch face defined by the SDK.
+ *  1.4 Advanced custom digital watch face: Completely customize the digital style, which may take you a lot of time to debug. You need to pass in the dial image and an array of [EACustomNumberWatchFaceModel] to generate the watch face. It is best to process it according to your custom watch face UI parameters.
+ *  1.5 Advanced custom pointer watch face: Completely customize the pointer style, which may take you a lot of time to debug. You need to pass in the dial image and an array of [EACustomPointerWatchFaceModel] to generate the watch face. It is best to process it according to your custom watch face UI parameters.
+ *
+ * 2.His chip type
+ *  2.1 Set the watch face according to the properties of the EACusWatchFaceSetting object. Please refer to Class EACusWatchFaceSetting for details.
+ *
+ * 3.JieLi 707 chip type
+ *  3.1 Set the watch face according to the properties of the EAJieLiCusWatchFaceSetTimeStyle object. Please refer to Class EAJieLiCusWatchFaceSetTimeStyle for details.
+ *
+ * EAMakeWatchFaceManager 是自定义表盘操作类，如获取自定义表盘预览图、生成自定义表盘并同步到手表等功能。
+ *
+ * 目前自定义表盘按照芯片的不同，都有其适应的自定义表盘方法。
+ * 1.通用芯片类型
+ *  目前定义了种自定义表盘方法
+ *  1.1 数字表盘：只需要传入手表尺寸的表盘图片和颜色即可生成SDK定义好的表盘。
+ *  1.2 指针表盘：只需要传入手表尺寸的表盘图片和指针样式即可生成SDK定义好的表盘。
+ *  1.3 指针刻度表盘：只需要传入手表尺寸的表盘图片、指针样式、刻度样式即可生成SDK定义好的表盘。
+ *  1.4 高级自定义数字表盘：完全自定义数字样式，这可能需要您花费大量时间来调试。需要传入表盘图片、[EACustomNumberWatchFaceModel]数组来生成表盘，最好是根据你们的自定义表盘UI参数来处理。
+ *  1.5 高级自定义指针表盘：完全自定义指针样式，这可能需要您花费大量时间来调试。需要传入表盘图片、[EACustomPointerWatchFaceModel]数组来生成表盘，最好是根据你们的自定义表盘UI参数来处理。
+ *
+ * 2.His芯片类型
+ *  2.1 根据EACusWatchFaceSetting对象的属性来设置表盘，具体请查看Class EACusWatchFaceSetting。
+ *
+ * 3.杰里707芯片类型
+ *  3.1 根据EAJieLiCusWatchFaceSetTimeStyle对象的属性来设置表盘，具体请查看Class EAJieLiCusWatchFaceSetTimeStyle。
+ *
+ *
+ */
 @interface EAMakeWatchFaceManager : NSObject
 
-/// I. There are currently 5 custom watch face styles
-/// 1.(deprecated) Two types of digital dial (black and white numbers) ==> Type1
-/// 2.2 Pointer dial (black and white pointer) ==> Type2
-/// 3. Default custom digital dial (color needs to be set) ==> Type3
-/// 4. Customize the digital dial (need to set the color, size and position of the number) ==> Type4
-/// 5. Customize pointer dial (need to set picture, position, rotation point) ==> Type5
-///
-/// II. Introduction to use:
-/// 1. Each custom watch face provides a 'get thumbnail' and 'ota watch face' method respectively
-/// 2. If ota watch face method is used, kNTF_EAOTAAGPSDataing and kNTF_EAOTAAGPSDataFinish notifications need to be added to monitor OTA progress and implemented.
-///
-/// III.Advanced custom watch face
-/// 1.Type 4 and type 5 is an advanced custom watch face, which needs to be planned by the product manager and designed by a UI designer. If your app doesn't require this, just use type 2 or type 3.
-/// 2.If the watch digital watch face does not want the built-in digital watch face style of sdk, then you need to use type4 to set the font, color and position to meet your needs.
-/// 3.It may take you 1 to 2 days to complete this.
-///
 
-/// 自定义表盘介绍
-/// 一、目前有5种自定义表盘风格
-/// 1.(弃用)2种数字表盘（黑白色数字） ==> Type1
-/// 2.2种指针表盘（黑白色指针） ==> Type2
-/// 3.默认自定义数字表盘（需要设置颜色） ==> Type3
-/// 4.自定义数字表盘（需要设置数字颜色、数字大小、数字位置）  ==> Type4
-/// 5.自定义指针表盘（需要设置图片、位置、旋转点） ==> Type5
-/// 6.自定义海思表盘 ==> Type6
-/// 二、使用介绍：
-/// 1.每种自定义表盘 分别提供 获取缩略图方法 和 ota表盘方法
-/// 2.使用 ota表盘 方法时，如果需要监听 OTA进度 需要添加 通知  kNTF_EAOTAAGPSDataing 和 kNTF_EAOTAAGPSDataFinish 并实现.
-///
-///
-/// 三、高级自定义表盘
-/// 1.Type 4和Type 5是高级自定义表盘，需要产品经理来规划并且需要UI设计师来设计。如果你的应用程序不需要这个，只需使用Type2 ~ 3。
-/// 2.如果手表的数字表盘不想要sdk内置的数字表盘样式，那么你需要使用type4来设置字体、颜色和位置来满足你的需求。
-/// 3.你可能需要花费1~2天来完成这个事情。
+#pragma mark - thumbnails【预览图】
 
-
-#pragma mark - thumbnails【缩略图】
-
-/// Type2：Create thumbnail of pointer watch face【创建指针表盘缩略图】
-/// @return Thumbnail
-+ (UIImage *)eaGetDefaultPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType;
-
-/// Type3： Create thumbnail of default style digital watch face
-/// @return Thumbnail
+/// Type 1.1： Create thumbnail of default style digital watch face【数字表盘预览图】
+/// - Parameters:
+///   - image: image【图片】
+///   - color: color【颜色】
 + (UIImage *)eaGetDefaultNumberThumbnailWithImage:(UIImage *)image color:(UIColor *)color;
 
-/// Type4：Create a fully custom digital watch face thumbnail 【创建完全自定义数字表盘缩略图】
-/// @return Thumbnail
-+ (UIImage *)eaGetNumberThumbnailWithImage:(UIImage *)image list:(NSArray <EACustomNumberWatchFaceModel *>*)numberList;
+/// Type 1.2：Create thumbnail of pointer watch face【创建指针表盘预览图】
+/// - Parameters:
+///   - image: image 【图片】
+///   - colorType: color type 【颜色类型】
++ (UIImage *)eaGetDefaultPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType;
 
-/// Type5：Create a fully custom pointer watch face thumbnail 【创建完全自定义指针表盘缩略图】
-/// @return Thumbnail
-+ (UIImage *)eaGetPointerThumbnailWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList ;
-
-
-/// Type2：Create thumbnail of pointer watch face【创建指针表盘缩略图】
-/// @return Thumbnail
+/// Type 1.3：Create thumbnail of pointer watch face【创建指针表盘预览图】
+/// - Parameters:
+///   - image: image 【图片】
+///   - colorType: color type 【颜色类型】
+///   - scaleStyle: scale style 【刻度】
 + (UIImage *)eaGetDefaultPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle;
 
 
-/// Type 6: Get the thumbnail of the custom watch face on the His platform
-/// @return Thumbnail
+/// Type 1.4：Create a fully custom digital watch face thumbnail 【创建完全自定义数字表盘预览图】
+/// - Parameters:
+///   - image: image【图片】
+///   - numberList: number style List【数字样式】
++ (UIImage *)eaGetNumberThumbnailWithImage:(UIImage *)image list:(NSArray <EACustomNumberWatchFaceModel *>*)numberList;
+
+/// Type 1.5：Create a fully custom pointer watch face thumbnail 【创建完全自定义指针表盘预览图】
+/// - Parameters:
+///   - image: image【图片】
+///   - pointerList: pointer style List【指针样式】
++ (UIImage *)eaGetPointerThumbnailWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList ;
+
+
+
+/// Type 2.1: Get the thumbnail of the custom watch face on the His platform【海思自定义表盘预览图】
+/// - Parameter cusWatchFaceSetting: Custom Watch Face Setting 【自定义表盘样式】
 + (UIImage *)eaGetHisCusThumbnailWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting;
 
 
 
-/// Type 7: Get the thumbnail of the Jerry watch face
+/// Type 3.1: Get the thumbnail of the Jerry watch face【杰里自定义表盘预览图】
+/// - Parameters:
+///   - image: image 【图片】
+///   - jlTimeStyle: jieli time style 【杰里时间样式】
 + (UIImage *)eaGetJieLiThumbnailWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle;
 
 
 
 
 
-
-
-
-/**
-
- 0: Unconnected watch
- -1: The resolution of the picture is inconsistent with the watch
- -2: If the numberList data is insufficient, it must contain high, low, high and low.
- -3: numberList contains duplicate time type data
- -4: Font does not exist, please set it again
- 
-
- 0:未连接手表
- -1:图片与手表分辨率不一致
- -2:numberList数据不足，必须含有时高位、时低位、分高位、分低位
- -3:numberList含有重复时间类型数据
- -4:字体不存在，请重新设置
- */
-
 #pragma mark - watch face ota 【表盘OTA】
-/// Type2：Default style digital watch face【默认指针表盘】
-+ (NSInteger )eaOtaDefaultPointerWatchFaceWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
-/// Type3：Default style digital watch face【默认数字表盘】
+/// Type 1.1：Default style digital watch face【默认数字表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - color: color 【颜色】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOtaDefaultNumberWatchFaceWithImage:(UIImage *)image color:(UIColor *)color watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
-/// Type4：Advanced custom digital watch face【高级自定义数字表盘】
+
+/// Type 1.2：Default style digital watch face【默认指针表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - colorType: color type 【颜色类型】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
++ (NSInteger )eaOtaDefaultPointerWatchFaceWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+/// Type 1.3：Default style digital watch face【默认指针表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - colorType: color type 【颜色类型】
+///   - scaleStyle: scale style 【刻度】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
++ (NSInteger )eaOtaDefaultPointerWatchFaceWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
+
+
+/// Type 1.4：Advanced custom digital watch face【高级自定义数字表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - numberList:  number style List【数字样式】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOtaNumberWatchFaceWithImage:(UIImage *)image list:(NSArray <EACustomNumberWatchFaceModel *>*)numberList watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
-/// Type5：Advanced custom pointer watch face【高级自定义指针表盘】
+
+
+/// Type 1.5：Advanced custom pointer watch face【高级自定义指针表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - pointerList: pointer style List【指针样式】
+///   - colorType: color type 【颜色类型】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOtaPointerWatchFaceWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList colorType:(EACWFTimerColorType )colorType watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
-/// Type2：Default style digital watch face【默认指针表盘】
-+ (NSInteger )eaOtaDefaultPointerWatchFaceWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
-
-/// Type5：Advanced custom pointer watch face【高级自定义指针表盘】
+/// Type 1.5：Advanced custom pointer watch face【高级自定义指针表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - pointerList: pointer style List【指针样式】
+///   - colorType: color type 【颜色类型】
+///   - scaleStyle: scale style 【刻度】
+///   - watchFaceId: watch face Id
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOtaPointerWatchFaceWithImage:(UIImage *)image list:(NSArray <EACustomPointerWatchFaceModel *>*)pointerList colorType:(EACWFTimerColorType )colorType scaleStyle:(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
-/// Type6:
+
+
+/// Type 2.1:海思自定义表盘
+/// - Parameters:
+///   - cusWatchFaceSetting: Custom Watch Face Setting 【自定义表盘样式】
+///   - cusIdBlock: Custom Infomation
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOtaHisCusWatchFaceWithCusWatchFaceSetting:(EACusWatchFaceSetting *)cusWatchFaceSetting cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat progress))progress complete:(OTACompleteBlock)complete;
 
 
 
-/// Type 7: OTA the JieLi watch face
+/// Type 3.1: OTA the JieLi watch face 【杰里海思自定义表盘】
+/// - Parameters:
+///   - image: image 【图片】
+///   - jlTimeStyle: jieli time style 【杰里时间样式】
+///   - cusIdBlock: Custom Infomation
+///   - progress: progress
+///   - complete: complete
 + (NSInteger )eaOTAJieLiWatchFaceWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat p))progress complete:(OTACompleteBlock)complete;
 
 
@@ -144,7 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-+ (void)testJlConvertImage:(UIImage *)image;
+
 
 
 
@@ -193,7 +250,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIImage *)eaGetPointerThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle :(EACWFPointerScaleStyle)scaleStyle DEPRECATED_MSG_ATTRIBUTE("Please use \"eaGetDefaultPointerThumbnailWithImage: colorType:\"");
 
-/// Type1：Create thumbnails of digital watch face【创建数字表盘缩略图】
+/// Type1：Create thumbnails of digital watch face【创建数字表盘预览图】
 /// @return Thumbnail
 + (UIImage *)eaGetNumberThumbnailWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType DEPRECATED_MSG_ATTRIBUTE("Please use \"eaGetDefaultNumberThumbnailWithImage: color:\"");
 
@@ -207,7 +264,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSInteger )eaOtaPointerWatchFaceWithImage:(UIImage *)image colorType:(EACWFTimerColorType )colorType scaleStyle :(EACWFPointerScaleStyle)scaleStyle watchFaceId:(NSString *)watchFaceId DEPRECATED_MSG_ATTRIBUTE("Please use \"eaOtaDefaultPointerWatchFaceWithImage: colorType: watchFaceId:\"");
 
 
-+ (UIImage *)testLoadSvg;
++ (UIImage *)testLoadSvg DEPRECATED_MSG_ATTRIBUTE();
 
 
 @end

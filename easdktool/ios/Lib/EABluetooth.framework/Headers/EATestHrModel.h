@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EATestHrModel.h
 //  EABluetooth
 //
@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, assign) NSInteger hrValue;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EATestHrModel *)getTestHeartRateData:(NSData *)data;
 
 @end

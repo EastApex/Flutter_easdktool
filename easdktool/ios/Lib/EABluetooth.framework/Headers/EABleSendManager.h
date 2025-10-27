@@ -1,4 +1,4 @@
-//
+//  NEED_CLASS_ANALYSIS
 //  EABleSendManager.h
 //  EABluetooth
 //
@@ -15,27 +15,40 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
-//typedef void(^ResultGetInfoBlock)(EABaseModel *baseModel);
-//typedef void(^RespondBlock)(EARespondModel *respondModel);
-
-
+/**
+ * EABleSendManager is a Bluetooth data class: responsible for operations such as communication and data interaction with the watch.
+ * EABleSendManager是蓝牙数据类：负责与手表的通讯、交互数据等操作。
+ */
 @interface EABleSendManager : NSObject
 
 
-/// The singleton 单例
+/// The singleton 【单例】
 + (instancetype)defaultManager;
 
 
-/// Get data 获取数据
+
+///  Get data 【获取数据】
+/// - Parameters:
+///   - dataInfoType: data type 【数据类型】
+///   - result: Response 【响应】
 - (void)operationGetInfoWithType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
-/// Get data from class ’EARequestModel‘ 获取数据
+
+/// Get data from class ’EARequestModel‘ 【获取数据】
+/// - Parameters:
+///   - requestModel: data model【数据类型】
+///   - result: Response 【响应】
 - (void)operationGetInfoWithRequestModel:(EARequestModel *)requestModel result:(ResultGetInfoBlock )result;
 
-/// Set data 修改数据
+/// Set data 【修改数据】
+/// - Parameters:
+///   - changeModel: data model【数据类型】
+///   - respond: Response 【响应】
 - (void)operationChangeModel:(EABaseModel *)changeModel respond:(RespondBlock )respond;
 
 /// App controlled watch App操控手表
+/// - Parameters:
+///   - deviceOpsType: ops type 【操作类型】
+///   - respond: Response 【响应】
 - (void)operationControlledWatchWithType:(EADeviceOpsType)deviceOpsType result:(RespondBlock )respond;
 
 
@@ -71,8 +84,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger )customNumberWatchFaceBackgroundImage:(UIImage *)backGroundImage list:(NSArray <EACustomNumberWatchFaceModel *>*)numberList DEPRECATED_MSG_ATTRIBUTE("Please use \"Class EAMakeWatchFaceManager func\"");
 
 
-
-- (void)getPpgDataResult:(ResultGetPpgBlock )result;
+/// Get ppg Data 获取ppg数据【单线程操作】
+- (void)getPpgDataResult:(ResultGetPpgBlock )result DEPRECATED_MSG_ATTRIBUTE();
 
 
 /** * You are not advised to use */
@@ -81,13 +94,13 @@ NS_ASSUME_NONNULL_BEGIN
 /** 需要在单线程操作:确保上次操作完成后，调用才会响应，尽量使用上面队列操作方法 */
 
 /// Get data 获取数据【单线程操作】
-- (void)getInfoByInfoType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result;
+- (void)getInfoByInfoType:(EADataInfoType)dataInfoType result:(ResultGetInfoBlock )result DEPRECATED_MSG_ATTRIBUTE();
 /// Get data 获取数据【单线程操作】
-- (void)getInfoByRequestModel:(EARequestModel *)requestModel result:(ResultGetInfoBlock )result;
+- (void)getInfoByRequestModel:(EARequestModel *)requestModel result:(ResultGetInfoBlock )result DEPRECATED_MSG_ATTRIBUTE();
 /// Set data 修改数据【单线程操作】
-- (void)changeInfo:(EABaseModel *)baseModel respond:(RespondBlock )respond;
+- (void)changeInfo:(EABaseModel *)baseModel respond:(RespondBlock )respond DEPRECATED_MSG_ATTRIBUTE();
 /// Get big data 获取大数据【单线程操作】
-- (void)getBigDataRequestModel:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond;;
+- (void)getBigDataRequestModel:(EAGetBigDataRequestModel *)model respond:(RespondBlock )respond DEPRECATED_MSG_ATTRIBUTE();
 
 
 /// ignore：

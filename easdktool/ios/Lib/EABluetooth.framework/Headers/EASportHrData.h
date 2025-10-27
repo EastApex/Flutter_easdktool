@@ -9,19 +9,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// 心率数据
+/**
+ * Sport heart rate data model
+ * 运动心率数据模型
+*/
 @interface EASportHrModel : EABigDataModel
 
-/// heart rate
-/// 心率值
+/// heart rate【心率值】
 @property(nonatomic, assign) NSInteger hrValue;
 
 @end
 
+//  NOT_ANALYSIS_CLASS
 @interface EASportHrData : EABaseBigDataModel
 
 @property(nonatomic, strong) NSMutableArray<EASportHrModel*> *sIndexArray;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EASportHrData *)getBigData:(NSData *)data;
 @end
 

@@ -9,37 +9,37 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// id = 55 ：经期提醒
+/**
+ *  id = 55
+ *  Menstrual Reminder
+ *  经期提醒
+ */
 @interface EAMenstrualReminder : EABaseModel
 
-/// 经期开始提醒开关，默认关闭
-/// Menstrual start reminder switch, off by default
+/// Menstrual start reminder switch, off by default【经期开始提醒开关，默认关闭】
 @property(nonatomic, assign) BOOL menstrualBeginSw;
 
-/// 经期结束提醒开关，默认关闭
-/// Menstrual end reminder switch, off by default
+/// Menstrual end reminder switch, off by default【经期结束提醒开关，默认关闭】
 @property(nonatomic, assign) BOOL menstrualEndSw;
 
-/// 易孕期开始提醒开关，默认关闭
-/// Easy pregnancy start to remind switch, default off
+/// Easy pregnancy start to remind switch, default off【易孕期开始提醒开关，默认关闭】
 @property(nonatomic, assign) BOOL easyPregnancyBeginSw;
 
-/// 易孕期易孕期提醒开关，默认关闭
-/// Easy pregnancy end to remind switch, default off
+/// Easy pregnancy end to remind switch, default off【易孕期易孕期提醒开关，默认关闭】
 @property(nonatomic, assign) BOOL easyPregnancyEndSw;
 
-/// 排卵日提醒开关，默认关闭
-/// Ovulation day reminder switch, default off
+///
+/// Ovulation day reminder switch, default off【排卵日提醒开关，默认关闭】
 @property(nonatomic, assign) BOOL ovulationDaySw;
 
 
-/** 经期开始(对应menstrual_begin_sw)提醒时间：提前多少天提醒（可选1~5天） */
+/// Reminder time for the start of menstruation (corresponding to menstrual_begin_sw): How many days in advance to remind (optional 1 - 5 days)【经期开始(对应menstrual_begin_sw)提醒时间：提前多少天提醒（可选1~5天）】
 @property(nonatomic, assign) NSInteger menstrualReminderDaysBefore;
 
-/** 经期开始(对应menstrual_begin_sw)提醒时间：小时 */
+/// Reminder time for the start of menstruation (corresponding to menstrual_begin_sw): hour【经期开始(对应menstrual_begin_sw)提醒时间：小时】
 @property(nonatomic, assign) NSInteger menstrualReminderHours;
 
-/** 经期开始(对应menstrual_begin_sw)提醒时间：分钟 */
+/// Reminder time for the start of menstruation (corresponding to menstrual_begin_sw): minute【经期开始(对应menstrual_begin_sw)提醒时间：分钟 】
 @property(nonatomic, assign) NSInteger menstrualReminderMinutes;
 
 

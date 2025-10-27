@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+//  NOT_ANALYSIS_CLASS
 @interface EAOtaRequest : EABaseModel
 
 /// ota类型 

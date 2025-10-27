@@ -10,20 +10,23 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// 心率数据
+/**
+ * Heart rate data model
+ * 心率数据模型
+ */
 @interface EAHeartRateModel : EABigDataModel
 
-
-/// heart rate
-/// 心率值
+/// heart rate【心率值】
 @property(nonatomic, assign) NSInteger hrValue;
 
 @end
 
+//  NOT_ANALYSIS_CLASS
 @interface EAUploadHeartRateData : EABaseBigDataModel
 
 @property(nonatomic, strong) NSMutableArray<EAHeartRateModel*> *sIndexArray;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EAUploadHeartRateData *)getHeartRatetData:(NSData *)data;
 
 @end

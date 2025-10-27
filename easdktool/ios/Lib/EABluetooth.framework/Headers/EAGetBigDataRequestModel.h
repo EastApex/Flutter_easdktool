@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAGetBigDataRequestModel.h
 //  EABluetooth
 //
@@ -10,13 +10,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// id = 29: Big data acquisition command
-/// id = 29: 获取大数据请求
+/**
+ * id = 29
+ * Big data acquisition command
+ * 获取大数据请求
+ */
 @interface EAGetBigDataRequestModel : EABaseModel
-
-/// Set the following properties to return first
-/// 设置以下属性为 优先 返回
-
 
 @property(nonatomic, assign) NSInteger sportDataReq;
 

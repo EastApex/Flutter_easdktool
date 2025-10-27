@@ -7,88 +7,61 @@
 
 #import <EABluetooth/EABluetooth.h>
 
-/*
-Cycle: == "Sunday ~ Saturday,
-0: off 1: on
-eg1:
 
-Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-0, 1, 0, 0, 0, 1
-You get 0110001, you need flashback to get 1000110
-Convert 1000110 binary to base 10, that is, weekCycleBit is 70 to enable the Monday, Tuesday, and Saturday detection
-
-Use the let weekCycleBit = EADataValue. getWeekCycleByWeekCycleBitString weekCycleBit (@ "0110001")
-Use the let weekCycle = EADataValue. getWeekCycleBitByWeekCycle weekCycle (70)
- 
-eg2:
-Sunday Monday Tuesday Wednesday Thursday Friday Saturday
-0, 0, 0, 0, 1, 1
-So you get 0000011, you have to flashback to get 1100000
-The 1100000 binary is converted to base 10. At this time, weekCycleBit is 96
-
-If weekCycleBit is 0, the monitoring function is disabled
-If weekCycleBit is 127, the daily monitoring function is enabled
-*/
- 
-/*
-周期：==》周日~周六，
-0：关闭 1：开启
-eg1：
-
-周日 周一 周二 周三 周四 周五 周六
-0 1 1 0 0 0 1
-
- 使用 let weekCycleBit = EADataValue.getWeekCycleByWeekCycleBitString(@"0110001") 获取weekCycleBit
- 使用 let weekCycle = EADataValue.getWeekCycleBitByWeekCycle(13) 获取 weekCycle
- 
-eg2：
-周日 周一 周二 周三 周四 周五 周六
-0 0 0 0 0 1 1
-得到 0000011，需要倒叙得到 1100000
-将 1100000二进制转为 10进制 即此时 weekCycleBit 为 96 开启 周五六 检测
-
-weekCycleBit 为0 即 关闭监测功能
-weekCycleBit 为127 即 开启每天监测功能
-*/
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// id = 45 ：提醒事件监测
-/// id = 45 ：Monitor reminder event
+
+/**
+ * id = 45
+ * 提醒事件监测
+ * Monitor reminder event
+ */
 @interface EAMonitorReminder : EABaseModel
 
 
-/** 提醒事件类型 */
+/// Reminder event type【提醒事件类型 】
 @property(nonatomic, assign) EAMonitorReminderType eReminderType;
 
-/** 开关 */
+/// Switch【开关 】
 @property(nonatomic, assign) NSInteger sw;
 
-/** 间隔时长：单位分钟 */
+/// Interval duration: in minutes【间隔时长：单位分钟 】
 @property(nonatomic, assign) NSInteger interval;
 
-/** 周期：位对应从bit0~bit6对应周日~周六,0仅一次提醒 */
+/// Cycle【周期】
 @property(nonatomic, assign) NSInteger weekCycleBit;
 
-/** 开始时间 ：小时 */
+/// Start time: hour【开始时间 ：小时 】
 @property(nonatomic, assign) NSInteger beginHour;
 
-/** 开始时间 ：分钟 */
+/// Start time: minute【开始时间 ：分钟 】
 @property(nonatomic, assign) NSInteger beginMinute;
 
-/** 结束时间 ：小时 */
+/// End time: hour【结束时间 ：小时 】
 @property(nonatomic, assign) NSInteger endHour;
 
-/** 结束时间 ：分钟 */
+/// End time: minute【结束时间 ：分钟 】
 @property(nonatomic, assign) NSInteger endMinute;
 
-/** 步数阈值 ：低于此步数则提醒久坐（reminder_type = Sedentary） */
+/// Step threshold: Remind of sedentary if steps are below this value (reminder_type = Sedentary)【步数阈值 ：低于此步数则提醒久坐（reminder_type = Sedentary） 】
 @property(nonatomic, assign) NSInteger stepThreshold;
 
-/** 杯：喝多少杯水，一杯水 = 200ml（reminder_type = Drink） */
+/// Cups: How many cups of water to drink, one cup = 200ml (reminder_type = Drink)【杯：喝多少杯水，一杯水 = 200ml（reminder_type = Drink） 】
 @property(nonatomic, assign) NSInteger cup;
 
+
+/// Initialize water drinking reminder【初始化喝水提醒】
+/// - Parameters:
+///   - sw: Switch【开关】
+///   - interval: Interval duration (minutes)【间隔时长（分）】
+///   - weekCycleBit: Cycle【周期】
+///   - beginHour: Start hour【开始时】
+///   - beginMinute: Start minute【开始分】
+///   - endHour: End hour【结束时】
+///   - endMinute: End minute【结束分】
+///   - cup: Number of cups of water【多少杯水】
 + (EAMonitorReminder *)eaInitDrinkMonitorWithOnOff:(BOOL)sw
                                         interval:(NSInteger)interval
                                     weekCycleBit:(NSInteger)weekCycleBit
@@ -99,6 +72,15 @@ NS_ASSUME_NONNULL_BEGIN
                                              cup:(NSInteger)cup;
 
 
+/// Initialize hand - washing reminder【初始化洗手提醒】
+/// - Parameters:
+///   - sw: Switch【开关】
+///   - interval: Interval duration (minutes)【间隔时长（分）】
+///   - weekCycleBit: Cycle【周期】
+///   - beginHour: Start hour【开始时】
+///   - beginMinute: Start minute【开始分】
+///   - endHour: End hour【结束时】
+///   - endMinute: End minute【结束分】
 + (EAMonitorReminder *)eaInitWashHandsMonitorWithOnOff:(BOOL)sw
                                             interval:(NSInteger)interval
                                         weekCycleBit:(NSInteger)weekCycleBit
@@ -107,20 +89,32 @@ NS_ASSUME_NONNULL_BEGIN
                                              endHour:(NSInteger)endHour
                                            endMinute:(NSInteger)endMinute;
 
-//+ (EAMonitorReminder *)initSedentaryMonitorWithOnOff:(BOOL)sw
-//                                            interval:(NSInteger)interval
-//                                        weekCycleBit:(NSInteger)weekCycleBit
-//                                           beginHour:(NSInteger)beginHour
-//                                         beginMinute:(NSInteger)beginMinute
-//                                             endHour:(NSInteger)endHour
-//                                           endMinute:(NSInteger)endMinute
-//                                       stepThreshold:(NSInteger)stepThreshold;
+
+/// Initialize Take Medicine 【初始化吃药】
+/// - Parameters:
+///   - sw: Switch【开关】
+///   - interval: Interval duration (minutes)【间隔时长（分）】
+///   - weekCycleBit: Cycle【周期】
+///   - beginHour: Start hour【开始时】
+///   - beginMinute: Start minute【开始分】
+///   - endHour: End hour【结束时】
+///   - endMinute: End minute【结束分】
++ (EAMonitorReminder *)initTakeMedicineMonitorWithOnOff:(BOOL)sw
+                                            interval:(NSInteger)interval
+                                        weekCycleBit:(NSInteger)weekCycleBit
+                                           beginHour:(NSInteger)beginHour
+                                         beginMinute:(NSInteger)beginMinute
+                                             endHour:(NSInteger)endHour
+                                           endMinute:(NSInteger)endMinute;
 
 
+
+/// Get water - drinking reminder【获取喝水提醒】
 + (void)eaGetDrinkReminder:(ResultGetInfoBlock )result;
+/// Get hand - washing reminder【获取洗手提醒】
 + (void)eaGetWashHandsReminder:(ResultGetInfoBlock )result;
+/// Get medicine - taking reminder【获取吃药提醒】
 + (void)eaGetTakeMedicineReminder:(ResultGetInfoBlock )result;
-
 
 @end
 

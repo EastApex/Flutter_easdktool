@@ -9,19 +9,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+/**
+ * id = 71
+ * Muslim Calendar
+ * 穆斯林回历
+ */
 @interface EAMuslimCalendar : EABaseModel
 
-/** 当前回历年份 */
+/// Year【当前回历年份】
 @property(nonatomic,  assign) NSInteger mYear;
 
-/** 当前回历月份 */
+/// Month【当前回历月份】
 @property(nonatomic,  assign) NSInteger mMonth;
 
-/** 当前回历日期 */
+/// Day【当前回历日期】
 @property(nonatomic,  assign) NSInteger mDay;
 
 
-- (instancetype)eaInitMuslimCalendarWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
+/// Initialization
+/// - Parameters:
+///   - year: year 
+///   - month: month
+///   - day: day
++ (instancetype)eaInitMuslimCalendarWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;
 
 @end
 

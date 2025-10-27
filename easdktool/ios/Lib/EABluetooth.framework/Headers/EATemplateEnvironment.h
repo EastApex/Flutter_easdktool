@@ -8,13 +8,17 @@
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+/**
+ * id = 67
+ * template environment
+ * 环境温度
+ */
 @interface EATemplateEnvironment : EABaseModel
 
-/** 0关，1开 */
+/// 0 off, 1 on
 @property(nonatomic, assign) BOOL sw;
 
-/** 间隔时间，单位：分钟(最低不少于60分钟) */
+/// Interval time, unit: minutes (It is recommended to be no less than 60 minutes)
 @property(nonatomic, assign) NSInteger interval;
 
 @end

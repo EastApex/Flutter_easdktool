@@ -10,31 +10,63 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// id = 38: 习惯追踪
-/// id = 38: Habit Tracker
-@interface EAHabitTrackerModel : EABaseModel
+@class EAHabitTrackerModel;
 
-@property(nonatomic, assign) EAHabitTrackerIconType eIconId;
+/**
+ * id = 38
+ * 习惯追踪
+ * Habit Tracker
+ */
+@interface EAHabitTrackers : EABaseModel
+
+
+@property(nonatomic, assign) EAHabitTrackerOps eOps;
 
 @property(nonatomic, assign) NSInteger id_p;
 
+///  Up to 12 【最多12个】
+@property(nonatomic, strong) NSMutableArray<EAHabitTrackerModel*> *sIndexArray;
+
+/// will delete id_ps【要删除的id_p】
+@property(nonatomic,strong)NSMutableArray<NSNumber*> *sDelIndexArray;
+
+
+@end
+
+/**
+ * 习惯追踪
+ * Habit Tracker Model
+ */
+@interface EAHabitTrackerModel : EABaseModel
+
+/// icon ID
+@property(nonatomic, assign) EAHabitTrackerIconType eIconId;
+
+/// id
+@property(nonatomic, assign) NSInteger id_p;
+
+/// Start time: hour【开始时间:时】
 @property(nonatomic, assign) NSInteger beginHour;
 
+/// Start time: minute【开始时间:分】
 @property(nonatomic, assign) NSInteger beginMinute;
 
+/// End time: hour【结束时间:时】
 @property(nonatomic, assign) NSInteger endHour;
 
+/// End time: minute【结束时间:分】
 @property(nonatomic, assign) NSInteger endMinute;
 
+/// Red value (0 - 255)【红色数值（0~255）】
 @property(nonatomic, assign) NSInteger r;
 
+/// Green value (0 - 255)【绿色数值（0~255）】
 @property(nonatomic, assign) NSInteger g;
 
+/// Blue value (0 - 255)【蓝色数值（0~255）】
 @property(nonatomic, assign) NSInteger b;
 
-
-/// Snooze time (Unit: minute)
-/// 贪睡时间（单位：分钟）写死30分钟 */
+/// Snooze time (minute)【贪睡时间（单位：分钟）写死30分钟 】
 @property(nonatomic, assign) NSInteger duration;
 
 
@@ -42,36 +74,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, copy,) NSString *content;
 
-/// 周期：
+/// Cycle【周期】
 @property(nonatomic, assign) NSInteger weekCycleBit;
 
-/** 标志  （read respond有效，write request set 0） */
+/// Status
 @property(nonatomic, assign) EAHabitTrackerFlag eFlag;
 
 
 @end
 
-/**
- * id = 38 : 习惯追踪
- * write request：   (上位机--->固件 id：38)       respond：（固件--->上位机 id：39）
- * read  request:    (上位机--->固件 id：2)        respond：（固件--->上位机 id：38）
- **/
-@interface EAHabitTrackers : EABaseModel
-
-@property(nonatomic, assign) EAHabitTrackerOps eOps;
-
-@property(nonatomic, assign) NSInteger id_p;
-
-/**  Up to 12 最多12个 */
-@property(nonatomic, strong) NSMutableArray<EAHabitTrackerModel*> *sIndexArray;
-
-/// will delete id_ps  要删除的id_p
-@property(nonatomic,strong)NSMutableArray<NSNumber*> *sDelIndexArray;
-
-
-
-
-@end
 
 /**
  * id = 39 ：习惯追踪回应
@@ -79,6 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
  *     read  request:     不支持            respond：不支持
  **/
 NS_CLASS_DEPRECATED_IOS(9_0, 9_0, "No longer supported; please adopt EARespondModel") __TVOS_PROHIBITED
+//  NOT_ANALYSIS_CLASS
 @interface EAHabitTrackerRespondModel : EABaseModel
 
 /** 操作状态 */

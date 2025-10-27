@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAVoiceData.h
 //  EABluetooth
 //
@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger voicePackageLen;
 @property(nonatomic, strong) NSData *voicePackage;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EAVoiceData *)getBigData:(NSData *)data;
 @end
 

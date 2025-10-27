@@ -10,15 +10,34 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+@class EAAppMessageSwitchModel;
+
 /**
- Note a few things about testing your push:
- 1. The watch must be paired with the phone to allow for notifications.
- 2. The watch needs to disable DND
- 3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
+ * id = 34
+ * 手机各个APP推送开关
+ * Push switch of each APP on mobile phone
+ *
+ * ** It is recommended to use Class EAShowAppMessageModel【建议使用 Class  EAShowAppMessageModel】
+ *
+ * Please note the following points when testing the push notifications of your App
+ * 1. The watch must be paired with a mobile phone to receive notifications.
+ * 2. Turn off the Do Not Disturb function of the watch.
+ * 3. Enable the relevant Bluetooth protocol. Class EAAppMessageSwitchData
+ *
+ * 关于测试你的App推送通知，请注意以下几点：
+ * 1. 手表必须与手机配对，才能接收通知。
+ * 2. 手表关闭免打扰功能。
+ * 3. 开启相关蓝牙协议。类EAAppMessageSwitchData
  */
+@interface EAAppMessageSwitchData : EABaseModel
+
+@property(nonatomic,strong) NSMutableArray<EAAppMessageSwitchModel*> *sAppSwArray;
 
 
-@class EAAppMessageSwitchData;
++ (void)eaUpdateAppMessageSwitch:(EAAppMessageSwitchModel *)appMessageSwitchModel respond:(void (^)(EARespondModel *respondModel))respond;
++ (void)eaUpdateAppMessagesSwitch:(NSArray <EAAppMessageSwitchModel *> *)updateList  respond:(void (^)(EARespondModel *respondModel))respond;
+
+@end
 
 typedef NS_OPTIONS(NSUInteger, EAShowAppType) {
     
@@ -103,9 +122,28 @@ typedef NS_OPTIONS(NSUInteger, EAShowAppType) {
 };
 
 
+/**
+ * App push model
+ * App推送模型
+ */
+@interface EAAppMessageSwitchModel : EABaseModel
+
+@property(nonatomic, assign) BOOL sw;
+@property(nonatomic, assign) EAShowAppType showAppType;
+@property(nonatomic, strong) NSString *appName;
+
++ (instancetype)eaInitAppMessageSwitchModel:(EAShowAppType)showAppType sw:(BOOL)sw;
+
+@end
 
 
 
+@class EAAppMessageSwitchData;
+
+/**
+ * App push model
+ * App推送模型
+ */
 @interface EAShowAppMessageModel : EABaseModel
 
 @property(nonatomic,assign) BOOL unknow;
@@ -187,21 +225,23 @@ typedef NS_OPTIONS(NSUInteger, EAShowAppType) {
 @property(nonatomic,assign) BOOL titanSmartWord;
 
 
-// 获取App推送蓝牙传输对象数据
+/// Obtain the data of the Bluetooth transmission object pushed by the App 【获取App推送蓝牙传输对象数据】
 - (EAAppMessageSwitchData *)getEAAppMessageSwitchData;
 
 
+/// Convert the Class EAAppMessageSwitchData to EAShowAppMessageModel【将Class EAAppMessageSwitchData 转换为 EAShowAppMessageModel】
+/// - Parameter appMessageSwitchData: appMessageSwitchData
 + (EAShowAppMessageModel *)eaAllocInitWithAppMessageSwitchData:(EAAppMessageSwitchData *)appMessageSwitchData;
 
-/// 一键开启或者关闭
-/// - Parameter onOff: 开启或者关闭
+/// One-click on or off【一键开启或者关闭】
+/// - Parameter onOff:
 + (EAShowAppMessageModel *)eaAllocInitWithAllOnOff:(BOOL)onOff;
 
-/// 一键开启或者关闭
+/// One-click on or off【一键开启或者关闭】
 /// - Parameter onOff: 开启或者关闭
 /// - Parameter showAppTypes: [数组]开启或者关闭的App类型
 /// -
-/// - Sample Code:
+/// - Remark:
 /// -
 /// -   NSArray *showAppTypes = @[@(EAShowAppTypeWechat), @(EAShowAppTypeGmail)];
 /// -   EAShowAppMessageModel *eaShowAppMessageModel = [EAShowAppMessageModel eaAllocInitWithOnOff:YES showAppTypes:showAppTypes];
@@ -213,28 +253,8 @@ typedef NS_OPTIONS(NSUInteger, EAShowAppType) {
 
 
 
-@interface EAAppMessageSwitchModel : EABaseModel
-
-@property(nonatomic, assign) BOOL sw;
-@property(nonatomic, assign) EAShowAppType showAppType;
-@property(nonatomic, strong) NSString *appName;
-
-+ (instancetype)eaInitAppMessageSwitchModel:(EAShowAppType)showAppType sw:(BOOL)sw;
-
-@end
-
-/// id = 34: 手机各个APP推送开关
-/// id = 34: Push switch of each APP on mobile phone
-@interface EAAppMessageSwitchData : EABaseModel
-
-@property(nonatomic,strong) NSMutableArray<EAAppMessageSwitchModel*> *sAppSwArray;
-
-
-+ (void)eaUpdateAppMessageSwitch:(EAAppMessageSwitchModel *)appMessageSwitchModel respond:(void (^)(EARespondModel *respondModel))respond;
-+ (void)eaUpdateAppMessagesSwitch:(NSArray <EAAppMessageSwitchModel *> *)updateList  respond:(void (^)(EARespondModel *respondModel))respond;
 
 
 
-@end
 
 NS_ASSUME_NONNULL_END

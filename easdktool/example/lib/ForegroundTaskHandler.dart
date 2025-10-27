@@ -185,7 +185,7 @@ class MyTaskHandler extends TaskHandler {
       } else if (type == 0x18) {
         if (Platform.isAndroid) {
           print("开始连接BT");
-          easdkTool.pairBt("45:41:5B:16:58:4A");
+          easdkTool.pairBt("45:42:B9:04:34:83");
         }
       }
     }

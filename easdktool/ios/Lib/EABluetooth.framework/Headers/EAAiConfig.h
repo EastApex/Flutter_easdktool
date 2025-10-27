@@ -9,11 +9,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+/**
+ * id = 77
+ * AI配置
+ * AI configuration
+*/
 @interface EAAiConfig : EABaseModel
-/** 深度思考使能  0:禁用 1:使能 */
+
+/// Deep thinking【深度思考】
 @property(nonatomic, assign) NSInteger deepThinkingEn;
 
-/** 联网搜索使能  0:禁用 1:使能 */
+/// Online search【联网搜索】
 @property(nonatomic, assign) NSInteger onlineSearchEn;
 
 

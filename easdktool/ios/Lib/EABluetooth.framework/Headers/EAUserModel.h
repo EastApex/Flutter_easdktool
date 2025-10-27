@@ -9,33 +9,30 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-/// id = 4: User information
-/// id = 4: 用户信息
+
+/**
+ * id = 4
+ * User information
+ * 用户信息
+*/
 @interface EAUserModel : EABaseModel
 
-/// sex
-/// 性别
+/// sex【性别】
 @property(nonatomic, assign) EASexType sexType;
 
-/// age
-/// 年龄
+/// age【年龄】
 @property(nonatomic, assign) NSInteger age;
 
-/// height:unit cm
-/// 身高，单位：厘米
+/// height:cm【身高，单位：厘米、
 @property(nonatomic, assign) NSInteger height;
 
-/// weight:unit g
-/// 体重，单位：克
+/// weight:g【体重，单位：克】
 @property(nonatomic, assign) NSInteger weight;
 
-/// Wear way
-/// 穿戴方式
-@property(nonatomic, assign) EAWearWayType wearWayType;
+/// Wear way【穿戴方式】
+@property(nonatomic, assign) EAWearWayType wearWayType __attribute__((deprecated));
 
-/// Note：This parameter is optional. It is not required
-/// Skin Color
-/// 肤色
+/// Skin Color【肤色】
 @property(nonatomic, assign) EASkinColorType eSkinColor __attribute__((deprecated));
 
 

@@ -291,6 +291,7 @@ public class SetWatchData {
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        LogUtils.i(TAG, "bind device end:" + eaBleBindInfo.getBind_mod());
                                         channel.invokeMethod(kArgumentsError, "user_id error");
                                         mHandler = null;
                                     }
@@ -319,6 +320,7 @@ public class SetWatchData {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        LogUtils.i(TAG, "start bind :" + eaBleBindInfo.getBind_mod()+":"+i);
                         channel.invokeMethod(kArgumentsError, "user_id error");
                         mHandler = null;
                     }

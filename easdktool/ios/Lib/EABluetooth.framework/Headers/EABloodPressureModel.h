@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EABloodPressureModel.h
 //  EABluetooth
 //

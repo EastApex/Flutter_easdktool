@@ -20,6 +20,11 @@ import com.example.easdktool.jieli.watchface.JieliWatchFaceManager;
 import com.example.easdktool.jieli.watchface.JieliWatchInfo;
 import com.jieli.jl_rcsp.model.base.BaseError;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +64,26 @@ public class JieLiWatchFace {
             });
             return;
         }
+        File file = new File(filePath);
+        if (file == null || !file.exists() || !file.isFile()) {
+            if (mHandler == null) {
+                mHandler = new Handler(Looper.getMainLooper());
+            }
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (channel != null) {
+                        OtaProgress otaProgress = new OtaProgress();
+                        otaProgress.isSuccess = -1;
+                        otaProgress.progress = -1;
+                        otaProgress.errorType = 0x10;
+                        channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                    }
+                    mHandler = null;
+                }
+            });
+            return;
+        }
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
             @Override
             public void watchInfo(final EABleWatchInfo eaBleWatchInfo) {
@@ -66,6 +91,28 @@ public class JieLiWatchFace {
                     @Override
                     public void run() {
                         super.run();
+                        //修改判断文件名
+                        File nFile = new File(filePath);
+                        String name = getInternalName(nFile);
+                        if (TextUtils.isEmpty(name)) {
+                            returnFailData(0x10);
+                            return;
+                        }
+                        String orName = nFile.getName();
+                        String endPath = filePath;
+                        if (!name.equals(orName)) {//需要给文件重命名
+                            endPath = renameFile(file, name);
+                        }
+                        if (TextUtils.isEmpty(endPath)) {
+                            returnFailData(0x10);
+                            return;
+                        }
+                        final File tFile = new File(endPath);
+                        if (tFile == null || !tFile.exists() || !tFile.isFile()) {
+                            returnFailData(0x10);
+                            return;
+                        }
+                        final String lastPath = endPath;
                         if (eaBleWatchInfo != null) {
                             final int dialNum = eaBleWatchInfo.getEx_dial_num();
 
@@ -93,7 +140,7 @@ public class JieLiWatchFace {
                                             return;
                                         }
                                     }
-                                    add707WatchFace(filePath);
+                                    add707WatchFace(lastPath);
 
                                 }
 
@@ -104,7 +151,7 @@ public class JieLiWatchFace {
                             });
                             return;
                         }
-                        add707WatchFace(filePath);
+                        add707WatchFace(lastPath);
                     }
                 }.start();
 
@@ -131,6 +178,92 @@ public class JieLiWatchFace {
             }
         });
 
+    }
+
+    private String renameFile(File orFile, String name) {
+        try {
+            String orDir = orFile.getParent();
+            File file = new File(orDir, name);
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            FileInputStream fileInputStream = new FileInputStream(orFile);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            byte[] readByte = new byte[1024];
+            int readSize;
+            while ((readSize = fileInputStream.read(readByte)) != -1) {
+                fileOutputStream.write(readByte, 0, readSize);
+            }
+            fileOutputStream.close();
+            fileInputStream.close();
+            return file.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    private void returnFailData(final int error) {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (channel != null) {
+                    OtaProgress otaProgress = new OtaProgress();
+                    otaProgress.isSuccess = -1;
+                    otaProgress.progress = -1;
+                    otaProgress.errorType = error;
+                    channel.invokeMethod(kAddJieLiWatchFace, JSONObject.toJSONString(otaProgress));
+                }
+                mHandler = null;
+            }
+        });
+    }
+
+    private String getInternalName(final File f) {
+        String name = null;
+        try {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(f, "r");
+            byte[] bytes = new byte[400];
+            randomAccessFile.read(bytes);
+            String content = new String(bytes, Charset.forName("UTF-8"));
+            if (!TextUtils.isEmpty(content)) {
+                String splitContent = null;
+                if (content.contains("sty")) {
+                    splitContent = content.substring(0, content.indexOf("sty"));
+                } else if (content.contains("res")) {
+                    splitContent = content.substring(0, content.indexOf("res"));
+                } else if (content.contains("str")) {
+                    splitContent = content.substring(0, content.indexOf("str"));
+                } else if (content.contains("json")) {
+                    splitContent = content.substring(0, content.indexOf("json"));
+                } else if (content.contains("view")) {
+                    splitContent = content.substring(0, content.indexOf("view"));
+                }
+                if (!TextUtils.isEmpty(splitContent)) {
+                    if (splitContent.contains("watch")) {
+                        splitContent = splitContent.substring(splitContent.indexOf("watch"), splitContent.length());
+
+                    } else if (splitContent.contains("WATCH")) {
+                        splitContent = splitContent.substring(splitContent.indexOf("WATCH"), splitContent.length());
+                    }
+
+                }
+                if (!TextUtils.isEmpty(splitContent)) {
+                    if (splitContent.contains(".")) {
+                        name = splitContent.split("\\.")[0];
+                    }
+                }
+            }
+            randomAccessFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 
     private void add707WatchFace(final String filePath) {

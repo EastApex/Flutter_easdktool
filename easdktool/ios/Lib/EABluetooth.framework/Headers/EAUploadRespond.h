@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAUploadRespond.h
 //  EABluetooth
 //
@@ -13,9 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 数据需求 */
 @property(nonatomic, assign) NSInteger requestId;
-
-
-
 
 @end
 

@@ -1,9 +1,23 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAMakeWatchFaceManager.h
 //  EABluetooth
 //
 //  Created by Aye on 2022/9/7.
 //
+
+
+/*
+还需要修改以下几点：
+1.将所有输出到文件中的中文修改为英文
+2.文件内容第一行含有"NOT_ANALYSIS_CLASS"字段不需要解析
+3.含有“__attribute__((deprecated))”的属性不需要解析
+4.文件名以“.pbobjc.h”结尾不解析
+*/
+
+
+
+
+
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

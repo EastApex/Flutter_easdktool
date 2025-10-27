@@ -8,15 +8,13 @@
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class EACusWatchFaceId;
 
-
-@interface EACusWatchFaceId : EABaseModel
-
-/** 自定义表盘的ID（大小详见对应OPTIONS文件） */
-@property(nonatomic, strong) NSString *cusId;
-
-@end
-
+/**
+ * id = 74
+ * Customize the ID of the watch face
+ * 自定义表盘的ID
+ */
 @interface EACusWatchFaceIds : EABaseModel
 
 @property(nonatomic, strong) NSMutableArray<EACusWatchFaceId*> *sStrCusIdArray;
@@ -24,5 +22,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,strong) NSMutableArray *ids;
 
 @end
+
+/**
+ * Customize the ID of the watch face
+ * 自定义表盘的ID
+ */
+@interface EACusWatchFaceId : EABaseModel
+
+@property(nonatomic, strong) NSString *cusId;
+
+@end
+
+
 
 NS_ASSUME_NONNULL_END

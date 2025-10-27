@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAHrMaxMinShow.h
 //  EABluetooth
 //

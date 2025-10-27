@@ -8,6 +8,24 @@
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class EAMuslimTimeItem;
+
+
+
+/**
+ * id = 70
+ * Muslim Direction Time
+ * 穆斯林时间
+ */
+@interface EAMuslimDirectionTime : EABaseModel
+
+@property(nonatomic, strong) NSMutableArray<EAMuslimTimeItem*> *daydirArray;
+
+@property(nonatomic, assign) NSInteger kneelerDir;
+
+@end
+
+
 
 
 @interface EAMuslimTimeItem : EABaseModel
@@ -29,12 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@interface EAMuslimDirectionTime : EABaseModel
 
-@property(nonatomic, strong) NSMutableArray<EAMuslimTimeItem*> *daydirArray;
-
-@property(nonatomic, assign) NSInteger kneelerDir;
-
-@end
 
 NS_ASSUME_NONNULL_END

@@ -9,12 +9,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
+/**
+ * id = 72
+ * Current location (longitude and latitude)
+ * 当前位置（经纬度）
+ */
 @interface EAGPSLocation : EABaseModel
 
 @property(nonatomic, assign) CGFloat latitude;
 @property(nonatomic, assign) CGFloat longitude;
 
-- (instancetype)eaInitUploadGPSLocationWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
+
+/// Initialization
+/// - Parameters:
+///   - latitude: latitude
+///   - longitude: longitude 
++ (instancetype)eaInitUploadGPSLocationWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude;
 
 @end
 

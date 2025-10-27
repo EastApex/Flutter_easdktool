@@ -133,6 +133,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final String kAddJieLiWatchFace = "AddJieLiWatchFace";
     final String kDeleteJieLiWatchFace = "DeleteJieLiWatchFace";
     final String kGetJieLiWatchFace = "GetJieLiWatchFace";
+    final String kJieLiCusWatchFace = "JieLiCusWatchFace";
 
     /// 数据类型
     /* 手表 */
@@ -232,6 +233,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     SMSReceiveBroadcast smsReceiveBroadcast;
     private final String CID_KEY = "CID_KEY_CACHE";
     private final String DISPATCHER_HANDLE_KEY = "dispatch_handler";
+    final String kCustomWatchFaceResponse = "CustomWatchFaceResponse";
     BtConnectBroadcast btConnectBroadcast;
     EventChannel eventChannel;
 
@@ -488,7 +490,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                                     super.run();
                                                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                                                    byte[] bitArray = outputStream.toByteArray();
+                                                    final byte[] bitArray = outputStream.toByteArray();
                                                     if (channel != null) {
                                                         if (bitArray == null) {
                                                             //将其转Uint8List
@@ -502,7 +504,7 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
                                                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                                 @Override
                                                                 public void run() {
-                                                                    channel.invokeMethod(kEACustomWatchface, bitArray);
+                                                                    channel.invokeMethod(kCustomWatchFaceResponse, bitArray);
                                                                 }
                                                             });
 
@@ -711,6 +713,41 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
         } else if (call.method.equals(kGetJieLiWatchFace)) {
 
             new JieLiWatchFace(channel).getWatchFace();
+
+        } else if (call.method.equals(kJieLiCusWatchFace)) {
+            String arguments = (String) call.arguments;
+            if (TextUtils.isEmpty(arguments)) {
+                channel.invokeMethod(kArgumentsError, "param error");
+                return;
+
+            }
+            Map<String, Object> map = JSONObject.parseObject(arguments, Map.class);
+            boolean isPreview = (boolean) map.get("getPreviewImage");
+            String orPath = (String) map.get("bgImagePath");
+            int styleType = (int) map.get("style");
+            String imageType = null;
+            if (isPreview) {
+                if (TextUtils.isEmpty(orPath)) {
+                    channel.invokeMethod(kArgumentsError, "param error");
+                    return;
+                }
+                File orFile = new File(orPath);
+                if (!orFile.exists() || !orFile.isFile()) {
+                    channel.invokeMethod(kArgumentsError, "param error");
+                    return;
+                }
+                String[] nameString = orFile.getName().split("\\.");
+                if (nameString.length < 2) {
+                    channel.invokeMethod(kArgumentsError, "param error");
+                    return;
+                }
+                if (!nameString[1].equalsIgnoreCase("JPEG") && !nameString[1].equalsIgnoreCase("JPG") && !nameString[1].equalsIgnoreCase("PNG")) {
+                    channel.invokeMethod(kArgumentsError, "param error");
+                    return;
+                }
+                imageType = nameString[1];
+            }
+            new JieLiCustomWatchFace(channel, mContext.getApplicationContext()).jieli707CustomDial(styleType, orPath, isPreview, imageType);
 
         } else {
             result.notImplemented();

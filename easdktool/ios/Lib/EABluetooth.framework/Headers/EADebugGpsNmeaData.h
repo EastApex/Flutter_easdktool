@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EADebugGpsNmeaData.h
 //  EABluetooth
 //
@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 透传的log */
 @property(nonatomic, strong) NSString *log;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EADebugGpsNmeaData *)getBigData:(NSData *)data;
 @end
 

@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAPpgAuto.h
 //  EABluetooth
 //
@@ -8,7 +8,7 @@
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
+//  NOT_ANALYSIS_CLASS
 @interface EAPpgAuto : EABaseModel
 
 /** 自动开关: 0关闭 1打开 */

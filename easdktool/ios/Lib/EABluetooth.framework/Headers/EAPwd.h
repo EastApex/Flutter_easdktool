@@ -9,13 +9,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ * id = 65
+ * watch password
+ * 手表密码
+ */
 @interface EAPwd : EABaseModel
 
 @property(nonatomic, assign) NSInteger sw;
 
-//@property(nonatomic, assign) NSInteger pwdLen;
-
 @property(nonatomic, strong) NSString *pwd;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,3 +1,13 @@
+Date:10.27.2025
+Change:
+    Android:
+        1.add jieli 707 custom watch face.
+    iOS:
+        1.Fixed the issue where it sometimes failed to reconnect after pairing.
+
+=================================================================
+
+
 Date:10.21.2025
 Change:
     Android:

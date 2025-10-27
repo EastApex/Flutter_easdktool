@@ -9,16 +9,26 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ * id = 76
+ * AI Text
+ * AI 文本
+*/
 @interface EAAiText : EABaseModel
 
-/** 类型 */
+/// Type[类型]
 @property(nonatomic, assign) EAAiTextType eType;
 
-@property(nonatomic, assign) NSInteger aiTxtLen;
+/// AI text information (no more than 2,000 words at a time)【AI文字信息 (一次不能超过2000字)】
+@property(nonatomic, strong) NSString *aiTxt;
 
-/** AI文字信息 (一次不能超过2000字)*/
-@property(nonatomic, strong) NSString *aiTxt; 
+@property(nonatomic, assign) NSInteger aiTxtLen __attribute__((deprecated));
 
+
+/// Initialization
+/// - Parameters:
+///   - type: type
+///   - text: text
 + (instancetype)eaInitAiTextWithType:(EAAiTextType)type text:(NSString * )text;
 
 

@@ -374,7 +374,7 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     EADataInfoTypeTemplateEnvironment = 67,
     
     /// id = 68
-    ///what support sport for App mac sport (id = 46) & APP starts watch motion (screen motion)(id = 54)
+    /// what support sport for App mac sport (id = 46) & APP starts watch motion (screen motion)(id = 54)
     /// EASportSupport
     EADataInfoTypeAppSportSupport = 68,
     

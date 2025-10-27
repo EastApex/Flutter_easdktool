@@ -9,59 +9,41 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class EASocialOps;
 
 
-/// 社交提醒设置
-@interface EASocialOps : EABaseModel
-
-/// on-off
-/// 开关
-@property(nonatomic, assign) NSInteger sw;
-
-/// Remind the way
-/// 提醒方式
-@property(nonatomic, assign) EARemindActionType remindActionType;
-
-+ (instancetype)eaInitWithOnOff:(NSInteger)onOff remindActionType:(EARemindActionType)remindActionType;
-
-@end
-
-
-/// id = 21 : Social alert switch
-/// id = 21 : 社交提醒开关
+/**
+ * id = 21
+ * Social alert switch
+ * 社交提醒开关
+ */
 @interface EASocialSwitchModel : EABaseModel
 
-/// incoming call
-/// 来电
+/// incoming call【来电】
 @property(nonatomic, strong) EASocialOps *sIncomingcall;
 
-/// Missed vall
-/// 未知来电
+/// Missed call【未知来电】
 @property(nonatomic, strong) EASocialOps *sMissedcall;
 
-/// Sms
-/// 短信
+/// Sms【短信】
 @property(nonatomic, strong) EASocialOps *sSms;
 
 
- /**
-  Note a few things about testing your push:
-  1. The watch must be paired with the phone to allow for notifications.
-  2. The watch needs to disable DND
-  3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
-  */
-
-/// Social
-/// 社交（第三方App推送提醒 ）
+/**
+ Note a few things about testing your push:
+ 1. The watch must be paired with the phone to allow for notifications.
+ 2. The watch needs to disable DND
+ 3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
+ */
+/// Third - party App push reminder【第三方 App 推送提醒】
 @property(nonatomic, strong) EASocialOps *sSocial;
 
 
-/// 邮件
+/// Email【邮件】
 @property(nonatomic, strong) EASocialOps *sEmail;
 
 
-/// Schedule
-/// 日程（iPhone日历提醒）
+/// Calendar reminder【日历提醒】
 @property(nonatomic, strong) EASocialOps *sSchedule;
 
 
@@ -69,7 +51,35 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-+ (instancetype)eaInitWithRemindActionType:(EARemindActionType)remindActionType incomingcall:(NSInteger)incomingcall missedcall:(NSInteger)missedcall sms:(NSInteger)sms social:(NSInteger)social email:(NSInteger)email schedule:(NSInteger)schedule;
+/// Initialize【初始化】
+/// - Parameters:
+///  - remindActionType: Remind method【提醒方式】
+///  - incomingcall: Incoming call reminder【来电提醒】
+///  - missedcall: Missed call reminder【未接电话提醒】
+///  - sms: SMS reminder【SMS 提醒】
+///  - social: Third - party App push reminder【第三方 App 推送提醒】
+///  - email: Email reminder【邮件提醒】
+///  - schedule: Calendar reminder【日历提醒】
++(instancetype)eaInitWithRemindActionType:(EARemindActionType)remindActionType incomingcall:(NSInteger)incomingcall missedcall:(NSInteger)missedcall sms:(NSInteger)sms social:(NSInteger)social email:(NSInteger)email schedule:(NSInteger)schedule;
+
+@end
+
+
+
+@interface EASocialOps : EABaseModel
+
+/// on-off【开关】
+@property(nonatomic, assign) NSInteger sw;
+
+/// Remind the way【提醒方式】
+@property(nonatomic, assign) EARemindActionType remindActionType;
+
+
+/// 初始化【Initialize】
+/// - Parameters:
+///  - onOff: 开关【Switch】
+///  - remindActionType: 提醒方式【Remind method】
++(instancetype)eaInitWithOnOff:(NSInteger)onOff remindActionType:(EARemindActionType)remindActionType;
 
 @end
 

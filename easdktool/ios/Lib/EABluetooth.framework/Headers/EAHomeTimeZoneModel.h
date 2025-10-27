@@ -1,4 +1,4 @@
-//
+
 //  EAHomeTimeZoneModel.h
 //  EABluetooth
 //
@@ -9,23 +9,26 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-// disuse
-// 弃用
 
-/// id:14 家乡时区信息
 
+
+/**
+ * id:14
+ * World Time
+ * 世界时间
+ */
 @interface EAHomeTimeZoneItem : EABaseModel
 
-/// 家乡时区: 0时区、东时区、西时区
+/// Time zone: 0 time zone, east time zone, west time zone【时区: 0时区、东时区、西时区】
 @property(nonatomic, assign) EATimeZone timeZone;
 
-/// 家乡时区: 时
+/// Time zone: hour【时区: 时】
 @property(nonatomic, assign) NSInteger timeZoneHour;
 
-/// 家乡时区: 分
+/// Time zone: minute【时区: 分】
 @property(nonatomic, assign) NSInteger timeZoneMinute;
 
-/// 家乡名称: 最多支持32字节的utf8，
+/// Home name: Supports up to 32 bytes of utf8【家名称: 最多支持32字节的utf8，】
 @property(nonatomic, copy) NSString *place;
 
 

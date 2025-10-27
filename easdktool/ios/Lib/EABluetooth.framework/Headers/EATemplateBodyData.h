@@ -9,21 +9,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
+/**
+ * Template data model
+ * 温度数据模型
+*/
 @interface EATemplateBobyDataItem : EABigDataModel
 
-/** 体温 （单位摄氏度） */
+/// Body temperature (in degrees Celsius)【体温 （单位摄氏度）】
 @property(nonatomic, assign) NSInteger body;
 
-/** 环境温度（单位摄氏度） */
+/// Ambient temperature (in degrees Celsius)【环境温度（单位摄氏度）】
 @property(nonatomic, assign) NSInteger environment;
 
 @end
 
+
+//  NOT_ANALYSIS_CLASS
 @interface EATemplateBodyData : EABaseBigDataModel
 
 @property(nonatomic, strong) NSMutableArray<EATemplateBobyDataItem*> *sIndexArray;
 
+/// NOT_ANALYSIS_FUNCTION
 + (EATemplateBodyData *)getBigData:(NSData *)data;
 
 @end

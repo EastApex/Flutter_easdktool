@@ -9,24 +9,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// id = 50 ：自动睡眠血氧监测（夜间血氧监测）
-/// id = 50: Automatic sleep oxygen monitoring (night oxygen monitoring)
+/**
+ * id = 50 ：
+ * Automatic sleep oxygen monitoring (night oxygen monitoring)
+ * 自动睡眠血氧监测（夜间血氧监测）
+ */
 @interface EASleepBloodOxygenMonitor : EABaseModel
 
-/// 0关，1开
-/// Zero off, one on
+/// 0 off, 1 on 【0关，1开】
 @property(nonatomic, assign) BOOL sw;
 
-/// 间隔时间，默认半小时：30（单位：分钟），范围（30、45、60、90、120）
-/// Interval: 30 (unit: minute), range: 30, 45, 60, 90, and 120
+/// Interval: 30 (unit: minute), range: 30, 45, 60, 90, and 120【间隔时间，默认半小时：30（单位：分钟），范围（30、45、60、90、120）】
 @property(nonatomic, assign) NSInteger interval;
 
 
 
 
-/// init【初始化】
+/// Initialization【初始化】
 /// - Parameters:
-///   - sw: on-off Zero off, one on[0关，1开]
+///   - sw: on-off，0 off, 1 on 【0关，1开】
 ///   - interval: Interval[间隔时间]
 + (instancetype )eaInitWithOnOff:(BOOL)sw interval:(NSInteger)interval;
 

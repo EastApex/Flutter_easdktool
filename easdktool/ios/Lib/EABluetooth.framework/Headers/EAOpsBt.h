@@ -9,11 +9,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Classic Bluetooth BT Control
+
+/**
+ * id = 59
+ * Classic Bluetooth BT Control
+ * 经典蓝牙BT控制
+ */
 @interface EAOpsBt : EABaseModel
 
+/// BT Type
 @property(nonatomic, assign) EABtType eBtStatusType;
 
+
+/// Initialization
+/// - Parameter eaBtType: BT Type
 + (instancetype )eaInitOnOff:(EABtType)eaBtType;
 
 @end

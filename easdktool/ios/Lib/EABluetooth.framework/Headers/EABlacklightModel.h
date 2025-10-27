@@ -9,17 +9,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// id = 7 : The screen brightness of watch
-/// id = 7 : 屏幕亮度
+
+/**
+ * id = 7
+ * The screen brightness of watch
+ * 屏幕亮度
+ */
 @interface EABlacklightModel : EABaseModel
 
-/// brightness  0~100
-/// 亮度 0~100
+/// brightness  0~100 【亮度 0~100】
 @property(nonatomic, assign) NSInteger level;
 
 
 
-
+/// Initialize the brightness model【初始化亮度模型】
+///- Parameter level: Brightness value【初始化亮度模型】
++ (instancetype)eaInitWithBlacklightLevel:(NSInteger )level;
 
 
 

@@ -9,15 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// id = 53 ：震动模式
-/// id = 53: vibrate mode
+/**
+ * id = 54
+ * 震动模式
+ * vibrate mode
+ */
 @interface EAVibrateIntensity : EABaseModel
 
-/// MARK: - 震动类型
-/// Vibration type
+/// Vibration type【震动类型】
 @property(nonatomic, assign) EAVibrateIntensityType eVibrateIntensity;
 
-/// init【初始化】
+/// Initialization【初始化】
 /// - Parameters:
 ///   - eaVibrateIntensityType: Vibration type【震动类型】
 + (instancetype )eaInitWithVibrateIntensityType:(EAVibrateIntensityType )eaVibrateIntensityType;

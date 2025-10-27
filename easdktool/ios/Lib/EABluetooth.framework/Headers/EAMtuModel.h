@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EAMtuModel.h
 //  EABluetooth
 //
@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 目前连接的mtu值 */
 @property(nonatomic, assign) NSInteger mtuValue;
-
-
 
 
 @end

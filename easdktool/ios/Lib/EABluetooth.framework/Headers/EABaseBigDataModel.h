@@ -1,4 +1,4 @@
-//
+//  NOT_ANALYSIS_CLASS
 //  EABaseBigDataModel.h
 //  EABluetooth
 //
@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 标志 */
 @property(nonatomic, assign) EAUploadRespondStatus eCommonFlag;
 
-//@property(nonatomic, readonly) NSUInteger sIndexArray_Count;
+
 @end
 
 NS_ASSUME_NONNULL_END

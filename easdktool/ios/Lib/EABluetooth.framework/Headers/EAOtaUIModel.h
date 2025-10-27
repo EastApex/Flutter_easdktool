@@ -9,10 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-//ota自定义表盘需求
 
 
 
+//  NOT_ANALYSIS_CLASS
 @interface EAOtaUIModel : EABaseModel
 
 /// 图片类型 */
@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
+//  NOT_ANALYSIS_CLASS
 @interface EAOtaUIRequest : EABaseModel
 
 /// （大小详见对应OPTIONS文件） */

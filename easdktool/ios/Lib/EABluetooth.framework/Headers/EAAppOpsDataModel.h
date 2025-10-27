@@ -9,12 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-
-/// id = 2009 : 上报启动手表测量结果【主动上报 8801=>id = 48 测量结果）】
-/// id = 2009: report the measurement result of start watch [Report the measurement result of 8801=>id = 48 voluntarily]
-///
-/// 监听通知【kNTF_EAAppOpsData】并实现通知方法获取EAAppOpsDataModel对象
-/// Listen to the notification [kNTF_EAAppOpsData] and implement the notification method to obtain the EAAppOpsDataModel object
+/**
+* id = 2009 : 上报启动手表测量结果【主动上报 8801=>id = 48 测量结果）】
+* id = 2009: report the measurement result of start watch [Report the measurement result of 8801=>id = 48 voluntarily]
+*
+* 监听通知【kNTF_EAAppOpsData】并实现通知方法获取EAAppOpsDataModel对象
+* Listen to the notification [kNTF_EAAppOpsData] and implement the notification method to obtain the EAAppOpsDataModel object
+*/
 @interface EAAppOpsDataModel : EABaseModel
 
 /// App操作手表类型
