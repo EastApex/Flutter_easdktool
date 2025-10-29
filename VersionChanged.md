@@ -1,3 +1,13 @@
+Date:10.29.2025
+Change:
+    Android:
+        1.Modifying the gradle
+    iOS:
+        No modification for now
+
+=================================================================
+
+
 Date:10.27.2025
 Change:
     Android:
