@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:12:Operating The Watch【操作设备】
+
 
 #import <EABluetooth/EABaseModel.h>
 NS_ASSUME_NONNULL_BEGIN

@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/22.
-//
+//  File Name:22:Reminder(Alarm、Schedule)【提醒（闹钟、日程）】
+
 
 #import <EABluetooth/EABaseModel.h>
 

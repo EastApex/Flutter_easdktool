@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2025/9/5.
-//
+//  File Name:81:JL707 Watch Face【JL707表盘】
+
 
 #import <EABluetooth/EABluetooth.h>
 
@@ -20,31 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *oldestId;
 @end
 
-
-/**
- * id = 82
- * JL707平台自定义表盘信息
- * Customize the dial information for the JL707 platform
-*/
-@interface EAJieLiCustomWacthFace : EABaseModel
-
-/// Configuration: Time style【配置:时间样式】
-@property(nonatomic, assign) EAJieLiCusWatchFaceSetTimeStyle eCusTimeStyle;
-
-/// Operation【操作 】
-@property(nonatomic, assign) EAJieLiCusWatchFaceOps eCusops;
-
-
-/// Initialization OTA
-/// - Parameter eCusTimeStyle: eCusTimeStyle
-+ (instancetype)eaInitOtaCusTimeStyle:(EAJieLiCusWatchFaceSetTimeStyle)eCusTimeStyle;
-
-
-/// Initialization Set
-/// - Parameter eCusTimeStyle: eCusTimeStyle
-+ (instancetype)eaInitSetCusTimeStyle:(EAJieLiCusWatchFaceSetTimeStyle)eCusTimeStyle;
-
-@end
 
 /**
  * JL707表盘操作

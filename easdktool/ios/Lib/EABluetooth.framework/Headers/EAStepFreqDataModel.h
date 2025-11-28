@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/31.
-//
+//  File Name:3008:Step Frequency【步频】
 
 #import <EABluetooth/EABaseBigDataModel.h>
 

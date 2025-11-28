@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:17:HR Monitoring【心率监测】
+
 
 #import <EABluetooth/EABaseModel.h>
 

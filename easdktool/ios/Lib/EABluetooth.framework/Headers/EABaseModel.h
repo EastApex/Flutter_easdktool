@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/18.
-//
+//  File Name:Base Model【模型基类】
 
 #import <Foundation/Foundation.h>
 #import <EABluetooth/EAEnum.h>

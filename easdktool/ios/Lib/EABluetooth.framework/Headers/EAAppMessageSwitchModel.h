@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/9/18.
-//
+//  File Name:34:APP Push Message【APP推送开关】
+
 
 #import <EABluetooth/EABluetooth.h>
 
@@ -253,7 +254,23 @@ typedef NS_OPTIONS(NSUInteger, EAShowAppType) {
 
 
 
+/**
+ * id = 83
+ * 来消息亮屏
+ * The message lights up
+ */
+@interface EAAppMessagLight : EABaseModel
 
+/// Switch [开关]
+@property(nonatomic,assign) BOOL sw;
+
+
+/// Initialization method【初始化方法】
+/// - Parameters:
+///   - sw: stop or start 【0停止，1开启】
++ (instancetype )eaInitWithSw:(BOOL)sw;
+
+@end
 
 
 

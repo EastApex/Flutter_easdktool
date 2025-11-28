@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/18.
-//
+//  File Name:4:User Information【用户信息】
+
 
 #import <EABluetooth/EABaseModel.h>
 NS_ASSUME_NONNULL_BEGIN

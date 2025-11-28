@@ -1,9 +1,9 @@
-//  NEED_CLASS_ANALYSIS
+//  
 //  EABleSendManager.h
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/26.
-//
+//  File Name:Cmd Send【命令发送】
 
 #import <Foundation/Foundation.h>
 #import <EABluetooth/EAModelHeader.h>

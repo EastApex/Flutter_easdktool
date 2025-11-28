@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/22.
-//
+//  File Name:21:Social Alert Switch【社交提醒开关】
 
 #import <EABluetooth/EABaseModel.h>
 
@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
  * id = 21
  * Social alert switch
  * 社交提醒开关
+ *
+ * Note a few things about testing your push:
+ * 1. The watch must be paired with the phone to allow for notifications.
+ * 2. The watch needs to disable DND
+ * 3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
+ *
  */
 @interface EASocialSwitchModel : EABaseModel
 
@@ -28,13 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// Sms【短信】
 @property(nonatomic, strong) EASocialOps *sSms;
 
-
-/**
- Note a few things about testing your push:
- 1. The watch must be paired with the phone to allow for notifications.
- 2. The watch needs to disable DND
- 3. Enable related Bluetooth protocols. Class EASocialSwitchModel and  Class  EAAppMessageSwitchData
- */
 /// Third - party App push reminder【第三方 App 推送提醒】
 @property(nonatomic, strong) EASocialOps *sSocial;
 

@@ -440,8 +440,14 @@ typedef NS_ENUM(NSUInteger, EADataInfoType) {
     
     /// id = 82: JL707平台自定义表盘信息
     /// id = 82: Customize the dial information for the JL707 platform
-    /// EAJieLiCustomWacthFace
-    EADataInfoTypeJieLiCustomWacthFace = 82,
+    /// EAJieLiCustomWatchFace
+    EADataInfoTypeJieLiCustomWatchFace = 82,
+    
+    
+    /// id = 83: 来消息亮屏
+    /// id = 83: The message lights up
+    /// EAAppMessagLight
+    EADataInfoTypeAppMessagLight = 83,
     
     
     
@@ -3767,23 +3773,23 @@ typedef NS_ENUM(NSUInteger,EACusWatchFaceFunctionType) {
   EACusWatchFaceFunctionTypeWeather = 21,
 };
 
-
+                           
 typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceSetTimeStyle) {
 
-    /** 时间样式(无时间) */
-    EAJieLiCusWatchFaceSetTimeStyleNone = 0,
+    EAJieLiCusWatchFaceSetTimeStyleDefault  = 0,
+    EAJieLiCusWatchFaceSetTimeStyle1        = 1,
+    EAJieLiCusWatchFaceSetTimeStyle2        = 2,
+    EAJieLiCusWatchFaceSetTimeStyle3        = 3,
+    EAJieLiCusWatchFaceSetTimeStyle4        = 4,
+    EAJieLiCusWatchFaceSetTimeStyle5        = 5,
+    EAJieLiCusWatchFaceSetTimeStyle6        = 6,
+};
 
-    /** 时间样式1 */
-    EAJieLiCusWatchFaceSetTimeStyleTimeStyle1 = 1,
+typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceSetPointerStyle) {
 
-    /** 时间样式2 */
-    EAJieLiCusWatchFaceSetTimeStyleTimeStyle2 = 2,
-
-    /** 指针样式1 */
-    EAJieLiCusWatchFaceSetTimeStylePointerStyle1 = 3,
-
-    /** 指针样式2 */
-    EAJieLiCusWatchFaceSetTimeStylePointerStyle2 = 4,
+    EEAJieLiCusWatchFaceSetPointerStyleDefault          = 0,
+    EEAJieLiCusWatchFaceSetPointerStyleStyleWhite       = 1, //白
+    EEAJieLiCusWatchFaceSetPointerStyleStyleBlack       = 2, //黑
 
 };
 
@@ -3797,7 +3803,13 @@ typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceOps) {
 
 };
 
+typedef NS_ENUM(NSUInteger,EAJieLiCusWatchFaceSelectStyle) {
 
+   
+    EAJieLiCusWatchFaceSelectStyleNone       = 0,
+    EAJieLiCusWatchFaceSelectStyleTime       = 1,
+    EAJieLiCusWatchFaceSelectStylePointer    = 2,
+};
 
 
 

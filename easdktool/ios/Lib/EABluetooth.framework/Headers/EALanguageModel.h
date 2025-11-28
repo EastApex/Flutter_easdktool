@@ -3,23 +3,14 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:10:Language【语言】
+
 
 #import <EABluetooth/EABaseModel.h>
 NS_ASSUME_NONNULL_BEGIN
 
 
-/**
- * Language
- * 语种
- */
-@interface EALanguageItemModel : EABaseModel
-
-/// Language Type【语言类型】
-@property(nonatomic, assign) EALanguageType languageName;
-
-@end
-
+@class EALanguageItemModel;
 
 /**
  * id = 10
@@ -40,4 +31,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)eaInitWithLanguageType:(EALanguageType )languageType;
 @end
 
+
+
+/**
+ * Language
+ * 语种
+ */
+@interface EALanguageItemModel : EABaseModel
+
+/// Language Type【语言类型】
+@property(nonatomic, assign) EALanguageType languageName;
+
+@end
 NS_ASSUME_NONNULL_END

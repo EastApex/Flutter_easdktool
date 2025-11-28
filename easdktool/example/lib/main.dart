@@ -211,7 +211,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// 打开 SDKLog
-    EASDKTool().showLog(0);
+    EASDKTool().showLog(1);
 
     EASDKTool().showTest(0);
   }
@@ -1247,12 +1247,13 @@ class _MyAppState extends State<MyApp> {
                     print("device not connected");
                     return;
                   }
+                  DateTime dateTime = DateTime.now();
                   EASyncTime syncTime = EASyncTime();
-                  syncTime.day = 2;
-                  syncTime.month = 12;
-                  syncTime.year = 2022;
-                  syncTime.hour = 10;
-                  syncTime.minute = 45;
+                  syncTime.day = dateTime.day;
+                  syncTime.month = dateTime.month;
+                  syncTime.year = dateTime.year;
+                  syncTime.hour = dateTime.hour;
+                  syncTime.minute = dateTime.minute;
                   syncTime.second = 0;
                   syncTime.timeHourType = EATimeHourType.hour24;
                   syncTime.timeZone = EATimeZone.east;
@@ -1385,6 +1386,13 @@ class _MyAppState extends State<MyApp> {
                   dayWeather.maxWindPower = 5;
                   dayWeather.minWindPower = 2;
                   dayWeather.eAir = EAWeatherAirType.excellent;
+                  dayWeather.airHumidity = 90;
+                  dayWeather.airGrade = 20;
+                  dayWeather.cloudiness = 10;
+                  dayWeather.eMoon = EAWeatherMoonType.NewMoon;
+                  dayWeather.eRays = EAWeatherRaysType.Medium;
+                  dayWeather.sunriseTimestamp = 1764021600;
+                  dayWeather.sunsetTimestamp = 1764063000;
 
                   EADayWeather dayWeather2 = EADayWeather();
                   dayWeather2.eDayType = EAWeatherType.lightSnow;
@@ -1504,7 +1512,7 @@ class _MyAppState extends State<MyApp> {
                     print("device not connected");
                     return;
                   }
-                  EAMenstrual menstrual = EAMenstrual("2022-04-15", 5, 28);
+                  EAMenstrual menstrual = EAMenstrual("2022-12-01", 5, 28);
                   secondMethodSetWatchData(
                       kEADataInfoTypeMenstrual, menstrual.toMap());
                 },
@@ -2295,7 +2303,7 @@ class _MyAppState extends State<MyApp> {
 
                   EAJieLiCustomWatchFace customWatchFace =
                       EAJieLiCustomWatchFace();
-                  customWatchFace.style = 3;
+                  customWatchFace.style = 1;
                   customWatchFace.bgImagePath = filePath;
                   customWatchFace.getPreviewImage = false;
                   secondEasdkTool.otaJieLiCustomWatchface(customWatchFace,

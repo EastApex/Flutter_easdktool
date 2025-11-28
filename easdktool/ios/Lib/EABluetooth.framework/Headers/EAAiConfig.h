@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2025/4/14.
-//
+//  File Name:77:AI Configuration【AI配置】
 
 #import <EABluetooth/EABluetooth.h>
 

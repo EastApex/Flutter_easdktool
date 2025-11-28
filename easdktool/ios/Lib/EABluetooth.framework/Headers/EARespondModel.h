@@ -3,13 +3,15 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/31.
-//
+//  File Name:2:Response Model【命令响应】
+
 
 #import <EABluetooth/EABaseModel.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
+ * id = 2
  * Watch response model: Respond to set watch information status
  * 手表响应模型：响应设置手表信息状态
  */

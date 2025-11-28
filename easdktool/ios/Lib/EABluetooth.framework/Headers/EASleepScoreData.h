@@ -3,14 +3,14 @@
 //  EABluetooth
 //
 //  Created by Aye on 2023/6/29.
-//
+//  File Name:3012:Sleep Score【睡眠得分】
 
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- * Sleepc score data model
+ * Sleep score data model
  * 睡眠得分数据模型
 */
 @interface EASleepScoreModel : EABigDataModel

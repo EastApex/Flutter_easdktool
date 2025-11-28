@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/31.
-//
+//  File Name:3009:Step Pace【配速】
 
 #import <EABluetooth/EABaseBigDataModel.h>
 

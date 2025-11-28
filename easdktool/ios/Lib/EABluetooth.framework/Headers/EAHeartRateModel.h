@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/22.
-//
+//  File Name:3003:Heart Rate【心率】
 
 #import <EABluetooth/EABaseBigDataModel.h>
 

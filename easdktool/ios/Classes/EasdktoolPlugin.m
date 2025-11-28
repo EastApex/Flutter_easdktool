@@ -1083,17 +1083,19 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
         
         if (getPreviewImage) {
             
-           UIImage *thumbnail = [EAMakeWatchFaceManager eaGetJieLiThumbnailWithImage:bgImage timeStyle:(style)];
+//           UIImage *thumbnail = [EAMakeWatchFaceManager eaGetJieLiThumbnailWithImage:bgImage timeStyle:(style)];
+            
+            EAJieLiCustomWatchFace *jlCwf = [EAJieLiCustomWatchFace eaInitSetCusTimeStyle:(style)];
+            UIImage *thumbnail = [EAMakeWatchFaceManager eaGetJieLiThumbnailWithImage:bgImage customWatchFace:jlCwf];
             [_channel invokeMethod:kCustomWatchFaceResponse arguments:UIImageJPEGRepresentation(thumbnail, 1)];
         }
         else
         {
-            [EAMakeWatchFaceManager eaOTAJieLiWatchFaceWithImage:bgImage timeStyle:style cusInfos:^(NSString * _Nonnull cusId, UIImage * _Nonnull thumbnail, UIImage * _Nonnull bgImage) {
+            EAJieLiCustomWatchFace *jlCwf = [EAJieLiCustomWatchFace eaInitSetCusTimeStyle:(style)];
+            [EAMakeWatchFaceManager eaOTAJieLiWatchFaceWithImage:bgImage customWacthFace:jlCwf cusInfos:^(NSString * _Nonnull cusId, UIImage * _Nonnull thumbnail, UIImage * _Nonnull bgImage) {
                 
             } progress:^(CGFloat p) {
-                
                 [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:p] userInfo:nil];
-                
             } complete:^(BOOL succ, NSError * _Nullable error) {
                 
                 if (succ) {
@@ -1105,6 +1107,24 @@ typedef NS_ENUM(NSUInteger, BluetoothResponse) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
                 }
             }];
+            
+//            [EAMakeWatchFaceManager eaOTAJieLiWatchFaceWithImage:bgImage timeStyle:style cusInfos:^(NSString * _Nonnull cusId, UIImage * _Nonnull thumbnail, UIImage * _Nonnull bgImage) {
+//                
+//            } progress:^(CGFloat p) {
+//                
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:p] userInfo:nil];
+//                
+//            } complete:^(BOOL succ, NSError * _Nullable error) {
+//                
+//                if (succ) {
+//                    
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:1] userInfo:nil];
+//                }
+//                else
+//                {
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:kNTF_EAOTAAGPSDataing object:[NSNumber numberWithFloat:error.code] userInfo:nil];
+//                }
+//            }];
         }
         
     }

@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2023/2/3.
-//
+//  File Name:53:Vibrate Mode【震动模式】
+
 
 #import <EABluetooth/EABluetooth.h>
 

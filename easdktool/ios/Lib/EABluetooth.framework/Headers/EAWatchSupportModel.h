@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2022/9/1.
-//
+//  File Name:44:Watch Supports【手表支持设置的功能】
+
 
 #import <EABluetooth/EABaseModel.h>
 #import <EABluetooth/EARespondModel.h>

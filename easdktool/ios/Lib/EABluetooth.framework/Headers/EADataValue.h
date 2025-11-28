@@ -106,6 +106,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)getWeekCycleBitByWeekCycle:(NSInteger )weekCycle;
 
 
++ (NSString *)eaSignedIntFromData:(NSData *)data byteLength:(NSUInteger)byteLength;
+
++ (NSString *)eaSignedIntFromHexString:(NSString *)hexString byteLength:(NSUInteger)byteLength;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

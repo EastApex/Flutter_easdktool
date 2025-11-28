@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2022/12/14.
-//
+//  File Name:47:Send Sport Details【发送运动数据】
+
 
 #import <EABluetooth/EABluetooth.h>
 

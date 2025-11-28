@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/22.
-//
+//  File Name:26:HR Alarm setting【心率报警】
 
 #import <EABluetooth/EABaseModel.h>
 

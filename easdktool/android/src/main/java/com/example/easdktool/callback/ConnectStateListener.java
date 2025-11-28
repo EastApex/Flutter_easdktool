@@ -1,5 +1,6 @@
 package com.example.easdktool.callback;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -8,6 +9,7 @@ import com.apex.ax_bluetooth.callback.WatchInfoCallback;
 import com.apex.ax_bluetooth.core.EABleManager;
 import com.apex.ax_bluetooth.enumeration.QueryWatchInfoType;
 import com.apex.ax_bluetooth.model.EABleWatchInfo;
+import com.example.easdktool.BuildConfig;
 import com.example.easdktool.enumerate.BluetoothState;
 import com.example.easdktool.enumerate.ConnectState;
 import com.example.easdktool.jieli.watchface.JieliWatchFaceManager;
@@ -55,6 +57,7 @@ public class ConnectStateListener implements BleConnectStatusListener {
                 }
             }
         });
+
 
     }
 

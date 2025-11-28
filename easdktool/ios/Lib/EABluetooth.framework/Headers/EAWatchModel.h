@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/18.
-//
+//  File Name:3:Watch Information【手表信息】
 
 #import <EABluetooth/EABaseModel.h>
 #import <EABluetooth/EARespondModel.h>

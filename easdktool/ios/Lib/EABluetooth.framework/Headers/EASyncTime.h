@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:5:Synchronization Time【同步时间】
+
 
 #import <EABluetooth/EABaseModel.h>
 NS_ASSUME_NONNULL_BEGIN
@@ -11,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * id = 5
- * Indicates the synchronization time
+ * Synchronization time
  * 同步时间
 */
 @interface EASyncTime : EABaseModel

@@ -84,6 +84,35 @@ public class JieLiWatchFace {
             });
             return;
         }
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                File nFile = new File(filePath);
+                String name = getInternalName(nFile);
+                if (TextUtils.isEmpty(name)) {
+                    returnFailData(0x10);
+                    return;
+                }
+                String orName = nFile.getName();
+                String endPath = filePath;
+                if (!name.equals(orName)) {//需要给文件重命名
+                    endPath = renameFile(file, name);
+                }
+                if (TextUtils.isEmpty(endPath)) {
+                    returnFailData(0x10);
+                    return;
+                }
+                final File tFile = new File(endPath);
+                if (tFile == null || !tFile.exists() || !tFile.isFile()) {
+                    returnFailData(0x10);
+                    return;
+                }
+                final String lastPath = endPath;
+                add707WatchFace(lastPath);
+            }
+        }.start();
+        /**
         EABleManager.getInstance().queryWatchInfo(QueryWatchInfoType.watch_info, new WatchInfoCallback() {
             @Override
             public void watchInfo(final EABleWatchInfo eaBleWatchInfo) {
@@ -177,6 +206,7 @@ public class JieLiWatchFace {
                 });
             }
         });
+         */
 
     }
 

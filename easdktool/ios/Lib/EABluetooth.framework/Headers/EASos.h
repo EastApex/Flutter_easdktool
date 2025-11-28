@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2023/6/29.
-//
+//  File Name:58:Sos【紧急联系人】
+
 
 #import <EABluetooth/EABluetooth.h>
 

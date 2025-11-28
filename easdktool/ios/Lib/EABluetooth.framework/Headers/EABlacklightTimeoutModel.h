@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:8:Screen Dies Time【屏幕熄灭时间】
+
 
 #import <EABluetooth/EABaseModel.h>
 NS_ASSUME_NONNULL_BEGIN

@@ -1,9 +1,9 @@
-//  NOT_ANALYSIS_CLASS
+//  
 //  EAVoiceData.h
 //  EABluetooth
 //
 //  Created by Aye on 2025/4/11.
-//
+//  File Name:3016:Voice Data【语音】
 
 #import <EABluetooth/EABluetooth.h>
 

@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2024/6/13.
-//
+//  File Name:3014:Template【温度】
+
 
 #import <EABluetooth/EABluetooth.h>
 

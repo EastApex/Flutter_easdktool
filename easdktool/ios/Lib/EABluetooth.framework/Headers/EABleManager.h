@@ -1,21 +1,15 @@
-//  NEED_CLASS_ANALYSIS
+//  
 //  EABleManager.h
 //  Template
 //
 //  Created by Aye on 2021/3/15.
 //  version: 2022.12.06 
+//  File Name:Ble connection蓝牙连接
 
 
 
-
-// Demo & SDK
-// https://github.com/EastApex/EASDKTool_iOS.git
-//
-// SDK access documentation
-// https://www.showdoc.com.cn/easkd
-
-#define kEASDKVERSION   @"1.1.25"
-#define kEASDKBUILD     @"5"
+#define kEASDKVERSION   @"1.1.28"
+#define kEASDKBUILD     @"3"
 #define kEAAppVersion   [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define kEAAppBulid     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 
@@ -114,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kNTF_RecordingCompleted             @"EARecordingCompleted"
 
 /// JL7070 Mandatory upgrade
-#define kNTF_EAJLNeedForcedOTA             @"EAJLNeedForcedOTA"
+#define kNTF_EAJLNeedForcedOTA              @"EAJLNeedForcedOTA"
 
 
 

@@ -3,15 +3,16 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/23.
-//
+//  File Name:1:Query Command Model【查询命令】
 
 #import <EABluetooth/EABaseModel.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
-    * Command to query watch information, all obtained by converting to the data stream of Class EARequestModel.
-    * 查询手表信息的命令，都是转化为Class EARequestModel的数据流来获取。
+ * id = 1
+ * Command to query watch information, all obtained by converting to the data stream of Class EARequestModel.
+ * 查询手表信息的命令，都是转化为Class EARequestModel的数据流来获取。
  */
 @interface EARequestModel : EABaseModel
 

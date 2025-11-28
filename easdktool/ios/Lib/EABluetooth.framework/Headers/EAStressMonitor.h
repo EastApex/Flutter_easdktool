@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2023/2/3.
-//
+//  File Name:51:Stress Monitoring【压力监测】
+
 
 #import <EABluetooth/EABluetooth.h>
 
@@ -11,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * id = 51
- * Automatic pressure monitoring
+ * Automatic Stress monitoring
  * 自动压力监测
  */
 @interface EAStressMonitor : EABaseModel

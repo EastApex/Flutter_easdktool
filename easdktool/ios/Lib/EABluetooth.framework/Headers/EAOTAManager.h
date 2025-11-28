@@ -1,9 +1,9 @@
-//  NEED_CLASS_ANALYSIS
+//
 //  EAOTAManager.h
 //  EABluetooth
 //
 //  Created by Aye on 2024/8/2.
-//
+//  File Name:OTA
 
 #import <Foundation/Foundation.h>
 #import "EABleConfig.h"

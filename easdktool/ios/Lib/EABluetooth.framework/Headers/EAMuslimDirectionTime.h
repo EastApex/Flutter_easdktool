@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2024/11/13.
-//
+//  File Name:70:Muslim Direction Time【穆斯林时间】
+
 
 #import <EABluetooth/EABluetooth.h>
 

@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2024/8/12.
-//
+//  File Name:68:Support Sports【支持运动】
+
 
 #import <EABluetooth/EABluetooth.h>
 

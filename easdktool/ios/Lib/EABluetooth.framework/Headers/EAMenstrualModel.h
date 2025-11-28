@@ -3,28 +3,14 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/6/21.
-//
+//  File Name:32:Physiological Cycle【生理周期】
+
 
 #import <EABluetooth/EABluetooth.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EAMenstrualModel : EABaseModel
-
-@property(nonatomic, assign) EAMenstruationType eType;
-
-/// The time stamp【时间戳】
-@property(nonatomic, assign) NSInteger timeStamp;
-
-/// Days of prompt :(if e_type is a safe period, days>0, indicates the number of days of the next period. If you are menstruating, days>0 is the number of days you are menstruating.【提示的天数：（如果e_type是安全期，days>0，则表示下一个经期的天数。如果是经期，days>0，则代表经期第几天)】
-@property(nonatomic, assign) NSInteger days;
-
-////第几天
-//@property(nonatomic, assign) NSInteger rankDay;
-////还有几天离开
-//@property(nonatomic, assign) NSInteger leftDay;
-
-@end
+@class EAMenstrualModel;
 
 /**
  * id = 32
@@ -63,6 +49,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface EAMenstrualModel : EABaseModel
+
+@property(nonatomic, assign) EAMenstruationType eType;
+
+/// The time stamp【时间戳】
+@property(nonatomic, assign) NSInteger timeStamp;
+
+/// Days of prompt :(if e_type is a safe period, days>0, indicates the number of days of the next period. If you are menstruating, days>0 is the number of days you are menstruating.【提示的天数：（如果e_type是安全期，days>0，则表示下一个经期的天数。如果是经期，days>0，则代表经期第几天)】
+@property(nonatomic, assign) NSInteger days;
+
+////第几天
+//@property(nonatomic, assign) NSInteger rankDay;
+////还有几天离开
+//@property(nonatomic, assign) NSInteger leftDay;
+
+@end
 
 
 NS_ASSUME_NONNULL_END

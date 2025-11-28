@@ -38,6 +38,7 @@ import com.jieli.jl_rcsp.model.WatchConfigure;
 import com.jieli.jl_rcsp.model.base.BaseError;
 import com.jieli.jl_rcsp.model.device.DeviceConfiguration;
 import com.jieli.jl_rcsp.model.device.settings.v0.NetworkInfo;
+import com.jieli.bmp_convert.ConvertResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -298,6 +299,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
 
             @Override
             public void onAuthFailed(BluetoothDevice bluetoothDevice, int i, String s) {
+                Log.i(TAG, "设备认证失败");
                 //设备认证失败
                 EABleManager.getInstance().disconnectPeripheral();
                 if (bleConnectStatusListener != null) {
@@ -308,6 +310,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
         mRcspAuth.stopAuth(getConnectedDevice(), false); //清除旧的设备认证
+        //  RcspAuth.setAuthTimeout(10000);
         startAuth = true;
         boolean ret = mRcspAuth.startAuth(getConnectedDevice()); //开始设备认证, 结果是操作结果
     }
@@ -324,7 +327,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             public void onSuccess(ArrayList<FatFile> fatFiles) {
                 Log.i(TAG, "获取所有的表盘成功");
                 List<FatFile> fatFileList = getWatchDialList(fatFiles);
-                if (fatFileList != null&&!fatFileList.isEmpty()) {
+                if (fatFileList != null && !fatFileList.isEmpty()) {
                     if (getWatchMsgTask == null) {
                         getWatchMsgTask = new GetWatchMsgTask(jieliWatchFaceManager, fatFileList, jieliDialCallback, new ThreadStateListener() {
                             @Override
@@ -495,6 +498,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                     });
                 } else {
                     Log.i(TAG, "OTA表盘错误码：" + i);
+                    cancelTransfer();
                     if (otaCallback != null) {
                         otaCallback.mutualFail(i);
                     }
@@ -502,6 +506,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     private void getCustomDialModelInfo(JieliDialCallback jieliDialCallback) {
         if (initSuccess != 2) {
             Log.i(TAG, "手表未初始化完成");
@@ -549,6 +554,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     public void customDialBack(final String backFile, final OtaCallback otaCallback, final EABleWatchInfo eaBleWatchInfo, final int selectStyle) {
         if (initSuccess != 2) {
             Log.i(TAG, "手表未初始化完成");
@@ -626,6 +632,14 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                             }
 
                         }
+
+                        @Override
+                        public void onStop(ConvertResult convertResult, String s) {
+                            if (convertResult != null) {
+                                Log.i(TAG, "convertResult:" + new Gson().toJson(convertResult));
+                            }
+
+                        }
                     });
 
                 } catch (Exception e) {
@@ -634,6 +648,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         }.start();
     }
+
     private boolean isValidImage(final String backFile) {
         if (TextUtils.isEmpty(backFile)) {
             return false;
@@ -655,6 +670,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
         return false;
 
     }
+
     /**
      * 将原始图片转换成屏幕大小，并保存，保存文件固定位bgp_w000;
      *
@@ -734,6 +750,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
         return null;
 
     }
+
     private void startInstallCustomDial(final OtaCallback otaCallback, final int style, final String dialPath) {
         getCustomDialModelInfo(new JieliDialCallback() {
             @Override
@@ -767,6 +784,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
         });
 
     }
+
     /**
      * @param style       要设置的风格号
      * @param otaCallback
@@ -780,7 +798,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
         eaBleCustom707Dial.setDialStyle(style);
         EABleManager.getInstance().setCustom707DialInfo(eaBleCustom707Dial, new GeneralCallback() {
             @Override
-            public void result(boolean success,int error) {
+            public void result(boolean success, int error) {
                 Log.i(TAG, "设置风格成功：" + success);
                 new Thread() {
                     @Override
@@ -805,6 +823,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     /**
      * @param otaCallback
      * @param filePath    下发的背景路径
@@ -829,6 +848,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     /**
      * 下发自定义表盘
      *
@@ -855,23 +875,30 @@ public class JieliWatchFaceManager extends WatchOpImpl {
 
             @Override
             public void onStop(int i) {
-                File cFile = new File(dialPath);
-                if (cFile.exists() && cFile.isFile()) {
-                    cFile.delete();
-                }
+
+
                 if (i == 0) {
-                    if (otaCallback != null) {
-                        otaCallback.success();
-                    }
+                    /**
+                     if (otaCallback != null) {
+                     otaCallback.success();
+                     }
+                     */
+                    associationPointDialBack(dialPath, otaCallback);
                 } else {
+                    cancelTransfer();
                     if (otaCallback != null) {
                         otaCallback.mutualFail(i);
+                    }
+                    File cFile = new File(dialPath);
+                    if (cFile.exists() && cFile.isFile()) {
+                        cFile.delete();
                     }
                 }
 
             }
         });
     }
+
     /**
      * @param orPath      模板表盘路径
      * @param otaCallback
@@ -937,6 +964,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     /**
      * 不改背景，直接修改自定风格
      *
@@ -954,13 +982,13 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                     eaBleCustom707Dial.setOtaStyle(1);
                     EABleManager.getInstance().setCustom707DialInfo(eaBleCustom707Dial, new GeneralCallback() {
                         @Override
-                        public void result(boolean success,int error) {
+                        public void result(boolean success, int error) {
                             if (success) {
                                 setCurrentWatchInfo(jieliWatchInfo.path, new OnWatchOpCallback<FatFile>() {
                                     @Override
                                     public void onSuccess(FatFile fatFile) {
                                         if (generalCallback != null) {
-                                            generalCallback.result(true,0);
+                                            generalCallback.result(true, 0);
                                         }
                                     }
 
@@ -973,7 +1001,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                                 });
                             } else {
                                 if (generalCallback != null) {
-                                    generalCallback.result(false,error);
+                                    generalCallback.result(false, error);
                                 }
                             }
                         }
@@ -1003,6 +1031,7 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             }
         });
     }
+
     private List<FatFile> getCustomMode(List<FatFile> fatFiles) {
         if (fatFiles == null || fatFiles.isEmpty()) {
             return null;

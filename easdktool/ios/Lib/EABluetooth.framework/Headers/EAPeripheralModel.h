@@ -3,7 +3,7 @@
 //  Template
 //
 //  Created by Aye on 2021/3/15.
-//
+//  File Name:Ble Device【Ble设备】
 
 #import <Foundation/Foundation.h>
 
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) NSInteger r;
 
 /// Which Build is the current version【当前版本第几次Build】
-@property(nonatomic,assign) NSInteger b1;
+@property(nonatomic,assign) NSInteger builtInVersion;
 
 /// quantity of electricity 【电量】
 @property(nonatomic,assign) NSInteger charge;

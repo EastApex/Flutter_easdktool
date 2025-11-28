@@ -118,6 +118,8 @@
 #import <EABluetooth/EACusWatchFaceSetting.h>
 #import <EABluetooth/EACusWatchFaceGlobalSetting.h>
 
+
+
 // ops
 #import <EABluetooth/EABingingOps.h>
 #import <EABluetooth/EADeviceOps.h>
@@ -139,7 +141,7 @@
 
 // jie li
 #import <EABluetooth/EAJieLiWacthFace.h>
-
+#import <EABluetooth/EAJieLiCustomWatchFace.h>
 
 
 #endif /* EAModelHeader_h */

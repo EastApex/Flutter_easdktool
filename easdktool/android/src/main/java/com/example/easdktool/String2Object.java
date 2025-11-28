@@ -298,7 +298,8 @@ public class String2Object {
             for (int i = 0; i < wArray.size(); i++) {
                 JSONObject wMap = wArray.get(i);
                 EABleWeather.EABleWeatherItem eaBleWeatherItem = new EABleWeather.EABleWeatherItem();
-                eaBleWeatherItem.setAir_humidity((Integer) wMap.getInteger("airGrade"));
+                eaBleWeatherItem.setAir_humidity((Integer) wMap.getInteger("airHumidity"));
+                eaBleWeatherItem.setAir_grade((Integer)wMap.getInteger("airGrade"));
                 eaBleWeatherItem.setCloudiness((Integer) wMap.getInteger("cloudiness"));
                 eaBleWeatherItem.setMax_temperature((Integer) wMap.getInteger("maxTemperature"));
                 eaBleWeatherItem.setMax_wind_power((Integer) wMap.getInteger("maxWindPower"));

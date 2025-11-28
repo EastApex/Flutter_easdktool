@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/3/19.
-//
+//  File Name:7:Screen Brightness【屏幕亮度】
 
 #import <EABluetooth/EABaseModel.h>
 

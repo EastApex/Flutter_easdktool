@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2022/5/30.
-//
+//  File Name:40:Watch Daily Data【日常界面数据】
+
 
 #import <EABluetooth/EABluetooth.h>
 

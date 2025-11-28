@@ -2,5 +2,10 @@
     {
         "clientCodes":["002086"],
         "timeStyles":["album_watchface1","album_watchface2","album_watchface3","album_watchface4"]
+    },
+    {
+        "clientCodes":["012095"],
+        "timeStyles":["hl_707_watchface1","hl_707_watchface2","hl_707_watchface3","hl_707_watchface4","hl_707_watchface5","hl_707_watchface6"],
+        "pointerStyles":["hl_707_watchface100","hl_707_watchface101"]
     }
 ]

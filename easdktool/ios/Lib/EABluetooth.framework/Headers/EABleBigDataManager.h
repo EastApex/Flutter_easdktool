@@ -1,9 +1,9 @@
-//  NEED_CLASS_ANALYSIS
+//  
 //  EABleBigDataManager.h
 //  EABluetooth
 //
 //  Created by Aye on 2023/7/17.
-//
+//  File Name:Big Data【大数据】
 
 #import <Foundation/Foundation.h>
 #import <EABluetooth/EAEnum.h>

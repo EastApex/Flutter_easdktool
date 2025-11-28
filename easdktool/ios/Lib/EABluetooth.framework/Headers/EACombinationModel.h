@@ -3,7 +3,8 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/5/8.
-//
+//  File Name:30:Basic Device Information【设备基本信息】
+
 
 #import <EABluetooth/EABaseModel.h>
 

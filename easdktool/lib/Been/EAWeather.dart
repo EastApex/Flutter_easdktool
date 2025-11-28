@@ -62,6 +62,7 @@ class EADayWeather {
       "minWindPower": minWindPower,
       "maxWindPower": maxWindPower,
       "cloudiness": cloudiness,
+      "airHumidity": airHumidity,
       "airGrade": airGrade,
     };
   }

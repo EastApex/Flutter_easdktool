@@ -3,7 +3,7 @@
 //  EABluetooth
 //
 //  Created by Aye on 2021/7/21.
-//
+//  File Name:3010:Resting Heart Rate【静息心率】
 
 #import <EABluetooth/EABaseBigDataModel.h>
 

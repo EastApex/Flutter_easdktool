@@ -1,21 +1,20 @@
-//  NEED_CLASS_ANALYSIS
+//  
 //  EAMakeWatchFaceManager.h
 //  EABluetooth
 //
 //  Created by Aye on 2023/2/25.
-//
+//  File Name:Make Watch Face【制作表盘】
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <EABluetooth/EAEnum.h>
 #import "EACustomNumberWatchFaceModel.h"
-
 #import <EABluetooth/EAOTAManager.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class EACusWatchFaceSetting;
-
+@class EAJieLiCustomWatchFace;
 
 /**
  * EAMakeWatchFaceManager is a custom watch face operation class, responsible for functions such as obtaining custom watch face preview images, generating custom watch faces and synchronizing them to the watch.
@@ -55,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  */
 @interface EAMakeWatchFaceManager : NSObject
+
+
 
 
 #pragma mark - thumbnails【预览图】
@@ -103,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameters:
 ///   - image: image 【图片】
 ///   - jlTimeStyle: jieli time style 【杰里时间样式】
-+ (UIImage *)eaGetJieLiThumbnailWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle;
++ (UIImage *)eaGetJieLiThumbnailWithImage:(UIImage *)image customWatchFace:(EAJieLiCustomWatchFace *)customWacthFace;
 
 
 
@@ -187,20 +188,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-/// Type 3.1: OTA the JieLi watch face 【杰里海思自定义表盘】
+/// Type 3.1: OTA the JieLi watch face 【杰里自定义表盘】
 /// - Parameters:
 ///   - image: image 【图片】
 ///   - jlTimeStyle: jieli time style 【杰里时间样式】
 ///   - cusIdBlock: Custom Infomation
 ///   - progress: progress
 ///   - complete: complete
-+ (NSInteger )eaOTAJieLiWatchFaceWithImage:(UIImage *)image timeStyle:(EAJieLiCusWatchFaceSetTimeStyle )jlTimeStyle cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat p))progress complete:(OTACompleteBlock)complete;
++ (NSInteger )eaOTAJieLiWatchFaceWithImage:(UIImage *)image customWacthFace:(EAJieLiCustomWatchFace *)customWacthFace cusInfos:(void (^)(NSString * cusId,UIImage *thumbnail,UIImage *bgImage))cusIdBlock progress:(void (^)(CGFloat p))progress complete:(OTACompleteBlock)complete;
 
 
 
 
 
-
+/// Get the time-style pictures supported by JieLi【获取杰里支持的时间样式图片】
++ (NSArray *)eaGetJieLiSupportTimeStyleImages;
 
 
 
@@ -265,7 +267,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (UIImage *)testLoadSvg DEPRECATED_MSG_ATTRIBUTE();
-
++ (void)testJlConvertImage:(UIImage *)image DEPRECATED_MSG_ATTRIBUTE();
 
 @end
 
