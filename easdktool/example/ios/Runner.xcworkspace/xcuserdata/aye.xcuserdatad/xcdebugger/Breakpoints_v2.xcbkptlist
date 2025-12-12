@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "66B53C33-5083-4064-B44C-262DEC689078"
+   uuid = "3A027662-F795-498D-86E2-AD95B772FC87"
    type = "0"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AAF84B81-31F3-4EDA-98C5-C9AADD10CAB5"
-            shouldBeEnabled = "Yes"
+            uuid = "E8A5D71F-5043-47BF-B990-EE94F7FD0801"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../ios/Classes/EasdktoolPlugin.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1089"
-            endingLineNumber = "1089"
+            startingLineNumber = "755"
+            endingLineNumber = "755"
             landmarkName = "-handleMethodCall:result:"
             landmarkType = "7">
          </BreakpointContent>

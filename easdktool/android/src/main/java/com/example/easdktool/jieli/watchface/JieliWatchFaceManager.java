@@ -38,7 +38,6 @@ import com.jieli.jl_rcsp.model.WatchConfigure;
 import com.jieli.jl_rcsp.model.base.BaseError;
 import com.jieli.jl_rcsp.model.device.DeviceConfiguration;
 import com.jieli.jl_rcsp.model.device.settings.v0.NetworkInfo;
-import com.jieli.bmp_convert.ConvertResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,10 +82,12 @@ public class JieliWatchFaceManager extends WatchOpImpl {
     }
 
     private void initSystem() {
+        addConnectListener();
         if (onWatchCallback == null) {
             onWatchCallback = new OnWatchCallback() {
                 @Override
                 public void onWatchSystemInit(int i) {
+                    super.onWatchSystemInit(i);
                     Log.i(TAG, "手表系统初始化结果：" + i);
                     if (i == 0) {
                         //初始化成功；
@@ -99,25 +100,50 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                         if (jieliWatchInitCallback != null) {
                             jieliWatchInitCallback.initResult(3);
                         }
-                        EABleManager.getInstance().disconnectPeripheral();
-                        if (bleConnectStatusListener != null) {
-                            bleConnectStatusListener.deviceDisconnect();
-                        }
-                        release();
+                        /**
+                         EABleManager.getInstance().disconnectPeripheral();
+                         if (bleConnectStatusListener != null) {
+                         bleConnectStatusListener.deviceDisconnect();
+                         }
+                         release();
+                         */
 
                     }
-                    super.onWatchSystemInit(i);
+
                 }
 
                 @Override
                 public void onWatchSystemException(BluetoothDevice bluetoothDevice, int i) {
-                    Log.i(TAG, "手表系统异常：" + i);
-                    EABleManager.getInstance().disconnectPeripheral();
-                    if (bleConnectStatusListener != null) {
-                        bleConnectStatusListener.deviceDisconnect();
-                    }
-                    release();
                     super.onWatchSystemException(bluetoothDevice, i);
+                    Log.i(TAG, "手表系统异常：" + i);
+                    restoreWatchSystem(new OnFatFileProgressListener() {
+                        @Override
+                        public void onStart(String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(float v) {
+
+                        }
+
+                        @Override
+                        public void onStop(int i) {
+
+                        }
+                    });
+                    initSuccess = 3;//初始化失败
+                    if (jieliWatchInitCallback != null) {
+                        jieliWatchInitCallback.initResult(3);
+                    }
+                    /**
+                     EABleManager.getInstance().disconnectPeripheral();
+                     if (bleConnectStatusListener != null) {
+                     bleConnectStatusListener.deviceDisconnect();
+                     }
+                     release();
+                     */
+
                 }
 
 
@@ -135,17 +161,24 @@ public class JieliWatchFaceManager extends WatchOpImpl {
 
                 @Override
                 public void onRcspInit(BluetoothDevice bluetoothDevice, boolean b) {
+                    super.onRcspInit(bluetoothDevice, b);
                     if (b) {
                         Log.i(TAG, "Rcsp 初始化成功");
                     } else {
                         Log.i(TAG, "Rcsp 初始化失败，断开蓝牙连接");
-                        EABleManager.getInstance().disconnectPeripheral();
-                        if (bleConnectStatusListener != null) {
-                            bleConnectStatusListener.deviceDisconnect();
+                        initSuccess = 3;//初始化失败
+                        if (jieliWatchInitCallback != null) {
+                            jieliWatchInitCallback.initResult(3);
                         }
-                        release();
+                        /**
+                         EABleManager.getInstance().disconnectPeripheral();
+                         if (bleConnectStatusListener != null) {
+                         bleConnectStatusListener.deviceDisconnect();
+                         }
+                         release();
+                         */
                     }
-                    super.onRcspInit(bluetoothDevice, b);
+
                 }
 
 
@@ -157,7 +190,6 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             initSuccess = 1;//正在初始化
         }
 
-        addConnectListener();
 
     }
 
@@ -300,12 +332,18 @@ public class JieliWatchFaceManager extends WatchOpImpl {
             @Override
             public void onAuthFailed(BluetoothDevice bluetoothDevice, int i, String s) {
                 Log.i(TAG, "设备认证失败");
-                //设备认证失败
-                EABleManager.getInstance().disconnectPeripheral();
-                if (bleConnectStatusListener != null) {
-                    bleConnectStatusListener.deviceDisconnect();
+                initSuccess = 3;//初始化失败
+                if (jieliWatchInitCallback != null) {
+                    jieliWatchInitCallback.initResult(3);
                 }
-                release();
+                //设备认证失败
+                /**
+                 EABleManager.getInstance().disconnectPeripheral();
+                 if (bleConnectStatusListener != null) {
+                 bleConnectStatusListener.deviceDisconnect();
+                 }
+                 release();
+                 */
 
             }
         });
@@ -319,6 +357,25 @@ public class JieliWatchFaceManager extends WatchOpImpl {
     public void getDialList(JieliDialCallback jieliDialCallback) {
         if (initSuccess != 2) {
             Log.i(TAG, "手表未初始化完成");
+            if (initSuccess == 0) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x19));
+                }
+                return;
+            }
+            if (initSuccess == 1) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x1A));
+                }
+                return;
+            }
+            if (initSuccess == 3) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x1B));
+                }
+                return;
+            }
+
             return;
         }
         Log.i(TAG, "开始获取所有的表盘");
@@ -498,7 +555,6 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                     });
                 } else {
                     Log.i(TAG, "OTA表盘错误码：" + i);
-                    cancelTransfer();
                     if (otaCallback != null) {
                         otaCallback.mutualFail(i);
                     }
@@ -509,7 +565,25 @@ public class JieliWatchFaceManager extends WatchOpImpl {
 
     private void getCustomDialModelInfo(JieliDialCallback jieliDialCallback) {
         if (initSuccess != 2) {
-            Log.i(TAG, "手表未初始化完成");
+            if (initSuccess == 0) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x19));
+                }
+                return;
+            }
+            if (initSuccess == 1) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x1A));
+                }
+                return;
+            }
+            if (initSuccess == 3) {
+                if (jieliDialCallback != null) {
+                    jieliDialCallback.error(new BaseError(0x1B));
+                }
+                return;
+            }
+
             return;
         }
         Log.i(TAG, "开始获取所有的表盘");
@@ -630,15 +704,6 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                                 }
                                 return;
                             }
-
-                        }
-
-                        @Override
-                        public void onStop(ConvertResult convertResult, String s) {
-                            if (convertResult != null) {
-                                Log.i(TAG, "convertResult:" + new Gson().toJson(convertResult));
-                            }
-
                         }
                     });
 
@@ -752,36 +817,37 @@ public class JieliWatchFaceManager extends WatchOpImpl {
     }
 
     private void startInstallCustomDial(final OtaCallback otaCallback, final int style, final String dialPath) {
-        getCustomDialModelInfo(new JieliDialCallback() {
-            @Override
-            public void jieliDial(List<JieliWatchInfo> watchInfos) {
-                if (watchInfos == null || watchInfos.isEmpty()) {
-                    File cFile = new File(dialPath);
-                    if (cFile.exists() && cFile.isFile()) {
-                        cFile.delete();
-                    }
-                    if (otaCallback != null) {
-                        otaCallback.mutualFail(0x16);
-                    }
-                    return;
-                }
-                final JieliWatchInfo jieliWatchInfo = watchInfos.get(0);
-                modifyStyle(style, otaCallback, jieliWatchInfo.customBgFatPath, dialPath, jieliWatchInfo.path);
+        modifyStyle(style, otaCallback, null, dialPath, null);
+        /**
+         getCustomDialModelInfo(new JieliDialCallback() {
+        @Override public void jieliDial(List<JieliWatchInfo> watchInfos) {
+        if (watchInfos == null || watchInfos.isEmpty()) {
+        File cFile = new File(dialPath);
+        if (cFile.exists() && cFile.isFile()) {
+        cFile.delete();
+        }
+        if (otaCallback != null) {
+        otaCallback.mutualFail(0x16);
+        }
+        return;
+        }
+        final JieliWatchInfo jieliWatchInfo = watchInfos.get(0);
+        modifyStyle(style, otaCallback, jieliWatchInfo.customBgFatPath, dialPath, jieliWatchInfo.path);
 
-            }
+        }
 
-            @Override
-            public void error(BaseError error) {
-                File cFile = new File(dialPath);
-                if (cFile.exists() && cFile.isFile()) {
-                    cFile.delete();
-                }
-                if (otaCallback != null) {
-                    otaCallback.mutualFail(error.getCode());
-                }
+        @Override public void error(BaseError error) {
+        File cFile = new File(dialPath);
+        if (cFile.exists() && cFile.isFile()) {
+        cFile.delete();
+        }
+        if (otaCallback != null) {
+        otaCallback.mutualFail(error.getCode());
+        }
 
-            }
+        }
         });
+         */
 
     }
 
@@ -885,7 +951,6 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                      */
                     associationPointDialBack(dialPath, otaCallback);
                 } else {
-                    cancelTransfer();
                     if (otaCallback != null) {
                         otaCallback.mutualFail(i);
                     }
@@ -905,6 +970,43 @@ public class JieliWatchFaceManager extends WatchOpImpl {
      * @param path        下发背景路径
      */
     private void changeDial(final String orPath, final OtaCallback otaCallback, final String path, final String cusImage) {
+        /**
+         replaceWatchFile(path, new OnFatFileProgressListener() {
+        @Override public void onStart(String s) {
+        if (otaCallback != null) {
+        otaCallback.progress(0);
+        }
+        }
+
+        @Override public void onProgress(float v) {
+        if (otaCallback != null) {
+        otaCallback.progress((int) v);
+        }
+        }
+
+        @Override public void onStop(int i) {
+        if (i == 0) {
+
+        if (otaCallback != null) {
+        otaCallback.success();
+        }
+        File cFile = new File(path);
+        if (cFile.exists() && cFile.isFile()) {
+        cFile.delete();
+        }
+
+        } else {
+        if (otaCallback != null) {
+        otaCallback.mutualFail(i);
+        }
+        File cFile = new File(path);
+        if (cFile.exists() && cFile.isFile()) {
+        cFile.delete();
+        }
+        }
+        }
+        });
+         */
 
         setCurrentWatchInfo(orPath, new OnWatchOpCallback<FatFile>() {
             @Override

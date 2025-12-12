@@ -1,3 +1,13 @@
+Date:12.12.2025
+Change:
+    Android:
+        1. Changed jieli lib 
+    iOS:
+       No modification for now
+
+=================================================================
+
+
 Date:11.28.2025
 Change:
     Android:

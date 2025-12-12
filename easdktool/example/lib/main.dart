@@ -211,7 +211,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// 打开 SDKLog
-    EASDKTool().showLog(1);
+    EASDKTool().showLog(0);
 
     EASDKTool().showTest(0);
   }
@@ -1386,13 +1386,13 @@ class _MyAppState extends State<MyApp> {
                   dayWeather.maxWindPower = 5;
                   dayWeather.minWindPower = 2;
                   dayWeather.eAir = EAWeatherAirType.excellent;
-                  dayWeather.airHumidity = 90;
-                  dayWeather.airGrade = 20;
-                  dayWeather.cloudiness = 10;
-                  dayWeather.eMoon = EAWeatherMoonType.NewMoon;
-                  dayWeather.eRays = EAWeatherRaysType.Medium;
-                  dayWeather.sunriseTimestamp = 1764021600;
-                  dayWeather.sunsetTimestamp = 1764063000;
+                  dayWeather.airHumidity=90;
+                  dayWeather.airGrade=20;
+                  dayWeather.cloudiness=10;
+                  dayWeather.eMoon=EAWeatherMoonType.NewMoon;
+                  dayWeather.eRays=EAWeatherRaysType.Medium;
+                  dayWeather.sunriseTimestamp=1764021600;
+                  dayWeather.sunsetTimestamp=1764063000;
 
                   EADayWeather dayWeather2 = EADayWeather();
                   dayWeather2.eDayType = EAWeatherType.lightSnow;
@@ -1970,7 +1970,7 @@ class _MyAppState extends State<MyApp> {
                     return;
                   }
                   var bytes9 =
-                      await rootBundle.load("assets/bin/002086_AP0.1B6.6.bin");
+                      await rootBundle.load("assets/bin/002083_R0.6.bin");
                   String path9 = (await getApplicationSupportDirectory()).path;
                   String filePath9 =
                       '$path9/' + DateTime.now().toString() + '.bin';
@@ -1978,7 +1978,7 @@ class _MyAppState extends State<MyApp> {
                   await File(filePath9).writeAsBytes(buffer9.asUint8List(
                       bytes9.offsetInBytes, bytes9.lengthInBytes));
                   EAOTA resOTA =
-                      EAOTA(filePath9, EAFirmwareType.Apollo, "AP0.1B6.6");
+                      EAOTA(filePath9, EAFirmwareType.Res, "R0.6");
 
                   /**
                       var bytes9 =

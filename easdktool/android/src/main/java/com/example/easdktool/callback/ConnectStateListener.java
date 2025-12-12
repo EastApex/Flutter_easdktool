@@ -37,8 +37,8 @@ public class ConnectStateListener implements BleConnectStatusListener {
                     if (eaBleWatchInfo.getLcd_pixel_type() == 4 || eaBleWatchInfo.getLcd_pixel_type() == 5) {
                         JieliWatchFaceManager.getInstance().release();
                         JieliWatchFaceManager.getInstance().setBleConnectStatusListener(connectStateListener);
-                        JieliWatchFaceManager.getInstance().addConnectListener();
-                        JieliWatchFaceManager.getInstance().addReceiveDeviceData();
+                        // JieliWatchFaceManager.getInstance().addConnectListener();
+                        // JieliWatchFaceManager.getInstance().addReceiveDeviceData();
                         JieliWatchFaceManager.getInstance().init();
                     }
                 }
