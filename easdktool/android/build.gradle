@@ -99,10 +99,10 @@ dependencies {
     implementation 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
     implementation group: 'androidx.multidex', name: 'multidex', version: '2.0.1'
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
-    api(name: 'jl_bt_ota_V1.10.0_10931-release', ext: 'aar')
-    api(name: 'JL_Watch_V1.13.1_11213-release', ext: 'aar')
-    api(name: 'jl_rcsp_V0.7.2_526-release', ext: 'aar')
-    api(name: 'BmpConvert_V1.4.0_10400-release', ext: 'aar')
+    api(name: 'jl_bt_ota_V1.10.0_10932-release', ext: 'aar')
+    api(name: 'JL_Watch_V1.13.1_11214-release', ext: 'aar')
+    api(name: 'jl_rcsp_V0.7.2_527-release', ext: 'aar')
+    api(name: 'BmpConvert_V1.6.0_10604-release', ext: 'aar')
     api 'com.google.code.gson:gson:2.10.1'
 
 }

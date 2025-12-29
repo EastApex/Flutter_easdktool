@@ -24,6 +24,7 @@ import com.apex.ax_bluetooth.model.EABleWatchInfo;
 import com.apex.ax_bluetooth.utils.LogUtils;
 import com.google.gson.Gson;
 import com.jieli.bmp_convert.BmpConvert;
+import com.jieli.bmp_convert.ConvertResult;
 import com.jieli.bmp_convert.OnConvertListener;
 import com.jieli.jl_bt_ota.constant.StateCode;
 import com.jieli.jl_fatfs.interfaces.OnFatFileProgressListener;
@@ -705,6 +706,11 @@ public class JieliWatchFaceManager extends WatchOpImpl {
                                 return;
                             }
                         }
+
+                        @Override
+                        public void onStop(ConvertResult convertResult, String s) {
+
+                        }
                     });
 
                 } catch (Exception e) {
@@ -970,68 +976,65 @@ public class JieliWatchFaceManager extends WatchOpImpl {
      * @param path        下发背景路径
      */
     private void changeDial(final String orPath, final OtaCallback otaCallback, final String path, final String cusImage) {
+
+        replaceWatchFile(path, new OnFatFileProgressListener() {
+            @Override
+            public void onStart(String s) {
+                if (otaCallback != null) {
+                    otaCallback.progress(0);
+                }
+            }
+
+            @Override
+            public void onProgress(float v) {
+                if (otaCallback != null) {
+                    otaCallback.progress((int) v);
+                }
+            }
+
+            @Override
+            public void onStop(int i) {
+                if (i == 0) {
+
+
+                    associationPointDialBack(path, otaCallback);
+
+                } else {
+                    if (otaCallback != null) {
+                        otaCallback.mutualFail(i);
+                    }
+                    File cFile = new File(path);
+                    if (cFile.exists() && cFile.isFile()) {
+                        cFile.delete();
+                    }
+                }
+            }
+        });
+
         /**
-         replaceWatchFile(path, new OnFatFileProgressListener() {
-        @Override public void onStart(String s) {
-        if (otaCallback != null) {
-        otaCallback.progress(0);
-        }
-        }
-
-        @Override public void onProgress(float v) {
-        if (otaCallback != null) {
-        otaCallback.progress((int) v);
-        }
-        }
-
-        @Override public void onStop(int i) {
-        if (i == 0) {
-
-        if (otaCallback != null) {
-        otaCallback.success();
-        }
-        File cFile = new File(path);
-        if (cFile.exists() && cFile.isFile()) {
-        cFile.delete();
-        }
-
+         setCurrentWatchInfo(orPath, new OnWatchOpCallback<FatFile>() {
+        @Override public void onSuccess(FatFile fatFile) {
+        if (TextUtils.isEmpty(cusImage)) {
+        addDialBack(path, otaCallback, orPath);
         } else {
-        if (otaCallback != null) {
-        otaCallback.mutualFail(i);
+        deleteDialBack(otaCallback, path, orPath);
         }
+
+
+        }
+
+        @Override public void onFailed(BaseError baseError) {
         File cFile = new File(path);
         if (cFile.exists() && cFile.isFile()) {
         cFile.delete();
         }
+        if (otaCallback != null) {
+        otaCallback.mutualFail(baseError.getCode());
         }
+
         }
         });
          */
-
-        setCurrentWatchInfo(orPath, new OnWatchOpCallback<FatFile>() {
-            @Override
-            public void onSuccess(FatFile fatFile) {
-                if (TextUtils.isEmpty(cusImage)) {
-                    addDialBack(path, otaCallback, orPath);
-                } else {
-                    deleteDialBack(otaCallback, path, orPath);
-                }
-
-
-            }
-
-            @Override
-            public void onFailed(BaseError baseError) {
-                File cFile = new File(path);
-                if (cFile.exists() && cFile.isFile()) {
-                    cFile.delete();
-                }
-                if (otaCallback != null) {
-                    otaCallback.mutualFail(baseError.getCode());
-                }
-
-            }
-        });
     }
 
     /**

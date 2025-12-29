@@ -1,3 +1,13 @@
+Date:12.29.2025
+Change:
+    Android:
+        1. Changed jieli lib 
+    iOS:
+       No modification for now
+
+=================================================================
+
+
 Date:12.12.2025
 Change:
     Android:
@@ -12,10 +22,10 @@ Date:11.28.2025
 Change:
     Android:
         1. Fixed the bug related to air humidity
-	2. Modify the logic of the OTA online Watch Face. There is no need to delete the online  Watch Face to perform OTA.
+        2. Modify the logic of the OTA online Watch Face. There is no need to delete the online  Watch Face to perform OTA.
     iOS:
         1. Fixed the bug related to air humidity
-	2. Modify the logic of the OTA online  Watch Face. There is no need to delete the online  Watch Face to perform OTA.
+        2. Modify the logic of the OTA online  Watch Face. There is no need to delete the online  Watch Face to perform OTA.
 
 =================================================================
 
