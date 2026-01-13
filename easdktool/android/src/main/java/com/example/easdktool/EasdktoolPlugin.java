@@ -48,8 +48,6 @@ import com.example.easdktool.been.LogParam;
 
 import com.example.easdktool.been.QueryDb;
 import com.example.easdktool.broadcast.BtConnectBroadcast;
-import com.example.easdktool.broadcast.CallReceiveBroadcast;
-import com.example.easdktool.broadcast.SMSReceiveBroadcast;
 
 import com.example.easdktool.callback.ConnectStateListener;
 import com.example.easdktool.callback.DeviceOperationListener;
@@ -228,9 +226,6 @@ public class EasdktoolPlugin implements FlutterPlugin, MethodCallHandler {
     final int kEADataInfoTypeOTARequest = 9001;
     /* OTA命令回应 */
     final int kEADataInfoTypeOTARespond = 9000;
-
-    private CallReceiveBroadcast callReceiveBroadcast;
-    SMSReceiveBroadcast smsReceiveBroadcast;
     private final String CID_KEY = "CID_KEY_CACHE";
     private final String DISPATCHER_HANDLE_KEY = "dispatch_handler";
     final String kCustomWatchFaceResponse = "CustomWatchFaceResponse";

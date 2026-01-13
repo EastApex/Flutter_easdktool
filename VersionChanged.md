@@ -1,3 +1,13 @@
+Date:01.13.2026
+Change:
+    Android:
+        1. Del invalid sms 
+    iOS:
+       No modification for now
+
+=================================================================
+
+
 Date:12.29.2025
 Change:
     Android:
